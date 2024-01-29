@@ -1,5 +1,5 @@
 ## 1. Overview
-Development setup for DSV Intranet.
+Production setup for DSV Intranet.
 
 ## 2. Requirements
 Requirements are best determined using Server Requirements page of corresponding Laravel 10 version
