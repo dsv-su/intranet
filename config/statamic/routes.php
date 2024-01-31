@@ -38,6 +38,7 @@ return [
     |
     */
 
-    'middleware' => ['web', 'auth', 'dsv'],
+    //'middleware' => ['web', 'auth', 'dsv'],
+    'middleware' => ['web'],
 
 ];
