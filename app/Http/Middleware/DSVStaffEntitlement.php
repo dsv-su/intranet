@@ -5,55 +5,60 @@ namespace App\Http\Middleware;
 use App\Services\Settings\AuthHandler;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class DSVStaffEntitlement
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Closure $next
+     * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        $system = new AuthHandler();
-        $system = $system->authorize();
-        $auth_param = $system->global->authorization_parameter;
-        //$authstring = $system->global->authorization; //For multiple entitlements
-        $entitlement = $system->global->authorization;
+        $authHandler = new AuthHandler();
+        $system = $authHandler->authorize();
 
-        //$auth = explode(";", $authstring); //For multiple entitlements
+        $authParam = $system->global->authorization_parameter;
+        $authString = $system->global->authorization;
+        $auth = explode(";", $authString);
 
-        $match = 0;
-        if(!$request->server('REMOTE_USER')) {
-            //if($system->global->app_env == 'local' or Auth::check()) {
-            if(Auth::check()) {
+        if (!$request->server('REMOTE_USER')) {
+            if ($system->global->app_env == 'local') {
                 return $next($request);
+            } else {
+                return Redirect::guest(route('sulogin'));
             }
-        }
-        else
-        {
-            $server = explode(";", $_SERVER[$auth_param]);
-            //foreach ($auth as $entitlement)  //For multiple entitlements
-            //{                                 //For multiple entitlements
-            foreach($server as $server_entitlement)
-            {
-                if($entitlement == $server_entitlement)
-                {
-                    $match++;
-                }
-            }
-            //} //For multiple entitlements
-        }
+        } else {
+            $serverEntitlements = $this->getServerEntitlements($authParam);
 
-        if ($match !== 1)
-        {
-            Auth::logout();
-            abort(401);
+            if (!$this->checkEntitlementMatch($serverEntitlements, $auth)) {
+                abort(401);
+            }
         }
 
         return $next($request);
+    }
+
+    protected function getServerEntitlements($authParam)
+    {
+        if (isset($_SERVER[$authParam])) {
+            return explode(";", $_SERVER[$authParam]);
+        }
+
+        return [];
+    }
+
+    protected function checkEntitlementMatch($serverEntitlements, $auth)
+    {
+        foreach ($serverEntitlements as $serverEntitlement) {
+            if (in_array($serverEntitlement, $auth)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

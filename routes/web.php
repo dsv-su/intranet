@@ -16,6 +16,7 @@ if (class_exists(AuthHandler::class))
     $login = app()->make('SystemService')->authorize()->global->login_route;
 
 //Setting for SU idplogin
+Route::get('/sulogin', 'SystemController@SUlogin')->name('sulogin');
 Route::get($login, [SystemController::class, 'login'])->name('login');
 
 //Language

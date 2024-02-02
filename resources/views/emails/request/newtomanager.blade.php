@@ -1,4 +1,4 @@
-[DSV Intranet - Test]<br><br>
+[DSV Intranet - PROJECTLEADER]<br><br>
 Dear {{$manager->name}},
 <br><br>
 A new <strong>{{$dashboard->type}}</strong> has been submitted that requires your immediate consideration as project manager for the project.
