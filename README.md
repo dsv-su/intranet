@@ -36,7 +36,7 @@ Requirements are best determined using Server Requirements page of corresponding
 
         * Move into the directory. Move into the `/systemconfig` folder.
 
-            * Make sure that `/systemconfig/internt.ini` file is present and configured with the configuration details for your requirements and for the server (copy play.ini.example to .ini and fill in with your data)
+            * Make sure that `/systemconfig/internt.ini` file is present and configured with the configuration details for your requirements and for the server (copy internt.ini.example to .ini and fill in with your data)
 
                     [global]
                     app_env=local                           ; Make sure this is set to local NOTE! For production enviroment the settings should be set to: app_env=production and app_debug=false.
