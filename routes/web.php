@@ -19,6 +19,11 @@ if (class_exists(AuthHandler::class))
 Route::get('/sulogin', 'SystemController@SUlogin')->name('sulogin');
 Route::get($login, [SystemController::class, 'login'])->name('login');
 
+//SU debugging
+Route::get('/', function() {
+    dd($_SERVER);
+});
+
 //Language
 Route::get('lang/{lang}', [LocalizationController::class, 'index'])->name('language');
 Route::statamic('search', 'search')->name('search');
