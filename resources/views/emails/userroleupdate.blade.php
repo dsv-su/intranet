@@ -1,8 +1,8 @@
-[DSV Intranet: Role Update Notification]<br><br>
+DSV Intranet: Role Update Notification<br><br>
 
 Dear <b>{{$user->name}}</b>,
 <br><br>
-We would like inform you that your account and roles have been updated in our system. Your new responsibilities and privileges are now active.
+We would like to inform you that your account and roles have been updated in our system. Your new permissions are now active.
 <br><br>
 Please review your updated roles and ensure that you have the necessary access and permissions to carry out your tasks effectively.
 If you have any questions or require further information about your updated roles, please don't hesitate to contact our product owner or support.
@@ -12,25 +12,25 @@ Your roles have been updated to:
 @foreach($user->roles() as $role)
     <b>
         @if($role->title == 'staff_education')
-            STAFF - Create, edit, and publish digital content, including articles, news posts, images, and other assets within education.
+            STAFF - Manage the creation, editing, and publishing of digital content, encompassing articles, news posts, images, and other assets within the education sector.
         @elseif ($role->title == 'staff_administration')
-            ADMIN - Create, edit, and publish digital content, including articles, news posts, images, and other assets within administration.
+            ADMIN - Create, edit, and publish digital content, such as articles, news posts, images, and other assets, within administrative contexts.
         @elseif ($role->title == 'staff_phd')
-            PHD - Create, edit, and publish digital content, including articles, news posts, images, and other assets within phd.
+            PHD - Create, edit, and publish digital content, encompassing articles, news posts, images, and other assets within the realm of PhD studies.
         @elseif ($role->title == 'staff_research')
-            RESEARCH - Create, edit, and publish digital content, including articles, news posts, images, and other assets within research.
+            RESEARCH - Create, edit, and publish digital content, including articles, news posts, images, and other assets within the field of research.
         @elseif ($role->title == 'staff_premises')
-            PREMISES - Create, edit, and publish digital content, including articles, news posts, images, and other assets within premises.
+            PREMISES - Create, edit, and publish digital content, such as articles, news posts, images, and other assets related to premises.
         @elseif ($role->title == 'staff_it')
-            IT - Create, edit, and publish digital content, including articles, news posts, images, and other assets within it.
+            IT - Create, edit, and publish digital content, including articles, news posts, images, and other assets within the IT domain.
         @elseif ($role->title == 'financial_officer')
-            FINACIAL OFFICER - Review, grant, deny or return user requests for the DSV department.
+            FINACIAL OFFICER - Review, approve, deny, or return user requests for the DSV department.
         @elseif ($role->title == 'project_leader')
-            PROJECT LEADER - Review, grant, deny or return user requests within your project group.
+            PROJECT LEADER - Review, approve, deny, or return user requests within your project group.
         @elseif ($role->title == 'unit_head')
-            UNIT HEAD - Review, grant, deny or return user requests within your unit.
+            UNIT HEAD - Review, grant, deny, or return user requests within your unit.
         @elseif ($role->title == 'site_administrator')
-            ADMINISTRATOR - Full administrative access to the CMS - managing, configuring, and maintaining the CMS.  User management and role assignment - ensuring user roles and permissions are properly set up.
+            ADMINISTRATOR - Full administrative access to the CMS, including managing, configuring, and maintaining the system. Responsibilities also include user management and role assignment, ensuring that user roles and permissions are correctly configured.
         @endif
     </b>
     <br><br>
@@ -38,4 +38,4 @@ Your roles have been updated to:
 <br>
 ---
 <br>
-This is an automated email, please do not reply to this email.
+This is an automated email. Please do not reply to this message.

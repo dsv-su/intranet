@@ -1,19 +1,12 @@
-[DSV Intranet Registration Confirmation]<br><br>
+Confirmation of First-time Registration on DSV Intranet<br><br>
 
 Dear <b>{{$user->name}}</b>,
 <br><br>
-We confirm your successful first time registration for the DSV intranet platform. Welcome!
+We are pleased to confirm your successful first-time registration for the DSV intranet.!
 <br><br>
-With access to our intranet, you will be able to:
-<br><br>
-- Stay updated on internal news and announcements.
+To get started, please visit https://internt.dsv.su.se
 <br>
-- Access important documents and resources.
-<br>
-- Stay connected to internal events and initiatives.
-<br><br>
-To get started, please visit [url].
-If you have any questions or need assistance, please don't hesitate to reach out to [systemowner] or helpdesk@dsv.su.se.
+If you have any questions or need assistance, please don't hesitate to reach out to Tuija Lehtonen (tuija@dsv.su.se) or helpdesk@dsv.su.se.
 <br><br><br>
 ---
 <br>
