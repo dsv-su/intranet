@@ -51,7 +51,7 @@
         <tr>
             <th>{{__("ProjectID")}}</th>
             <th>{{__("Project leader")}}</th>
-            <th>{{__("Unit head")}}</th>
+            <th>{{__("Unit Head")}}</th>
             <th>{{__("Approved date")}}</th>
         </tr>
         </thead>
@@ -242,6 +242,32 @@
             @endif
         </td>
       </tr>
+      <tr>
+          <td>
+              <b>{{__("Daily subsistence allowances")}}</b>
+          </td>
+          <td>
+              @if($tr->daily == null or $tr->daily == 0)
+                  0
+              @else
+                  {{$tr->daily}}
+              @endif
+          </td>
+          <td>
+              @if($tr->days == null or $tr->days == 0)
+                  0
+              @else
+                  {{$tr->days}}
+              @endif
+          </td>
+          <td>
+              @if(($tr->daily * $tr->days)  == null or ($tr->daily * $tr->days) == 0)
+                  0
+              @else
+                  {{($tr->daily * $tr->days)}}
+              @endif
+          </td>
+      </tr>
     </tbody>
   </table>
   <br><br>
@@ -256,7 +282,7 @@
     </tr>
     <tr>
       <th>
-        {{__("Moms")}} 25%
+        {{__("VAT")}} 25%
       </th>
       <td>
           {{$tr->total * 0.25}}

@@ -2,7 +2,7 @@
 
 Dear <b>{{$user->name}}</b>,
 <br><br>
-We are excited to confirm your successful first time registration for the DSV intranet platform. Welcome!
+We confirm your successful first time registration for the DSV intranet platform. Welcome!
 <br><br>
 With access to our intranet, you will be able to:
 <br><br>

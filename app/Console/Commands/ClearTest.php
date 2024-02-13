@@ -12,7 +12,7 @@ class ClearTest extends Command
      *
      * @var string
      */
-    protected $signature = 'app:clear-test';
+    protected $signature = 'clear-test';
 
     /**
      * The console command description.

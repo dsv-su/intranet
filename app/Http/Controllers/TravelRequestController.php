@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use App\Models\Dashboard;
+use App\Models\SettingsFo;
 use App\Models\TravelRequest;
 use App\Models\User;
-use App\Workflows\TravelRequestWorkflow;
+use App\Workflows\DSVRequestWorkflow;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +19,7 @@ class TravelRequestController extends Controller
     public function __construct()
     {
         $this->middleware('show')->except(['create', 'submit']);
+        $this->middleware(['checklang', 'locale']);
     }
 
     /**
@@ -67,11 +69,16 @@ class TravelRequestController extends Controller
                 'country' => 'required',
                 'project_leader' => 'required',
                 'unit_head' => 'required',
+                'start' => 'required',
+                'end' => 'required'
             ]);
 
             //Financial officer
+            /*
             $roleIds = DB::table('role_user')->where('role_id', 'financial_officer')->pluck('user_id');
             $fo = User::whereIn('id', $roleIds)->first();
+            */
+            $fo = SettingsFo::find(1);
 
             //Create a new Travelreqeust
             $travelrequest = TravelRequest::create([
@@ -106,12 +113,12 @@ class TravelRequestController extends Controller
                 'type' => 'travelrequest',
                 'user_id' => auth()->user()->id,
                 'manager_id' => $request->project_leader,
-                'fo_id' => $fo->id,
+                'fo_id' => $fo->user_id,
                 'head_id' => $request->unit_head
             ]);
 
             // Create workflow
-            $workflow = WorkflowStub::make(TravelRequestWorkflow::class);
+            $workflow = WorkflowStub::make(DSVRequestWorkflow::class);
             // start workflow [DashboardId]
             $workflow->start($dashboard->id);
             //Submit TR

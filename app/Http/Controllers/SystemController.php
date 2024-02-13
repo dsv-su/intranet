@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 
 class SystemController extends Controller
 {
+
     /**
      * Create the session, send the user away to the SU IDP
      * for authentication.

@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.keep-alive>
     @foreach($user_requests as $user_request)
         <a href="{{route('travel-request-show', $user_request->id)}}" class="flex py-3 px-4 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">
             <div class="flex-shrink-0 mt-4">

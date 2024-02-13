@@ -2,7 +2,7 @@
 
 Dear <b>{{$user->name}}</b>,
 <br><br>
-We are pleased to inform you that your account and roles have been updated in our system. Your new responsibilities and privileges are now active.
+We would like inform you that your account and roles have been updated in our system. Your new responsibilities and privileges are now active.
 <br><br>
 Please review your updated roles and ensure that you have the necessary access and permissions to carry out your tasks effectively.
 If you have any questions or require further information about your updated roles, please don't hesitate to contact our product owner or support.

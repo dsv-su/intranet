@@ -1,9 +1,9 @@
-<article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+<article class="w-1/4 p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
 
     @include('requests.travel.progress')
 
     @if(!$tr->manager_comment_id == null or !$tr->fo_comment_id == null or !$tr->head_comment_id == null)
-        <h2 class="mb-2 mt-4 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"><a href="#">{{__("Comments")}}</a></h2>
+        <h2 class="mb-2 mt-4 text-xl font-bold tracking-tight text-gray-900 dark:text-white"><a href="#">{{__("Comments")}}</a></h2>
         <hr class="m-2">
         @if($tr->manager_comment_id)
             <div class="flex justify-between items-center mb-5 text-gray-500">

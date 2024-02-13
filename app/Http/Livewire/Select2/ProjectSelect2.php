@@ -22,9 +22,13 @@ class ProjectSelect2 extends Component
         'clear'
     ];
 
-    public function mount()
+    public function mount($id = 0)
     {
-        $this->Project = new Project;
+        if($id != 0) {
+            $this->Project = Project::where('project', $id)->first();
+        } else {
+            $this->Project = new Project;
+        }
     }
 
     public function getOptionsProperty()

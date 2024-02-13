@@ -19,13 +19,15 @@ return [
             //'name' => config('app.name'),
             'name' => 'English',
             'locale' => 'en_US',
-            'url' => '/',
+            //'url' => '/',
+            'url' => env('APP_URL'),
         ],
 
         'swe' => [
             'name' => 'Svenska',
             'locale' => 'sv_SE',
-            'url' => '/swe/',
+            //'url' => '/swe/',
+            'url' => env('APP_URL') . 'swe/',
         ],
 
     ],

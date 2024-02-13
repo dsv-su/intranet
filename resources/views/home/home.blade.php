@@ -18,7 +18,9 @@
                         <p class="mt-2 text-gray-500">
                             {{__("The DSV Intranet is under construction. Scheduled for launch 2024")}}
                         </p>
-
+                        {{--}}
+                        @include('lectureroom.status')
+                        {{--}}
                     </div>
 
                     <div class="absolute top-0 inset-x-0 -z-[1] w-full h-full">

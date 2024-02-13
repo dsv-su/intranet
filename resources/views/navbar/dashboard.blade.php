@@ -79,7 +79,7 @@
                 {{__("User requests")}}
             </div>
             <div class="grid grid-cols-3 gap-4 p-4">
-
+                <!--Request list -->
                 <a href="{{route('request-list')}}" class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 group">
 
                     <svg class="mx-auto mb-2 w-5 h-5 text-blue-600 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="20" fill="none" viewBox="0 0 18 20">
@@ -87,7 +87,14 @@
                     </svg>
                     <div class="text-sm font-medium text-blue-600 dark:text-white">Request list</div>
                 </a>
+                <!--FO settings -->
+                <a href="{{route('settings')}}" class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 group">
 
+                    <svg class="mx-auto mb-2 w-5 h-5 text-blue-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-width="1" d="M6 4v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2m6-16v2m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v10m6-16v10m0 0a2 2 0 1 0 0 4m0-4a2 2 0 1 1 0 4m0 0v2"/>
+                    </svg>
+                    <div class="text-sm font-medium text-blue-600 dark:text-white">{{__("Settings")}}</div>
+                </a>
 
             </div>
         </div>
