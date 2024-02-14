@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TravelRequest</title>
-    <link rel="stylesheet" href="{{ asset('./tr/pdf.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ public_path() .'/tr/pdf.css' }}" type="text/css">
 </head>
 <body>
 <header>
   <div class="headerSection">
     <div class="logoAndName">
-        <img src="{{ asset('./images/su_cp.png') }}" alt="Stockholms University" width="100" />
+        <img src="{{ public_path() . '/images/su_cp.png' }}" alt="Stockholms University" width="100" />
     </div>
   </div>
   <p style="margin-top:.8cm; font-size:12pt;">{{__("Department of Computer and Systems Sciences")}}</p>
