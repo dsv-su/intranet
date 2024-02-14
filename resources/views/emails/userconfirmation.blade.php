@@ -2,7 +2,7 @@ Confirmation of First-time Registration on DSV Intranet<br><br>
 
 Dear <b>{{$user->name}}</b>,
 <br><br>
-We are pleased to confirm your successful first-time registration for the DSV intranet.!
+We are pleased to confirm your successful first-time registration for the DSV intranet!
 <br><br>
 To get started, please visit https://internt.dsv.su.se
 <br>

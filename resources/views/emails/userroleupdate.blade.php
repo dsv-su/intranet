@@ -2,10 +2,10 @@ DSV Intranet: Role Update Notification<br><br>
 
 Dear <b>{{$user->name}}</b>,
 <br><br>
-We would like to inform you that your account and roles have been updated in our system. Your new permissions are now active.
+We would like to inform you that your account and roles have been updated. Your new permissions are now active.
 <br><br>
 Please review your updated roles and ensure that you have the necessary access and permissions to carry out your tasks effectively.
-If you have any questions or require further information about your updated roles, please don't hesitate to contact our product owner or support.
+If you have any questions or require further information about your updated roles, please don't hesitate to contact our product owner, Tuija Lehtonen (tuija@dsv.su.se), or support.
 <br><br>
 Your roles have been updated to:
 <br><br>
