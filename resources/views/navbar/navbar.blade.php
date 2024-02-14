@@ -2,8 +2,7 @@
     <div x-data="{ open: false }" class="relative flex flex-col w-full p-5 mx-auto bg-white md:items-center md:justify-between md:flex-row md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
         <div class="flex flex-row items-center justify-between lg:justify-start">
             <a class="text-lg tracking-tight text-black focus:outline-none focus:ring lg:text-2xl dark:text-white" href="/">
-                {{--}}<span class="lg:text-lg focus:ring-0">{{--}}
-                <span class="bg-clip-text bg-blue-600 text-transparent text-4xl font-bold">
+                <span class="bg-clip-text bg-blue-600 text-transparent text-lg focus:ring-0 md:text-2xl lg:text-3xl md:font-bold">
                     {{__('DSVIntranet')}}
                 </span>
             </a>
