@@ -5,22 +5,29 @@
             <!-- Card middle-->
             <div class="md:order-1 relative border border-gray-200 dark:border-gray-800 rounded-xl">
                 <div class="relative overflow-hidden w-full h-full rounded-xl">
-                    <div class="p-6 flex flex-col justify-center items-center md:min-h-[480px] text-center rounded-xl dark:border-gray-700">
-                        <p class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-xs font-semibold uppercase">
-                            {{__("Scheduled for launch")}}
-                        </p>
-                        <span class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-7xl font-bold">
-                          2024
-                        </span>
-                        <h3 class="mt-6 text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
-                            DSV Intranet
-                        </h3>
-                        <p class="mt-2 text-gray-500">
-                            {{__("The DSV Intranet is under construction. Scheduled for launch 2024")}}
-                        </p>
-                        {{--}}
-                        @include('lectureroom.status')
-                        {{--}}
+                    <livewire:lecturerooms />
+                    <div class="p-6 mt-6 flex flex-col justify-center items-center md:min-h-[480px] text-center rounded-xl dark:border-gray-700">
+                        <div id="middleHolder">
+                            <p class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-xs font-semibold uppercase">
+                                {{__("Scheduled for launch")}}
+                            </p>
+                            <span class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-7xl font-bold">
+                                2024
+                            </span>
+                            <h3 class="mt-6 text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
+                                DSV Intranet
+                            </h3>
+                            <p class="mt-2 text-gray-500">
+                                {{__("The DSV Intranet is under construction. Scheduled for launch 2024")}}
+                            </p>
+                        </div>
+                        <div id="lectureroomHolder" style="display: none;">
+                            <livewire:roomstatus />
+                        </div>
+
+
+
+
                     </div>
 
                     <div class="absolute top-0 inset-x-0 -z-[1] w-full h-full">
@@ -323,3 +330,19 @@
     </div>
     <!-- End Grid -->
 </div>
+
+<script>
+    let holder = document.getElementById('middleHolder');
+    let holderinfo = document.getElementById('lectureroomHolder');
+    window.addEventListener('contentChanged', e => {
+        if(e.detail.lecturerooms) {
+            holder.style.display = 'none';
+            holderinfo.style.display = 'block';
+        }
+        else {
+            holder.style.display = 'block';
+            holderinfo.style.display = 'none';
+        }
+
+    })
+</script>

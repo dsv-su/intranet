@@ -1,5 +1,11 @@
 <?php
 
+$file = base_path().'/systemconfig/internt.ini';
+if (!file_exists($file)) {
+    $file = base_path().'/systemconfig/internt.ini.example';
+}
+$system_config = parse_ini_file($file, true);
+
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -16,7 +22,8 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Statamic'),
+    //'name' => env('APP_NAME', 'Statamic'),
+    'name' => $system_config['global']['app_name'],
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +36,8 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    //'env' => env('APP_ENV', 'production'),
+    'env' => $system_config['global']['app_env'],
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +50,8 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    //'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool) $system_config['global']['app_debug'],
 
     /*
     |--------------------------------------------------------------------------
@@ -70,7 +79,8 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    //'timezone' => 'UTC',
+    'timezone' => 'Europe/Stockholm',
 
     /*
     |--------------------------------------------------------------------------

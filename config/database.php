@@ -1,4 +1,9 @@
 <?php
+$file = base_path().'/systemconfig/internt.ini';
+if (!file_exists($file)) {
+    $file = base_path().'/systemconfig/internt.ini.example';
+}
+$system_config = parse_ini_file($file, true);
 
 use Illuminate\Support\Str;
 
@@ -15,7 +20,8 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    //'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => $system_config['database']['db'],
 
     /*
     |--------------------------------------------------------------------------
@@ -46,12 +52,12 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
+            'host' => $system_config['database']['db_host'],
+            'port' => $system_config['database']['db_port'],
+            'database' => $system_config['database']['db_database'],
+            'username' => $system_config['database']['db_username'],
+            'password' => $system_config['database']['db_password'],
+            'unix_socket' => $system_config['database']['db_unix_socket'],
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',

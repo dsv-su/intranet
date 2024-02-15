@@ -117,5 +117,10 @@
     "Denied by Unit head": "Nekad av Enhetschefen",
     "Returned by Unit head": "Återlämnad av Enhetschefen",
     "Show": "Visa",
-    "Download": "Ladda ner"
+    "Download": "Ladda ner",
+    "No results found": "Inga resultat funna",
+    "Room Status": "Rumsstatus",
+    "Projector status": "Projektor status",
+    "Recording status": "Inspelnings status",
+    "Room status": "Rums status"
 }

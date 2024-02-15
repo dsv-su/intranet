@@ -23,7 +23,7 @@
                         <hr>
                     </a>
                 @empty
-                    <div class="block px-4 py-2">No results found</div>
+                    <div class="block px-4 py-2">{{__("No results found")}}</div>
                 @endforelse
             </div>
         </div>
