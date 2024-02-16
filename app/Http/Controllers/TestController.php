@@ -8,7 +8,7 @@ class TestController extends Controller
 {
     public function test()
    {
-
+       dd($_SERVER);
    }
 
    public function truncate()
