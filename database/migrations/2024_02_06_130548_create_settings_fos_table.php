@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('settings_fos', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('name')->nullable();
             $table->boolean('active')->default(false);
             $table->timestamps();

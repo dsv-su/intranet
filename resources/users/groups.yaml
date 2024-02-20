@@ -1,4 +1,4 @@
-# admin:
-#   title: Administrators
-#   roles:
-#     - admin
+content-editor:
+  title: DSVAdministration
+  roles:
+    - staff_administration

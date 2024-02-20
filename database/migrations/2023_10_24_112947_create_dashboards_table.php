@@ -19,12 +19,13 @@ return new class extends Migration
             $table->integer('created');
             $table->string('status');
             $table->string('type');
-            $table->foreignId('user_id')->constrained();
-            $table->unsignedBigInteger('manager_id');
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->uuid('manager_id');
             $table->foreign('manager_id')->references('id')->on('users');
-            $table->unsignedBigInteger('fo_id');
+            $table->uuid('fo_id');
             $table->foreign('fo_id')->references('id')->on('users');
-            $table->unsignedBigInteger('head_id');
+            $table->uuid('head_id');
             $table->foreign('head_id')->references('id')->on('users');
             $table->timestamps();
         });
