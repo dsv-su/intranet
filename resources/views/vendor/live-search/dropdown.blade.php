@@ -8,7 +8,7 @@
     </div>
     <input wire:model="q" id="search" name="search"
            class="w-full py-2 pl-10 pr-4 text-black bg-white border border-gray-200 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-500
-                    sm:text-sm rounded-xl placeholder:text-gray-400 focus:border-blue-500 dark:bg-gray-900 dark:text-white" placeholder="Search" type="search">
+                    sm:text-sm rounded-xl placeholder:text-gray-400 focus:border-blue-500 dark:bg-gray-900 dark:text-white" placeholder="{{__("Search")}}" type="search">
 
     @if ($q)
         <div class="origin-top-right absolute right-0 mt-2 z-20 w-72 md:w-96 rounded-md shadow-lg bg-white dark:bg-gray-800 dark:text-white ring-1 ring-black ring-opacity-5">

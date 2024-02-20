@@ -2,7 +2,7 @@
     <div x-data="{ open: false }" class="relative flex flex-col w-full p-5 mx-auto bg-white md:items-center md:justify-between md:flex-row md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
         <div class="flex flex-row items-center justify-between lg:justify-start">
             <a class="text-lg tracking-tight text-black focus:outline-none focus:ring lg:text-2xl dark:text-white" href="/">
-                <span class="bg-clip-text bg-blue-600 text-transparent text-lg focus:ring-0 md:text-xl lg:text-2xl md:font-bold">
+                <span class="bg-clip-text bg-blue-600 text-transparent text-lg focus:ring-0 md:text-xl lg:text-2xl">
                     {{ config('app.name')}}
                 </span>
             </a>
@@ -55,8 +55,13 @@
                                     <span>
                                       {{__($entry['title']->value())}}
                                     </span>
+                                        {{--}}
                                         <svg style="fill:gray" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}" class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform rotate-0 md:-mt-1">
                                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{--}}
+                                        <svg class="inline-flex w-6 h-6 mt-1 transition-transform duration-200 transform rotate-0 md:-mt-1 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"/>
                                         </svg>
                                     </button>
                                 </div>
@@ -64,7 +69,7 @@
                         </nav>
                     </div>
                     <div x-on:click="openMobileMenu = false" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" :class="{'translate-y-0 shadow-md duration-150': openMobileMenu, '-translate-y-full': ! openMobileMenu}" class="fixed inset-0 top-0 z-40 h-screen overflow-y-auto transition origin-top transform -translate-y-full">
-                        <div class="relative overflow-hidden bg-white shadow-xl lg:bg-transparent" role="menu" aria-orientation="vertical" aria-labelledby="main-menu">
+                        <div class="relative overflow-hidden bg-white lg:bg-transparent" role="menu" aria-orientation="vertical" aria-labelledby="main-menu">
                             <div class="bg-white dark:bg-gray-900 border-y">
                                 <div class="grid px-4 py-6 mx-auto sm:grid-cols-2 2xl:max-w-7xl gap-y-6 sm:gap-8 sm:px-6 sm:py-8 lg:grid-cols-3 lg:px-8 lg:py-12 xl:py-16">
                                     @foreach(collect($entry['children'])->chunk(5) as $chunk)
@@ -97,6 +102,22 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- CLOSE -->
+                        <div class="p-2 bg-white border-y">
+                            <div class="px-4 py-5 mx-auto space-y-6 2xl:max-w-7xl sm:flex sm:space-y-0 sm:space-x-10 sm:px-6 lg:px-8">
+                                <div class="flow-root mx-auto">
+                                    <div x-on:click="openMobileMenu = false" class="flex items-center p-3 -m-3 text-sm text-gray-500 transition duration-150 ease-in-out hover:text-blue-500">
+                                        {{__("Close menu")}}
+                                        <span class="ml-3" aria-hidden="true">
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end Close -->
                     </div>
                 </div>
                 <!--menu-->

@@ -1,6 +1,6 @@
 [DSV Intranet]<br><br>
 
-On workflow-test - A new user has been created:
+{{ config('app.name')}} - A new user has been created:
 <br><br>
 {{$user->name}}
 <br><br>

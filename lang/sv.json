@@ -29,7 +29,7 @@
     "Phone": "Telefon",
     "Name": "Namn",
     "Email": "Epost",
-    "Contact": "Kontakta",
+    "Contact": "Kontakt",
     "Information from DSV IT": "Information från DSV IT",
     "Ongoing at DSV": "Pågång inom DSV",
     "Be up to date with the latest news and events from the department.":"Håll dig uppdaterad med de senaste nyheterna och händelserna inom institutionen.",
@@ -122,5 +122,8 @@
     "Room Status": "Rumsstatus",
     "Projector status": "Projektor status",
     "Recording status": "Inspelnings status",
-    "Room status": "Rums status"
+    "Room status": "Rums status",
+    "Close menu": "Stäng menyn",
+    "DSV IT systems": "DSV IT system",
+    "SU IT systems": "SU IT system"
 }
