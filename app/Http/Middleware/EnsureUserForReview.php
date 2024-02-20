@@ -21,7 +21,7 @@ class EnsureUserForReview
          * Ensure the right reviewer reviews the request
          */
 
-        $id = basename($request->getUri());
+        $id = basename($request->path());
         $user = User::current();
 
         $dashboard = Dashboard::where('request_id',$id)->first();
