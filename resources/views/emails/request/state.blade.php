@@ -1,7 +1,7 @@
-[DSV Intranet - Test]<br><br>
+Status Update: Your Submitted Request<br><br>
 Dear {{$user->name}}
 <br><br>
-Your <strong>{{$dashboard->type}}</strong> has been
+Your <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been
 @switch($dashboard->state)
     @case('manager_returned')
         returned
@@ -29,4 +29,8 @@ Updated: {{$dashboard->updated_at}}
 <br><br>
 Please review the comments as soon as possible at:
 <br><br>
-https://workflow-test.dsv.su.se
+<a href="{{ url('') }}">{{url('')}}</a>
+<br><br>
+---
+<br>
+This is an automated email, please do not reply to this email.

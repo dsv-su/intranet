@@ -10,6 +10,7 @@ use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class NewUser extends Mailable
 {
@@ -32,7 +33,7 @@ class NewUser extends Mailable
     {
         return new Envelope(
             from: new Address('helpdesk@dsv.su.se', 'Intranet'),
-            subject: '[DSV Intranet] New user',
+            subject: config('app.name'). ' New user',
         );
     }
 

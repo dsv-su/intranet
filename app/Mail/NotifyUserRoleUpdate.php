@@ -29,7 +29,7 @@ class NotifyUserRoleUpdate extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '[DSV Intranet] Notify User Role Update',
+            subject: config('app.name'). ' Permissions Update',
         );
     }
 

@@ -32,7 +32,7 @@ class SendUserConfirmation extends Mailable
     {
         return new Envelope(
             from: new Address('helpdesk@dsv.su.se', 'DSV Intranet'),
-            subject: '[DSV Intranet] User Confirmation',
+            subject: config('app.name'). ' Welcome',
         );
     }
 

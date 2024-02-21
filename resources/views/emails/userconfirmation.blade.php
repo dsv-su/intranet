@@ -4,7 +4,7 @@ Dear <b>{{$user->name}}</b>,
 <br><br>
 We are pleased to confirm your successful first-time registration for the DSV intranet!
 <br><br>
-To get started, please visit https://internt.dsv.su.se
+To get started, please visit {{ config('app.url')}}
 <br>
 If you have any questions or need assistance, please don't hesitate to reach out to Tuija Lehtonen (tuija@dsv.su.se) or helpdesk@dsv.su.se.
 <br><br><br>

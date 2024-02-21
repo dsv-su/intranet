@@ -10,6 +10,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class NotifyUserChangedState extends Mailable
 {
@@ -33,7 +34,7 @@ class NotifyUserChangedState extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '[DSV Intranet] '. $this->dashboard->type . ' Status update',
+            subject: config('app.name'). ' '. Str::upper($this->dashboard->type) . ' Status update',
         );
     }
 

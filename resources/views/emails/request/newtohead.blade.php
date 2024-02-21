@@ -1,8 +1,8 @@
-[DSV Intranet - UNITHEAD]<br><br>
+Review request<br><br>
 Dear {{$manager->name}},
 <br><br>
-A new <strong>{{$dashboard->type}}</strong> has been submitted and approved from the project leader/manager and financial officer that requires your immediate consideration.
-Brief details in the request are as follows:
+A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been submitted and duly approved by the project leader/manager.
+Your attention is kindly requested to review and approve the request. Below are summarized details of the request:
 <br><br>
 Requester: {{$user->name}}
 <br><br>
@@ -10,11 +10,15 @@ Manager: {{$manager->name}}
 <br><br>
 Created: {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
 <br><br>
-Approved by financial officer: {{$dashboard->updated_at}}
+Approved by project leader: {{$dashboard->updated_at}}
 <br><br>
-Your prompt attention to this matter is crucial to ensure that we can address this request effectively and meet our commitments to the requester.
-Please review the request as soon as possible at:
+Your prompt attention to this matter is vital to ensure that we can promptly address this request and uphold our commitments to the requester.
+Please review the request at your earliest convenience by accessing the following link:
 <br><br>
-https://workflow-test.dsv.su.se
+<a href="{{ url('') }}">{{url('')}}</a>
 <br><br>
 Thank you for your prompt attention to this request.
+<br><br>
+---
+<br>
+This is an automated email, please do not reply to this email.

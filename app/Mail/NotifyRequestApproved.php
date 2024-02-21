@@ -11,6 +11,7 @@ use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class NotifyRequestApproved extends Mailable
 {
@@ -34,7 +35,7 @@ class NotifyRequestApproved extends Mailable
     {
         return new Envelope(
             from: new Address('noreply@dsv.su.se', 'Intranet'),
-            subject: '[DSV Intranet] Approved '. $this->dashboard->type,
+            subject: config('app.name'). ' Approved: '. Str::upper($this->dashboard->type),
         );
     }
 

@@ -32,7 +32,7 @@ class DSVNews extends Mailable
     {
         return new Envelope(
             from: new Address('helpdesk@dsv.su.se', 'Intranet'),
-            subject: '[DSV Intranet] '. $this->news->title,
+            subject: config('app.name'). ' '. $this->news->title,
         );
     }
 

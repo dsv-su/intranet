@@ -1,26 +1,30 @@
-[DSV Intranet - APPROVED]<br><br>
-<strong>APPROVED {{$dashboard->type}}</strong>
+<strong>APPROVED {{Illuminate\Support\Str::upper($dashboard->type)}}</strong>
 <br><br>
 Dear {{$user->name}},
 <br><br>
-This is a notification to inform you that your request has been successfully approved. Here are the details of the approved request:
+We are pleased to inform you that your request has been successfully approved.
+<br>
+Below, you will find the details pertaining to the approved request:
 <br><br>
-<strong>RequestID:</strong> {{$dashboard->request_id}}
+RequestID: {{$dashboard->request_id}}
 <br>
-<strong>Request Type:</strong> {{$dashboard->type}}
+Request Type: {{Illuminate\Support\Str::upper($dashboard->type)}}
 <br>
-<strong>Name:</strong> {{$dashboard->name}}
+Name: {{$dashboard->name}}
 <br>
-<strong>Created:</strong> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
+Created: {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
 <br>
-<strong>Approval Date:</strong> {{$dashboard->updated_at}}
+Approval Date: {{$dashboard->updated_at}}
 <br>
 <br>
-With your request approved, this request workflow is now closed. If you have any questions or require further assistance, please do not hesitate to reach out to ekonomi@dsv.su.se
+With your request approved, this request workflow is now closed. Should you require any further assistance or clarification, please do not hesitate to reach out to: ekonomi@dsv.su.se
 <br><br>
-@if($dashboard->type == 'Travelrequest')
+@if($dashboard->type == 'travelrequest')
     Bon Voyage
 @endif
-
+<br><br>
+---
+<br>
+This is an automated email, please do not reply to this email.
 
 
