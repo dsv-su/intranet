@@ -22,7 +22,7 @@ class RequestReviewHandler
         $this->reviewer = $reviewer;
         $this->comment = $comment;
         $this->decicion = $decicion;
-        $this->workflowhandler = new WorkflowHandler($this->dashboard->request_id);
+        $this->workflowhandler = new WorkflowHandler($this->dashboard->id);
     }
 
     public function review()
@@ -35,7 +35,7 @@ class RequestReviewHandler
         //Register comment
         switch($this->dashboard->type) {
             case('travelrequest'):
-                $tr = TravelRequest::find($this->dashboard->id);
+                $tr = TravelRequest::find($this->dashboard->request_id);
                 switch($this->getRole()) {
                     case('manager'):
                         $comment = $this->manager_comment('travelrequest', $tr->id, $this->reviewer->id, $this->comment);

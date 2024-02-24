@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('travel_requests', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
             $table->string('name');
             $table->integer('created');
             $table->string('state');

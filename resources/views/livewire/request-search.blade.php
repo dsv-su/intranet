@@ -18,6 +18,7 @@
                 <th scope="col" class="px-4 py-3">{{__("State")}}</th>
                 <th scope="col" class="px-4 py-3">{{__("User")}}</th>
                 <th scope="col" class="px-4 py-3">{{__("Created")}}</th>
+                <th scope="col" class="px-4 py-3">{{__("Action")}}</th>
             </tr>
             </thead>
             <tbody>
@@ -25,10 +26,10 @@
 
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 
-                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{$dashboard->type}}</th>
-                    <td class="px-4 py-3">{{$dashboard->name}}</td>
-                    <td class="px-4 py-3">{{$dashboard->request_id}}</td>
-                    <td class="px-4 py-3">
+                    <th scope="row" class="px-4 py-3 text-xs text-gray-900 whitespace-nowrap dark:text-white">{{$dashboard->type}}</th>
+                    <td class="px-4 py-3 text-xs">{{$dashboard->name}}</td>
+                    <td class="px-4 py-3 text-xs">{{$dashboard->request_id}}</td>
+                    <td class="px-4 py-3 text-xs">
                         @switch($dashboard->state)
                             @case('submitted')
                                 <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
@@ -82,19 +83,19 @@
                             @break
                         @endswitch
                     </td>
-                    <td class="px-4 py-3">{{\App\Models\User::find($dashboard->user_id)->name}}</td>
-                    <td class="px-4 py-3">{{\Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateString()}}</td>
+                    <td class="px-4 py-3 text-xs">{{\App\Models\User::find($dashboard->user_id)->name}}</td>
+                    <td class="px-4 py-3 text-xs">{{\Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateString()}}</td>
                     <td>
                         <a type="button" href="{{route('fo-request-show', $dashboard->request_id)}}"
                            class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300
-                                font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
+                                rounded-lg text-xs px-3 py-2 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
                             {{__("Show")}}
                         </a>
                     </td>
                     <td>
                         <a type="button" href="{{route('travel-request-pdf', $dashboard->request_id)}}"
                            class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300
-                                        font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                                        rounded-lg text-xs px-3 py-2 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
                             {{__("Download")}}
                         </a>
                     </td>

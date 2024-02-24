@@ -23,8 +23,8 @@ class EnsureUserForReview
 
         $id = basename($request->path());
         $user = User::current();
+        $dashboard = Dashboard::find($id);
 
-        $dashboard = Dashboard::where('request_id',$id)->first();
         switch($dashboard->state) {
             case('submitted'):
                 if($user->id == $dashboard->manager_id) {

@@ -1,5 +1,5 @@
 <div class="fixed bottom-20 left-0 z-50 w-full bg-white dark:bg-gray-900 dark:border-gray-600">
-    <form method="POST" action="{{route('review', $tr)}}">
+    <form method="POST" action="{{route('review', $dashboard)}}">
         @csrf
         <div class="sm:hidden sm:col-span-4 my-4">
             <label for="purpose" class="block mb-2 text-sm font-medium text-blue-600 dark:text-white">{{ __("Please Review and Comment") }}</label>

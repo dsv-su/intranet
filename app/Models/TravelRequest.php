@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use \Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class TravelRequest extends Model
 {
     use HasFactory;
     use Search;
+    use HasUuids;
 
     protected $fillable = [
         'created',

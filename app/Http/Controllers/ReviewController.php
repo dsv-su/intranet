@@ -18,7 +18,8 @@ class ReviewController extends Controller
 
     public function show($id)
     {
-        $tr = TravelRequest::find($id);
+        $dashboard = Dashboard::find($id);
+        $tr = TravelRequest::find($dashboard->request_id);
         // Retrieve the currently authenticated user's ID
         $user = Auth::user();
         // Check if user is FO
@@ -33,7 +34,7 @@ class ReviewController extends Controller
         return (new \Statamic\View\View)
             ->template('requests.travel.show')
             ->layout('mylayout')
-            ->with(['tr' => $tr, 'formtype' => $formtype]);
+            ->with(['tr' => $tr, 'formtype' => $formtype, 'dashboard' => $dashboard]);
     }
 
     public function review(Request $request, $req)
@@ -66,7 +67,7 @@ class ReviewController extends Controller
         switch($dashboard->type) {
             case('travelrequest'):
                 //Update project id
-                $tr = TravelRequest::find($req);
+                $tr = TravelRequest::find($dashboard->request_id);
                 $tr->project = $request->project;
                 $tr->save();
                 break;

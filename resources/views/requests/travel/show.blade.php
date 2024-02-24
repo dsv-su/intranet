@@ -19,14 +19,24 @@
     }
 </style>
 @if($formtype == 'fo_review')
-    <form method="POST" action="{{route('fo_review', $tr)}}">
+    <form method="POST" action="{{route('fo_review', $dashboard)}}">
         @csrf
 @endif
 <section class="bg-white dark:bg-gray-900">
     <div class="max-w-6xl px-4 py-8 mx-auto lg:py-16">
         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">{{ __("Duty Travel Request") }}</h2>
+
         <div class="flex gap-8">
             <div class="w-3/4 grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
+                <!--ID-->
+                <div class="w-full">
+                    <label for="project" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("RequestID") }} </label>
+                    <div class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block
+                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                        {{$tr->id}}
+                    </div>
+                </div>
+
                 <!--Name-->
                 <div class="w-full">
                     <label for="project" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Name") }} </label>

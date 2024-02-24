@@ -30,7 +30,8 @@ class TravelRequestController extends Controller
      */
     public function show($id)
     {
-        $tr = TravelRequest::find($id);
+        $dashboard = Dashboard::find($id);
+        $tr = TravelRequest::find($dashboard->request_id);
         $formtype = 'show';
 
         return (new \Statamic\View\View)

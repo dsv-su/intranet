@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('dashboards', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('request_id');
+            $table->uuid('request_id');
             $table->string('name');
             $table->string('state');
             $table->integer('created');

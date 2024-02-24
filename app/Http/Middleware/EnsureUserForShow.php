@@ -23,7 +23,7 @@ class EnsureUserForShow
 
         $id = basename($request->getUri());
         $user = User::current();
-        $dashboard = Dashboard::where('request_id',$id)->first();
+        $dashboard = Dashboard::find($id);
         $valid_viewers = [$dashboard->user_id, $dashboard->manager_id, $dashboard->fo_id, $dashboard->head_id];
 
         if(in_array($user->id, $valid_viewers)) {
