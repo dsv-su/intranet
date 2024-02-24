@@ -20,13 +20,14 @@ class NotifyRequestManager extends Mailable
     /**
      * Create a new message instance.
      */
-    public $user, $manager, $dashboard;
+    public $user, $manager, $head, $dashboard;
 
-    public function __construct(User $user, User $manager, Dashboard $dashboard)
+    public function __construct(User $user, User $manager, User $head, Dashboard $dashboard)
     {
         $this->user = $user;
-        $this->dashboard = $dashboard;
         $this->manager = $manager;
+        $this->head = $head;
+        $this->dashboard = $dashboard;
     }
 
     /**

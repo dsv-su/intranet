@@ -6,18 +6,17 @@ We are pleased to inform you that your request has been successfully approved.
 <br>
 Below, you will find the details pertaining to the approved request:
 <br><br>
-RequestID: {{$dashboard->request_id}}
-<br>
-Request Type: {{Illuminate\Support\Str::upper($dashboard->type)}}
-<br>
-Name: {{$dashboard->name}}
-<br>
-Created: {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
-<br>
-Approval Date: {{$dashboard->updated_at}}
-<br>
-<br>
-With your request approved, this request workflow is now closed. Should you require any further assistance or clarification, please do not hesitate to reach out to: ekonomi@dsv.su.se
+<b>RequestID:</b> {{$dashboard->request_id}}
+<br><br>
+<b>Request Type:</b>{{Illuminate\Support\Str::upper($dashboard->type)}}
+<br><br>
+<b>Name:</b>{{$dashboard->name}}
+<br><br>
+<b>Created:</b>{{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
+<br><br>
+<br>Approval Date:</b>{{$dashboard->updated_at}}
+<br><br>
+With your request approved, this request workflow is now closed. Should you require any further assistance or clarification, please do not hesitate to reach out to: <b>ekonomi@dsv.su.se</b>
 <br><br>
 @if($dashboard->type == 'travelrequest')
     Bon Voyage

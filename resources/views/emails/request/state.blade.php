@@ -1,7 +1,13 @@
-Status Update: Your Submitted Request<br><br>
+Notification: <b>Status Update on Your Submitted Request</b><br><br>
 Dear {{$user->name}}
 <br><br>
-Your <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been
+We're reaching out to inform you that your <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been processed.
+<br><br>
+<b>Updated:</b> {{$dashboard->updated_at}}
+<br><br>
+<b>By:</b> {{$return->name}}
+<br><br>
+<b>Status:</b>
 @switch($dashboard->state)
     @case('manager_returned')
         returned
@@ -23,13 +29,12 @@ Your <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has be
         @break
 @endswitch
 
-from {{$return->name}}.
 <br><br>
-Updated: {{$dashboard->updated_at}}
-<br><br>
-Please review the comments as soon as possible at:
+Please take a moment to review any associated comments at your earliest convenience by visiting:
 <br><br>
 <a href="{{ url('') }}">{{url('')}}</a>
+<br><br>
+Should you have any questions or need further assistance, feel free to reach out to {{$return->name}}. However, please note that this is an automated notification, and replies to this email will not be monitored.
 <br><br>
 ---
 <br>

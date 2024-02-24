@@ -1,17 +1,22 @@
-Review request<br><br>
+Review Request: New Request - <b>Action Required</b><br><br>
 Dear {{$manager->name}},
 <br><br>
-A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been submitted and duly approved by both the project leader/manager and unit head.
-Your attention is kindly requested to review and approve the request. Below are summarized details of the request:
+A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been submitted and has undergone necessary approvals from both the project leader/manager and unit head.
+Your input and approval are now required to proceed.
+Your attention is kindly requested to review and approve the request. Here's a quick overview of the request:
 <br><br>
-Requester: {{$user->name}}
+<b>Requester:</b> {{$user->name}}
 <br><br>
-Manager: {{$manager->name}}
+<b>Projectleader/Manager:</b> {{$manager->name}}
 <br><br>
-Created: {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
+<b>Unit Head:</b> {{$head->name}}
 <br><br>
-Your prompt attention to this matter is vital to ensure that we can promptly address this request and uphold our commitments to the requester.
-Please review the request at your earliest convenience by accessing the following link:
+<b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
+<br><br>
+<b>RequestID:</b> {{$dashboard->request_id}}
+<br><br>
+Given the importance of timely response, your swift review and approval would greatly assist us in promptly addressing this request and fulfilling our commitments to the requester.
+You can conveniently review the details and take necessary action by accessing the request through the following link:
 <br><br>
 <a href="{{ url('') }}">{{url('')}}</a>
 <br><br>
