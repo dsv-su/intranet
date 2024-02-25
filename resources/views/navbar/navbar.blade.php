@@ -1,4 +1,4 @@
-<div class="w-full mx-auto bg-white border-b {{--}}border-blue-600{{--}} 2xl:max-w-7xl">
+<div class="w-full mx-auto bg-white border-b border-susecondary {{--}}border-blue-600{{--}} 2xl:max-w-7xl">
     <div x-data="{ open: false }" class="relative flex flex-col w-full p-5 mx-auto bg-white md:items-center md:justify-between md:flex-row md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
         <div class="flex flex-row items-center justify-between lg:justify-start">
             <a class="text-lg tracking-tight text-black focus:outline-none focus:ring lg:text-2xl dark:text-white" href="/">

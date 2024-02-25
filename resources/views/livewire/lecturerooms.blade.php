@@ -1,5 +1,8 @@
 <div>
-    <div class="p-3 mt-6 flex flex-col justify-center items-center rounded-xl border border-gray-200 dark:border-gray-800">
+    <div class="p-3 mt-3 flex flex-col rounded-xl ">
+        <h3 class="text-left mb-2 text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
+            {{__("Teacher information")}}
+        </h3>
         <label class="inline-flex items-center cursor-pointer">
             <input wire:click="show_status" type="checkbox" value="" class="sr-only peer" @if($status == true) checked @endif>
             <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800

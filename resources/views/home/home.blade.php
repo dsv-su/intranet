@@ -3,13 +3,14 @@
     <div class="grid grid-cols-12 gap-2.5 xl:gap-4">
         <div class="col-span-12 md:col-span-6 md:order-2 lg:col-span-4 grid gap-2.5 xl:gap-4">
             <!-- Card middle-->
-            <div class="md:order-1 relative border border-gray-200 dark:border-gray-800 rounded-xl">
+            <div class="md:order-1 relative border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800 rounded-xl">
                 <div class="relative overflow-hidden w-full h-full rounded-xl">
                     <livewire:lecturerooms />
-                    <div class="p-6 mt-6 flex flex-col justify-center items-center md:min-h-[480px] text-center rounded-xl dark:border-gray-700">
+                    <div class="p-6 mt-6 flex flex-col justify-center items-start md:min-h-[480px] text-center rounded-xl dark:border-gray-700">
+
                         <div id="middleHolder">
                             <p class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-xs font-semibold uppercase">
-                                {{__("Scheduled for launch")}}
+                                {{__("Scheduled for launch on April 2nd,")}}
                             </p>
                             <span class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-7xl font-bold">
                                 2024
@@ -18,14 +19,12 @@
                                 DSV Intranet
                             </h3>
                             <p class="mt-2 text-gray-500">
-                                {{__("The DSV Intranet is under construction. Scheduled for launch 2024")}}
+                                {{__("The DSV Intranet is under construction. Scheduled for launch on April 2nd, 2024")}}
                             </p>
                         </div>
                         <div id="lectureroomHolder" style="display: none;">
                             <livewire:roomstatus />
                         </div>
-
-
 
 
                     </div>
@@ -76,7 +75,7 @@
 
         <div class="col-span-12 md:col-span-6 md:order-1 lg:col-span-4 grid gap-2.5 xl:gap-4">
             <!-- Card left bottom-->
-            <div class="md:order-2 text-left relative border border-gray-200 dark:border-gray-800 rounded-xl md:min-h-[230px]">
+            <div class="md:order-2 text-left relative border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800 rounded-xl md:min-h-[230px]">
                 <div class="relative overflow-hidden w-full h-full rounded-xl">
                     <div class="p-6 flex flex-col md:min-h-[480px] rounded-xl dark:border-gray-700">
                         <div>
@@ -88,6 +87,9 @@
                                 </a>
                             @endif
                             <h3 class="text-left text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
+                                <svg class="inline-flex mb-1 w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 9H5a1 1 0 0 0-1 1v4c0 .6.4 1 1 1h6m0-6v6m0-6 5.4-3.9A1 1 0 0 1 18 6v12.2a1 1 0 0 1-1.6.8L11 15m7 0a3 3 0 0 0 0-6M6 15h3v5H6v-5Z"/>
+                                </svg>
                                 {{__("Internal information")}}
                             </h3>
                             @foreach (\Statamic\Statamic::tag('collection:news')->limit(5)->fetch() as $entry)
@@ -124,7 +126,7 @@
 
             <!-- Card left top -->
             <div class="hidden md:block md:order-1 relative p-6 flex flex-col justify-center items-start {{--}}md:min-h-[230px]{{--}}md:h-fit text-center rounded-xl
-                border border-gray-200 dark:border-gray-800">
+                border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800">
                 <div class="mt-0 text-left">
                     <h3 class="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
                         DSV Helpdesk
@@ -165,7 +167,7 @@
             <!-- Card right bottom-->
             <div class="md:order-2 relative overflow-hidden rounded-xl">
                 <div class="relative overflow-hidden p-6 flex flex-col justify-start items-start {{--}}md:min-h-[480px]{{--}}md:h-fit text-center rounded-xl
-                    border border-gray-200 dark:border-gray-800">
+                    border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800">
                     <div class="mt-0 text-left">
                         <h3 class="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
                             {{__("Information from DSV IT")}}
@@ -202,7 +204,7 @@
 
 
             <!-- Card right top -->
-            <div class="md:order-1 p-6 relative flex flex-col justify-start items-start {{--}}md:min-h-[230px]{{--}}md:h-fit text-center rounded-xl border border-gray-200 dark:border-gray-800">
+            <div class="md:order-1 p-6 relative flex flex-col justify-start items-start {{--}}md:min-h-[230px]{{--}}md:h-fit text-center rounded-xl border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
                     {{__("Ongoing at DSV")}}
                 </h3>
@@ -226,7 +228,7 @@
             <!-- End Card -->
 
             <!-- Card right bottom -->
-            <div class="md:order-3 p-6 relative flex flex-col justify-start items-start md:min-h-fit text-center rounded-xl border border-gray-200 dark:border-gray-800">
+            <div class="md:order-3 p-6 relative flex flex-col justify-start items-start md:min-h-fit text-center rounded-xl border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
                     {{__("Stockholms University")}}
                 </h3>
