@@ -16,9 +16,18 @@
                 @forelse($results as $result)
                     <a href="{{ $result['url'] }}" class="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900">
                         {{ $result['title'] }}
-                        <span class="bg-blue-100 text-blue-800 text-xs font-normal mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                        @if($result['collection'] == 'education')
+                            <span class="bg-green-100 text-green-800 text-xs font-normal mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                        @elseif($result['collection'] == 'phd')
+                            <span class="bg-purple-100 text-purple-800 text-xs font-normal mr-2 px-2.5 py-0.5 rounded-full dark:bg-purple-900 dark:text-purple-300">
+                        @elseif($result['collection'] == 'it')
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-normal mr-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
+                        @else
+                            <span class="bg-blue-100 text-blue-800 text-xs font-normal mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                        @endif
                             {{ $result['collection'] }}
                         </span>
+
                         <div class="text-xs mt-2 text-blue-600">{!! $result['text_field'] ?? ''!!} </div>
                         <hr>
                     </a>

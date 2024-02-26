@@ -6,21 +6,36 @@
             <div class="md:order-1 relative border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800 rounded-xl">
                 <div class="relative overflow-hidden w-full h-full rounded-xl">
                     <livewire:lecturerooms />
-                    <div class="p-6 mt-6 flex flex-col justify-center items-start md:min-h-[480px] text-center rounded-xl dark:border-gray-700">
-
+                    <div class="px-6 {{--}}mt-6{{--}} flex flex-col {{--}}justify-center{{--}} {{--}}items-start{{--}} md:min-h-[480px] {{--}}text-center{{--}} rounded-xl dark:border-gray-700">
                         <div id="middleHolder">
-                            <p class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-xs font-semibold uppercase">
-                                {{__("Scheduled for launch on April 2nd,")}}
-                            </p>
-                            <span class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-7xl font-bold">
+                            <div class="flex flex-col border-y dark:border-gray-700">
+                                @foreach (\Statamic\Statamic::tag('collection:teachernews')->limit(5)->fetch() as $entry)
+                                    <div class="mt-4 text-gray-900 text-xs dark:text-gray-400">
+                                        {{ $entry['date'] }}  {{-- $entry['author']->name ?? '' --}}
+                                    </div>
+                                    <a href="{{$entry['url']}}" class="inline-flex text-left items-center gap-x-1.5 text-blue-600 font-medium">
+                                        {{ $entry['title'] }}
+                                        <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                            <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                                        </svg>
+                                    </a>
+                                @endforeach
+                            </div>
+                            <div class="mt-12 justify-center items-start text-center">
+                                <p class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-xs font-semibold uppercase">
+                                    {{__("Scheduled for launch on April 2nd,")}}
+                                </p>
+                                <span class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-7xl font-bold">
                                 2024
                             </span>
-                            <h3 class="mt-6 text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
-                                DSV Intranet
-                            </h3>
-                            <p class="mt-2 text-gray-500">
-                                {{__("The DSV Intranet is under construction. Scheduled for launch on April 2nd, 2024")}}
-                            </p>
+                                <h3 class="mt-6 text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
+                                    DSV Intranet
+                                </h3>
+                                <p class="mt-2 text-gray-500">
+                                    {{__("The DSV Intranet website is under construction. Scheduled for launch on April 2nd, 2024")}}
+                                </p>
+                            </div>
+
                         </div>
                         <div id="lectureroomHolder" style="display: none;">
                             <livewire:roomstatus />
@@ -87,21 +102,23 @@
                                 </a>
                             @endif
                             <h3 class="text-left text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
+                                {{--}}
                                 <svg class="inline-flex mb-1 w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 9H5a1 1 0 0 0-1 1v4c0 .6.4 1 1 1h6m0-6v6m0-6 5.4-3.9A1 1 0 0 1 18 6v12.2a1 1 0 0 1-1.6.8L11 15m7 0a3 3 0 0 0 0-6M6 15h3v5H6v-5Z"/>
                                 </svg>
+                                {{--}}
                                 {{__("Internal information")}}
                             </h3>
-                            @foreach (\Statamic\Statamic::tag('collection:news')->limit(5)->fetch() as $entry)
-                                <div class="mt-4 text-gray-900 text-sm dark:text-gray-400">
+                            @foreach (\Statamic\Statamic::tag('collection:news')->limit(6)->fetch() as $entry)
+                                <div class="mt-4 text-gray-900 text-xs dark:text-gray-400">
                                     {{ $entry['date'] }}  {{-- $entry['author']->name ?? '' --}}
                                 </div>
-                                <a href="{{$entry['url']}}" class="inline-flex text-left items-center gap-x-1.5 text-blue-600 font-medium">
+                                <a href="{{$entry['url']}}" class="inline text-left items-center gap-x-1.5 text-blue-600 font-medium">
                                     {{ $entry['title'] }}
-                                    <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                                    </svg>
                                 </a>
+                                <svg class="inline w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                                </svg>
                             @endforeach
                         </div>
                     </div>
@@ -173,12 +190,12 @@
                             {{__("Information from DSV IT")}}
                         </h3>
                         @foreach (\Statamic\Statamic::tag('collection:itnews')->limit(5)->fetch() as $entry)
-                            <div class="mt-4 text-gray-900 text-sm dark:text-gray-400">
+                            <div class="mt-4 text-gray-900 text-xs dark:text-gray-400">
                                 {{ $entry['date'] }}  {{-- $entry['author']->name ?? '' --}}
                             </div>
-                            <a href="{{$entry['url']}}" class="inline-flex text-left items-center gap-x-1.5 text-blue-600 font-medium">
+                            <a href="{{$entry['url']}}" class="inline text-left items-center gap-x-1.5 text-blue-600 font-medium">
                             {{ $entry['title'] }}
-                            <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <svg class="inline w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                 <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                             </svg>
                         </a>

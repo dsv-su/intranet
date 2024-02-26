@@ -1,5 +1,5 @@
 <div>
-    <div class="p-3 mt-3 flex flex-col rounded-xl ">
+    <div class="p-3 mt-3 flex flex-col">
         <h3 class="text-left mb-2 text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
             {{__("Teacher information")}}
         </h3>
