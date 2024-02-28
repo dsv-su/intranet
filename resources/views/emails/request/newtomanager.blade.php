@@ -14,7 +14,6 @@ Your attention is kindly requested to review and approve the request. Here's a q
 <br><br>
 <b>RequestID:</b> {{$dashboard->request_id}}
 <br><br>
-Given the importance of timely response, your swift review and approval would greatly assist us in promptly addressing this request and fulfilling our commitments to the requester.
 Please review the request at your earliest convenience by accessing the following link:
 <br><br>
 <a href="{{ url('') }}">{{url('')}}</a>

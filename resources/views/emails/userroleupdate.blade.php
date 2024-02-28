@@ -36,6 +36,36 @@ Your roles have been updated to:
         <br><br>
 @endforeach
 
+@foreach($user->groups() as $group)
+
+        @if($group->title == 'UtbildningsAdmin')
+            <b>UTBILDNINGSADMINISTRATION</b> - Manage the creation, editing, and publishing of digital content, news posts, images, and other assets within the education sector.
+        @elseif ($group->title == 'Personal')
+            <b>ADMINISTRATION</b> - Create, edit, and publish digital content, such as articles, news posts, images, and other assets, within administrative contexts.
+        @elseif ($group->title == 'DoktorandAdmin')
+            <b>PHD ADMINISTRATION</b> - Create, edit, and publish digital content, encompassing articles, news posts, images, and other assets within the realm of PhD studies.
+        @elseif ($group->title == 'ForskarAdmin')
+            <b>RESEARCH ADMINISTRATION</b> - Create, edit, and publish digital content, including articles, news posts, images, and other assets within the field of research.
+        @elseif ($group->title == 'LokalAdmin')
+            <b>LOKAL ADMINISTRATION</b> - Create, edit, and publish digital content, such as articles, news posts, images, and other assets related to premises.
+        @elseif ($group->title == 'DMC')
+            <b>DMC</b> - Create, edit, and publish digital content, including articles, news posts, images, and other assets within the IT domain.
+        @elseif ($group->title == 'Ekonomi')
+            <b>FINACIAL OFFICER</b> - Review, approve, deny, or return user requests for the DSV department.
+        @elseif ($group->title == 'Projektledare')
+            <b>PROJECT LEADER</b> - Review, approve, deny, or return user requests within your project group.
+        @elseif ($group->title == 'Enhetschef')
+            <b>UNIT HEAD</b> - Review, grant, deny, or return user requests within your unit.
+        @elseif ($group->title == 'Systemansvarig')
+            <b>ADMINISTRATOR</b> - Full administrative access to the CMS, including managing, configuring, and maintaining the system. Responsibilities also include user management and role assignment, ensuring that user roles and permissions are correctly configured.
+        @else
+            <b>{{$group->title}}</b>
+        @endif
+        <br><br>
+
+
+@endforeach
+
 ---
 <br>
 This is an automated email. Please do not reply to this message.
