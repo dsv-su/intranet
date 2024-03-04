@@ -32,7 +32,7 @@
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
   },
   "resources/css/site.css": {
-    "file": "assets/site-b4e33c0d.css",
+    "file": "assets/site-6a731cb0.css",
     "isEntry": true,
     "src": "resources/css/site.css"
   },

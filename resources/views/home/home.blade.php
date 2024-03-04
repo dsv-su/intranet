@@ -9,21 +9,23 @@
                     <div class="px-6 {{--}}mt-6{{--}} flex flex-col {{--}}justify-center{{--}} {{--}}items-start{{--}} md:min-h-[480px] {{--}}text-center{{--}} rounded-xl dark:border-gray-700">
                         <div id="middleHolder">
                             <div class="flex flex-col border-y dark:border-gray-700">
-                                @foreach (\Statamic\Statamic::tag('collection:teachernews')->limit(5)->fetch() as $entry)
-                                    <div class="mt-4 text-gray-900 text-xs dark:text-gray-400">
-                                        {{ $entry['date'] }}  {{-- $entry['author']->name ?? '' --}}
-                                    </div>
-                                    <a href="{{$entry['url']}}" class="inline-flex text-left items-center gap-x-1.5 text-blue-600 font-medium">
-                                        {{ $entry['title'] }}
-                                        <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                            <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                                        </svg>
-                                    </a>
-                                @endforeach
+                                <div class="pb-8">
+                                    @foreach (\Statamic\Statamic::tag('collection:teachernews')->limit(5)->fetch() as $entry)
+                                        <div class="mt-4 text-gray-900 text-xs dark:text-gray-400">
+                                            {{ $entry['date'] }}  {{-- $entry['author']->name ?? '' --}}
+                                        </div>
+                                        <a href="{{$entry['url']}}" class="inline-flex text-left items-center gap-x-1.5 text-blue-600 font-medium">
+                                            {{ $entry['title'] }}
+                                            <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                                            </svg>
+                                        </a>
+                                    @endforeach
+                                </div>
                             </div>
                             <div class="mt-12 justify-center items-start text-center">
                                 <p class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-xs font-semibold uppercase">
-                                    {{__("Scheduled for launch on April 2nd,")}}
+                                    {{__("Scheduled for launch,")}}
                                 </p>
                                 <span class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-7xl font-bold">
                                 2024
@@ -32,7 +34,7 @@
                                     DSV Intranet
                                 </h3>
                                 <p class="mt-2 text-gray-500">
-                                    {{__("The DSV Intranet website is under construction. Scheduled for launch on April 2nd, 2024")}}
+                                    {{__("The DSV Intranet website is under construction.")}}
                                 </p>
                             </div>
 
@@ -186,6 +188,13 @@
                 <div class="relative overflow-hidden p-6 flex flex-col justify-start items-start {{--}}md:min-h-[480px]{{--}}md:h-fit text-center rounded-xl
                     border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800">
                     <div class="mt-0 text-left">
+                        @can('access cp')
+                            <a href="/cp/collections/itnews" class="float-right hover:border-blue-600">
+                                <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4.109 17H1v-2a4 4 0 0 1 4-4h.87M10 4.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm7.95 2.55a2 2 0 0 1 0 2.829l-6.364 6.364-3.536.707.707-3.536 6.364-6.364a2 2 0 0 1 2.829 0Z"/>
+                                </svg>
+                            </a>
+                        @endif
                         <h3 class="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
                             {{__("Information from DSV IT")}}
                         </h3>
