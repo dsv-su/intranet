@@ -24,7 +24,6 @@ class SendNewUserNotification
     public function handle(object $event): void
     {
         $user = $event->user;
-
         Mail::to('ryan@dsv.su.se')->send(new NewUser($user));
     }
 }
