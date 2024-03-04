@@ -1,4 +1,13 @@
-Intranet Notification - Important Message:
+Intranet Notification - Important Message
+@if($news->email_dsv)
+    for DSV Staff:
+@elseif($news->email_teachers && $news->email_phd)
+    for teachers and Phd students
+@elseif($news->email_teachers)
+    for teachers:
+@elseif ($news->email_phd)
+    for Phd Students:
+@endif
 <br><br>
 <b>{{ $news->title }}</b>
 <br>
