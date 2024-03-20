@@ -129,5 +129,10 @@
     "Travelrequest": "Resebegäran",
     "Please refine your search by typing to filter ID, User, Purpose, or ProjectID": "Var vänlig förfina din sökning genom att skriva för att filtrera ID, Användare, Syfte eller ProjektID",
     "Teacher information": "Lärar information",
-    "PhD information": "Doktorand information"
+    "PhD information": "Doktorand information",
+    "Projector": "Projektor",
+    "Recorder": "Inspelare",
+    "Room": "Rum",
+    "Error": "Fel",
+    "Remark": "Anmärkning"
 }

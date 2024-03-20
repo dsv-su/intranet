@@ -1,9 +1,9 @@
 <div wire:poll.visible>
     <section>
-        <div class="relative items-start w-full px-3 py-1 mx-auto md:px-6 lg:px-10 max-w-7xl">
+        <div class="relative items-center w-full px-3 py-1 mx-auto md:px-6 lg:px-10 max-w-7xl">
             <div class="grid w-full grid-cols-1 mx-auto">
                 @foreach(\Statamic\Statamic::tag('collection:roomsstatus') as $page)
-                <div class="max-w-md py-2 mx-auto">
+                <div class="max-w-md py-2">
                     @can('access cp')
                         <div class="inline-flex z-10">
                             <a href="{{$page->edit_url}}" >
@@ -16,40 +16,40 @@
                     <p class="mb-2 text-sm font-semibold text-blue-600 dark:text-gray-200">{!! $page->title !!}</p>
 
                     <div class="inline">
-                        <p class="inline-flex mb-2 text-sm font-normal dark:text-gray-200">Projector |</p>
-                        <p class="inline-flex mb-2 text-sm font-normal dark:text-gray-200">Recorder |</p>
-                        <p class="inline-flex mb-2 text-sm font-normal dark:text-gray-200">Room</p>
+                        <p class="inline-flex mb-2 text-sm font-normal dark:text-gray-200">{{__("Projector")}} |</p>
+                        <p class="inline-flex mb-2 text-sm font-normal dark:text-gray-200">{{__("Recorder")}} |</p>
+                        <p class="inline-flex mb-2 text-sm font-normal dark:text-gray-200">{{__("Room")}}</p>
                     </div>
 
                     <br>
-                    <div data-tooltip-target="first" class="inline">
+                    <a href="#" class="inline-flex">
                         @if($page->projector == true )
-                            <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">Error</span>
+                            <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">{{__("Error")}}</span>
                         @elseif(!empty($page->projector_status))
-                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400">Note</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400">{{__("Remark")}}</span>
                         @else
                             <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">OK</span>
                         @endif
-                    </div>
+                    </a>
 
-                    <div class="inline">
+                    <a href="#" class="inline">
                         @if($page->recorder == true )
-                            <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">Error</span>
+                            <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">{{__("Error")}}</span>
                         @elseif(!empty($page->recorder_status))
-                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400">Note</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400">{{__("Remark")}}</span>
                         @else
                             <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">OK</span>
                         @endif
-                    </div>
-                    <div class="inline">
+                    </a>
+                    <a href="#" class="inline">
                         @if($page->room == true )
-                            <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">Error</span>
+                            <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">{{__("Error")}}</span>
                         @elseif(!empty($page->room_status))
-                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400">Note</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400">{{__("Remark")}}</span>
                         @else
                             <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">OK</span>
                         @endif
-                    </div>
+                    </a>
                 </div>
 
                 @endforeach
@@ -58,44 +58,6 @@
 
         </div>
     </section>
-
-
-{{--}}
-@foreach(\Statamic\Statamic::tag('collection:roomsstatus') as $page)
-
-
-    <div class="statuscontainer">
-        <a href="#" class="init">
-
-            <div class="tab">
-                <p class="mb-2 text-sm font-semibold text-blue-600">{!! $page->title !!}</p>
-            </div>
-            @if($page->projector == false && $page->recorder == false && $page->room == false)
-                <div class="light" data-tooltip-target="first" style="background: green"></div>
-                <div class="inline">
-                    <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">OK</span>
-                </div>
-            @else
-                <div class="light" data-tooltip-target="first" style="@if($page->projector == true ) background: red @elseif(!empty($page->projector_status)) background: yellow @else background: green @endif"></div>
-                <div class="light" data-tooltip-target="second" style="@if($page->recorder == true ) background: red @elseif(!empty($page->recorder_status)) background: yellow @else background: green @endif"></div>
-                <div class="light" data-tooltip-target="third" style="@if($page->room == true ) background: red @elseif(!empty($page->room_status)) background: yellow @else background: green @endif"></div>
-            @endif
-
-        </a>
-
-        @can('access cp')
-            <div class="z-10">
-                <a href="{{$page->edit_url}}" >
-                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.1" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"/>
-                    </svg>
-                </a>
-            </div>
-        @endif
-    </div>
-
-@endforeach
-{{--}}
 
 <!-- Tooltips -->
     <div id="first" role="tooltip"
