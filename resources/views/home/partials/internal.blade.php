@@ -2,7 +2,7 @@
     <div class="mt-4 text-gray-900 text-xs dark:text-gray-400">
         {{ $entry['date'] }}  {{-- $entry['author']->name ?? '' --}}
     </div>
-    <a href="{{$entry['url']}}" class="inline text-left items-center gap-x-1.5 text-blue-600 font-medium">
+    <a href="{{$entry['url']}}" class="inline text-left items-center gap-x-1.5 text-blue-800 font-medium">
         {{ $entry['title'] }}
     </a>
     <svg class="inline w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">

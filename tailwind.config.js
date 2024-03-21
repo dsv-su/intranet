@@ -29,8 +29,7 @@ module.exports = {
             colors: {
                 suprimary: '#002f5f',
                 sudepartment: '#33587f',
-                susecondary: '#acdee6',
-                sublue: '#0f6cbf'
+                susecondary: '#acdee6'
             },
         },
     },

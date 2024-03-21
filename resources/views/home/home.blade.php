@@ -155,14 +155,14 @@
                         SU, tel 08-16 1999
                     </p>
 
-                    <a href="mailto:helpdesk@dsv.su.se" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-600 font-medium">
+                    <a href="mailto:helpdesk@dsv.su.se" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-800 font-medium">
                         {{__("Contact")}} DSV Helpdesk
                         <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                         </svg>
                     </a>
                     <br>
-                    <a href="https://serviceportalen.su.se" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-600 font-medium">
+                    <a href="https://serviceportalen.su.se" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-800 font-medium">
                         Serviceportalen
                         <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
@@ -222,14 +222,14 @@
                 <p class="text-left text-gray-500">
                     {{__("Be up to date with the latest news and events from the department.")}}
                 </p>
-                <a href="https://www.su.se/institutionen-for-data-och-systemvetenskap/nyheter" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-600 font-medium">
+                <a href="https://www.su.se/institutionen-for-data-och-systemvetenskap/nyheter" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-800 font-medium">
                     {{__("News")}}
                     <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                     </svg>
                 </a>
 
-                <a href="https://www.su.se/institutionen-for-data-och-systemvetenskap/kalender" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-600 font-medium">
+                <a href="https://www.su.se/institutionen-for-data-och-systemvetenskap/kalender" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-800 font-medium">
                     {{__("Calender")}}
                     <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
@@ -246,31 +246,31 @@
                 <p class="text-left text-gray-500">
                     {{__("Links to Stockholm University")}}
                 </p>
-                <a href="https://www.su.se/english/news" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-600 font-medium">
+                <a href="https://www.su.se/english/news" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-800 font-medium">
                     SU {{__("News")}}
                     <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                     </svg>
                 </a>
-                <a href="https://www.su.se/english/about-the-university/contact/press-and-media/newsletter-1.534043" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-600 font-medium">
+                <a href="https://www.su.se/english/about-the-university/contact/press-and-media/newsletter-1.534043" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-800 font-medium">
                     SU {{__("Newsletter")}}
                     <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                     </svg>
                 </a>
-                <a href="https://www.su.se/english/calendar" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-600 font-medium">
+                <a href="https://www.su.se/english/calendar" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-800 font-medium">
                     SU {{__("Calender")}}
                     <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                     </svg>
                 </a>
-                <a href="https://www.su.se/staff/" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-600 font-medium">
+                <a href="https://www.su.se/staff/" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-800 font-medium">
                     SU {{__("Staff pages")}}
                     <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                     </svg>
                 </a>
-                <a href="https://www.su.se/stockholm-university-library/" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-600 font-medium">
+                <a href="https://www.su.se/stockholm-university-library/" class="mt-4 inline-flex items-center gap-x-1.5 text-blue-800 font-medium">
                     SU {{__("Library")}}
                     <svg class="w-2.5 h-2.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
