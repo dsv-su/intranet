@@ -13,7 +13,7 @@
                             </a>
                         </div>
                     @endif
-                    <p class="mb-2 text-sm font-semibold text-blue-600 dark:text-gray-200">{!! $page->title !!}</p>
+                    <p class="mb-1 text-sm font-semibold text-blue-600 dark:text-gray-200">{!! $page->title !!}</p>
 
                     <div class="inline">
                         <p class="inline-flex mb-2 text-sm font-normal dark:text-gray-200">{{__("Projector")}} |</p>
@@ -22,7 +22,7 @@
                     </div>
 
                     <br>
-                    <a href="#" class="inline-flex">
+                    <a href="{{ config('app.url')}}{{$page->slug}}" class="inline-flex">
                         @if($page->projector == true )
                             <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">{{__("Error")}}</span>
                         @elseif(!empty($page->projector_status))
