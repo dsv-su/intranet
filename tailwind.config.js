@@ -30,6 +30,7 @@ module.exports = {
                 suprimary: '#002f5f',
                 sudepartment: '#33587f',
                 susecondary: '#acdee6',
+                sublue: '#0f6cbf'
             },
         },
     },

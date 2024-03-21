@@ -103,10 +103,10 @@
                             </div>
                         </div>
                         <!-- CLOSE -->
-                        <div class="p-2 bg-white border-y">
+                        <div class="p-2 bg-white border-y dark:bg-gray-900">
                             <div class="px-4 py-5 mx-auto space-y-6 2xl:max-w-7xl sm:flex sm:space-y-0 sm:space-x-10 sm:px-6 lg:px-8">
                                 <div class="flow-root mx-auto">
-                                    <div x-on:click="openMobileMenu = false" class="flex items-center p-3 -m-3 text-sm text-gray-500 transition duration-150 ease-in-out hover:text-blue-500">
+                                    <div x-on:click="openMobileMenu = false" class="flex items-center p-3 -m-3 text-sm text-gray-500 transition duration-150 ease-in-out hover:text-blue-500 dark:text-white">
                                         {{__("Close menu")}}
                                         <span class="ml-3" aria-hidden="true">
                                             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

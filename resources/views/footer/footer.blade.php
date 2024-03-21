@@ -2,11 +2,12 @@
     <!-- Grid -->
     <div class="grid md:grid-cols-4 lg:grid-cols-5 gap-8 mb-10">
         <div class="col-span-full lg:col-span-1">
-            <img class="h-24" src="{{asset('images/su_logo.png')}}"  alt="Stockholms universitet">
+            <img class="h-24 block dark:hidden" src="{{asset('images/su_logo.png')}}"  alt="Stockholms universitet">
+            <img class="h-24 hidden dark:block" src="{{asset('images/su_logo_dark.png')}}"  alt="Stockholms universitet">
             {{--}}
             <a class="flex-none text-xl font-semibold dark:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#" aria-label="Brand">{{__("Stockholms University")}}</a>
             {{--}}
-            <p class="mt-3 text-xs sm:text-sm text-gray-600 dark:text-gray-400">{{__("Department of Computer and Systems Sciences")}}</p>
+            <p class="mt-3 text-xs sm:text-sm text-gray-600 dark:text-gray-200">{{__("Department of Computer and Systems Sciences")}}</p>
         </div>
         <!-- End Col -->
 
