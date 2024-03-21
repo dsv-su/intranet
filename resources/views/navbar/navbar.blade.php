@@ -2,7 +2,7 @@
     <div x-data="{ open: false }" class="relative flex flex-col w-full p-5 mx-auto bg-white md:items-center md:justify-between md:flex-row md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
         <div class="flex flex-row items-center justify-between lg:justify-start">
             <a class="text-lg tracking-tight text-black focus:outline-none focus:ring lg:text-2xl dark:text-white" href="/">
-                <span class="bg-clip-text bg-blue-600 text-transparent text-lg focus:ring-0 md:text-xl lg:text-2xl">
+                <span class="bg-clip-text bg-blue-800 text-transparent text-lg focus:ring-0 md:text-xl lg:text-2xl">
                     {{ config('app.name')}}
                 </span>
             </a>
@@ -83,7 +83,7 @@
                                                                 {!! $child['icon_field'] !!}
                                                             </div>
                                                             {{--}}
-                                                            <p class="mt-4 ml-16 text-base font-medium text-blue-700">
+                                                            <p class="mt-4 ml-16 text-base font-medium text-blue-800">
                                                                 {!! $child['title'] !!}
                                                                 <svg class="w-2.5 h-2.5 inline-flex" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                                     <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
@@ -91,7 +91,7 @@
                                                             </p>
 
                                                         </div>
-                                                        <div class="mt-2 ml-16 text-sm text-gray-500 dark:text-white">
+                                                        <div class="mt-2 ml-16 text-sm text-gray-900 dark:text-white">
                                                             {!! $child['intro'] !!}
                                                         </div>
                                                     </div>

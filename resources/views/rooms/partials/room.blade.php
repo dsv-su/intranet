@@ -3,7 +3,8 @@
         <h2 class="text-2xl font-bold md:text-3xl dark:text-gray-200 dark:before:bg-gray-600"> {!! $page->title !!}</h2>
         <br>
         @if($page->projector === false and $page->recorder === false and $page->room ===false and empty($page->projector_status) and empty($page->recorder_status) and empty($page->room_status))
-            <p class="text-lg text-gray-800 dark:text-gray-200 dark:before:bg-gray-600">{!! $page->content !!}</p>
+            <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">{{__("Status: OK")}}</span>
+            <p class="text-lg text-gray-800 dark:text-gray-200 dark:before:bg-gray-600">{{__("Nothing reported")}}</p>
         @endif
 
         <!-- Projector -->
