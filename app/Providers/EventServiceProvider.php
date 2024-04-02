@@ -26,7 +26,7 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         UserCreatedSuccessful::class => [
-            SendUserConfirmationEmail::class,
+            //SendUserConfirmationEmail::class,
             SendNewUserNotification::class,
         ],
         EntrySaved::class => [
