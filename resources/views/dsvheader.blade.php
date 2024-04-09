@@ -41,6 +41,7 @@
                 @endguest
                 {{auth()->user()->name ?? 'Not logged in'}}
             </div>
+
             <!-- Dark mode switcher -->
             <button id="theme-toggle" data-tooltip-target="navbar-dropdown-toggle-dark-mode-tooltip" type="button" data-toggle-dark="light" class="flex items-center w-6 h-6 justify-center text-xs font-small text-white outline outline-offset-2 outline-1 rounded-sm toggle-dark-state-example hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:outline-none dark:text-gray-200 dark:border-gray-200 dark:hover:text-white dark:hover:bg-gray-700">
                 <svg id="theme-toggle-dark-icon" data-toggle-icon="moon" class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
