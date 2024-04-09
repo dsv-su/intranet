@@ -73,7 +73,8 @@ class FOController extends Controller
     public function settings()
     {
         //Financial officers
-        $roleIds = DB::table('role_user')->where('role_id', 'financial_officer')->pluck('user_id');
+        //$roleIds = DB::table('role_user')->where('role_id', 'financial_officer')->pluck('user_id');
+        $roleIds = DB::table('group_user')->where('group_id', 'ekonomi')->pluck('user_id');
         $financialofficer = User::whereIn('id', $roleIds)->get();
         //return view('requests.fo.settings',['fos' => $financialofficer]);
         return (new \Statamic\View\View)

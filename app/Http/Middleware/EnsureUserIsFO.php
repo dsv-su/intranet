@@ -15,7 +15,7 @@ class EnsureUserIsFO
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(\Statamic\Auth\User::current()->hasRole('financial_officer')) {
+        if(\Statamic\Auth\User::current()->can('financial_officer')) {
             return $next($request);
         }
         abort(401);
