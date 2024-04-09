@@ -46,11 +46,15 @@ class TravelRequestController extends Controller
         $countries = Country::all();
 
         //Projectleaders
-        $roleIds = DB::table('role_user')->where('role_id', 'project_leader')->pluck('user_id');
+        //$roleIds = DB::table('role_user')->where('role_id', 'project_leader')->pluck('user_id');
+        //Switched to groups
+        $roleIds = DB::table('group_user')->where('group_id', 'projektledare')->pluck('user_id');
         $projectleaders = User::whereIn('id', $roleIds)->get();
 
         //Unitheads
-        $roleIds = DB::table('role_user')->where('role_id', 'unit_head')->pluck('user_id');
+        //$roleIds = DB::table('role_user')->where('role_id', 'unit_head')->pluck('user_id');
+        //Switched to groups
+        $roleIds = DB::table('group_user')->where('group_id', 'enhetschef')->pluck('user_id');
         $unitheads = User::whereIn('id', $roleIds)->get();
         return (new \Statamic\View\View)
                    ->template('requests.travel.create')

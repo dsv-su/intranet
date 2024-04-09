@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@include('dsvheader')
-@include('navbar.navbar')
+@nocache('dsvheader')
+@nocache('navbar.navbar')
 @include('home.home')
-@include('layouts.darktoggler')
+@nocache('layouts.darktoggler')
 
