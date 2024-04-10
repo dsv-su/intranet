@@ -18,7 +18,7 @@ class TravelRequestController extends Controller
 
     public function __construct()
     {
-        $this->middleware('show')->except(['create', 'submit']);
+        $this->middleware('show')->except(['create', 'resume', 'submit']);
         $this->middleware(['checklang', 'locale']);
     }
 
@@ -32,7 +32,12 @@ class TravelRequestController extends Controller
     {
         $dashboard = Dashboard::find($id);
         $tr = TravelRequest::find($dashboard->request_id);
-        $formtype = 'show';
+        if($tr->state == 'manager_returned' or $tr->state == 'head_returned' or $tr->state == 'fo_returned') {
+            $formtype = 'returned';
+        } else {
+            $formtype = 'show';
+        }
+
 
         return (new \Statamic\View\View)
             ->template('requests.travel.show')
@@ -40,26 +45,53 @@ class TravelRequestController extends Controller
             ->with(['tr' => $tr, 'formtype' => $formtype]);
     }
 
-
-    public function create()
+    public function resume(TravelRequest $tr)
     {
+        //Type
+        $type = 'resume';
+
+        //Countries
         $countries = Country::all();
 
         //Projectleaders
-        //$roleIds = DB::table('role_user')->where('role_id', 'project_leader')->pluck('user_id');
-        //Switched to groups
         $roleIds = DB::table('group_user')->where('group_id', 'projektledare')->pluck('user_id');
         $projectleaders = User::whereIn('id', $roleIds)->get();
 
         //Unitheads
-        //$roleIds = DB::table('role_user')->where('role_id', 'unit_head')->pluck('user_id');
-        //Switched to groups
         $roleIds = DB::table('group_user')->where('group_id', 'enhetschef')->pluck('user_id');
         $unitheads = User::whereIn('id', $roleIds)->get();
+
+        //Dashboard
+        $dashboard = Dashboard::where('request_id', $tr->id)->first();
+
+        return (new \Statamic\View\View)
+            ->template('requests.travel.create')
+            ->layout('mylayout')
+            ->with(['type' => $type, 'tr' => $tr, 'dashboard' => $dashboard, 'countries' => $countries, 'projectleaders' => $projectleaders,
+                'unitheads' => $unitheads]);
+    }
+
+    public function create()
+    {
+        //Type
+        $type = 'create';
+
+        //Countries
+        $countries = Country::all();
+
+        //Projectleaders
+        $roleIds = DB::table('group_user')->where('group_id', 'projektledare')->pluck('user_id');
+        $projectleaders = User::whereIn('id', $roleIds)->get();
+
+        //Unitheads
+
+        $roleIds = DB::table('group_user')->where('group_id', 'enhetschef')->pluck('user_id');
+        $unitheads = User::whereIn('id', $roleIds)->get();
+
         return (new \Statamic\View\View)
                    ->template('requests.travel.create')
                    ->layout('mylayout')
-                   ->with(['countries' => $countries, 'projectleaders' => $projectleaders,
+                   ->with(['type' => $type, 'countries' => $countries, 'projectleaders' => $projectleaders,
             'unitheads' => $unitheads]);
 
     }

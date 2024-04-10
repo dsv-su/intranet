@@ -16,7 +16,8 @@ class Usernotifications extends Component
     public function mount()
     {
         $this->user_roles = $this->getUserRoles();
-        $this->user_requests = Dashboard::where('user_id', $this->auth_user)->orderBy('created_at', 'desc')->get();
+        //Limit notifications
+        $this->user_requests = Dashboard::where('user_id', $this->auth_user)->orderBy('created_at', 'desc')->limit(10)->get();
     }
 
     private function getUserRoles()

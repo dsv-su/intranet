@@ -22,8 +22,9 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Nunito', 'sans-serif'],
-                serif: ['Merriweather', 'sans-serif'],
+                sans: ['Nunito', 'Inter', 'Helvetica', 'Arial', 'sans-serif'],
+                serif: ['Merriweather', 'Georgia', 'Cambria', 'Times New Roman', 'serif'],
+                mono: ['Courier New', 'monospace'],
                 sudepartment: ['TheSansB2-Light', 'Verdana', 'sans-serif'],
             },
             colors: {
