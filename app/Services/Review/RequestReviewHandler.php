@@ -115,11 +115,10 @@ class RequestReviewHandler
     {
         switch($type) {
             case('travelrequest'):
-                $id = ManagerComment::create([
-                    'reqid' => $req_id,
-                    'user_id' => $role_id,
-                    'comment' => $comment
-                ]);
+                $id = ManagerComment::updateOrcreate(
+                    ['reqid' => $req_id, 'user_id' => $role_id],
+                    ['comment' => $comment]
+                );
                 break;
         }
         return $id;
@@ -129,11 +128,10 @@ class RequestReviewHandler
     {
         switch($type) {
             case('travelrequest'):
-                $id = FoComment::create([
-                    'reqid' => $req_id,
-                    'user_id' => $role_id,
-                    'comment' => $comment
-                ]);
+                $id = FoComment::updateOrcreate(
+                    ['reqid' => $req_id, 'user_id' => $role_id],
+                    ['comment' => $comment]
+                );
                 break;
         }
         return $id;
@@ -143,11 +141,10 @@ class RequestReviewHandler
     {
         switch($type) {
             case('travelrequest'):
-                $id = HeadComment::create([
-                    'reqid' => $req_id,
-                    'user_id' => $role_id,
-                    'comment' => $comment
-                ]);
+                $id = HeadComment::updateOrcreate(
+                    ['reqid' => $req_id, 'user_id' => $role_id],
+                    ['comment' => $comment]
+                );
                 break;
         }
         return $id;
