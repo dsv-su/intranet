@@ -13,6 +13,10 @@
         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">{{ __("Duty Travel Request") }}</h2>
         <form method="post" action="{{route('travel-submit')}}">
             @csrf
+            @if($type == 'resume')
+                <input type="hidden" name="id" value="{{$tr->id}}">
+            @endif
+
             <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
                 <!--Name-->
                 <div class="w-full">
@@ -172,7 +176,7 @@
                         @error('start')
                         <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                         @enderror
-                        <input name="start" id="startInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
+                        <input name="start" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->departure)->format('d/m/Y') }}" @endif id="startInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
                     </div>
 
                     <span class="mx-4 text-gray-500">{{__("To")}}</span>
@@ -185,7 +189,7 @@
                         @error('end')
                         <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                         @enderror
-                        <input name="end" id="endInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
+                        <input name="end" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->return)->format('d/m/Y') }}" @endif id="endInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
                     </div>
                 </div>
 
@@ -213,6 +217,12 @@
 
 <!-- Modals -->
 @include('requests.travel.modals.travel_help')
+@if($type == 'resume')
+    <script>
+
+    </script>
+@endif
+
 <script>
     document.getElementById("startInput").addEventListener("changeDate", function (e){
         Livewire.emit('changeStartDate', e.detail.datepicker.inputField.value)

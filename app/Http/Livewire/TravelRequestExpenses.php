@@ -38,6 +38,7 @@ class TravelRequestExpenses extends Component
         $this->other = $this->tr->other_costs ?? null;
         $this->days = $this->tr->days ?? null;
         $this->total = $this->tr->total ?? null;
+        //$this->start = Carbon::createFromTimestamp($this->tr->departure)->toDateString() ?? null;
     }
 
     public function changeStartDate($date)

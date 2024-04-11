@@ -22,7 +22,7 @@ class RequestReviewHandler
         $this->reviewer = $reviewer;
         $this->comment = $comment;
         $this->decicion = $decicion;
-        $this->workflowhandler = new WorkflowHandler($this->dashboard->id);
+        $this->workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
     }
 
     public function review()
