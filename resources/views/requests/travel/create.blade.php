@@ -13,6 +13,10 @@
         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">{{ __("Duty Travel Request") }}</h2>
         <form method="post" action="{{route('travel-submit')}}">
             @csrf
+            @if($type == 'resume')
+                <input type="hidden" name="id" value="{{$tr->id}}">
+            @endif
+
             <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
                 <!--Name-->
                 <div class="w-full">
@@ -24,7 +28,7 @@
                         </button>
                     </label>
                     <input type="text" name="name" id="project" class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                           value="{{ old('name') ? old('name'): $name ??  'Travelrequest for '. auth()->user()->name  }}" placeholder="Name" required="">
+                           value="{{ old('name') ? old('name'): $tr->name ??  'Travelrequest for '. auth()->user()->name  }}" placeholder="Name" required="">
                     @error('name')
                     <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}} </p>
                     @enderror
@@ -42,7 +46,7 @@
                     <textarea id="purpose" rows="4" name="purpose"
                               class="@error('purpose') border-red-500 @enderror font-mono block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300
                               focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                              placeholder="{{__("Describe the purpose of your mission")}}">{{ old('purpose') ? old('purpose'): $purpose ?? '' }}</textarea>
+                              placeholder="{{__("Describe the purpose of your mission")}}">{{ old('purpose') ? old('purpose'): $tr->purpose ?? '' }}</textarea>
                     @error('purpose')
                         <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}}</p>
                     @enderror
@@ -57,18 +61,31 @@
                             </svg>
                         </button>
                     </label>
-                    <select id="paper" name="paper"
+                    <select id="paper" name="paper" data-value="{{ old('paper') ? old('paper'): $tr->paper ?? 0}}"
                             class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                        <option selected="" value="0">{{__("No")}}</option>
-                        <option value="1">{{__("Yes")}}</option>
+                        @if($type == 'create')
+                            <option selected="" value="0">{{__("No")}}</option>
+                            <option value="1">{{__("Yes")}}</option>
+                        @else
+                            <option @if(!$tr->paper) selected="" @endif value="0">{{__("No")}}</option>
+                            <option  @if($tr->paper) selected="" @endif value="1">{{__("Yes")}}</option>
+                        @endif
                     </select>
                 </div>
                 <br>
                 <!-- Project -->
-                <livewire:select2.project-select2 />
+                @if($type == 'resume')
+                    <livewire:select2.project-select2 :id="$tr->project">
+                @else
+                    <livewire:select2.project-select2 />
+                @endif
 
                 <!--Country-->
-                <livewire:select2.country-select2 />
+                @if($type == 'resume')
+                        <livewire:select2.country-select2 :country="$tr->country">
+                @else
+                    <livewire:select2.country-select2 />
+                @endif
                 <!--end -->
 
                 <!-- Projectleader -->
@@ -83,7 +100,12 @@
                     <select id="project_leader" name="project_leader"
                             class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                         @foreach($projectleaders as $projectleader)
-                            <option value="{{$projectleader->id}}">{{$projectleader->name}}</option>
+                            @if($type == 'resume')
+                                <option @if($projectleader->id == $dashboard->manager_id) selected="" @endif value="{{$projectleader->id}}">{{$projectleader->name}}</option>
+                            @else
+                                <option value="{{$projectleader->id}}">{{$projectleader->name}}</option>
+                            @endif
+
                         @endforeach
                     </select>
                 </div>
@@ -99,7 +121,11 @@
                     <select id="unit_head" name="unit_head"
                             class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                         @foreach($unitheads as $unithead)
-                            <option value="{{$unithead->id}}">{{$unithead->name}}</option>
+                            @if($type == 'resume')
+                                <option @if($unithead->id == $dashboard->head_id) selected="" @endif value="{{$unithead->id}}">{{$unithead->name}}</option>
+                            @else
+                                <option value="{{$unithead->id}}">{{$unithead->name}}</option>
+                            @endif
                         @endforeach
                     </select>
                     @error('unit_head')
@@ -150,7 +176,7 @@
                         @error('start')
                         <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                         @enderror
-                        <input name="start" id="startInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
+                        <input name="start" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->departure)->format('d/m/Y') }}" @endif id="startInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
                     </div>
 
                     <span class="mx-4 text-gray-500">{{__("To")}}</span>
@@ -163,14 +189,18 @@
                         @error('end')
                         <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                         @enderror
-                        <input name="end" id="endInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
+                        <input name="end" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->return)->format('d/m/Y') }}" @endif id="endInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
                     </div>
                 </div>
 
 
                 <!--Expenses-->
                 <label for="expenses" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Expenses") }}</label>
-                <livewire:travel-request-expenses />
+                @if($type == 'resume')
+                    <livewire:travel-request-expenses :tr="$tr">
+                @else
+                    <livewire:travel-request-expenses />
+                @endif
                 <!--end -->
 
             </div>
@@ -187,6 +217,12 @@
 
 <!-- Modals -->
 @include('requests.travel.modals.travel_help')
+@if($type == 'resume')
+    <script>
+
+    </script>
+@endif
+
 <script>
     document.getElementById("startInput").addEventListener("changeDate", function (e){
         Livewire.emit('changeStartDate', e.detail.datepicker.inputField.value)

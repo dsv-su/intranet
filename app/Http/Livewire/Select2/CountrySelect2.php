@@ -22,9 +22,14 @@ class CountrySelect2 extends Component
         'clear'
     ];
 
-    public function mount()
+    public function mount($country = 0)
     {
-        $this->Country = new Country;
+        if($country != 0) {
+            $this->Country = Country::where('country',  $country)->first();
+        } else {
+            $this->Country = new Country;
+        }
+
     }
 
     public function getOptionsProperty()

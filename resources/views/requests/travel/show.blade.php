@@ -21,11 +21,21 @@
 @if($formtype == 'fo_review')
     <form method="POST" action="{{route('fo_review', $dashboard)}}">
         @csrf
+@elseif($formtype == 'returned')
+    <form method="POST" action="{{route('travel-request-resume', $tr)}}">
+        @csrf
 @endif
 <section class="bg-white dark:bg-gray-900">
     <div class="max-w-6xl px-4 py-8 mx-auto lg:py-16">
-        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">{{ __("Duty Travel Request") }}</h2>
-
+        <h2 class="inline mb-4 text-xl font-bold text-gray-900 dark:text-white">{{ __("Duty Travel Request") }}</h2>
+        <!-- Returned request -->
+        @if($formtype == 'returned')
+            <button type="submit" name="resume" value="resume"
+                    class="inline mx-2 items-center justify-center px-5 hover:bg-yellow-400 font-semibold
+                    hover:text-white py-2 px-4 border border-yellow-400 hover:border-transparent rounded dark:hover:bg-gray-800 group dark:border-gray-600">
+                <span class="text-sm text-yellow-400 dark:text-gray-400 group-hover:text-white dark:group-hover:text-blue-500">{{__("Resume")}}</span>
+            </button>
+        @endif
         <div class="flex gap-8">
             <div class="w-3/4 grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
                 <!--ID-->
