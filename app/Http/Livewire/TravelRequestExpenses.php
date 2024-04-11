@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Country;
+use App\Models\TravelRequest;
 use Carbon\Carbon;
 use DateTime;
 use Livewire\Component;
@@ -18,6 +19,7 @@ class TravelRequestExpenses extends Component
     public $days;
     public $countryname;
     public $start, $end;
+    public $tr;
 
     protected $listeners = [
         'selectedCountry',
@@ -28,7 +30,15 @@ class TravelRequestExpenses extends Component
     public function mount()
     {
         $this->days = 0;
-
+        $this->flight = $this->tr->flight ?? null;
+        $this->hotel = $this->tr->hotel ?? null;
+        $this->daily = $this->tr->daily ?? null;
+        $this->countryname = $this->tr->country ?? null;
+        $this->conference = $this->tr->conference ?? null;
+        $this->other = $this->tr->other_costs ?? null;
+        $this->days = $this->tr->days ?? null;
+        $this->total = $this->tr->total ?? null;
+        //$this->start = Carbon::createFromTimestamp($this->tr->departure)->toDateString() ?? null;
     }
 
     public function changeStartDate($date)

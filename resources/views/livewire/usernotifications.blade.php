@@ -9,55 +9,74 @@
             <div class="pl-3 w-full">
                 <div class="text-gray-900 dark:text-white font-semibold text-sm mb-1.5 ">[{{$user_request->id}}] {{$user_request->name}}</div>
                 <div class="text-xs font-medium text-primary-700 dark:text-white">
-                    @if($user_request->status == 'unread')
+                    @if($user_request->status == 'unread' && $user_request->state == 'fo_approved')
+                        <!-- Approved request -->
                         <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-                              @else
-                                <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
-                              @endif
-                                    {{__("Sent")}}
-                                  </span>
-                                {{Carbon\Carbon::createFromTimestamp($user_request->created)->toDateString()}}
-                                | Status:
-                                @if($user_request->state == 'manager_denied' or $user_request->state == 'fo_denied' or $user_request->state == 'head_denied')
-                                    <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
-                              @elseif ($user_request->state == 'manager_returned' or $user_request->state == 'fo_returned' or $user_request->state == 'head_returned')
-                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-                              @else
-                                                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">
-                              @endif
-                                                        @switch($user_request->state)
-                                                            @case('submitted')
-                                                            {{__("Submitted")}}
-                                                            @break
-                                                            @case('manager_approved')
-                                                            {{__("Processing")}}
-                                                            @break
-                                                            @case('manager_denied')
-                                                            {{__("Denied")}}
-                                                            @break
-                                                            @case('manager_returned')
-                                                            {{__("Returned")}}
-                                                            @break
-                                                            @case('head_approved')
-                                                            {{__("Processing")}}
-                                                            @break
-                                                            @case('fo_denied')
-                                                            {{__("Denied")}}
-                                                            @break
-                                                            @case('fo_returned')
-                                                            {{__("Returned")}}
-                                                            @break
-                                                            @case('fo_approved')
-                                                            {{__("Approved")}}
-                                                            @break
-                                                            @case('head_denied')
-                                                            {{__("Denied")}}
-                                                            @break
-                                                            @case('head_returned')
-                                                            {{__("Returned")}}
-                                                            @break
-                                                        @endswitch
-                                </span>
+                            {{__("Closed")}}
+                        </span>
+                    @elseif(($user_request->status == 'unread' or $user_request->status == 'read') && ($user_request->state == 'manager_returned' or $user_request->state == 'head_returned' or $user_request->state == 'fo_returned'))
+                        <!-- Returned request -->
+                        <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+                        {{__("Pending")}}
+                    </span>
+                    @elseif(($user_request->status == 'unread' or $user_request->status == 'read') && ($user_request->state == 'manager_denied' or $user_request->state == 'head_denied' or $user_request->state == 'fo_denied'))
+                        <!-- Denied request -->
+                            <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+                        {{__("Closed")}}
+                    </span>
+                    @else
+                        <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                            {{__("Sent")}}
+                        </span>
+
+
+                    @endif
+
+
+                    {{Carbon\Carbon::createFromTimestamp($user_request->created)->toDateString()}}
+                    | Status:
+                    @if($user_request->state == 'manager_denied' or $user_request->state == 'fo_denied' or $user_request->state == 'head_denied')
+                        <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
+                    @elseif ($user_request->state == 'manager_returned' or $user_request->state == 'fo_returned' or $user_request->state == 'head_returned')
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                    @elseif ($user_request->state == 'fo_approved')
+                        <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                    @else
+                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">
+                    @endif
+                        @switch($user_request->state)
+                            @case('submitted')
+                            {{__("Submitted")}}
+                            @break
+                            @case('manager_approved')
+                            {{__("Processing")}}
+                            @break
+                            @case('manager_denied')
+                            {{__("Denied")}}
+                            @break
+                            @case('manager_returned')
+                            {{__("Returned")}}
+                            @break
+                            @case('head_approved')
+                            {{__("Processing")}}
+                            @break
+                            @case('fo_denied')
+                            {{__("Denied")}}
+                            @break
+                            @case('fo_returned')
+                            {{__("Returned")}}
+                            @break
+                            @case('fo_approved')
+                            {{__("Approved")}}
+                            @break
+                            @case('head_denied')
+                            {{__("Denied")}}
+                            @break
+                            @case('head_returned')
+                            {{__("Returned")}}
+                            @break
+                        @endswitch
+                        </span>
 
                 </div>
             </div>

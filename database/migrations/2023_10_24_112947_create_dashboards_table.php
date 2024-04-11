@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('dashboards', function (Blueprint $table) {
             $table->id();
             $table->uuid('request_id');
+            $table->foreignId('workflow_id')->nullable();
             $table->string('name');
             $table->string('state');
             $table->integer('created');

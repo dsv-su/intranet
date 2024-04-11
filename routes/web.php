@@ -29,9 +29,10 @@ Route::statamic('search', 'search')->name('search');
 Route::get('/travel', [TravelRequestController::class, 'create'])->name('travel-request-create');
 Route::get('/{lang?}/travel', [TravelRequestController::class, 'create']);
 
-
 Route::get('/travel/show/{id}', [TravelRequestController::class, 'show'])->name('travel-request-show');
 Route::post('/travel', [TravelRequestController::class, 'submit'])->name('travel-submit');
+
+Route::post('/travelresume/{tr}', [TravelRequestController::class, 'resume'])->name('travel-request-resume');
 
 //ReviewHandler
 Route::get('/travel/review/{id}', [\App\Http\Controllers\ReviewController::class, 'show'])->name('travel-request-review');
