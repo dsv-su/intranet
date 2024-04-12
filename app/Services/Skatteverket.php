@@ -51,33 +51,51 @@ class Skatteverket
         $countries = Country::all();
         foreach($countries as $country) {
             switch($country->allowance) {
+                //Burma
                 case('Se Myanmar'):
                     $assign = Country::where('country', 'Myanmar')->first();
                     $country->allowance = $assign->allowance;
+                    break;
+                //Grönland
                 case('Se Danmark'):
                     $assign = Country::where('country', 'Danmark')->first();
                     $country->allowance = $assign->allowance;
+                    break;
+                //Hong Kong
                 case('Se Kina'):
                     $assign = Country::where('country', 'Kina')->first();
                     $country->allowance = $assign->allowance;
+                    break;
+                //Iran
                 case('Se Övriga länder och områden'):
-                    $assign = Country::where('country', 'Irak')->first();
+                    $assign = Country::where('country', 'Övriga länder och områden')->first();
                     $country->allowance = $assign->allowance;
+                    break;
+                //Makedonien
                 case('Se Nordmakedonien'):
                     $assign = Country::where('country', 'Nordmakedonien, f.d. Makedonien')->first();
                     $country->allowance = $assign->allowance;
+                    break;
+                //Puerto Rico
                 case('Se USA'):
                     $assign = Country::where('country', 'USA')->first();
                     $country->allowance = $assign->allowance;
+                    break;
+                //San Marino
                 case('Se Italien'):
                     $assign = Country::where('country', 'Italien')->first();
                     $country->allowance = $assign->allowance;
+                    break;
+                //Swaziland
                 case('Se Eswatini'):
                     $assign = Country::where('country', 'Eswatini')->first();
                     $country->allowance = $assign->allowance;
+                    break;
+                //Vitryssland
                 case('Se Belarus'):
                     $assign = Country::where('country', 'Belarus')->first();
                     $country->allowance = $assign->allowance;
+                    break;
             }
             $country->save();
         }
