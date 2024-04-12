@@ -98,114 +98,83 @@ class TravelRequestController extends Controller
 
     public function submit(Request $request)
     {
-        if ($request->isMethod('post')) {
-            //Second validation
-            $this->validate($request, [
-                'purpose' => 'required',
-                'project' => 'required',
-                'country' => 'required',
-                'project_leader' => 'required',
-                'unit_head' => 'required',
-                'start' => 'required',
-                'end' => 'required'
-            ]);
-            //dd($request->all());
-            //Financial officer
-            /*
-            $roleIds = DB::table('role_user')->where('role_id', 'financial_officer')->pluck('user_id');
-            $fo = User::whereIn('id', $roleIds)->first();
-            */
-            $fo = SettingsFo::find(1);
-            //Find first or create new
-            if($travelrequest = TravelRequest::find($request->id)) {
-                //Update existing
-                $travelrequest->name = $request->name;
-                $travelrequest->created = Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp;
-                $travelrequest->state = 'submitted';
-                $travelrequest->purpose = $request->purpose;
-                $travelrequest->project = $request->project;
-                $travelrequest->country = $request->country;
-                $travelrequest->paper =  $request->paper ?? false;
-                $travelrequest->contribution = $request->contribution;
-                $travelrequest->other = $request->reason;
-                $travelrequest->departure = Carbon::createFromFormat('d/m/Y', $request->start)->timestamp;
-                $travelrequest->return = Carbon::createFromFormat('d/m/Y', $request->end)->timestamp;
-                $travelrequest->days = $request->days;
-                $travelrequest->flight = $request->flight;
-                $travelrequest->hotel = $request->hotel;
-                $travelrequest->daily = $request->daily;
-                $travelrequest->conference = $request->conference;
-                $travelrequest->other_costs = $request->other;
-                $travelrequest->total = $request->total;
-                $travelrequest->save();
-            } else {
-                //Create a new Travelreqeust
-                $travelrequest = TravelRequest::create([
-                    'name' => $request->name,
-                    'created' => Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp,
-                    'state' => 'submitted',
-                    'purpose' => $request->purpose,
-                    'project' => $request->project,
-                    'country' => $request->country,
-                    'paper' =>  $request->paper ?? false,
-                    'contribution' => $request->contribution,
-                    'other' => $request->reason,
-                    'departure' => Carbon::createFromFormat('d/m/Y', $request->start)->timestamp,
-                    'return' => Carbon::createFromFormat('d/m/Y', $request->end)->timestamp,
-                    'days' => $request->days,
-                    'flight' => $request->flight,
-                    'hotel' => $request->hotel,
-                    'daily' => $request->daily,
-                    'conference' => $request->conference,
-                    'other_costs' => $request->other,
-                    'total' => $request->total,
+        // Ensure the request method is POST
+        $this->validateRequest($request);
 
-                ]);
-            }
+        // Find or create the financial officer
+        $fo = SettingsFo::find(1);
 
-            //Find or create Dashboard instance
-            if($dashboard = Dashboard::where('request_id', $request->id)->first()) {
-                $dashboard->request_id = $travelrequest->id;
-                $dashboard->name = $request->name;
-                $dashboard->created = Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp;
-                $dashboard->state = 'submitted';
-                $dashboard->status = 'unread';
-                $dashboard->type = 'travelrequest';
-                $dashboard->user_id = auth()->user()->id;
-                $dashboard->manager_id = $request->project_leader;
-                $dashboard->fo_id = $fo->user_id;
-                $dashboard->head_id = $request->unit_head;
-                $dashboard->save();
-            } else {
-                //Create a new Dashboard post
-                $dashboard = Dashboard::create([
-                    'request_id' => $travelrequest->id,
-                    'name' => $request->name,
-                    'created' => Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp,
-                    'state' => 'submitted',
-                    'status' => 'unread',
-                    'type' => 'travelrequest',
-                    'user_id' => auth()->user()->id,
-                    'manager_id' => $request->project_leader,
-                    'fo_id' => $fo->user_id,
-                    'head_id' => $request->unit_head
-                ]);
-            }
+        // Create or update TravelRequest
+        $travelRequestData = $request->only([
+            'name', 'purpose', 'project', 'country', 'paper', 'contribution',
+            'other_costs', 'days', 'flight', 'hotel', 'daily',
+            'conference', 'other_costs', 'total'
+        ]);
 
+        // Convert dates to unix format
+        $departureDate = Carbon::createFromFormat('d/m/Y', $request->departure)->timestamp;
+        $returnDate = Carbon::createFromFormat('d/m/Y', $request->return)->timestamp;
+        $travelRequestData['departure'] = $departureDate;
+        $travelRequestData['return'] = $returnDate;
+        $travelRequestData['created'] = Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp;
 
-            // Create workflow
-            $workflow = WorkflowStub::make(DSVRequestWorkflow::class);
-            //Store workflowId in dashboard
-            $dashboard->workflow_id = $workflow->id();
-            $dashboard->save();
-            // start workflow [DashboardId]
-            $workflow->start($dashboard->id);
-            //Submit TR
-            $workflow->submit();
+        //Set initial state
+        $travelRequestData['state'] = 'submitted';
 
-            return redirect()->route('statamic.site');
+        $travelRequest = TravelRequest::find($request->id);
+        if (!$travelRequest) {
+            $travelRequest = TravelRequest::create($travelRequestData);
+        } else {
+            $travelRequest->update($travelRequestData);
         }
+
+        // Find or create Dashboard instance
+        $dashboardData = [
+            'request_id' => $travelRequest->id,
+            'name' => $request->name,
+            'created' => Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp,
+            'state' => 'submitted',
+            'status' => 'unread',
+            'type' => 'travelrequest',
+            'user_id' => auth()->id(),
+            'manager_id' => $request->project_leader,
+            'fo_id' => $fo->user_id,
+            'head_id' => $request->unit_head
+        ];
+
+        $dashboard = Dashboard::where('request_id', $request->id)->first();
+        if (!$dashboard) {
+            $dashboard = Dashboard::create($dashboardData);
+        } else {
+            $dashboard->update($dashboardData);
+        }
+
+        // Create and start workflow
+        $workflow = $this->createAndStartWorkflow($dashboard);
+
+        return redirect()->route('statamic.site');
     }
 
+    protected function validateRequest(Request $request)
+    {
+        return $this->validate($request, [
+            'purpose' => 'required',
+            'project' => 'required',
+            'country' => 'required',
+            'project_leader' => 'required',
+            'unit_head' => 'required',
+            'departure' => 'required',
+            'return' => 'required'
+        ]);
+    }
 
+    protected function createAndStartWorkflow($dashboard)
+    {
+        $workflow = WorkflowStub::make(DSVRequestWorkflow::class);
+        $dashboard->workflow_id = $workflow->id();
+        $dashboard->save();
+        $workflow->start($dashboard->id);
+        $workflow->submit();
+        return $workflow;
+    }
 }

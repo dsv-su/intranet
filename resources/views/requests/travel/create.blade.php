@@ -3,13 +3,6 @@
 @include('navbar.navbar')
 <section class="bg-white dark:bg-gray-900">
     <div class="max-w-2xl px-4 py-8 mx-auto lg:py-16">
-        {{--}}
-        <div class="relative w-fit-content">
-            <div class="absolute top-0 right-0 w-32">
-                <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">DSVTR-231025-1</span>
-            </div>
-        </div>
-        {{--}}
         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">{{ __("Duty Travel Request") }}</h2>
         <form method="post" action="{{route('travel-submit')}}">
             @csrf
@@ -173,10 +166,10 @@
                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                             </svg>
                         </div>
-                        @error('start')
+                        @error('departure')
                         <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                         @enderror
-                        <input name="start" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->departure)->format('d/m/Y') }}" @endif id="startInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
+                        <input name="departure" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->departure)->format('d/m/Y') }}" @endif id="startInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
                     </div>
 
                     <span class="mx-4 text-gray-500">{{__("To")}}</span>
@@ -186,10 +179,10 @@
                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                             </svg>
                         </div>
-                        @error('end')
+                        @error('return')
                         <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                         @enderror
-                        <input name="end" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->return)->format('d/m/Y') }}" @endif id="endInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
+                        <input name="return" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->return)->format('d/m/Y') }}" @endif id="endInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
                     </div>
                 </div>
 
