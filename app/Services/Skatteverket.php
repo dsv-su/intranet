@@ -31,8 +31,9 @@ class Skatteverket
     //Retrieving countries
     public function getCountry()
     {
-        //Retrive allowances for 2023
-        $this->array_resource = json_decode($this->getResource('/dataset/70ccea31-b64c-4bf5-84c7-673f04f32505?%C3%A5r=2023&_limit=500&_offset=0')->getBody()->getContents(), TRUE);
+        //Retrive allowances
+        $year = 2024;
+        $this->array_resource = json_decode($this->getResource('/dataset/70ccea31-b64c-4bf5-84c7-673f04f32505?%C3%A5r=' . $year . '&_limit=500&_offset=0')->getBody()->getContents(), TRUE);
 
         foreach ($this->array_resource['results'] as $result_country) {
             $country = Country::updateOrCreate(
@@ -43,5 +44,42 @@ class Skatteverket
 
         }
         return true;
+    }
+
+    public function checkAllowance()
+    {
+        $countries = Country::all();
+        foreach($countries as $country) {
+            switch($country->allowance) {
+                case('Se Myanmar'):
+                    $assign = Country::where('country', 'Myanmar')->first();
+                    $country->allowance = $assign->allowance;
+                case('Se Danmark'):
+                    $assign = Country::where('country', 'Danmark')->first();
+                    $country->allowance = $assign->allowance;
+                case('Se Kina'):
+                    $assign = Country::where('country', 'Kina')->first();
+                    $country->allowance = $assign->allowance;
+                case('Se Övriga länder och områden'):
+                    $assign = Country::where('country', 'Irak')->first();
+                    $country->allowance = $assign->allowance;
+                case('Se Nordmakedonien'):
+                    $assign = Country::where('country', 'Nordmakedonien, f.d. Makedonien')->first();
+                    $country->allowance = $assign->allowance;
+                case('Se USA'):
+                    $assign = Country::where('country', 'USA')->first();
+                    $country->allowance = $assign->allowance;
+                case('Se Italien'):
+                    $assign = Country::where('country', 'Italien')->first();
+                    $country->allowance = $assign->allowance;
+                case('Se Eswatini'):
+                    $assign = Country::where('country', 'Eswatini')->first();
+                    $country->allowance = $assign->allowance;
+                case('Se Belarus'):
+                    $assign = Country::where('country', 'Belarus')->first();
+                    $country->allowance = $assign->allowance;
+            }
+            $country->save();
+        }
     }
 }
