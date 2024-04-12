@@ -206,7 +206,7 @@
             @endif
         </td>
         <td>
-            {{$tr->days}} {{__("days")}}
+            {{$tr->days}} ({{__("days")}})
         </td>
         <td>
             @if($tr->hotel == null or $tr->hotel == 0)
@@ -215,6 +215,32 @@
                 {{$tr->hotel}}
             @endif
         </td>
+      </tr>
+      <tr>
+          <td>
+              <b>{{__("Conference")}}</b>
+          </td>
+          <td>
+              @if($tr->conference == null or $tr->conference == 0)
+                  0
+              @else
+                  {{$tr->conference}}
+              @endif
+          </td>
+          <td>
+              @if($tr->conference == null or $tr->conference == 0)
+                  0
+              @else
+                  1
+              @endif
+          </td>
+          <td>
+              @if($tr->conference == null or $tr->conference == 0)
+                  0
+              @else
+                  {{$tr->conference}}
+              @endif
+          </td>
       </tr>
       <tr>
         <td>
@@ -257,7 +283,7 @@
               @if($tr->days == null or $tr->days == 0)
                   0
               @else
-                  {{$tr->days}}
+                  {{$tr->days}} {{__("days")}}
               @endif
           </td>
           <td>
