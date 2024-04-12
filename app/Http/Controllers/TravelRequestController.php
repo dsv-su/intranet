@@ -11,6 +11,7 @@ use App\Workflows\DSVRequestWorkflow;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Statamic\View\View;
 use Workflow\WorkflowStub;
 
 class TravelRequestController extends Controller
@@ -47,53 +48,47 @@ class TravelRequestController extends Controller
 
     public function resume(TravelRequest $tr)
     {
-        //Type
-        $type = 'resume';
-
-        //Countries
+        // Fetching countries
         $countries = Country::all();
 
-        //Projectleaders
-        $roleIds = DB::table('group_user')->where('group_id', 'projektledare')->pluck('user_id');
-        $projectleaders = User::whereIn('id', $roleIds)->get();
+        // Fetching project leaders and unit heads
+        $roleIdsProjectLeader = $this->getUserIdsByGroup('projektledare');
+        $projectleaders = User::whereIn('id', $roleIdsProjectLeader)->get();
 
-        //Unitheads
-        $roleIds = DB::table('group_user')->where('group_id', 'enhetschef')->pluck('user_id');
-        $unitheads = User::whereIn('id', $roleIds)->get();
+        $roleIdsUnitHead = $this->getUserIdsByGroup('enhetschef');
+        $unitheads = User::whereIn('id', $roleIdsUnitHead)->get();
 
-        //Dashboard
+        // Fetching dashboard
         $dashboard = Dashboard::where('request_id', $tr->id)->first();
 
-        return (new \Statamic\View\View)
-            ->template('requests.travel.create')
-            ->layout('mylayout')
-            ->with(['type' => $type, 'tr' => $tr, 'dashboard' => $dashboard, 'countries' => $countries, 'projectleaders' => $projectleaders,
-                'unitheads' => $unitheads]);
+        return $this->createView('requests.travel.create', 'mylayout', [
+            'type' => 'resume',
+            'tr' => $tr,
+            'dashboard' => $dashboard,
+            'countries' => $countries,
+            'projectleaders' => $projectleaders,
+            'unitheads' => $unitheads,
+        ]);
     }
 
     public function create()
     {
-        //Type
-        $type = 'create';
-
-        //Countries
+        // Fetching countries
         $countries = Country::all();
 
-        //Projectleaders
-        $roleIds = DB::table('group_user')->where('group_id', 'projektledare')->pluck('user_id');
-        $projectleaders = User::whereIn('id', $roleIds)->get();
+        // Fetching project leaders and unit heads
+        $roleIdsProjectLeader = $this->getUserIdsByGroup('projektledare');
+        $projectleaders = User::whereIn('id', $roleIdsProjectLeader)->get();
 
-        //Unitheads
+        $roleIdsUnitHead = $this->getUserIdsByGroup('enhetschef');
+        $unitheads = User::whereIn('id', $roleIdsUnitHead)->get();
 
-        $roleIds = DB::table('group_user')->where('group_id', 'enhetschef')->pluck('user_id');
-        $unitheads = User::whereIn('id', $roleIds)->get();
-
-        return (new \Statamic\View\View)
-                   ->template('requests.travel.create')
-                   ->layout('mylayout')
-                   ->with(['type' => $type, 'countries' => $countries, 'projectleaders' => $projectleaders,
-            'unitheads' => $unitheads]);
-
+        return $this->createView('requests.travel.create', 'mylayout', [
+            'type' => 'create',
+            'countries' => $countries,
+            'projectleaders' => $projectleaders,
+            'unitheads' => $unitheads,
+        ]);
     }
 
     public function submit(Request $request)
@@ -176,5 +171,15 @@ class TravelRequestController extends Controller
         $workflow->start($dashboard->id);
         $workflow->submit();
         return $workflow;
+    }
+
+    private function createView($template, $layout, $data)
+    {
+        return (new View)->template($template)->layout($layout)->with($data);
+    }
+
+    private function getUserIdsByGroup($group)
+    {
+        return DB::table('group_user')->where('group_id', $group)->pluck('user_id');
     }
 }
