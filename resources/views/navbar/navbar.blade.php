@@ -2,7 +2,7 @@
     <div x-data="{ open: false }" class="relative flex flex-col w-full p-5 mx-auto bg-white md:items-center md:justify-between md:flex-row md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
         <div class="flex flex-row items-center justify-between lg:justify-start">
             <a class="text-lg tracking-tight text-black focus:outline-none focus:ring lg:text-2xl dark:text-white" href="/">
-                <span class="bg-clip-text bg-blue-800 text-transparent text-lg focus:ring-0 md:text-xl lg:text-2xl">
+                <span class="font-mono bg-clip-text bg-blue-800 text-transparent text-lg focus:ring-0 md:text-xl lg:text-xl">
                     {{ config('app.name')}}
                 </span>
             </a>
@@ -38,7 +38,7 @@
         <!-- nav:collection:pages -->
         @foreach (\Statamic\Statamic::tag('nav:main')->sort('order')->fetch() as $entry)
             @if(!$entry['children'])
-                    <a class="px-2 py-2 text-normal text-gray-900 lg:px-6 md:px-3 hover:text-blue-600 dark:text-white @if ($entry['is_parent'] || $entry['is_current']) font-semibold text-blue-500  @endif"
+                    <a class="px-2 py-2 text-base text-gray-900 lg:px-6 md:px-3 hover:text-blue-600 dark:text-white @if ($entry['is_parent'] || $entry['is_current']) font-semibold text-blue-500  @endif"
                        href="{{ $entry['url']->value() }}">
                         {{ $entry['title']->value() }}
                     </a>
@@ -48,7 +48,7 @@
                         <nav class="relative flex items-center justify-around w-full sm:h-10">
                             <div class="flex items-center justify-between flex-1">
                                 <div class="flex items-center -mr-2" x-on:click="openMobileMenu = !openMobileMenu">
-                                    <button type="button" class="flex flex-row items-center w-full px-4 py-2 mt-2 text-normal text-left
+                                    <button type="button" class="flex flex-row items-center w-full px-2 py-2 mt-1 text-base text-left
                                     text-gray-900 md:w-auto md:inline md:mt-0 hover:text-blue-600
                                     focus:outline-none focus:shadow-outline dark:text-white"
                                             id="main-menu" aria-label="Main menu" aria-haspopup="true">
@@ -71,7 +71,7 @@
                     <div x-on:click="openMobileMenu = false" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" :class="{'translate-y-0 shadow-md duration-150': openMobileMenu, '-translate-y-full': ! openMobileMenu}" class="fixed inset-0 top-0 z-40 h-screen overflow-y-auto transition origin-top transform -translate-y-full">
                         <div class="relative overflow-hidden bg-white lg:bg-transparent" role="menu" aria-orientation="vertical" aria-labelledby="main-menu">
                             <div class="bg-white dark:bg-gray-900 border-y">
-                                <div class="grid px-4 py-6 mx-auto sm:grid-cols-2 2xl:max-w-7xl gap-y-6 sm:gap-8 sm:px-6 sm:py-8 lg:grid-cols-3 lg:px-8 lg:py-12 xl:py-16">
+                                <div class="grid px-4 py-4 mx-auto sm:grid-cols-2 2xl:max-w-7xl gap-y-6 sm:gap-8 sm:px-6 sm:py-4 lg:grid-cols-3 lg:px-8 lg:py-4 xl:py-4">
                                     @foreach(collect($entry['children'])->chunk(5) as $chunk)
                                         <div class="grid grid-cols-1 gap-3 p-2 lg:p-0">
                                             @foreach($chunk as $child)
@@ -83,15 +83,14 @@
                                                                 {!! $child['icon_field'] !!}
                                                             </div>
                                                             {{--}}
-                                                            <p class="mt-4 ml-16 text-base font-medium text-blue-800">
+                                                            <p class="mt-2 ml-16 text-sm font-normal text-blue-800">
                                                                 {!! $child['title'] !!}
                                                                 <svg class="w-2.5 h-2.5 inline-flex" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                                     <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                                                                 </svg>
                                                             </p>
-
                                                         </div>
-                                                        <div class="mt-2 ml-16 text-sm text-gray-900 dark:text-white">
+                                                        <div class="mt-2 ml-16 text-xs text-gray-900 dark:text-white">
                                                             {!! $child['intro'] !!}
                                                         </div>
                                                     </div>
@@ -103,8 +102,8 @@
                             </div>
                         </div>
                         <!-- CLOSE -->
-                        <div class="p-2 bg-white border-y dark:bg-gray-900">
-                            <div class="px-4 py-5 mx-auto space-y-6 2xl:max-w-7xl sm:flex sm:space-y-0 sm:space-x-10 sm:px-6 lg:px-8">
+                        <div class="bg-white border-y dark:bg-gray-900">
+                            <div class="px-4 py-2 mx-auto space-y-6 2xl:max-w-7xl sm:flex sm:space-y-0 sm:space-x-10 sm:px-6 lg:px-8">
                                 <div class="flow-root mx-auto">
                                     <div x-on:click="openMobileMenu = false" class="flex items-center p-3 -m-3 text-sm text-gray-500 transition duration-150 ease-in-out hover:text-blue-500 dark:text-white">
                                         {{__("Close menu")}}
