@@ -25,6 +25,7 @@
             <!-- User displayName -->
             <div data-tooltip-target="displayName-tooltip" class="flex items-center w-44 h-6 px-3 justify-center text-xs font-small text-white rounded-lg toggle-dark-state-example hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-500 focus:outline-none dark:text-gray-200 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                 {{--}}<img class="w-8 h-8 rounded-full mx-2 hidden lg:block" src="{{asset('images/ryan.jpg')}}" alt="user photo">{{--}}
+                {{--}}
                 @guest
                     <svg class="w-5 h-5 mx-2 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 18">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 8a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-2 3h4a4 4 0 0 1 4 4v2H1v-2a4 4 0 0 1 4-4Z"/>
@@ -39,6 +40,7 @@
                     @endif
 
                 @endguest
+                {{--}}
                 {{auth()->user()->name ?? 'Not logged in'}}
             </div>
 
@@ -96,7 +98,7 @@
             <!-- end language switcher -->
             <!-- Dashbord -->
             @can('access cp')
-                <a data-tooltip-target="navbar-dashboard-tooltip" href='/cp' class="block px-2 py-0.5 mr-2 text-sm outline outline-offset-2 outline-1 rounded text-gray-200 hover:bg-white hover:text-black dark:border-gray-600" role="menuitem">
+                <a data-tooltip-target="navbar-dashboard-tooltip" href='/cp' class="block px-2 py-0.5 mr-2 text-sm outline outline-offset-2 outline-1 rounded text-gray-200 hover:bg-slate-100 hover:text-black dark:border-gray-600" role="menuitem">
                     <svg class="w-5 h-5 text-white hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"/>
                     </svg>
