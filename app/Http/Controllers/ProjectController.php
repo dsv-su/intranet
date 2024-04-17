@@ -11,5 +11,6 @@ class ProjectController extends Controller
     {
         $skatteverket = new Skatteverket();
         $skatteverket->getCountry();
+        $skatteverket->checkAllowance();
     }
 }
