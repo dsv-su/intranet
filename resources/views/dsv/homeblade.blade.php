@@ -3,5 +3,8 @@
 @include('navbar.navbar')
 @include('layouts.breadcrumbs')
 <!-- Sidenav with content -->
-@include('navbar.sidenav')
+<div class="flex h-screen overflow-hidden bg-white dark:bg-gray-800 dark:text-white">
+    @include('navbar.sidenav')
+    @include('partials.page')
+</div>
 @include('layouts.darktoggler')
