@@ -1,4 +1,4 @@
-<div class="flex flex-col flex-1 w-0 overflow-hidden">
+<div class="flex flex-col flex-1 w-0 overflow-hidden content">
     <main class="relative flex-1 overflow-y-auto focus:outline-none">
         <div class="py-6">
             <!--<div class="px-4 mx-auto 2xl:max-w-7xl sm:px-6 md:px-6">-->
