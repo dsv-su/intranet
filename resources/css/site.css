@@ -3,3 +3,71 @@
 @import "tailwindcss/utilities";
 
 @import '/node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+
+/* Mobile submenu styling */
+
+*, ::after, ::before {
+    scroll-behavior: smooth;
+}
+
+.border-r {
+    /* Border for large screens in SU secondary color */
+    border-right: 1px solid #acdee6;
+}
+
+.hamburger {
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    transition: all 0.25s;
+}
+
+.hamburger_sub_top,
+.hamburger_sub_bottom {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 2px;
+    background: #000;
+    transform: rotate(0);
+    transition: all 0.5s;
+}
+
+.hamburger_sub_top {
+    transform: translateY(-5px);
+}
+
+.hamburger_sub_bottom {
+    transform: translateY(3px);
+}
+
+.open {
+    transform: rotate(90deg);
+    transform: translateY(-1px);
+}
+
+.open .hamburger_sub_top {
+    transform:
+        rotate(45deg)
+        translateY(0px);
+}
+
+.open .hamburger_sub_bottom {
+    transform:
+        rotate(-45deg)
+        translateY(0px);
+}
+
+/* Media query for mobile devices */
+@media only screen and (max-width: 768px) {
+    .border-r {
+        /* Remove the right border for mobile devices */
+        border-right: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .content {
+        padding-top: 51px;
+    }
+}
