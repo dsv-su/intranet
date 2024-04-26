@@ -1,6 +1,7 @@
-<header id="top" class="md:hidden block w-full flex flex-col fixed sm:relative bg-white z-10">
+<header class="md:hidden block w-full fixed flex flex-col bg-white z-10">
     <nav id="site-menu" class="flex flex-col sm:flex-row w-full justify-between items-center px-4 sm:px-6 py-1 bg-white shadow sm:shadow-none">
         <div class="w-full sm:w-auto self-start sm:self-center flex flex-row sm:flex-none flex-no-wrap justify-between items-center">
+
             {{--}}<h1 class="tracking-widest">{{__("Submenu")}}</h1>{{--}}
             <button id="menuBtn" class="hamburger block sm:hidden focus:outline-none" type="button" onclick="navToggle();">
                 <span class="hamburger_sub_top"></span><span class="hamburger_sub_bottom"></span>
@@ -37,7 +38,15 @@
 <script>
     // Open close mobile submenu
     var nav = document.getElementById('site-menu');
-    var header = document.getElementById('top');
+
+    /* Remove submenu when scrolling */
+    window.addEventListener('scroll', function() {
+        if (window.scrollY >= 10) {
+            nav.classList.add('hidden');
+        } else {
+            nav.classList.remove('hidden');
+        }
+    });
 
     function navToggle() {
         var btn = document.getElementById('menuBtn');
