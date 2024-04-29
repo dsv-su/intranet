@@ -1,4 +1,4 @@
-<div class="max-w-[85rem] mx-auto px-4 py-6 sm:px-6 lg:px-8 md:pt-8 md:pb-8">
+<div class="max-w-screen-xl mx-auto px-4 py-6 sm:px-6 lg:px-8 md:pt-8 md:pb-8 overflow-x-hidden">
     <!-- Grid -->
     <div class="grid grid-cols-12 gap-2.5 xl:gap-4">
         <div class="col-span-12 md:col-span-6 md:order-2 lg:col-span-4 grid gap-2.5 xl:gap-4">
