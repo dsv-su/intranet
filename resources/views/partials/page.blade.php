@@ -1,26 +1,23 @@
 <div class="flex flex-col flex-1 w-0 overflow-hidden content">
-    <main class="relative flex-1 overflow-y-auto focus:outline-none">
+    <main class="relative flex-1 focus:outline-none overflow-y-auto">
         <div class="py-6">
-            <!--<div class="px-4 mx-auto 2xl:max-w-7xl sm:px-6 md:px-6">-->
             <div class="px-4 mx-auto max-w-6xl sm:px-6 md:px-6">
-                <!-- Content-->
                 <div class="py-4">
-                    <div class="h-screen {{--}}border border-blue-600 border-dashed{{--}} rounded-lg">
-                        <article class="mt-4 mb-4 bg-white p-8 shadow-xl rounded-xl max-w-full {{--}}max-w-max{{--}} prose dark:bg-gray-800 dark:text-white antialiased">
+                    <div class="h-screen rounded-lg">
+                        <article class="mt-4 mb-4 bg-white p-8 shadow-xl rounded-xl max-w-full prose dark:bg-gray-800 dark:text-white antialiased">
                             <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900 dark:text-white">
                                 {!! $page->title !!}
                             </h2>
-                            <h4 class="max-w-xl mt-4 text-base tracking-tight text-gray-600 dark:text-white">
-                                {!! $page->intro ?? ''!!}
-                            </h4>
+                            @if(isset($page->intro))
+                                <h4 class="max-w-xl mt-4 text-base tracking-tight text-gray-600 dark:text-white">
+                                    {!! $page->intro !!}
+                                </h4>
+                            @endif
                             @foreach($page->content as $content)
-                                <!-- Content text -->
                                 @if($content->type == "text")
                                     <div class="dark:text-white">
                                         {!! $content->text !!}
                                     </div>
-
-                                <!-- Content file assets -->
                                 @elseif($content->type == "fileassets")
                                     <ul class="space-y-3 text-xs">
                                         @foreach($content->file as $file)
@@ -40,11 +37,8 @@
                                             <img class="rounded-t-lg" src="{{$image->url}}" alt="" />
                                         </div>
                                     @endforeach
-
                                 @endif
                             @endforeach
-
-                        <!--Page author-->
                             <div class="text-gray-600 text-sm bg-white p-3 rounded-md leading-none dark:bg-gray-800 dark:text-white">
                                 <hr>
                                 <p><i>{{__("Responsible for the page:")}} {!! $page->author->name ?? 'NN' !!}</i></p>
@@ -53,8 +47,9 @@
                         </article>
                     </div>
                 </div>
-                <!-- end content -->
             </div>
         </div>
     </main>
 </div>
+
+
