@@ -1,4 +1,4 @@
-<div class="flex flex-col flex-1 w-0 overflow-hidden content">
+<div class="flex flex-col flex-1 w-full overflow-hidden">
     <main class="relative flex-1 focus:outline-none overflow-y-auto">
         <div class="py-6">
             <div class="px-4 mx-auto max-w-6xl sm:px-6 md:px-6">
@@ -34,7 +34,7 @@
                                 @elseif($content->type == "images")
                                     @foreach($content->image as $image)
                                         <div class="border border-blue-600">
-                                            <img class="rounded-t-lg" src="{{$image->url}}" alt="" />
+                                            <img class="rounded-t-lg max-w-full" src="{{$image->url}}" alt="" />
                                         </div>
                                     @endforeach
                                 @endif
@@ -51,5 +51,4 @@
         </div>
     </main>
 </div>
-
 
