@@ -1,4 +1,4 @@
-<div class="relative order-last ml-2 mr-2 md:order-none">
+<div class="relative {{--}}order-last{{--}} ml-4 mr-2 {{--}}md:order-none{{--}}">
     <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
              <svg class="w-5 h-5 text-blue-800 dark:text-gray-200" viewBox="0 0 24 24" fill="none">
@@ -8,7 +8,7 @@
     </div>
     <input wire:model="q" id="search" name="search"
            class="w-full py-2 pl-10 pr-4 text-black bg-white border border-susecondary focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-500
-                    sm:text-sm rounded-xl placeholder:text-blue-800 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-200"
+                sm:text-sm rounded-xl placeholder:text-blue-800 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-200"
            placeholder="{{__("Search")}}" type="search">
 
     @if ($q)
@@ -26,9 +26,8 @@
                         @else
                             <span class="bg-blue-100 text-blue-800 text-xs font-normal mr-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
                         @endif
-                            {{ $result['collection'] }}
-                        </span>
-
+                        {{ $result['collection'] }}
+                            </span>
                         <div class="text-xs mt-2 text-blue-600">{!! $result['text_field'] ?? ''!!} </div>
                         <hr>
                     </a>
@@ -39,3 +38,5 @@
         </div>
     @endif
 </div>
+
+
