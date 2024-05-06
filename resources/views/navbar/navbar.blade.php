@@ -1,5 +1,5 @@
 <nav class="bg-white border-b border-susecondary dark:bg-gray-900 dark:border-gray-700">
-    <div class="relative flex flex-wrap sm:flex-col md:flex-row w-full p-5 mx-auto bg-white items-center justify-between md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
+    <div class="relative flex flex-wrap sm:flex-col md:flex-row w-full p-5 mx-auto bg-white items-center justify-center md:justify-between md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
         <a href="{{ config('app.url') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
             <span class="self-center text-lg font-mono whitespace-nowrap dark:text-white">{{ config('app.name') }}</span>
         </a>
