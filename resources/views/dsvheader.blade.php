@@ -1,4 +1,4 @@
-<div class="w-full sm:block sm:w-auto">
+<div class="w-full sm:block sm:w-auto overflow-x-hidden">
     <!-- Small breakpoint -->
     <div class="md:hidden block grid grid-cols-4 border-b-4 border-susecondary">
         <div class="flex items-center justify-center col-span-1 bg-suprimary">
