@@ -1,7 +1,7 @@
 <nav class="bg-white border-b border-susecondary dark:bg-gray-900 dark:border-gray-700">
     <div class="relative flex flex-wrap md:flex-row lg:flex-nowrap w-full p-5 mx-auto bg-white items-center justify-between md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
         <a href="{{ config('app.url') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <span class="self-center text-lg font-mono whitespace-nowrap dark:text-white">{{ config('app.name') }}</span>
+            <span class="self-center text-lg font-mono whitespace-nowrap dark:text-white">{{ config('app.name') }} &nbsp;</span>
         </a>
         <!-- Mobile -->
         <!-- Notifications -->
