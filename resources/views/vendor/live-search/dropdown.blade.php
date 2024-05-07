@@ -1,4 +1,4 @@
-<div class="relative {{--}}order-last{{--}} ml-4 mr-2 {{--}}md:order-none{{--}}">
+<div id="searchinput" class="relative grow{{--}}order-last{{--}} ml-4 mr-2 {{--}}md:order-none{{--}}">
     <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
              <svg class="w-5 h-5 text-blue-800 dark:text-gray-200" viewBox="0 0 24 24" fill="none">
@@ -12,7 +12,7 @@
            placeholder="{{__("Search")}}" type="search">
 
     @if ($q)
-        <div class="origin-top-right absolute right-0 mt-2 z-20 w-72 md:w-96 rounded-md shadow-lg bg-white dark:bg-gray-800 dark:text-white ring-1 ring-black ring-opacity-5">
+        <div class="origin-top-right absolute md:right-0 mt-2 z-20 w-72 md:w-96 rounded-md shadow-lg bg-white dark:bg-gray-800 dark:text-white ring-1 ring-black ring-opacity-5">
             <div class="py-1 text-sm text-gray-700 dark:text-white">
                 @forelse($results as $result)
                     <a href="{{ $result['url'] }}" class="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900">
