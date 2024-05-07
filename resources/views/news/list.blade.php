@@ -2,23 +2,20 @@
 @include('dsvheader')
 @include('navbar.navbar')
 
-@switch($type)
-    @case('news')
-
+@foreach ($collections as $collection)
+    @if($loop->first)
         <!-- Title -->
-        <div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
-            <h2 class="text-2xl font-bold md:text-4xl md:leading-tight dark:text-white">{{'News'}}</h2>
+        <div class="max-w-2xl mx-auto text-center mb-8 lg:mt-7 lg:mb-7">
+            <h2 class="uppercase text-2xl font-bold md:text-4xl md:leading-tight dark:text-white">{{$collection->collection}}</h2>
             <p class="mt-1 text-gray-600 dark:text-gray-400">Latest entries</p>
         </div>
-    @break
-    @endswitch
+    @endif
 
-@foreach ($collections as $collection)
-    <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+    <div class="px-4 mx-auto max-w-2xl">
             <!-- Card -->
             <a class="mb-3 group flex flex-col border border-blue-600 hover:border-transparent hover:shadow-lg
                     transition-all duration-300 rounded-xl p-5 dark:border-gray-700 dark:hover:border-transparent
-                    dark:hover:shadow-black/[.4] dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">
+                    dark:hover:shadow-black/[.4] dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="{{$collection->url}}">
                 <div class="flex justify-between items-center mb-3">
                     <div class="flex w-full sm:items-center gap-x-5 sm:gap-x-3">
                         <div class="grow">
@@ -32,10 +29,12 @@
                                         </div>
                                     </div>
                                     <ul class="text-xs text-gray-500">
-                                        <li class="inline-block relative pe-6 last:pe-0 last-of-type:before:hidden before:absolute before:top-1/2 before:end-2 before:-translate-y-1/2 before:w-1 before:h-1 before:bg-gray-300 before:rounded-full dark:text-gray-400 dark:before:bg-gray-600">
+                                        <li class="inline-block relative pe-6 last:pe-0 last-of-type:before:hidden before:absolute before:top-1/2 before:end-2 before:-translate-y-1/2 before:w-1
+                                        before:h-1 before:bg-gray-300 before:rounded-full dark:text-gray-400 dark:before:bg-gray-600">
                                             {!! $collection->date !!}
                                         </li>
-                                        <li class="inline-block relative pe-6 last:pe-0 last-of-type:before:hidden before:absolute before:top-1/2 before:end-2 before:-translate-y-1/2 before:w-1 before:h-1 before:bg-gray-300 before:rounded-full dark:text-gray-400 dark:before:bg-gray-600">
+                                        <li class="inline-block relative pe-6 last:pe-0 last-of-type:before:hidden before:absolute before:top-1/2 before:end-2 before:-translate-y-1/2 before:w-1
+                                        before:h-1 before:bg-gray-300 before:rounded-full dark:text-gray-400 dark:before:bg-gray-600">
                                             {!! $collection->collection !!}
                                         </li>
                                     </ul>
@@ -48,7 +47,7 @@
                 <div class="space-y-5 md:space-y-8">
                     <div class="space-y-3">
                         <h2 class="text-xl font-bold md:text-xl dark:text-white"> {!! $collection->title !!} </h2>
-                        <p class="text-lg text-gray-800 dark:text-gray-200">{!! \Illuminate\Support\Str::limit($collection->content, 16) !!}</p>
+                        <p class="text-lg text-gray-800 dark:text-gray-200">{!! \Illuminate\Support\Str::limit($collection->content, 24) !!}</p>
                     </div>
                 </div>
             </a>
