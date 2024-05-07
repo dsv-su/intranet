@@ -135,5 +135,11 @@
     "Room": "Rum",
     "Error": "Fel",
     "Remark": "Anmärkning",
-    "Conference": "Konferens"
+    "Conference": "Konferens",
+    "More news": "Flera nyheter",
+    "Latest entries": "Senaste inlägg",
+    "news": "Interna nyheter",
+    "teachernews": "Nyheter för Lärare",
+    "phdnews": "Nyheter för doktorander",
+    "itnews": "IT nyheter"
 }
