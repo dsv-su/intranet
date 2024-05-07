@@ -51,4 +51,5 @@ Route::get('/settings', [\App\Http\Controllers\FOController::class, 'settings'])
 Route::post('/fo', [\App\Http\Controllers\FOController::class, 'settings_fo'])->name('fo');
 
 //News list entries
-Route::get('/list/{collection}', [\App\Http\Controllers\NewsListController::class, 'list'])->name('list');
+Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'list'])->name('list');
+Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'swelist'])->name('swelist');
