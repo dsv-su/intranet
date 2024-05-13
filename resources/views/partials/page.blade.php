@@ -1,4 +1,4 @@
-<div class="flex flex-col flex-1 w-full overflow-hidden">
+<div class="flex flex-col flex-1 w-full">
     <main class="relative flex-1 focus:outline-none overflow-y-auto">
         <div class="py-6">
             <div class="px-4 mx-auto max-w-6xl sm:px-6 md:px-6">
@@ -15,11 +15,14 @@
                             @endif
                             @foreach($page->content as $content)
                                 @if($content->type == "text")
-                                    <div class="dark:text-white">
+                                    <div class="md:hidden table-auto text-xs dark:text-white">
+                                        {!! $content->text !!}
+                                    </div>
+                                    <div class="hidden sm:hidden md:block dark:text-white">
                                         {!! $content->text !!}
                                     </div>
                                 @elseif($content->type == "fileassets")
-                                    <ul class="space-y-3 text-xs">
+                                    <ul class="table-auto space-y-3 text-xs">
                                         @foreach($content->file as $file)
                                             <li class="flex space-x-3">
                                                 <a href="{{$file->url}}" class="inline-flex items-center justify-center p-3 text-sm font-medium text-gray-500 rounded-lg bg-gray-50 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -51,4 +54,3 @@
         </div>
     </main>
 </div>
-
