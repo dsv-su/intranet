@@ -108,7 +108,7 @@
                                                     </li>
                                                     {{ else }}
                                                     <li>
-                                                        <a href="{{ url }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                                                        <a href="{{ url }}" aria-label="Nav link" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
                                                             {{ title}}
                                                         </a>
                                                     </li>
@@ -119,7 +119,7 @@
                                         </li>
                                         {{ else }}
                                         <li>
-                                            <a href="{{ url }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                                            <a href="{{ url }}" aria-label="Nav link" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
                                                 {{ title}}
                                             </a>
                                         </li>
@@ -130,7 +130,7 @@
                             </li>
                             {{ else }}
                             <li>
-                                <a href="{{ url }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ title }}</a>
+                                <a href="{{ url }}" aria-label="Nav link" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ title }}</a>
                             </li>
                             {{ /if }}
 
@@ -141,7 +141,7 @@
                 {{ else }}
             <!-- No children -->
                 <li>
-                    <a href="{{ url }}"
+                    <a href="{{ url }}" aria-label="Nav link"
                        class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
                        aria-current="page">{{ title }}</a>
                 </li>
