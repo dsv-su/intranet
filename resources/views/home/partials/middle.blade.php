@@ -3,12 +3,32 @@
         <livewire:lecturerooms />
         <div class="px-6 {{--}}mt-6{{--}} flex flex-col {{--}}justify-center{{--}} {{--}}items-start{{--}} md:min-h-[480px] {{--}}text-center{{--}} rounded-xl dark:border-gray-700">
             <div id="middleHolder">
-                <div class="flex flex-col border-y dark:border-gray-700">
+                <div class="flex flex-col border-y border-susecondary dark:border-gray-700">
                     <div class="pb-8">
                         @nocache('home.partials.teachernews')
                     </div>
                 </div>
+
                 <div class="mt-6 justify-center items-start text-center">
+                    @php
+                        $file = base_path().'/systemconfig/internt.ini';
+                        if (!file_exists($file)) {
+                            $file = base_path().'/systemconfig/internt.ini.example';
+                            }
+                        $system_config = parse_ini_file($file, true);
+                    @endphp
+                    @antlers
+                    <video
+                        controls
+                        playsinline="1"
+                        preload="auto"
+                        crossorigin="anonymous"
+                        src="https://play-store-prod.dsv.su.se/presentation/13315a63-bd19-441b-bbe7-bc6c8cd0b1be/833835730-720.mp4?token={{ $system_config['play']['token'] }}">
+                    </video>
+                    @endantlers
+
+
+                    {{--}}
                     <p class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-xs font-semibold uppercase">
                         {{__("Scheduled for launch,")}}
                     </p>
@@ -21,7 +41,9 @@
                     <p class="mt-2 text-gray-500">
                         {{__("The DSV Intranet website is under construction.")}}
                     </p>
+                    {{--}}
                 </div>
+
                 <div class="flex flex-col border-y dark:border-gray-700">
                     <h3 class="pt-8 text-left text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
                         {{__("PhD information")}}
