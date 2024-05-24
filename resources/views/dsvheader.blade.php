@@ -58,10 +58,10 @@
             <button data-tooltip-target="navbar-dropdown-languageswitch-tooltip" type="button" data-dropdown-toggle="language-dropdown-menu" class="md:opacity-100 opacity-0 flex items-center text-xs font-small w-24 h-6 mx-5 {{--}}outline outline-offset-2 outline-1{{--}} rounded justify-center px-4 py-2 text-sm text-white dark:text-white cursor-pointer dark:hover:bg-gray-700 dark:hover:text-white">
                 {{--}}@if($site->handle == 'swe'){{--}}
                 @if(Illuminate\Support\Facades\App::currentLocale() == 'sv')
-                    <img src="{{asset('images/globallinks-lang-sv.gif')}}" class="w-5 h5 mr-2">
+                    <img src="{{asset('images/globallinks-lang-sv.gif')}}" alt="Swedish flag" class="w-5 h5 mr-2">
                     Svenska
                 @else
-                    <img src="{{asset('images/globallinks-lang-en.gif')}}" class="w-5 h5 mr-2">
+                    <img src="{{asset('images/globallinks-lang-en.gif')}}" alt="English flag" class="w-5 h5 mr-2">
                     English
                 @endif
             </button>
@@ -81,10 +81,10 @@
                                     <div class="inline-flex items-center">
                                         {{--}}@if($lang == 'swe'){{--}}
                                         @if($lang == 'sv')
-                                            <img src="{{asset('images/globallinks-lang-sv.gif')}}" class="w-5 h5 mr-2">
+                                            <img src="{{asset('images/globallinks-lang-sv.gif')}}" alt="Swedish flag" class="w-5 h5 mr-2">
                                         Svenska
                                         @else
-                                            <img src="{{asset('images/globallinks-lang-en.gif')}}" class="w-5 h5 mr-2">
+                                            <img src="{{asset('images/globallinks-lang-en.gif')}}" alt="English flag" class="w-5 h5 mr-2">
                                         English
                                         @endif
 
@@ -98,8 +98,10 @@
             <!-- end language switcher -->
             <!-- Dashbord -->
             @can('access cp')
-                <a data-tooltip-target="navbar-dashboard-tooltip" href='/cp' class="block px-2 py-0.5 mr-2 text-sm outline outline-offset-2 outline-1 rounded text-gray-200 hover:bg-slate-100 hover:text-black dark:border-gray-600" role="menuitem">
-                    <svg class="w-5 h-5 text-white hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <a data-tooltip-target="navbar-dashboard-tooltip" href='/cp' aria-label="Control panel"
+                   class="block px-2 py-0.5 mr-2 text-sm outline outline-offset-2 outline-1 rounded text-gray-200 hover:bg-slate-100 hover:text-black dark:border-gray-600" role="menuitem">
+                    <svg class="w-5 h-5 text-white hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-900"
+                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"/>
                     </svg>
                 </a>

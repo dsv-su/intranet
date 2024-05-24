@@ -1,4 +1,4 @@
-<footer class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 border-y border-susecondary overflow-x-hidden">
+<footer class="w-full py-10 px-4 sm:px-6 lg:px-8 border-y border-susecondary overflow-x-hidden">
     <!-- Grid -->
     <div class="grid md:grid-cols-4 lg:grid-cols-5 gap-8 mb-10">
         <div class="col-span-full lg:col-span-1">
@@ -34,8 +34,8 @@
             </div>
         </div>
         <div class="hidden md:block">
-            <h4 class="font-semibold text-gray-900 uppercase dark:text-gray-100">&nbsp;</h4>
-            <div class="mt-3 grid space-y-3 text-sm">
+            {{--}}<h4 class="font-semibold text-gray-900 uppercase dark:text-gray-100">&nbsp</h4>{{--}}
+            <div class="mt-10 grid space-y-3 text-sm">
                 <p><a class="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">Project Proposals</a></p>
                 <p><a class="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">SciPro Project</a></p>
                 <p><a class="inline-flex gap-x-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">Thesis Info</a></p>

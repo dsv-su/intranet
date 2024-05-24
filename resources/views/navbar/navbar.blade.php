@@ -1,7 +1,7 @@
 <nav class="bg-white border-b border-susecondary dark:bg-gray-900 dark:border-gray-700">
     <div class="relative flex flex-wrap md:flex-row lg:flex-nowrap w-full p-5 mx-auto bg-white items-center justify-between md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
         <a href="{{ config('app.url') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <span class="self-center text-lg font-mono whitespace-nowrap dark:text-white">{{ config('app.name') }}</span>
+            <span class="self-center text-lg font-mono whitespace-nowrap dark:text-white">{{ config('app.name') }} &nbsp;</span>
         </a>
         <!-- Mobile -->
         <!-- Notifications -->
@@ -108,7 +108,7 @@
                                                     </li>
                                                     {{ else }}
                                                     <li>
-                                                        <a href="{{ url }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                                                        <a href="{{ url }}" aria-label="Nav link" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
                                                             {{ title}}
                                                         </a>
                                                     </li>
@@ -119,7 +119,7 @@
                                         </li>
                                         {{ else }}
                                         <li>
-                                            <a href="{{ url }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                                            <a href="{{ url }}" aria-label="Nav link" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
                                                 {{ title}}
                                             </a>
                                         </li>
@@ -130,7 +130,7 @@
                             </li>
                             {{ else }}
                             <li>
-                                <a href="{{ url }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ title }}</a>
+                                <a href="{{ url }}" aria-label="Nav link" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ title }}</a>
                             </li>
                             {{ /if }}
 
@@ -141,7 +141,7 @@
                 {{ else }}
             <!-- No children -->
                 <li>
-                    <a href="{{ url }}"
+                    <a href="{{ url }}" aria-label="Nav link"
                        class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
                        aria-current="page">{{ title }}</a>
                 </li>

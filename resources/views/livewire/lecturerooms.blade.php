@@ -4,7 +4,7 @@
         <h3 class="text-left mb-2 text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
             {{__("Teacher information")}}
             @can('access cp')
-                <a href="/cp/collections/teachernews" class="float-right hover:border-blue-600">
+                <a href="/cp/collections/teachernews" aria-label="Teacher news admin" class="float-right hover:border-blue-600">
                     <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4.109 17H1v-2a4 4 0 0 1 4-4h.87M10 4.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm7.95 2.55a2 2 0 0 1 0 2.829l-6.364 6.364-3.536.707.707-3.536 6.364-6.364a2 2 0 0 1 2.829 0Z"/>
                     </svg>

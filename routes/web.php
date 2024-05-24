@@ -50,4 +50,6 @@ Route::get('/travel/pdf/{id}', [\App\Http\Controllers\FOController::class, 'down
 Route::get('/settings', [\App\Http\Controllers\FOController::class, 'settings'])->name('settings');
 Route::post('/fo', [\App\Http\Controllers\FOController::class, 'settings_fo'])->name('fo');
 
-Route::get('/test', [TestController::class, 'test'])->name('test');
+//News list entries
+Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'list'])->name('list');
+Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'swelist'])->name('swelist');
