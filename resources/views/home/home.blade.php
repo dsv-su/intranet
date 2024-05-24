@@ -6,7 +6,7 @@
             <!-- Card middle-->
             @include('home.partials.middle')
             <!-- End Card -->
-            
+
         </div>
         <!-- End Col -->
 

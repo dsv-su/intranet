@@ -1,4 +1,4 @@
-<footer class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 border-y border-susecondary overflow-x-hidden">
+<footer class="w-full py-10 px-4 sm:px-6 lg:px-8 border-y border-susecondary overflow-x-hidden">
     <!-- Grid -->
     <div class="grid md:grid-cols-4 lg:grid-cols-5 gap-8 mb-10">
         <div class="col-span-full lg:col-span-1">
