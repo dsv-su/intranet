@@ -10,6 +10,7 @@
                 </div>
 
                 <div class="mt-6 justify-center items-start text-center">
+                    {{--}}
                     @php
                         $file = base_path().'/systemconfig/internt.ini';
                         if (!file_exists($file)) {
@@ -27,7 +28,6 @@
                     </video>
                     @endantlers
 
-
                     {{--}}
                     <p class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-xs font-semibold uppercase">
                         {{__("Scheduled for launch,")}}
@@ -41,7 +41,7 @@
                     <p class="mt-2 text-gray-500">
                         {{__("The DSV Intranet website is under construction.")}}
                     </p>
-                    {{--}}
+
                 </div>
 
                 <div class="flex flex-col border-y dark:border-gray-700">
