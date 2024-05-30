@@ -9,7 +9,7 @@ use Statamic\Eloquent\Database\BaseMigration as Migration;
 return new class extends Migration {
     public function up()
     {
-        /*Schema::table($this->prefix('assets_meta'), function (Blueprint $table) {
+        Schema::table($this->prefix('assets_meta'), function (Blueprint $table) {
             $table->string('container')->after('handle')->index();
             $table->string('folder')->after('container')->index();
             $table->string('basename')->after('folder')->index();
@@ -41,7 +41,7 @@ return new class extends Migration {
 
         Schema::table($this->prefix('assets_meta'), function (Blueprint $table) {
             $table->dropColumn('handle');
-        });*/
+        });
     }
 
     public function down()
