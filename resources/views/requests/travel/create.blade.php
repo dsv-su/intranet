@@ -20,7 +20,7 @@
                             </svg>
                         </button>
                     </label>
-                    <input type="text" name="name" id="project" class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    <input type="text" name="name" id="project" class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
                            value="{{ old('name') ? old('name'): $tr->name ??  'Travelrequest for '. auth()->user()->name  }}" placeholder="Name" required="">
                     @error('name')
                     <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}} </p>
@@ -38,7 +38,7 @@
                     </label>
                     <textarea id="purpose" rows="4" name="purpose"
                               class="@error('purpose') border-red-500 @enderror font-mono block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300
-                              focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                              focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                               placeholder="{{__("Describe the purpose of your mission")}}">{{ old('purpose') ? old('purpose'): $tr->purpose ?? '' }}</textarea>
                     @error('purpose')
                         <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}}</p>
@@ -55,7 +55,7 @@
                         </button>
                     </label>
                     <select id="paper" name="paper" data-value="{{ old('paper') ? old('paper'): $tr->paper ?? 0}}"
-                            class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
                         @if($type == 'create')
                             <option selected="" value="0">{{__("No")}}</option>
                             <option value="1">{{__("Yes")}}</option>
@@ -91,7 +91,7 @@
                         </button>
                     </label>
                     <select id="project_leader" name="project_leader"
-                            class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
                         @foreach($projectleaders as $projectleader)
                             @if($type == 'resume')
                                 <option @if($projectleader->id == $dashboard->manager_id) selected="" @endif value="{{$projectleader->id}}">{{$projectleader->name}}</option>
@@ -112,7 +112,7 @@
                         </button>
                     </label>
                     <select id="unit_head" name="unit_head"
-                            class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
                         @foreach($unitheads as $unithead)
                             @if($type == 'resume')
                                 <option @if($unithead->id == $dashboard->head_id) selected="" @endif value="{{$unithead->id}}">{{$unithead->name}}</option>
@@ -158,31 +158,31 @@
                 </div>
                 {{--}}
                 <!--Departure return-->
-                <div date-rangepicker datepicker-format="dd/mm/yyyy" class="sm:col-span-2 inline-flex items-center">
-                    <span class="mx-4 text-gray-500">{{__("From")}}</span>
+                <div date-rangepicker datepicker-format="dd/mm/yyyy" class="sm:col-span-2 inline-flex items-center dark:text-gray-200">
+                    <span class="mx-4 text-gray-500 dark:text-gray-200">{{__("From")}}</span>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg style="fill:blue" class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4 text-blue-700 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                             </svg>
                         </div>
                         @error('departure')
                         <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                         @enderror
-                        <input name="departure" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->departure)->format('d/m/Y') }}" @endif id="startInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
+                        <input name="departure" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->departure)->format('d/m/Y') }}" @endif id="startInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
                     </div>
 
-                    <span class="mx-4 text-gray-500">{{__("To")}}</span>
+                    <span class="mx-4 text-gray-500 dark:text-gray-200">{{__("To")}}</span>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg style="fill:blue" class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4 text-blue-700 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                             </svg>
                         </div>
                         @error('return')
                         <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                         @enderror
-                        <input name="return" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->return)->format('d/m/Y') }}" @endif id="endInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
+                        <input name="return" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->return)->format('d/m/Y') }}" @endif id="endInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
                     </div>
                 </div>
 
@@ -198,9 +198,9 @@
 
             </div>
             <div class="mt-6 flex items-center justify-end gap-x-6">
-                <a type="button" href="{{ url()->previous() }}" class="text-sm bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">{{__("Cancel")}}</a>
-                <div class="py-3 px-6 border border-blue-500 rounded">
-                    <button type="submit" class="text-sm bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">{{__("Send in request")}}</button>
+                <a type="button" href="{{ url()->previous() }}" class="text-sm bg-transparent hover:bg-blue-500 text-blue-700 dark:text-gray-200 font-semibold hover:text-white py-2 px-4 border border-blue-500 dark:border-gray-200 hover:border-transparent rounded">{{__("Cancel")}}</a>
+                <div class="py-3 px-6 border border-blue-500 rounded dark:border-gray-200">
+                    <button type="submit" class="text-sm bg-transparent hover:bg-blue-500 text-blue-700 dark:text-gray-200 font-semibold hover:text-white py-2 px-4 border border-blue-500 dark:border-gray-200 hover:border-transparent rounded">{{__("Send in request")}}</button>
                 </div>
 
             </div>

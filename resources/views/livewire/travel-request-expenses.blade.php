@@ -6,7 +6,7 @@
             <input wire:model="flight" type="text" id="flight" name="flight" value="{{ old('flight') ? old('flight'): $tr->flight ?? '' }}"
                    placeholder="{{ __("SEK") }}"
                    class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block
-                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 
         </div>
         <!--Hotel-->
@@ -15,7 +15,7 @@
             <input wire:model="hotel" type="text" id="hotel" name="hotel" value="{{ old('hotel') ? old('hotel'): $tr->hotel ?? '' }}"
                    placeholder="{{ __("SEK") }}"
                    class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block
-                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
         </div>
         <!-- Daily allwances -->
         <div class="w-full">
@@ -28,7 +28,7 @@
                     w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
              {{--}}
             <div class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block
-                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                 {{$countryname ?? __("Please select a country destination")}} @if($countryname): {{$daily}} x {{$days}} = {{ $daily*$days }} @endif
             </div>
 
@@ -39,7 +39,7 @@
             <input wire:model="conference" type="text" id="conference" name="conference" value="{{ old('conference') ? old('conference'): $tr->conference ?? '' }}"
                    placeholder="{{ __("SEK") }}"
                    class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block
-                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
         </div>
         <!--Other-->
         <div class="w-full">
@@ -47,7 +47,7 @@
             <input wire:model="other_costs" type="text" id="other_costs" name="other_costs" value="{{ old('other_costs') ? old('other_costs'): $tr->other_costs ?? '' }}"
                     placeholder="{{ __("SEK") }}"
                    class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block
-                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
         </div>
         <!--Total-->
         <div class="w-full">
@@ -55,7 +55,7 @@
             <input wire:model="total" type="text" id="total" name="total" value="{{ old('total') ? old('total'): $tr->total ?? '' }}"
                     placeholder="{{ __("SEK") }}"
                     class="font-mono font-bold bg-blue-300 border border-gray-300 text-black text-sm font-semibold rounded-lg focus:ring-primary-600 focus:border-primary-600 block
-                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
         </div>
     </div>
     <input wire:model="daily" name="daily" hidden>
