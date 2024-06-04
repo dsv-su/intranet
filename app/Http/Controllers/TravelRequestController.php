@@ -106,11 +106,20 @@ class TravelRequestController extends Controller
             'conference', 'other_costs', 'total'
         ]);
 
+        //Domestric travel
+        if($request->countrytype == 'domestic') {
+            $travelRequestData['country'] = 'Sverige';
+        }
+
+
         // Convert dates to unix format
-        $departureDate = Carbon::createFromFormat('d/m/Y', $request->departure)->timestamp;
-        $returnDate = Carbon::createFromFormat('d/m/Y', $request->return)->timestamp;
-        $travelRequestData['departure'] = $departureDate;
-        $travelRequestData['return'] = $returnDate;
+        if($request->departure && $request->return) {
+            $departureDate = Carbon::createFromFormat('d/m/Y', $request->departure)->timestamp;
+            $returnDate = Carbon::createFromFormat('d/m/Y', $request->return)->timestamp;
+            $travelRequestData['departure'] = $departureDate;
+            $travelRequestData['return'] = $returnDate;
+        }
+        // Timestamp request
         $travelRequestData['created'] = Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp;
 
         //Set initial state
@@ -152,15 +161,33 @@ class TravelRequestController extends Controller
 
     protected function validateRequest(Request $request)
     {
-        return $this->validate($request, [
+        /*return $this->validate($request, [
             'purpose' => 'required',
-            'project' => 'required',
+            //'project' => 'required',
             'country' => 'required',
             'project_leader' => 'required',
             'unit_head' => 'required',
             'departure' => 'required',
             'return' => 'required'
-        ]);
+        ]);*/
+        $rules = [
+            'purpose' => 'required',
+            //'project' => 'required',
+            'project_leader' => 'required',
+            'unit_head' => 'required',
+            //'departure' => 'required',
+            //'return' => 'required'
+        ];
+
+        $rules['country'] = ['required_without:countrytype'];
+        $rules['countrytype'] = ['required_without:country'];
+
+        $messages = [
+            'country.required_without' => 'The country selection is required when your travel is international.',
+            'countrytype.required_without' => 'The countrytype field is required when country is not present.',
+        ];
+
+        return $this->validate($request, $rules, $messages);
     }
 
     protected function createAndStartWorkflow($dashboard)

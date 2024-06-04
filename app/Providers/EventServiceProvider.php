@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\UserCreatedSuccessful;
+use App\Listeners\AssignGroupToUser;
 use App\Listeners\SendDSVInfoNotification;
 use App\Listeners\SendNewUserNotification;
 use App\Listeners\SendUserConfirmationEmail;
@@ -27,6 +28,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserCreatedSuccessful::class => [
             //SendUserConfirmationEmail::class,
+            AssignGroupToUser::class,
             SendNewUserNotification::class,
         ],
         EntrySaved::class => [
