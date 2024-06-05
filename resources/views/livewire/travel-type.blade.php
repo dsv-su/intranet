@@ -44,7 +44,7 @@
 
         </div>
 
-         <div class="relative w-full mt-2 content">
+         <div class="relative w-full mt-2">
              <div :id="tabId + '-content-1'" x-show="tabContentActive($el)" class="relative">
                  <!-- Tab Content 1 -->
                  <livewire:select2.country-select2 :country="$country" />
