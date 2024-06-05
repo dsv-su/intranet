@@ -4,8 +4,7 @@ Dear <b>{{$user->name}}</b>,
 <br><br>
 We would like to inform you that your account and roles have been updated. Your new permissions are now active.
 <br><br>
-Please review your updated permissions and ensure that you have the necessary access and permissions to carry out your tasks effectively.
-If you have any questions or require further information about your updated roles, please don't hesitate to contact, Tuija Lehtonen (tuija@dsv.su.se), or support.
+If you have any questions or require further information about your updated roles, please don't hesitate to contact, Tuija Lehtonen (tuija@dsv.su.se), or helpdesk.
 <br><br>
 Your roles have been updated to:
 <br><br>
