@@ -1,4 +1,4 @@
-<div>
+<div wire:ignore>
     <div
         x-data="{
         tabSelected: @entangle('tabselected'),
