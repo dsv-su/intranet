@@ -95,7 +95,7 @@ class TravelRequestController extends Controller
     {
         // Ensure the request method is POST
         $this->validateRequest($request);
-        
+
         // Find or create the financial officer
         $fo = SettingsFo::find(1);
 

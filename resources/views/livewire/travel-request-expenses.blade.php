@@ -2,7 +2,7 @@
     <div class="grid gap-6 mb-6 md:grid-cols-2">
         <!-- Flight -->
         <div class="w-full">
-            <label for="flight" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Flight") }}</label>
+            <label for="flight" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Travel (Plane, train, etc)") }}</label>
             <input wire:model="flight" type="text" id="flight" name="flight" value="{{ old('flight') ? old('flight'): $tr->flight ?? '' }}"
                    placeholder="{{ __("SEK") }}"
                    class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block

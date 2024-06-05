@@ -10,15 +10,11 @@
             this.updateHiddenInput();
         },
         tabRepositionMarker(tabButton){
-            console.log('Repositioning marker for:', tabButton.id);
-            console.log('Offset Width:', tabButton.offsetWidth);
-            console.log('Offset Left:', tabButton.offsetLeft);
             this.$refs.tabMarker.style.width=tabButton.offsetWidth + 'px';
             this.$refs.tabMarker.style.height=tabButton.offsetHeight + 'px';
             this.$refs.tabMarker.style.left=tabButton.offsetLeft + 'px';
         },
         tabContentActive(tabContent){
-            console.log('Active Tab:', tabContent.id);
             return this.tabSelected == tabContent.id.replace(this.tabId + '-content-', '');
         },
         updateHiddenInput(){
@@ -39,8 +35,8 @@
         </label>
 
         <div x-ref="tabButtons" class="relative inline-grid items-center justify-center w-full h-10 grid-cols-2 p-1 text-gray-600 dark:text-gray-400 bg-gray-100 rounded-lg select-none dark:bg-gray-700 dark:border-gray-600">
-            <button :id="tabId + '-1'" @click="tabButtonClicked($el);" type="button" role="tab" class="relative z-20 inline-flex items-center justify-center w-full h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap">International</button>
-            <button :id="tabId + '-2'" @click="tabButtonClicked($el);" type="button" role="tab" class="relative z-20 inline-flex items-center justify-center w-full h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap">Domestic</button>
+            <button :id="tabId + '-1'" @click="tabButtonClicked($el);" type="button" role="tab" class="relative z-20 inline-flex items-center justify-center w-full h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap">{{__("International")}}</button>
+            <button :id="tabId + '-2'" @click="tabButtonClicked($el);" type="button" role="tab" class="relative z-20 inline-flex items-center justify-center w-full h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap">{{__("Domestic")}}</button>
 
             <div x-ref="tabMarker" class="absolute left-0 z-10 w-1/2 h-full duration-300 ease-out" x-cloak>
                 <div class="w-full h-full bg-white rounded-md shadow-sm dark:border dark:border-gray-200"></div>

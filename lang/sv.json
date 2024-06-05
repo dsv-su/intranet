@@ -63,7 +63,7 @@
     "Expenses": "Utgifter",
     "Amount": "Belopp",
     "Total": "Total",
-    "Flight": "Flyg",
+    "Travel (Plane, train, etc)": "Resor (Flyg, tåg, mm)",
     "Hotel": "Hotell",
     "Other costs": "Andra kostnader",
     "Subtotal": "Delsumma",
@@ -83,7 +83,10 @@
     "No": "Nej",
     "Yes": "Ja",
     "Project": "Projekt",
+    "No project": "Inget projekt",
     "Select Project": "Välj projekt",
+    "International": "Internationell",
+    "Domestic": "Inrikes",
     "Select Country": "Välj land",
     "Duty Travel Request Name": "Namn på resebegäran",
     "Close": "Stäng",
@@ -141,5 +144,10 @@
     "news": "Interna nyheter",
     "teachernews": "Nyheter för Lärare",
     "phdnews": "Nyheter för doktorander",
-    "itnews": "IT nyheter"
+    "itnews": "IT nyheter",
+    "Please select 'No project' if your travel is not associated with any specific project.": "Välj 'Inget projekt' om din resa inte är kopplad till något specifikt projekt.",
+    "Please enter a country from the list, or select 'Domestic' if your travel is within Sweden.": "Ange ett land från listan, eller välj 'Inrikes' om din resa är inom Sverige.",
+    "Send in request": "Skicka in förfrågan",
+    "Select date start": "Välj startdatum",
+    "Select date end": "Välj slutdatum"
 }
