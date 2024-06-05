@@ -242,9 +242,9 @@
     document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById('project-button').click();
     });
-    document.addEventListener("DOMContentLoaded", function(event) {
-        document.getElementById('tabs-2').click();
-    });
+    /*document.addEventListener("DOMContentLoaded", function(event) {
+        document.getElementById('tabs-2-1').click();
+    });*/
     document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById('projectleader-button').click();
     });
