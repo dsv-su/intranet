@@ -42,5 +42,5 @@
             </ul>
         </div>
     </div>
-    <input  name="project" value="{{$Project->project}}" hidden required>
+    <input  name="project" value="{{$Project->project}}" hidden>
 </div>

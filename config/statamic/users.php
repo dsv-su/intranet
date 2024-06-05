@@ -72,7 +72,7 @@ return [
     */
 
     'new_user_groups' => [
-        //
+        'projektledare'
     ],
 
     /*

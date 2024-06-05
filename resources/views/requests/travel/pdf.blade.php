@@ -58,7 +58,11 @@
         <tbody>
         <tr>
             <td>
-                {{$tr->project}}
+                @if($tr->project)
+                    {{$tr->project}}
+                @else
+                    NN
+                @endif
             </td>
             <td>
                 {{$manager->name}}
@@ -91,10 +95,18 @@
                 {{$tr->daily}} SEK
             </td>
             <td>
-                {{\Carbon\Carbon::createFromTimestamp($tr->departure)->toDateString()}}
+                @if($tr->departure)
+                    {{\Carbon\Carbon::createFromTimestamp($tr->departure)->toDateString()}}
+                @else
+                    NN
+                @endif
             </td>
             <td>
-                {{\Carbon\Carbon::createFromTimestamp($tr->return)->toDateString()}}
+                @if($tr->return)
+                    {{\Carbon\Carbon::createFromTimestamp($tr->return)->toDateString()}}
+                @else
+                    NN
+                @endif
             </td>
             <td>
                 {{$tr->days}}
@@ -184,7 +196,11 @@
             @endif
         </td>
         <td>
-          1
+            @if($tr->flight == null or $tr->flight == 0)
+                0
+            @else
+                1
+            @endif
         </td>
         <td>
             @if($tr->flight == null or $tr->flight == 0)
@@ -206,7 +222,12 @@
             @endif
         </td>
         <td>
-            {{$tr->days}} ({{__("days")}})
+            @if($tr->days)
+                {{$tr->days}}
+            @else
+                0
+            @endif
+            ({{__("days")}})
         </td>
         <td>
             @if($tr->hotel == null or $tr->hotel == 0)

@@ -67,18 +67,15 @@
                 </div>
                 <br>
                 <!-- Project -->
-                @if($type == 'resume')
-                    <livewire:select2.project-select2 :id="$tr->project">
-                @else
-                    <livewire:select2.project-select2 />
-                @endif
+                @include('requests.travel.partials.projecttab')
 
                 <!--Country-->
                 @if($type == 'resume')
-                        <livewire:select2.country-select2 :country="$tr->country">
+                    <livewire:travel-type :resume="$tr->country">
                 @else
-                    <livewire:select2.country-select2 />
+                    <livewire:travel-type />
                 @endif
+
                 <!--end -->
 
                 <!-- Projectleader -->
@@ -169,7 +166,14 @@
                         @error('departure')
                         <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                         @enderror
-                        <input name="departure" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->departure)->format('d/m/Y') }}" @endif id="startInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
+                        <input name="departure"
+                               @if($type == 'resume')
+                                    value="{{ \Carbon\Carbon::createFromTimestamp($tr->departure)->format('d/m/Y') }}"
+                               @endif
+                               id="startInput" type="text"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
+                               dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="Select date start">
                     </div>
 
                     <span class="mx-4 text-gray-500 dark:text-gray-200">{{__("To")}}</span>
@@ -182,7 +186,13 @@
                         @error('return')
                         <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                         @enderror
-                        <input name="return" @if($type == 'resume') value="{{ \Carbon\Carbon::createFromTimestamp($tr->return)->format('d/m/Y') }}" @endif id="endInput" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
+                        <input name="return"
+                               @if($type == 'resume')
+                                value="{{ \Carbon\Carbon::createFromTimestamp($tr->return)->format('d/m/Y') }}"
+                               @endif id="endInput" type="text"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
+                               dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="Select date end">
                     </div>
                 </div>
 
@@ -232,9 +242,9 @@
     document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById('project-button').click();
     });
-    document.addEventListener("DOMContentLoaded", function(event) {
-        document.getElementById('country-button').click();
-    });
+    /*document.addEventListener("DOMContentLoaded", function(event) {
+        document.getElementById('tabs-2-1').click();
+    });*/
     document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById('projectleader-button').click();
     });
@@ -244,11 +254,11 @@
     document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById('paper-button').click();
     });
-    document.addEventListener("DOMContentLoaded", function(event) {
+    /*document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById('contribution-button').click();
-    });
-    document.addEventListener("DOMContentLoaded", function(event) {
+    });*/
+    /*document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById('other-button').click();
-    });
+    });*/
 </script>
 @include('layouts.darktoggler')

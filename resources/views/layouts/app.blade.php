@@ -29,14 +29,7 @@
     <main>
         @yield('content')
     </main>
-
-    {{--}}
-    @include('includes.footer')
-    {{--}}
 </body>
-
-<!-- Scripts -->
-{{--}}@stack('after-scripts'){{--}}
 @livewireScripts
 @include('footer.footer')
 </html>
