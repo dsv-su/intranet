@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="relative w-full mt-2 content">
+        <div class="relative w-full mt-2">
             <div :id="$id(tabId + '-content')" x-show="tabContentActive($el)" class="relative">
                 <!-- Tab Content 1 -->
                 @if($type == 'resume')
