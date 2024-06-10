@@ -7,9 +7,9 @@
         </button>
     </label>
     <div class="w-full" x-data="{open:false}" x-on:click.away="open=false">
-        <button type="button" class="font-mono bg-gray-50 border border-gray-300 text-gray-900 p-2.5 rounded-lg shadow-inner w-full flex justify-between items-center text-sm focus:outline-none" x-on:click="open=!open">
+        <button type="button" class="font-mono bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200 p-2.5 rounded-lg shadow-inner w-full flex justify-between items-center text-sm focus:outline-none" x-on:click="open=!open">
             <span class="float-left">{{$Project->project ?? __("Select Project")}}</span>
-            <svg class="h-4 transform float-right fill-current text-black" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129" :class="{'rotate-180': open}">
+            <svg class="h-4 transform float-right fill-current text-black dark:text-gray-200" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129" :class="{'rotate-180': open}">
                 <g>
                     <path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"/>
                 </g>
@@ -42,5 +42,5 @@
             </ul>
         </div>
     </div>
-    <input  name="project" value="{{$Project->project}}" hidden required>
+    <input  name="project" value="{{$Project->project}}" hidden>
 </div>

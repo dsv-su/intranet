@@ -65,9 +65,20 @@ class TravelRequestExpenses extends Component
 
     public function selectedCountry($id)
     {
-        $country = Country::find($id);
-        $this->daily = $country->allowance;
-        $this->countryname = $country->country;
+        if ($id == 999) {
+            $this->domestic();
+        } else {
+            $country = Country::find($id);
+            $this->daily = $country->allowance;
+            $this->countryname = $country->country;
+            $this->summarize();
+        }
+    }
+
+    public function domestic()
+    {
+        $this->daily = 290;
+        $this->countryname = 'Sverige';
         $this->summarize();
     }
 

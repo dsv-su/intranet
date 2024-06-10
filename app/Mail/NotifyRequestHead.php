@@ -36,7 +36,7 @@ class NotifyRequestHead extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('noreply@dsv.su.se', 'Intranet'),
+            from: new Address('noreply@dsv.su.se', 'DSVIntranet'),
             subject: config('app.name'). ' New: '. Str::upper($this->dashboard->type),
         );
     }

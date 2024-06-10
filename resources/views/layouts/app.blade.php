@@ -20,7 +20,7 @@
     @vite(['resources/css/site.css'])
     @vite(['resources/js/site.js'])
     @livewireStyles
-    @stack('after-styles')
+    {{--}}@stack('after-styles'){{--}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/datepicker.min.js"></script>
 
 </head>
@@ -29,14 +29,7 @@
     <main>
         @yield('content')
     </main>
-
-    {{--}}
-    @include('includes.footer')
-    {{--}}
 </body>
-
-<!-- Scripts -->
-@stack('after-scripts')
 @livewireScripts
 @include('footer.footer')
 </html>

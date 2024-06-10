@@ -24,12 +24,11 @@ class CountrySelect2 extends Component
 
     public function mount($country = 0)
     {
-        if($country != 0) {
+        if($country != 0 && $country != 'Sverige') {
             $this->Country = Country::where('country',  $country)->first();
         } else {
             $this->Country = new Country;
         }
-
     }
 
     public function getOptionsProperty()
@@ -49,6 +48,7 @@ class CountrySelect2 extends Component
         $country = Country::where('country',$this->search)->first();
         if(!empty($country)) {
             $this->Country = $country;
+            $this->emit('selectedCountry', $this->Country->id);
         }
         $this->search = "";
     }

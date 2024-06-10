@@ -3,12 +3,12 @@
         <div class="py-6">
             <div class="px-4 mx-auto max-w-6xl sm:px-6 md:px-6">
                 <div class="py-4">
-                    <article class="mt-4 mb-4 bg-white p-8 shadow-xl rounded-xl max-w-full prose dark:bg-gray-800 dark:text-white antialiased">
+                    <article class="mt-4 mb-4 bg-white p-8 shadow-xl rounded-xl max-w-full prose dark:prose-invert dark:bg-gray-800 dark:text-white antialiased">
                         <h2 class="mb-4 text-2xl tracking-tight font-bold text-gray-900 dark:text-white">
                             {!! $page->title !!}
                         </h2>
                         @if(isset($page->intro))
-                            <h4 class="max-w-xl mt-4 text-base tracking-tight text-gray-600 dark:text-white">
+                            <h4 class="max-w-xl mt-4 text-base tracking-tight text-gray-600 dark:text-white dark:prose-invert">
                                 {!! $page->intro !!}
                             </h4>
                         @endif
