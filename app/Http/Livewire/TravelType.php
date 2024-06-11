@@ -27,7 +27,7 @@ class TravelType extends Component
 
     public function selectedCountry($type)
     {
-        $this->emit('clear', $type);
+        $this->emit('clearcontry');
         $this->emit('selectedCountry', $type);
     }
 

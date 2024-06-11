@@ -19,7 +19,7 @@ class CountrySelect2 extends Component
 
     protected $listeners = [
         'set-Country' => 'set_Country',
-        'clear'
+        'clearcountry'
     ];
 
     public function mount($country = 0)
@@ -60,7 +60,7 @@ class CountrySelect2 extends Component
     }
 
     /** listener */
-    public function clear()
+    public function clearcountry()
     {
         $this->Country = new Country;
         $this->reset('search');
