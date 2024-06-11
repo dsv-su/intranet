@@ -102,7 +102,7 @@
     "Duty Travel Request Country": "Resebegäran till land",
     "Please select the country you'd like to visit as your travel destination.": "Välj det land du vill besöka som ditt resmål.",
     "Duty Travel Request Projectleader or Manager": "Resebegäran Projektledaren",
-    "Please select you project leader or manager for the project.": "Välj din projektledare eller chef för projektet.",
+    "Please choose the project leader or manager for your project from the list. If your project does not have a designated leader or you are working independently, please select your own name.": "Vänligen välj projektledaren eller ansvarig för ditt projekt från listan. Om ditt projekt inte har en utsedd ledare eller om du arbetar självständigt, vänligen välj ditt eget namn.",
     "Duty Travel Request Unit Head": "Resebegäran Enhetschef",
     "Please select the unit head who is responsible for the project.": "Välj den enhetschef som är ansvarig för projektet.",
     "RequestId": "ID",
