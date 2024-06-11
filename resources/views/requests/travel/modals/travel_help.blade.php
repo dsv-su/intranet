@@ -184,7 +184,7 @@
             </div>
             <dl>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Please select you project leader or manager for the project.")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Please choose the project leader or manager for your project from the list. If your project does not have a designated leader or you are working independently, please select your own name.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact ekonomi@dsv.su.se")}}</dd>
             </dl>

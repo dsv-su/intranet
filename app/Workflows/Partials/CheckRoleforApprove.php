@@ -10,9 +10,28 @@ class CheckRoleforApprove
 {
     public $dashboard;
 
-    public function isSameManagerHead($request): bool
+    public function isSameUserManager($request): bool
     {
         // Logic to check if the user and manager are the same person
+
+        // Retrive request dashboard
+        $id = $request[0];
+        $this->dashboard = Dashboard::find($id);
+
+        //Users
+        $user = $this->dashboard->user_id;
+        $manager = $this->dashboard->manager_id;
+
+        if($user == $manager) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isSameManagerHead($request): bool
+    {
+        // Logic to check if the manager and head are the same person
 
         // Retrive request dashboard
         $id = $request[0];
@@ -28,5 +47,7 @@ class CheckRoleforApprove
 
         return false;
     }
+
+
 
 }
