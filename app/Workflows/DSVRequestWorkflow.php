@@ -201,40 +201,55 @@ class DSVRequestWorkflow extends Workflow implements StatefulInterface
         $this->stateMachine->initialize();
     }
 
-
     public function execute($userRequest)
     {
         //Submitted by requester
         yield WorkflowStub::await(fn () => $this->isSubmitted());
 
-        //Fire email to manager
-        yield ActivityStub::make(NewRequestNotification::class, RequestStates::MANAGER, $userRequest);
+        //Manager
+        if($this->checkRole->isSameUserManager($userRequest)) {
 
-        //Wait for manager to process request
-        yield WorkflowStub::await(fn () => $this->ManagerApproved() || $this->ManagerDenied() || $this->ManagerReturned());
+            // User and Manager is same person
+            $this->manager_approve();
 
-        // Handle managers decision
-        $newState = $this->getState();
+            // Retrive new state
+            $newState = $this->getState();
+            $commonActivities = $this->getCommonActivities($userRequest, $newState);
 
-        // Activities
-        $commonActivities = $this->getCommonActivities($userRequest, $newState);
+            // Await stateupdate
+            yield $commonActivities[0];
+        } else {
 
-        switch ($newState) {
-            case RequestStates::MANAGER_APPROVED:
-                // Request has been approved by manager
-                yield $commonActivities[0];
-                break;
-            case RequestStates::MANAGER_RETURNED:
-            case RequestStates::MANAGER_DENIED:
-                // Request had been returned or denied by manager
-                foreach ($commonActivities as $activity) {
-                    yield $activity;
-                }
-                //End workflow
-                return $this->stateMachine->getCurrentState()->getName();
+       //Fire email to manager
+       yield ActivityStub::make(NewRequestNotification::class, RequestStates::MANAGER, $userRequest);
+
+       //Wait for manager to process request
+       yield WorkflowStub::await(fn () => $this->ManagerApproved() || $this->ManagerDenied() || $this->ManagerReturned());
+
+       // Handle managers decision
+       $newState = $this->getState();
+
+       // Activities
+       $commonActivities = $this->getCommonActivities($userRequest, $newState);
+
+       switch ($newState) {
+           case RequestStates::MANAGER_APPROVED:
+               // Request has been approved by manager
+               yield $commonActivities[0];
+               break;
+           case RequestStates::MANAGER_RETURNED:
+           case RequestStates::MANAGER_DENIED:
+               // Request had been returned or denied by manager
+               foreach ($commonActivities as $activity) {
+                   yield $activity;
+               }
+               //End workflow
+               return $this->stateMachine->getCurrentState()->getName();
+       }
+
         }
 
-
+        //UnitHead
         if($this->checkRole->isSameManagerHead($userRequest)) {
 
             // Manager and Head is same person
@@ -281,7 +296,7 @@ class DSVRequestWorkflow extends Workflow implements StatefulInterface
 
         }
 
-        //Wait for financialofficer to process request
+        //FO
         yield WorkflowStub::await(fn () => $this->FOApproved() || $this->FODenied() || $this->FOReturned());
 
         //Handle FO decision
