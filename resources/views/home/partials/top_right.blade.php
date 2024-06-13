@@ -1,5 +1,10 @@
 <div class="md:order-1 p-6 relative flex flex-col justify-start items-start {{--}}md:min-h-[230px]{{--}}md:h-fit text-center rounded-xl border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800">
+
     <h3 class="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
+        {{__("Search people")}}
+    </h3>
+     {{--}}
+     <h3 class="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
         {{__("Ongoing at DSV")}}
     </h3>
     <p class="text-left text-gray-500 dark:text-gray-300">
@@ -18,4 +23,6 @@
             <path d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
         </svg>
     </a>
+    {{--}}
+    <livewire:sukat-staff-search />
 </div>

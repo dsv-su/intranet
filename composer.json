@@ -12,6 +12,7 @@
         "php": "^8.1",
         "barryvdh/laravel-dompdf": "^2.0",
         "blockpc/select2-wire": "^1.1",
+        "directorytree/ldaprecord-laravel": "^3.3",
         "guzzlehttp/guzzle": "^7.2",
         "jonassiewertsen/statamic-live-search": "^1.7",
         "laravel-workflow/laravel-workflow": "^1.0",
