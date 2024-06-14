@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Services\Ldap\SukatUser;
+use Illuminate\Support\Facades\App;
 use Livewire\Component;
 
 class SukatStaffSearch extends Component
@@ -45,7 +46,12 @@ class SukatStaffSearch extends Component
 
     public function defaultUser()
     {
-        $this->person = SukatUser::where('uid', '=', 'gwett')->first()->toArray();
+        if(App::isLocal()) {
+            $this->person = SukatUser::where('uid', '=', 'gwett')->first()->toArray();
+        } else {
+            $this->person = SukatUser::where('mail', '=', auth()->user()->email)->first()->toArray();
+        }
+
     }
 
     public function selectUser($id=0)

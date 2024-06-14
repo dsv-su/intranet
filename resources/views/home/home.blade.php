@@ -8,29 +8,31 @@
             <!-- End Card -->
 
         </div>
-        <!-- End Col -->
 
         <div class="col-span-12 md:col-span-6 md:order-1 lg:col-span-4 grid gap-2.5 xl:gap-4">
-
-            <!-- Card left bottom-->
-            @include('home.partials.bottom_left')
-            <!-- End Card -->
 
             <!-- Card left top -->
             @include('home.partials.top_left')
             <!-- End Card -->
 
+            <!-- Card left middle -->
+            @include('home.partials.middle_left')
+             <!-- End card -->
+
+            <!-- Card left bottom-->
+            @include('home.partials.bottom_left')
+            <!-- End Card -->
+
         </div>
-        <!-- End Col -->
 
         <div class="col-span-12 lg:col-span-4 md:order-3 md:grid-cols-2 lg:grid-cols-1 grid gap-2.5 xl:gap-4">
 
-            <!-- Card right middle-->
-            @include('home.partials.middle_right')
-            <!-- End Card -->
-
             <!-- Card right top -->
             @include('home.partials.top_right')
+            <!-- End Card -->
+
+            <!-- Card right middle-->
+            @include('home.partials.middle_right')
             <!-- End Card -->
 
             <!-- Card right bottom -->
@@ -48,9 +50,9 @@
             <!-- end mobile links -->
 
         </div>
-        <!-- End Col -->
+
     </div>
-    <!-- End Grid -->
+
 </div>
 
 <script>
