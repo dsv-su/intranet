@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dashboard;
 use App\Workflows\passTestWorkflow;
 use App\Workflows\TestWorkflow;
 use Workflow\WorkflowStub;
@@ -17,8 +18,13 @@ class TestController extends Controller
 
    public function testWorkflow()
    {
+       $dashboard = Dashboard::find(1);
        $workflow = WorkflowStub::make(TestWorkflow::class);
-       $workflow->start();
+       $dashboard->workflow_id = $workflow->id();
+       $dashboard->save();
+       $workflow->start($dashboard->id);
+       $workflow->submit();
+       return $workflow;
    }
 
    public function passTestWorkflow()
