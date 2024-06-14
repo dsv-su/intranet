@@ -53,3 +53,6 @@ Route::post('/fo', [\App\Http\Controllers\FOController::class, 'settings_fo'])->
 //News list entries
 Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'list'])->name('list');
 Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'swelist'])->name('swelist');
+
+//Test
+Route::get('/test', [TestController::class, 'test'])->name('test');
