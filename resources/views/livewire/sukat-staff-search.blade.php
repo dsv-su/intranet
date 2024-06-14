@@ -83,7 +83,7 @@
         @endif
     </div>
     @if($person)
-        <div class="mx-auto mt-4 my-10 flex max-w-xs flex-col text-left rounded-xl border px-4 py-4 md:max-w-lg md:flex-row md:items-start md:text-left">
+        <div class="mx-auto mt-4 flex max-w-xs flex-col text-left rounded-xl border px-4 py-4 md:max-w-lg md:flex-row md:items-start md:text-left">
             <div class="">
                 <p class="text-left font-normal text-gray-900 dark:text-gray-200">{{$person['displayname'][0] ?? ''}}</p>
                 <p class="mb-2 text-sm text-left font-medium text-blue-700 dark:text-gray-200">{{$person['title'][0] ?? ''}}</p>
