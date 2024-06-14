@@ -220,32 +220,32 @@ class DSVRequestWorkflow extends Workflow implements StatefulInterface
             yield $commonActivities[0];
         } else {
 
-       //Fire email to manager
-       yield ActivityStub::make(NewRequestNotification::class, RequestStates::MANAGER, $userRequest);
+           //Fire email to manager
+           yield ActivityStub::make(NewRequestNotification::class, RequestStates::MANAGER, $userRequest);
 
-       //Wait for manager to process request
-       yield WorkflowStub::await(fn () => $this->ManagerApproved() || $this->ManagerDenied() || $this->ManagerReturned());
+           //Wait for manager to process request
+           yield WorkflowStub::await(fn () => $this->ManagerApproved() || $this->ManagerDenied() || $this->ManagerReturned());
 
-       // Handle managers decision
-       $newState = $this->getState();
+           // Handle managers decision
+           $newState = $this->getState();
 
-       // Activities
-       $commonActivities = $this->getCommonActivities($userRequest, $newState);
+           // Activities
+           $commonActivities = $this->getCommonActivities($userRequest, $newState);
 
-       switch ($newState) {
-           case RequestStates::MANAGER_APPROVED:
-               // Request has been approved by manager
-               yield $commonActivities[0];
-               break;
-           case RequestStates::MANAGER_RETURNED:
-           case RequestStates::MANAGER_DENIED:
-               // Request had been returned or denied by manager
-               foreach ($commonActivities as $activity) {
-                   yield $activity;
-               }
-               //End workflow
-               return $this->stateMachine->getCurrentState()->getName();
-       }
+           switch ($newState) {
+               case RequestStates::MANAGER_APPROVED:
+                   // Request has been approved by manager
+                   yield $commonActivities[0];
+                   break;
+               case RequestStates::MANAGER_RETURNED:
+               case RequestStates::MANAGER_DENIED:
+                   // Request had been returned or denied by manager
+                   foreach ($commonActivities as $activity) {
+                       yield $activity;
+                   }
+                   //End workflow
+                   return $this->stateMachine->getCurrentState()->getName();
+           }
 
         }
 
