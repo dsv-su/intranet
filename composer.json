@@ -23,7 +23,7 @@
         "statamic/cms": "^4.0",
         "statamic/eloquent-driver": "^3.4",
         "uabookstores/laravel-shibboleth": "dev-master",
-        "yohang/finite": "^1.3"
+        "yohang/finite": "dev-master"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8.1",
@@ -68,7 +68,11 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/orkit/laravel-shibboleth.git"
+            "url":  "https://github.com/orkit/laravel-shibboleth.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "https://github.com/orkit/finite.git"
         }
     ],
     "scripts": {
