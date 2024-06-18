@@ -1,5 +1,5 @@
 Review Request: New Request - <b>Action Required</b><br><br>
-Dear {{$manager->name}},
+Dear Financial Officer,
 <br><br>
 A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been submitted and has undergone necessary approvals from both the project leader/manager and unit head.
 Your input and approval are now required to proceed.
