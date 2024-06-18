@@ -56,5 +56,9 @@ Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListControlle
 
 //Test
 Route::get('/test', [TestController::class, 'test'])->name('test');
+Route::get('/s/{id}', [TestController::class, 'submit']);
+Route::get('/ma/{id}', [TestController::class, 'manager_approve']);
+Route::get('/mr/{id}', [TestController::class, 'manager_return']);
+
 Route::get('/1', [TestController::class, 'testWorkflow'])->name('1');
 Route::get('/2', [TestController::class, 'passTestWorkflow'])->name('2');

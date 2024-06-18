@@ -13,7 +13,8 @@ class CheckRoleforApprove
         // Logic to check if the user and manager are the same person
 
         // Retrive request dashboard
-        $id = $request[0];
+        //$id = $request[0];
+        $id = $request;
         $this->dashboard = Dashboard::find($id);
 
         //Users
@@ -32,7 +33,8 @@ class CheckRoleforApprove
         // Logic to check if the manager and head are the same person
 
         // Retrive request dashboard
-        $id = $request[0];
+        //$id = $request[0];
+        $id = $request;
         $this->dashboard = Dashboard::find($id);
 
         //Users

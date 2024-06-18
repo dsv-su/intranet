@@ -195,7 +195,7 @@ class TravelRequestController extends Controller
         $workflow = WorkflowStub::make(DSVRequestWorkflow::class);
         $dashboard->workflow_id = $workflow->id();
         $dashboard->save();
-        $workflow->start($dashboard->id);
+        $workflow->start($dashboard);
         $workflow->submit();
         return $workflow;
     }
