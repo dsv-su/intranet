@@ -8,11 +8,11 @@ Below, you will find the details pertaining to the approved request:
 <br><br>
 <b>RequestID:</b> {{$dashboard->request_id}}
 <br><br>
-<b>Request Type:</b>{{Illuminate\Support\Str::upper($dashboard->type)}}
+<b>Request Type:</b> {{Illuminate\Support\Str::upper($dashboard->type)}}
 <br><br>
-<b>Name:</b>{{$dashboard->name}}
+<b>Name:</b> {{$dashboard->name}}
 <br><br>
-<b>Created:</b>{{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
+<b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
 <br><br>
 <b>Approval Date:</b>{{$dashboard->updated_at}}
 <br><br>

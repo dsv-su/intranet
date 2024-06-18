@@ -2,207 +2,159 @@
 
 namespace App\Workflows;
 
+use App\Models\Dashboard;
 use App\Workflows\Notifications\NewRequestNotification;
 use App\Workflows\Notifications\StateUpdateNotification;
 use App\Workflows\Partials\CheckRoleforApprove;
 use App\Workflows\Partials\RequestStates;
+use App\Workflows\States\FOApproved;
+use App\Workflows\States\FODenied;
+use App\Workflows\States\FOReturned;
+use App\Workflows\States\HeadApproved;
+use App\Workflows\States\HeadDenied;
+use App\Workflows\States\HeadReturned;
+use App\Workflows\States\ManagerApproved;
+use App\Workflows\States\ManagerDenied;
+use App\Workflows\States\ManagerReturned;
+use App\Workflows\States\Submitted;
 use App\Workflows\Transitions\StateUpdateTransition;
-use Finite\State\State;
-use Finite\State\StateInterface;
-use Finite\StatefulInterface;
-use Finite\StateMachine\StateMachine;
 use Workflow\ActivityStub;
 use Workflow\Models\StoredWorkflow;
 use Workflow\SignalMethod;
 use Workflow\Workflow;
 use Workflow\WorkflowStub;
 
-class DSVRequestWorkflow extends Workflow implements StatefulInterface
+class DSVRequestWorkflow extends Workflow
 {
-    private $state;
     private $stateMachine;
     protected $checkRole;
 
-    public function setFiniteState($state)
-    {
-        $this->state = $state;
-    }
-
-    public function getFiniteState()
-    {
-        return $this->state;
-    }
-
-    //Signal Submit
     #[SignalMethod]
     public function submit()
     {
-        $this->stateMachine->apply('submit');
+        $this->stateMachine->state->transitionTo(Submitted::class);
     }
 
-    //Signal Manager
     #[SignalMethod]
     public function manager_approve()
     {
-        $this->stateMachine->apply('managerapprove');
+        $this->stateMachine->state->transitionTo(ManagerApproved::class);
     }
 
     #[SignalMethod]
     public function manager_return()
     {
-        $this->stateMachine->apply('managerreturn');
+        $this->stateMachine->state->transitionTo(ManagerReturned::class);
     }
 
     #[SignalMethod]
     public function manager_deny()
     {
-        $this->stateMachine->apply('managerdeny');
+        $this->stateMachine->state->transitionTo(ManagerDenied::class);
     }
 
-    //Signal FO
-    #[SignalMethod]
-    public function fo_approve()
-    {
-        $this->stateMachine->apply('foapprove');
-    }
-
-    #[SignalMethod]
-    public function fo_return()
-    {
-        $this->stateMachine->apply('foreturn');
-    }
-
-    #[SignalMethod]
-    public function fo_deny()
-    {
-        $this->stateMachine->apply('fodeny');
-    }
-
-    //Signal Head
     #[SignalMethod]
     public function head_approve()
     {
-        $this->stateMachine->apply('headapprove');
+        $this->stateMachine->state->transitionTo(HeadApproved::class);
     }
 
     #[SignalMethod]
     public function head_return()
     {
-        $this->stateMachine->apply('headreturn');
+        $this->stateMachine->state->transitionTo(HeadReturned::class);
     }
 
     #[SignalMethod]
     public function head_deny()
     {
-        $this->stateMachine->apply('headdeny');
+        $this->stateMachine->state->transitionTo(HeadDenied::class);
+    }
+
+    #[SignalMethod]
+    public function fo_approve()
+    {
+        $this->stateMachine->state->transitionTo(FOApproved::class);
+    }
+
+    #[SignalMethod]
+    public function fo_return()
+    {
+        $this->stateMachine->state->transitionTo(FOReturned::class);
+    }
+
+    #[SignalMethod]
+    public function fo_deny()
+    {
+        $this->stateMachine->state->transitionTo(FODenied::class);
     }
 
     //Wait for statechange
     public function isSubmitted()
     {
-        return $this->stateMachine->getCurrentState()->getName() === 'submitted';
+        return $this->stateMachine->state->status() === 'submitted';
     }
 
     //Manager
     public function ManagerApproved()
     {
-        return $this->stateMachine->getCurrentState()->getName() === 'manager_approved';
+        return $this->stateMachine->state->status() === 'manager_approved';
     }
 
     public function ManagerReturned()
     {
-        return $this->stateMachine->getCurrentState()->getName() === 'manager_returned';
+        return $this->stateMachine->state->status() === 'manager_returned';
     }
 
     public function ManagerDenied()
     {
-        return $this->stateMachine->getCurrentState()->getName() === 'manager_denied';
-    }
-
-    //Finacial officer
-    public function FOApproved()
-    {
-        return $this->stateMachine->getCurrentState()->getName() === 'fo_approved';
-    }
-
-    public function FOReturned()
-    {
-        return $this->stateMachine->getCurrentState()->getName() === 'fo_returned';
-    }
-
-    public function FODenied()
-    {
-        return $this->stateMachine->getCurrentState()->getName() === 'fo_denied';
+        return $this->stateMachine->state->status() === 'manager_denied';
     }
 
     //Head
     public function HeadApproved()
     {
-        return $this->stateMachine->getCurrentState()->getName() === 'head_approved';
+        return $this->stateMachine->state->status() === 'head_approved';
     }
 
     public function HeadReturned()
     {
-        return $this->stateMachine->getCurrentState()->getName() === 'head_returned';
+        return $this->stateMachine->state->status() === 'head_returned';
     }
 
     public function HeadDenied()
     {
-        return $this->stateMachine->getCurrentState()->getName() === 'head_denied';
+        return $this->stateMachine->state->status() === 'head_denied';
+    }
+
+    //Finacial officer
+    public function FOApproved()
+    {
+        return $this->stateMachine->state->status() === 'fo_approved';
+    }
+
+    public function FOReturned()
+    {
+        return $this->stateMachine->state->status() === 'fo_returned';
+    }
+
+    public function FODenied()
+    {
+        return $this->stateMachine->state->status() === 'fo_denied';
     }
 
     public function __construct(
-        public StoredWorkflow $storedWorkflow, ...$arguments) {
-        parent::__construct($storedWorkflow, $arguments);
-
+        public StoredWorkflow $storedWorkflow, Dashboard $dashboard, ...$arguments)
+    {
+        parent::__construct($storedWorkflow, $dashboard, $arguments);
+        $this->stateMachine = $dashboard;
         $this->checkRole = new CheckRoleforApprove();
-        $this->stateMachine = new StateMachine();
-        //Initial
-        $this->stateMachine->addState(new State('created', StateInterface::TYPE_INITIAL));
-
-        //Submitted
-        $this->stateMachine->addState('submitted');
-
-        //Manager
-        $this->stateMachine->addState('manager_approved');
-        $this->stateMachine->addState(new State('manager_denied', StateInterface::TYPE_FINAL));
-        $this->stateMachine->addState('manager_returned');
-
-        //FO
-        $this->stateMachine->addState('fo_approved');
-        $this->stateMachine->addState(new State('fo_denied', StateInterface::TYPE_FINAL));
-        $this->stateMachine->addState('fo_returned');
-
-        //Head
-        $this->stateMachine->addState('head_approved');
-        $this->stateMachine->addState(new State('head_denied', StateInterface::TYPE_FINAL));
-        $this->stateMachine->addState('head_returned');
-
-        //Transitions
-        $this->stateMachine->addTransition('submit', 'created', 'submitted');
-
-        //Manager
-        $this->stateMachine->addTransition('managerapprove', 'submitted', 'manager_approved');
-        $this->stateMachine->addTransition('managerreturn', 'submitted', 'manager_returned');
-        $this->stateMachine->addTransition('managerdeny', 'submitted', 'manager_denied');
-
-        //Head
-        $this->stateMachine->addTransition('headapprove', 'manager_approved', 'head_approved');
-        $this->stateMachine->addTransition('headreturn', 'manager_approved', 'head_returned');
-        $this->stateMachine->addTransition('headdeny', 'manager_approved', 'head_denied');
-
-        //FO
-        $this->stateMachine->addTransition('foapprove', 'head_approved', 'fo_approved');
-        $this->stateMachine->addTransition('foreturn', 'head_approved', 'fo_returned');
-        $this->stateMachine->addTransition('fodeny', 'head_approved', 'fo_denied');
-
-        //Initialize
-        $this->stateMachine->setObject($this);
-        $this->stateMachine->initialize();
     }
 
-    public function execute($userRequest)
+    public function execute(Dashboard $dashboard)
     {
+        $userRequest = $dashboard->id;
+
         //Submitted by requester
         yield WorkflowStub::await(fn () => $this->isSubmitted());
 
@@ -214,38 +166,38 @@ class DSVRequestWorkflow extends Workflow implements StatefulInterface
 
             // Retrive new state
             $newState = $this->getState();
-            $commonActivities = $this->getCommonActivities($userRequest, $newState);
+            $commonActivities = $this->getCommonActivities($userRequest);
 
             // Await stateupdate
             yield $commonActivities[0];
         } else {
 
-       //Fire email to manager
-       yield ActivityStub::make(NewRequestNotification::class, RequestStates::MANAGER, $userRequest);
+            //Fire email to manager
+            yield ActivityStub::make(NewRequestNotification::class, RequestStates::MANAGER, $userRequest);
 
-       //Wait for manager to process request
-       yield WorkflowStub::await(fn () => $this->ManagerApproved() || $this->ManagerDenied() || $this->ManagerReturned());
+            //Wait for manager to process request
+            yield WorkflowStub::await(fn () => $this->ManagerApproved() || $this->ManagerDenied() || $this->ManagerReturned());
 
-       // Handle managers decision
-       $newState = $this->getState();
+            // Handle managers decision
+            $newState = $this->getState();
 
-       // Activities
-       $commonActivities = $this->getCommonActivities($userRequest, $newState);
+            // Activities
+            $commonActivities = $this->getCommonActivities($userRequest);
 
-       switch ($newState) {
-           case RequestStates::MANAGER_APPROVED:
-               // Request has been approved by manager
-               yield $commonActivities[0];
-               break;
-           case RequestStates::MANAGER_RETURNED:
-           case RequestStates::MANAGER_DENIED:
-               // Request had been returned or denied by manager
-               foreach ($commonActivities as $activity) {
-                   yield $activity;
-               }
-               //End workflow
-               return $this->stateMachine->getCurrentState()->getName();
-       }
+            switch ($newState) {
+                case RequestStates::MANAGER_APPROVED:
+                    // Request has been approved by manager
+                    yield $commonActivities[0];
+                    break;
+                case RequestStates::MANAGER_RETURNED:
+                case RequestStates::MANAGER_DENIED:
+                    // Request had been returned or denied by manager
+                    foreach ($commonActivities as $activity) {
+                        yield $activity;
+                    }
+                    //End workflow
+                    return $this->stateMachine->state->status();
+            }
 
         }
 
@@ -257,7 +209,7 @@ class DSVRequestWorkflow extends Workflow implements StatefulInterface
 
             // Retrive new state
             $newState = $this->getState();
-            $commonActivities = $this->getCommonActivities($userRequest, $newState);
+            $commonActivities = $this->getCommonActivities($userRequest);
 
             // Await stateupdate
             yield $commonActivities[0];
@@ -275,7 +227,7 @@ class DSVRequestWorkflow extends Workflow implements StatefulInterface
 
             //Handle Head decision
             $newState = $this->getState();
-            $commonActivities = $this->getCommonActivities($userRequest, $newState);
+            $commonActivities = $this->getCommonActivities($userRequest);
 
             switch ($newState) {
                 case RequestStates::HEAD_APPROVED:
@@ -291,7 +243,7 @@ class DSVRequestWorkflow extends Workflow implements StatefulInterface
                         yield $activity;
                     }
                     //End workflow
-                    return $this->stateMachine->getCurrentState()->getName();
+                    return $this->stateMachine->state->status();
             }
 
         }
@@ -301,7 +253,7 @@ class DSVRequestWorkflow extends Workflow implements StatefulInterface
 
         //Handle FO decision
         $newState = $this->getState();
-        $commonActivities = $this->getCommonActivities($userRequest, $newState);
+        $commonActivities = $this->getCommonActivities($userRequest);
 
         switch ($newState) {
             case RequestStates::FO_APPROVED:
@@ -317,24 +269,23 @@ class DSVRequestWorkflow extends Workflow implements StatefulInterface
                     yield $activity;
                 }
                 //End workflow
-                return $this->stateMachine->getCurrentState()->getName();
+                return $this->stateMachine->state->status();
         }
 
         //End workflow
-        return $this->stateMachine->getCurrentState()->getName();
+        return $this->stateMachine->state->status();
     }
 
     protected function getState()
     {
-        return $this->stateMachine->getCurrentState()->getName();
+        return $this->stateMachine->state->status();
     }
 
-    protected function getCommonActivities($userRequest, $newState)
+    protected function getCommonActivities($userRequest)
     {
         return [
-            ActivityStub::make(StateUpdateTransition::class, $newState, $userRequest),
+            ActivityStub::make(StateUpdateTransition::class, $userRequest),
             ActivityStub::make(StateUpdateNotification::class, $userRequest),
         ];
     }
-
 }
