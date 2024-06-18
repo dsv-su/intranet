@@ -17,7 +17,8 @@ class NewRequestNotification extends Activity
     public function execute($recipent, $request)
     {
         //Retrive request dashboard
-        $id = $request[0];
+        //$id = $request[0];
+        $id = $request;
         $this->dashboard = Dashboard::find($id);
         $user = User::find($this->dashboard->user_id);
         $manager = User::find($this->dashboard->manager_id);

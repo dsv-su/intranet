@@ -22,7 +22,8 @@ class StateUpdateNotification extends Activity
     public function execute($request)
     {
         //Retrive request dashboard
-        $id = $request[0];
+        //$id = $request[0];
+        $id = $request;
         $this->dashboard = Dashboard::find($id);
 
         //Users

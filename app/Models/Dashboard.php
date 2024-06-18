@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use App\Workflows\States\DashboardState;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\ModelStates\HasStates;
 
 class Dashboard extends Model
 {
-    use HasFactory;
+    use HasFactory, HasStates;
+
     protected $fillable = [
         'request_id',
         'name',
@@ -21,6 +24,10 @@ class Dashboard extends Model
         'fo_id',
         'head_id'
 
+    ];
+
+    protected $casts = [
+        'state' => DashboardState::class,
     ];
 
     /**
