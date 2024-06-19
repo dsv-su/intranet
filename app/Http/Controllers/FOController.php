@@ -15,7 +15,7 @@ class FOController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('fo');
+        $this->middleware('fo')->except(['list', 'svlist']);
     }
 
     /**
