@@ -4,13 +4,15 @@ Production setup for DSV Intranet.
 ## 2. Requirements
 Requirements are best determined using Server Requirements page of corresponding Laravel 10 version
 
-- PHP version 8.1.*
+- PHP version 8.2.*
 
 - BCMath PHP Extension
 
 - Ctype PHP Extension
 
-- Fileinfo PHP extension
+- Fileinfo PHP Extension
+
+- LDAP PHP Extension
 
 - JSON PHP Extension
 
@@ -62,7 +64,6 @@ Requirements are best determined using Server Requirements page of corresponding
                     port=636
                     base_dn=
                     timeout=5
-                    version=3
 
 
 * Make sure the subdirectories
