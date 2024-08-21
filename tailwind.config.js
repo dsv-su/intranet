@@ -26,6 +26,7 @@ module.exports = {
                 serif: ['Merriweather', 'Georgia', 'Cambria', 'Times New Roman', 'serif'],
                 mono: ['Courier New', 'monospace'],
                 sudepartment: ['TheSansB2-Light', 'Verdana', 'sans-serif'],
+                rock: ['Rock Salt'],
             },
             colors: {
                 suprimary: '#002f5f',
