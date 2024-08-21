@@ -4,7 +4,7 @@
             <span class="flex opacity-90  items-center h-full px-2 py-px ml-2 text-3xl leading-none border border-suprimary rounded">
                 DSV<span class="hidden md:block font-sudepartment text-lg whitespace-nowrap dark:text-white">Intranet</span>
             </span>
-            @if(config('app.url') == 'IntranetDev')
+            @if(config('app.name') == 'IntranetDev')
                 <span class="hidden md:block font-rock text-lg whitespace-nowrap dark:text-white">Dev</span>
             @endif
         </a>
