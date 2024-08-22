@@ -32,9 +32,17 @@
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
   },
   "resources/css/site.css": {
-    "file": "assets/site-ca57bd7e.css",
+    "file": "assets/site-f9e21efc.css",
     "isEntry": true,
     "src": "resources/css/site.css"
+  },
+  "resources/fonts/Nunito/Nunito-VariableFont_wght.ttf": {
+    "file": "assets/Nunito-VariableFont_wght-707f6b33.ttf",
+    "src": "resources/fonts/Nunito/Nunito-VariableFont_wght.ttf"
+  },
+  "resources/fonts/Rock_Salt/RockSalt-Regular.ttf": {
+    "file": "assets/RockSalt-Regular-90cc7e78.ttf",
+    "src": "resources/fonts/Rock_Salt/RockSalt-Regular.ttf"
   },
   "resources/js/site.js": {
     "file": "assets/site-82b87ff9.js",

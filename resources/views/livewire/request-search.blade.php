@@ -1,4 +1,4 @@
-<div>
+<div class="flex flex-col flex-1 w-full">
     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
     <div class="relative px-36">
         <input type="search" id="request-search" wire:model="searchTerm"
@@ -18,7 +18,7 @@
                 <th scope="col" class="px-4 py-3">{{__("State")}}</th>
                 <th scope="col" class="px-4 py-3">{{__("User")}}</th>
                 <th scope="col" class="px-4 py-3">{{__("Created")}}</th>
-                <th scope="col" class="px-4 py-3">{{__("Action")}}</th>
+                <th scope="col" colspan="2" class="px-4 py-3">{{__("Action")}}</th>
             </tr>
             </thead>
             <tbody>
@@ -29,9 +29,6 @@
                     <th scope="row" class="px-4 py-3 text-xs text-gray-900 whitespace-nowrap dark:text-white">
                         @if($dashboard->type == 'travelrequest')
                             <span class="bg-blue-100 text-xs mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-700 border border-blue-400">
-                                <svg class="inline w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M4.4 7.7c2 .5 2.4 2.8 3.2 3.8 1 1.4 2 1.3 3.2 2.7 1.8 2.3 1.3 5.7 1.3 6.7M20 15h-1a4 4 0 0 0-4 4v1M8.6 4c0 .8.1 1.9 1.5 2.6 1.4.7 3 .3 3 2.3 0 .3 0 2 1.9 2 2 0 2-1.7 2-2 0-.6.5-.9 1.2-.9H20m1 4a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                </svg>
                             {{__("Travelrequest")}}
                             </span>
                         @else
@@ -50,12 +47,12 @@
                             @break
                             @case('manager_approved')
                                 <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-                                    {{__("Approved by manager")}}
+                                    {{__("Processing")}}
                                 </span>
                             @break
                             @case('manager_denied')
                                 <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
-                                    {{__("Denied by manager")}}
+                                    {{__("Denied")}}
                                 </span>
                             @break
                             @case('manager_returned')
@@ -65,32 +62,32 @@
                             @break
                             @case('fo_approved')
                                 <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-                                    {{__("Approved by FO")}}
+                                    {{__("Completed")}}
                                 </span>
                             @break
                             @case('fo_denied')
                                 <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
-                                    {{__("Denied by FO")}}
+                                    {{__("Denied")}}
                                 </span>
                             @break
                             @case('fo_returned')
                                 <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
-                                    {{__("Returned by FO")}}
+                                    {{__("Returned")}}
                                 </span>
                             @break
                             @case('head_approved')
                                 <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-                                    {{__("Approved by Unit head")}}
+                                    {{__("Processing")}}
                                 </span>
                             @break
                             @case('head_denied')
                                 <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
-                                    {{__("Denied by Unit head")}}
+                                    {{__("Denied")}}
                                 </span>
                             @break
                             @case('head_returned')
                                 <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
-                                    {{__("Returned by Unit head")}}
+                                    {{__("Returned")}}
                                 </span>
                             @break
                         @endswitch
