@@ -4,7 +4,7 @@
             <span class="flex opacity-90  items-center h-full px-0.5 py-px ml-2 text-xl leading-none border-[2px] border-suprimary rounded dark:text-white dark:border-white">
                 DSV
             </span>
-            <span class="hidden md:block font-sudepartment ml-1 mb-1 text-xl font whitespace-nowrap dark:text-white">Intranet</span>
+            <span class="hidden md:block font-sudepartment ml-1 mb-1 text-xl font whitespace-nowrap dark:text-white">{{__("Intranet")}}</span>
 
             @if(config('app.name') == 'IntranetDev')
                 <span class="hidden md:block font-rock text-lg whitespace-nowrap dark:text-white">Dev</span>
