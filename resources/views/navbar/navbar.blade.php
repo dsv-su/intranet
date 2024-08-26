@@ -1,9 +1,11 @@
 <nav class="bg-white border-b border-susecondary dark:bg-gray-900 dark:border-gray-700">
     <div class="relative flex flex-wrap md:flex-row lg:flex-nowrap w-full p-5 mx-auto bg-white items-center justify-between md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
-        <a href="{{ config('app.url') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <span class="flex opacity-90  items-center h-full px-2 py-px ml-2 text-3xl leading-none border border-suprimary rounded">
-                DSV<span class="hidden md:block font-sudepartment text-lg whitespace-nowrap dark:text-white">Intranet</span>
+        <a href="{{ config('app.url') }}" class="flex items-center mr-4">
+            <span class="flex opacity-90  items-center h-full px-0.5 py-px ml-2 text-xl leading-none border-[2px] border-suprimary rounded dark:text-white dark:border-white">
+                DSV
             </span>
+            <span class="hidden md:block font-sudepartment ml-1 mb-1 text-xl font whitespace-nowrap dark:text-white">Intranet</span>
+
             @if(config('app.name') == 'IntranetDev')
                 <span class="hidden md:block font-rock text-lg whitespace-nowrap dark:text-white">Dev</span>
             @endif
