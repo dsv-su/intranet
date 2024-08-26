@@ -32,7 +32,7 @@
                         @endif
                     </a>
 
-                    <a href="#" class="inline">
+                    <a href="{{ config('app.url')}}{{$page->slug}}" class="inline">
                         @if($page->recorder == true )
                             <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">{{__("Error")}}</span>
                         @elseif(!empty($page->recorder_status))
@@ -41,7 +41,7 @@
                             <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">OK</span>
                         @endif
                     </a>
-                    <a href="#" class="inline">
+                    <a href="{{ config('app.url')}}{{$page->slug}}" class="inline">
                         @if($page->room == true )
                             <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">{{__("Error")}}</span>
                         @elseif(!empty($page->room_status))
