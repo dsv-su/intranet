@@ -48,49 +48,44 @@ class TravelRequestController extends Controller
 
     public function resume(TravelRequest $tr)
     {
-        // Fetching countries
-        $countries = Country::all();
-
-        // Fetching project leaders and unit heads
-        $roleIdsProjectLeader = $this->getUserIdsByGroup('projektledare');
-        $projectleaders = User::whereIn('id', $roleIdsProjectLeader)->get();
-
-        $roleIdsUnitHead = $this->getUserIdsByGroup('enhetschef');
-        $unitheads = User::whereIn('id', $roleIdsUnitHead)->get();
+        $viewData = $this->prepareTravelRequestData();
 
         // Fetching dashboard
         $dashboard = Dashboard::where('request_id', $tr->id)->first();
+        $viewData['type'] = 'resume';
+        $viewData['tr'] = $tr;
+        $viewData['dashboard'] = $dashboard;
 
-        return $this->createView('requests.travel.create', 'mylayout', [
-            'type' => 'resume',
-            'tr' => $tr,
-            'dashboard' => $dashboard,
-            'countries' => $countries,
-            'projectleaders' => $projectleaders,
-            'unitheads' => $unitheads,
-        ]);
+        return $this->createView('requests.travel.create', 'mylayout', $viewData);
     }
 
     public function create()
+    {
+        $viewData = $this->prepareTravelRequestData();
+        $viewData['type'] = 'create';
+
+        return $this->createView('requests.travel.create', 'mylayout', $viewData);
+    }
+
+    private function prepareTravelRequestData()
     {
         // Fetching countries
         $countries = Country::all();
 
         // Fetching project leaders and unit heads
         $roleIdsProjectLeader = $this->getUserIdsByGroup('projektledare');
-        $projectleaders = User::whereIn('id', $roleIdsProjectLeader)->get();
+        $projectleaders = User::whereIn('id', $roleIdsProjectLeader)->orderBy('name')->get();
 
         $roleIdsUnitHead = $this->getUserIdsByGroup('enhetschef');
         $unitheads = User::whereIn('id', $roleIdsUnitHead)->get();
 
-        return $this->createView('requests.travel.create', 'mylayout', [
-            'type' => 'create',
+        return [
             'countries' => $countries,
             'projectleaders' => $projectleaders,
             'unitheads' => $unitheads,
-        ]);
+        ];
     }
-
+    
     public function submit(Request $request)
     {
         // Ensure the request method is POST
@@ -161,22 +156,11 @@ class TravelRequestController extends Controller
 
     protected function validateRequest(Request $request)
     {
-        /*return $this->validate($request, [
-            'purpose' => 'required',
-            //'project' => 'required',
-            'country' => 'required',
-            'project_leader' => 'required',
-            'unit_head' => 'required',
-            'departure' => 'required',
-            'return' => 'required'
-        ]);*/
         $rules = [
             'purpose' => 'required',
             //'project' => 'required',
             'project_leader' => 'required',
             'unit_head' => 'required',
-            //'departure' => 'required',
-            //'return' => 'required'
         ];
 
         $rules['country'] = ['required_without:countrytype'];
