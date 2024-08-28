@@ -39,6 +39,8 @@
                                         <img class="rounded-t-lg max-w-full" src="{{$image->url}}" alt="" />
                                     </div>
                                 @endforeach
+                            @elseif($content->type == "faq_group")
+                                @include('partials.faq')
                             @endif
                         @endforeach
                         <div class="text-gray-600 text-sm bg-white p-3 rounded-md leading-none dark:bg-gray-800 dark:text-white">
