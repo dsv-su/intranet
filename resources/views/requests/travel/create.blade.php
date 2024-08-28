@@ -67,9 +67,9 @@
                 </div>
                 <br>
                 <!-- Project -->
-            @include('requests.travel.partials.projecttab')
+                @include('requests.travel.partials.projecttab')
 
-            <!--Country-->
+                <!--Country-->
                 @if($type == 'resume')
                     <livewire:travel-type :resume="$tr->country">
                         @else
@@ -208,9 +208,11 @@
 <script>
     document.getElementById("startInput").addEventListener("changeDate", function (e){
         Livewire.emit('changeStartDate', e.detail.datepicker.inputField.value)
+        e.detail.datepicker.hide(); //Override daterange
     });
     document.getElementById("endInput").addEventListener("changeDate", function (e){
         Livewire.emit('changeEndDate', e.detail.datepicker.inputField.value)
+        e.detail.datepicker.hide(); //Override daterange
     });
     document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById('name-button').click();

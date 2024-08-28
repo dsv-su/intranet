@@ -20,9 +20,6 @@
     @vite(['resources/css/site.css'])
     @vite(['resources/js/site.js'])
     @livewireStyles
-    {{--}}@stack('after-styles'){{--}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/datepicker.min.js"></script>
-
 </head>
 
 <body class="dark:bg-gray-800">
