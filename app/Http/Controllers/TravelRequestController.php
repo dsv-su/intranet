@@ -85,7 +85,7 @@ class TravelRequestController extends Controller
             'unitheads' => $unitheads,
         ];
     }
-    
+
     public function submit(Request $request)
     {
         // Ensure the request method is POST
