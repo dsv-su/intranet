@@ -207,11 +207,11 @@
 
 <script>
     document.getElementById("startInput").addEventListener("changeDate", function (e){
-        Livewire.emit('changeStartDate', e.detail.datepicker.inputField.value)
+        Livewire.dispatch('changeStartDate', { date: e.detail.datepicker.inputField.value });
         e.detail.datepicker.hide(); //Override daterange
     });
     document.getElementById("endInput").addEventListener("changeDate", function (e){
-        Livewire.emit('changeEndDate', e.detail.datepicker.inputField.value)
+        Livewire.dispatch('changeEndDate', { date: e.detail.datepicker.inputField.value });
         e.detail.datepicker.hide(); //Override daterange
     });
     document.addEventListener("DOMContentLoaded", function(event) {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Livewire\Select2;
+namespace App\Livewire\Select2;
 
 use Livewire\Component;
 use App\Models\Country;
@@ -48,7 +48,7 @@ class CountrySelect2 extends Component
         $country = Country::where('country',$this->search)->first();
         if(!empty($country)) {
             $this->Country = $country;
-            $this->emit('selectedCountry', $this->Country->id);
+            $this->dispatch('selectedCountry', $this->Country->id);
         }
         $this->search = "";
     }
@@ -56,7 +56,7 @@ class CountrySelect2 extends Component
     public function select(Country $Country)
     {
         $this->Country = $Country;
-        $this->emit('selectedCountry', $this->Country->id);
+        $this->dispatch('selectedCountry', $this->Country->id);
     }
 
     /** listener */

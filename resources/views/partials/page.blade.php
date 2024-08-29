@@ -41,6 +41,12 @@
                                 @endforeach
                             @elseif($content->type == "faq_group")
                                 @include('partials.faq')
+
+                            @elseif($content->type == "video_group")
+                                <div class="w-full min-h-[250px] rounded-md py-10 w-[640px] mx-auto box-border flex items-center ">
+                                    @include('partials.video')
+                                </div>
+
                             @endif
                         @endforeach
                         <div class="text-gray-600 text-sm bg-white p-3 rounded-md leading-none dark:bg-gray-800 dark:text-white">

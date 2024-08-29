@@ -39,6 +39,7 @@
                         DSV Intranet
                     </h3>
                     <p class="mt-2 text-gray-500 dark:text-gray-200">
+                        {{--}}@include('home.partials.textbanner.launch'){{--}}
                         {{__("The DSV Intranet website is under construction.")}}
                     </p>
 

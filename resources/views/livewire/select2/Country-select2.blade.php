@@ -19,7 +19,7 @@
         <div class="absolute z-10 w-80 rounded shadow-md bg-white" x-show="open" x-cloak>
             <ul class="list-reset p-2 max-h-64 overflow-y-auto text-sm">
                 <li>
-                    <input wire:model="search" wire:keydown.enter="save" @keydown.enter="open = false; $event.target.blur()" type="text" class="border-1 rounded h-10 w-full p-2">
+                    <input wire:model.live="search" wire:keydown.enter="save" @keydown.enter="open = false; $event.target.blur()" type="text" class="border-1 rounded h-10 w-full p-2">
                 </li>
                 @forelse ($options as $item)
                     <li class="" wire:click="select({{$item->id}})"  x-on:click="open=false; selectedCountry='{{$item->country}}'" id="Country-{{$item->id}}" @keydown.enter="open=false; selectedCountry='{{$item->country}}'; $event.target.blur()">

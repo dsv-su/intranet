@@ -1,24 +1,21 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Models\Dashboard;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Statamic\Auth\User;
 
-class Indicator extends Component
+class Mobileindicator extends Component
 {
     public $auth_user;
     public $user_roles;
     public $dashboard;
-    public $status;
 
     public function mount()
     {
         $this->dashboard = null;
-        $this->status = 'Rt';
         $this->user_roles = $this->getUserRoles();
         $this->checkDashboard();
     }
@@ -39,12 +36,10 @@ class Indicator extends Component
         $head_deny = collect(Dashboard::where('state', 'head_denied')->where('user_id', $this->auth_user)->where('status', 'unread')->get());
 
         $this->dashboard = $manager->merge($fo)->merge($head)
-                            ->merge($manager_return)->merge($manager_deny)
-                            ->merge($fo_return)->merge($fo_deny)
-                            ->merge($head_return)->merge($head_deny);
-
+            ->merge($manager_return)->merge($manager_deny)
+            ->merge($fo_return)->merge($fo_deny)
+            ->merge($head_return)->merge($head_deny);
     }
-
     public function hydrate()
     {
         $this->checkDashboard();
@@ -60,6 +55,6 @@ class Indicator extends Component
 
     public function render()
     {
-        return view('livewire.indicator');
+        return view('livewire.mobileindicator');
     }
 }

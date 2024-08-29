@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Livewire\Select2;
+namespace App\Livewire\Select2;
 
 use Livewire\Component;
 use App\Models\Project;
