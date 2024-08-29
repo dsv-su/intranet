@@ -1,7 +1,8 @@
 @extends('layouts.app')
-@nocache('dsvheader')
-@nocache('navbar.navbar')
-@include('home.partials.banner')
-@include('home.home')
-@nocache('layouts.darktoggler')
-
+@section('content')
+    @nocache('dsvheader')
+    @nocache('navbar.navbar')
+    @include('home.partials.banner')
+    @include('home.home')
+    @nocache('layouts.darktoggler')
+@endsection

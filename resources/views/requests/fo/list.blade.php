@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('content')
 @include('dsvheader')
 @include('navbar.navbar')
 <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
@@ -14,3 +15,4 @@
     </div>
 </section>
 @include('layouts.darktoggler')
+@endsection
