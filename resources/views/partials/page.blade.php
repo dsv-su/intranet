@@ -36,7 +36,7 @@
                             @elseif($content->type == "images")
                                 @foreach($content->image as $image)
                                     <div class="border border-blue-600">
-                                        <img class="rounded-t-lg max-w-full" src="{{$image->url}}" alt="" />
+                                        <img class="rounded-t-lg max-w-full" src="{{$image->url}}" alt="" loading="lazy" />
                                     </div>
                                 @endforeach
                             @elseif($content->type == "faq_group")

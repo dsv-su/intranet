@@ -5,7 +5,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{asset('images/favicon.png')}}">
     <link rel="icon" type="image/x-icon" href="{{asset('images/favicon.ico')}}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>@yield('title') | {{ config('app.name') }}</title>
+    <title>@yield('title') {{ config('app.name') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="#">
     <meta name="keyword" content="#">
