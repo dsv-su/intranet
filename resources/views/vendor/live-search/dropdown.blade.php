@@ -6,7 +6,7 @@
              </svg>
         </span>
     </div>
-    <input wire:model="q" id="search" name="search"
+    <input wire:model.live="q" id="search" name="search"
            class="w-full py-2 pl-10 pr-4 text-black bg-white border border-susecondary focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-500
                 sm:text-sm rounded-xl placeholder:text-blue-800 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-200 dark:placeholder:text-gray-200"
            placeholder="{{__("Search")}}" type="search">

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use Livewire\Component;
 
@@ -27,8 +27,8 @@ class TravelType extends Component
 
     public function selectedCountry($type)
     {
-        $this->emit('clearcontry');
-        $this->emit('selectedCountry', $type);
+        $this->dispatch('clearcontry');
+        $this->dispatch('selectedCountry', $type);
     }
 
 

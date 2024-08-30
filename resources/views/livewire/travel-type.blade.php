@@ -1,9 +1,9 @@
 <div wire:ignore>
     <div
         x-data="{
-        tabSelected: @entangle('tabselected'),
+        tabSelected: @entangle('tabselected').live,
         tabId: $id('tabs'),
-        hiddenInputValue: @entangle('inputvalue'),
+        hiddenInputValue: @entangle('inputvalue').live,
         tabButtonClicked(tabButton){
             this.tabSelected = tabButton.id.replace(this.tabId + '-', '');
             this.tabRepositionMarker(tabButton);

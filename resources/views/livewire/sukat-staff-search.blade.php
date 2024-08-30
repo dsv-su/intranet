@@ -13,7 +13,7 @@
                  </svg>
             </span>
             </div>
-            <input wire:model="query"
+            <input wire:model.live="query"
                    wire:keydown.escape="resetData"
                    wire:keydown.tab="resetData"
                    wire:keydown.arrow-up="decrementHighlight"

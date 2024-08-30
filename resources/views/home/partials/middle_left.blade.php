@@ -1,5 +1,5 @@
 <div class="md:order-2 text-left relative border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800 rounded-xl md:min-h-[230px]">
-    <div class="relative overflow-hidden w-full h-full rounded-xl">
+    {{--}}<div class="relative overflow-hidden w-full h-full rounded-xl">{{--}}
         <div class="p-6 flex flex-col md:min-h-[480px] rounded-xl dark:border-gray-700">
 
                 @can('access cp')
@@ -13,7 +13,6 @@
                     {{__("Internal information")}}
                 </h3>
                 @nocache('home.partials.internal')
-
         </div>
-    </div>
+    {{--}}</div>{{--}}
 </div>

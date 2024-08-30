@@ -1,16 +1,16 @@
-<div class="hidden md:block md:order-1 relative p-6 flex flex-col justify-center items-start {{--}}md:min-h-[230px]{{--}}md:h-fit text-center rounded-xl
+<div class="md:order-1 relative p-6 flex flex-col justify-center items-start {{--}}md:min-h-[230px]{{--}} {{--}}md:h-fit{{--}} text-center rounded-xl
                 border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800">
     <div class="mt-0 text-left">
         <h3 class="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
             DSV Helpdesk
         </h3>
-        <p class="mt-2 text-gray-500 dark:text-gray-300">
+        <p class="mt-2 text-sm font-medium text-gray-500 dark:text-gray-300">
             {{__("Phone")}}: 08-16 1648
         </p>
-        <p class="mt-2 text-gray-500 dark:text-gray-300">
+        <p class="mt-2 text-sm font-medium text-gray-500 dark:text-gray-300">
             {{__("Email")}}: helpdesk@dsv.su.se
         </p>
-        <p class="mt-2 text-gray-500 dark:text-gray-300">
+        <p class="mt-2 text-sm font-medium text-gray-500 dark:text-gray-300">
             SU, tel 08-16 1999
         </p>
 
