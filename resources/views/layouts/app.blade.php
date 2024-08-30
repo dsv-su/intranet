@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
-
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="{{asset('images/favicon.png')}}">
@@ -10,23 +9,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="#">
     <meta name="keyword" content="#">
-
-    <!-- Shortcut Icon -->
-    <link rel="shortcut icon" href="{{asset('images/favicon.png')}}">
-    <link rel="icon" type="image/ico" href="{{asset('images/favicon.png')}}" />
-    <!-- CSRF Token -->
+    @livewireStyles
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     @vite(['resources/css/site.css'])
     @vite(['resources/js/site.js'])
-    @livewireStyles
 </head>
 
 <body class="dark:bg-gray-800">
     <main>
         @yield('content')
     </main>
+    @livewireScripts
 </body>
-@livewireScripts
+
 @include('footer.footer')
 </html>

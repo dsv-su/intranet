@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('content')
 @include('dsvheader')
 @include('navbar.navbar')
 <style>
@@ -191,3 +192,4 @@
 @endif
 
 @include('layouts.darktoggler')
+@endsection

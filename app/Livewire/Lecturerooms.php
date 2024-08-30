@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use Livewire\Component;
 
@@ -16,7 +16,7 @@ class Lecturerooms extends Component
     public function show_status()
     {
         $this->status = !$this->status;
-        $this->dispatchBrowserEvent('contentChanged', ['lecturerooms' => $this->status]);
+        $this->dispatch('contentChanged', lecturerooms: $this->status);
     }
 
     public function render()

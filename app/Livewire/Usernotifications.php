@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Models\Dashboard;
+use Statamic\Auth\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Statamic\Auth\User;
 
-class Userrequeststoggler extends Component
+class Usernotifications extends Component
 {
     public $auth_user;
     public $user_roles;
@@ -16,7 +16,8 @@ class Userrequeststoggler extends Component
     public function mount()
     {
         $this->user_roles = $this->getUserRoles();
-        $this->user_requests = Dashboard::where('user_id', $this->auth_user)->orderBy('created_at', 'desc')->get();
+        //Limit notifications
+        $this->user_requests = Dashboard::where('user_id', $this->auth_user)->orderBy('created_at', 'desc')->limit(10)->get();
     }
 
     private function getUserRoles()
@@ -29,6 +30,6 @@ class Userrequeststoggler extends Component
 
     public function render()
     {
-        return view('livewire.userrequeststoggler');
+        return view('livewire.usernotifications');
     }
 }
