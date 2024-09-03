@@ -48,4 +48,13 @@
             <hr class="m-2">
         @endif
     @endif
+    <!-- Download if approved -->
+    @if($tr->state == 'fo_approved')
+    <div class="grid grid-cols-1 mt-2">
+        <a href="{{route('travel-request-pdf', $tr->id)}}" class="inline-flex items-center justify-center gap-x-1.5 text-blue-800 font-medium py-2 px-4 border border-susecondary rounded-lg w-full text-center dark:text-black">
+            {{__("Download")}}
+        </a>
+    </div>
+    @endif
+        <!-- end download -->
 </article>
