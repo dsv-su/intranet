@@ -1,4 +1,4 @@
-<div id="searchinput" class="relative grow max-w-96 ml-4 mr-2 md:order-none">
+<div id="searchinput" class="relative grow max-w-96 ml-4 mr-2 mt-2 md:order-none md:mt-0">
     <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
              <svg class="w-5 h-5 text-blue-800 dark:text-gray-200" viewBox="0 0 24 24" fill="none">

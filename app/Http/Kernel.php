@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'fo' => \App\Http\Middleware\EnsureUserIsFO::class,
         'checklang' => \App\Http\Middleware\CheckLocalizaion::class,
         'locale' => \App\Http\Middleware\Switchlocale::class,
+        'download' => \App\Http\Middleware\EnsureUserForDownload::class,
     ];
 }
