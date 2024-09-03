@@ -15,7 +15,8 @@ class FOController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('fo')->except(['list', 'svlist']);
+        $this->middleware('fo')->except(['list', 'svlist', 'download']);
+        $this->middleware('download')->only('download');
     }
 
     /**
@@ -52,6 +53,7 @@ class FOController extends Controller
 
     public function pdfview($id)
     {
+        //Custom middleware
         $tr = TravelRequest::find($id);
         $user = User::find(Dashboard::where('request_id', $tr->id)->first()->user_id);
         $manager = User::find(Dashboard::where('request_id', $tr->id)->first()->manager_id);
