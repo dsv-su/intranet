@@ -72,16 +72,11 @@ class TravelRequestController extends Controller
         // Fetching countries
         $countries = Country::all();
 
-        // Fetching project leaders and unit heads
-        $roleIdsProjectLeader = $this->getUserIdsByGroup('projektledare');
-        $projectleaders = User::whereIn('id', $roleIdsProjectLeader)->orderBy('name')->get();
-
         $roleIdsUnitHead = $this->getUserIdsByGroup('enhetschef');
         $unitheads = User::whereIn('id', $roleIdsUnitHead)->get();
 
         return [
             'countries' => $countries,
-            'projectleaders' => $projectleaders,
             'unitheads' => $unitheads,
         ];
     }
@@ -158,7 +153,6 @@ class TravelRequestController extends Controller
     {
         $rules = [
             'purpose' => 'required',
-            //'project' => 'required',
             'project_leader' => 'required',
             'unit_head' => 'required',
         ];
