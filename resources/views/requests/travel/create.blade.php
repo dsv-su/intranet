@@ -73,126 +73,105 @@
                     <!--Country-->
                     @if($type == 'resume')
                         <livewire:travel-type :resume="$tr->country">
-                            @else
-                                <livewire:travel-type />
-                            @endif
+                    @else
+                        <livewire:travel-type />
+                    @endif
 
-                        <!--end -->
 
-                            <!-- Projectleader -->
-                            <div>
-                                <label for="project_leader" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Project leader") }}<span class="text-red-600"> *</span>
-                                    <button id="projectleader-button" data-modal-toggle="projectleader-modal" class="inline" type="button">
-                                        <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                        </svg>
-                                    </button>
-                                </label>
-                                <select id="project_leader" name="project_leader"
-                                        class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                    @foreach($projectleaders as $projectleader)
-                                        @if($type == 'resume')
-                                            <option @if($projectleader->id == $dashboard->manager_id) selected="" @endif value="{{$projectleader->id}}">{{$projectleader->name}}</option>
-                                        @else
-                                            <option value="{{$projectleader->id}}">{{$projectleader->name}}</option>
-                                        @endif
 
-                                    @endforeach
-                                </select>
-                            </div>
-                            <!--Unithead-->
-                            <div>
-                                <label for="unit_head" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Unit Head") }}<span class="text-red-600"> *</span>
-                                    <button id="unithead-button" data-modal-toggle="unithead-modal" class="inline" type="button">
-                                        <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                        </svg>
-                                    </button>
-                                </label>
-                                <select id="unit_head" name="unit_head"
-                                        class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                    @foreach($unitheads as $unithead)
-                                        @if($type == 'resume')
-                                            <option @if($unithead->id == $dashboard->head_id) selected="" @endif value="{{$unithead->id}}">{{$unithead->name}}</option>
-                                        @else
-                                            <option value="{{$unithead->id}}">{{$unithead->name}}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
-                                @error('unit_head')
-                                <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
-                                @enderror
-                            </div>
+                    <!-- Projectleader -->
+                    <livewire:select2.projectleader-select2 />
 
-                            <!--Departure return-->
-                            <div date-rangepicker datepicker-format="dd/mm/yyyy" class="flex flex-col sm:flex-row sm:col-span-2 items-center dark:text-gray-200">
-                                <div class="flex flex-col w-full sm:w-1/2">
-                                    <label for="departure" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">{{ __("From") }}
-                                    </label>
-                                    <div class="flex flex-col sm:flex-row items-center w-full sm:w-auto">
-
-                                        <div class="relative w-full sm:w-auto">
-                                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                                <svg class="w-4 h-4 text-blue-700 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                                                </svg>
-                                            </div>
-                                            @error('departure')
-                                            <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
-                                            @enderror
-                                            <input name="departure"
-                                                   @if($type == 'resume')
-                                                   value="{{ \Carbon\Carbon::createFromTimestamp($tr->departure)->format('d/m/Y') }}"
-                                                   @endif
-                                                   id="startInput" type="text"
-                                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
-                                                dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                   placeholder="{{__("Select date start")}}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col w-full sm:w-1/2 sm:mt-0 mt-4">
-                                    <label for="return" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">{{ __("To") }}
-                                    </label>
-                                    <div class="flex flex-col sm:flex-row items-center w-full sm:w-auto sm:mt-0">
-
-                                        <div class="relative w-full sm:w-auto">
-                                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                                <svg class="w-4 h-4 text-blue-700 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                                                </svg>
-                                            </div>
-                                            @error('return')
-                                            <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
-                                            @enderror
-                                            <input name="return"
-                                                   @if($type == 'resume')
-                                                   value="{{ \Carbon\Carbon::createFromTimestamp($tr->return)->format('d/m/Y') }}"
-                                                   @endif id="endInput" type="text"
-                                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
-                                                dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                   placeholder="{{__("Select date end")}}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!--Expenses-->
-                            <label for="expenses" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Expenses") }}</label>
-                            @if($type == 'resume')
-                                <livewire:travel-request-expenses :tr="$tr">
-                                    @else
-                                        <livewire:travel-request-expenses />
+                    <!--Unithead-->
+                    <div>
+                        <label for="unit_head" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Unit Head") }}<span class="text-red-600"> *</span>
+                            <button id="unithead-button" data-modal-toggle="unithead-modal" class="inline" type="button">
+                                <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </button>
+                        </label>
+                        <select id="unit_head" name="unit_head"
+                                class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            @foreach($unitheads as $unithead)
+                                @if($type == 'resume')
+                                    <option @if($unithead->id == $dashboard->head_id) selected="" @endif value="{{$unithead->id}}">{{$unithead->name}}</option>
+                                @else
+                                    <option value="{{$unithead->id}}">{{$unithead->name}}</option>
                                 @endif
-                                <!--end -->
+                            @endforeach
+                        </select>
+                        @error('unit_head')
+                        <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
+                        @enderror
+                    </div>
 
+                    <!--Departure return-->
+                    <div date-rangepicker datepicker-format="dd/mm/yyyy" class="flex flex-col sm:flex-row sm:col-span-2 items-center dark:text-gray-200">
+                        <div class="flex flex-col w-full sm:w-1/2">
+                            <label for="departure" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">{{ __("From") }}
+                            </label>
+                            <div class="flex flex-col sm:flex-row items-center w-full sm:w-auto">
+
+                                <div class="relative w-full sm:w-auto">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-blue-700 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    @error('departure')
+                                    <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
+                                    @enderror
+                                    <input name="departure"
+                                           @if($type == 'resume')
+                                           value="{{ \Carbon\Carbon::createFromTimestamp($tr->departure)->format('d/m/Y') }}"
+                                           @endif
+                                           id="startInput" type="text"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
+                                        dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                           placeholder="{{__("Select date start")}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col w-full sm:w-1/2 sm:mt-0 mt-4">
+                            <label for="return" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">{{ __("To") }}
+                            </label>
+                            <div class="flex flex-col sm:flex-row items-center w-full sm:w-auto sm:mt-0">
+
+                                <div class="relative w-full sm:w-auto">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-blue-700 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    @error('return')
+                                    <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
+                                    @enderror
+                                    <input name="return"
+                                           @if($type == 'resume')
+                                           value="{{ \Carbon\Carbon::createFromTimestamp($tr->return)->format('d/m/Y') }}"
+                                           @endif id="endInput" type="text"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
+                                        dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                           placeholder="{{__("Select date end")}}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Expenses-->
+                    <label for="expenses" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Expenses") }}</label>
+                    @if($type == 'resume')
+                        <livewire:travel-request-expenses :tr="$tr">
+                    @else
+                        <livewire:travel-request-expenses />
+                    @endif
                 </div>
                 <div class="mt-6 flex items-center justify-end gap-x-6">
                     <a type="button" href="{{ url()->previous() }}" class="text-sm bg-transparent hover:bg-blue-500 text-blue-700 dark:text-gray-200 font-semibold hover:text-white py-2 px-4 border border-blue-500 dark:border-gray-200 hover:border-transparent rounded">{{__("Cancel")}}</a>
                     <div class="py-3 px-6 border border-blue-500 rounded dark:border-gray-200">
                         <button type="submit" class="text-sm bg-transparent hover:bg-blue-500 text-blue-700 dark:text-gray-200 font-semibold hover:text-white py-2 px-4 border border-blue-500 dark:border-gray-200 hover:border-transparent rounded">{{__("Send in request")}}</button>
                     </div>
-
                 </div>
             </form>
         </div>
