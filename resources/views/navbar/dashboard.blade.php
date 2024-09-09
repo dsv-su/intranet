@@ -55,7 +55,7 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h4M9 3v4a1 1 0 0 1-1 1H4m11 6v4m-2-2h4m3 0a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z"/>
                     </svg>
 
-                    <div class="text-sm font-medium text-gray-300 dark:text-white">Project Proposals (2025)</div>
+                    <div class="text-sm font-medium text-gray-300 dark:text-white">Project Proposals</div>
                 </a>
 
                 {{--}}
