@@ -52,7 +52,11 @@
             <th>{{__("ProjectID")}}</th>
             <th>{{__("Project leader")}}</th>
             <th>{{__("Unit Head")}}</th>
-            <th>{{__("Approved date")}}</th>
+            @if(in_array($tr->state, ['manager_denied', 'head_denied', 'fo_denied']))
+                <th>{{__("Rejected Date")}}</th>
+            @else
+                <th>{{__("Approved date")}}</th>
+            @endif
         </tr>
         </thead>
         <tbody>
