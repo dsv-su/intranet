@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Select2;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ProjectleaderSelect2 extends Component
@@ -19,7 +20,8 @@ class ProjectleaderSelect2 extends Component
 
     public function mount()
     {
-        $this->projectleader = new User;
+        //Retrive auth user
+        $this->projectleader = Auth::user();
     }
 
     public function getOptionsProperty()
