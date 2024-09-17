@@ -7,14 +7,14 @@
                placeholder="{{__("Please refine your search by typing to filter ID, User, Purpose, or ProjectID")}}">
     </div>
     <!-- Pagination -->
-    <nav class="flex justify-end items-center" aria-label="Pagination">
+    <nav class="flex justify-end items-center dark:text-white" aria-label="Pagination">
         {{ $dashboards->links() }}
     </nav>
     <!-- End Pagination -->
 
     <div class="mt-8 relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
             <tr>
                 <th scope="col" class="px-4 py-3">{{__("Request type")}}</th>
                 <th scope="col" class="px-4 py-3">{{__("Name")}}</th>
@@ -28,11 +28,11 @@
             <tbody>
             @foreach($dashboards as $dashboard)
 
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 dark:text-white">
 
                     <th scope="row" class="px-4 py-3 text-xs text-gray-900 whitespace-nowrap dark:text-white">
                         @if($dashboard->type == 'travelrequest')
-                            <span class="bg-blue-100 text-xs mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-700 border border-blue-400">
+                            <span class="bg-blue-100 text-xs mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-white border border-blue-400">
                             {{__("Travelrequest")}}
                             </span>
                         @else
