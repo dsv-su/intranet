@@ -16,16 +16,4 @@
 </video>
 @endantlers
 {{--}}
-
-<p class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-xs font-semibold uppercase dark:from-blue-500 dark:to-white">
-    {{__("Scheduled for launch,")}}
-</p>
-<span class="bg-clip-text bg-gradient-to-l from-purple-400 to-blue-600 text-transparent text-7xl font-bold dark:from-blue-500 dark:to-white">
-                                2024
-                            </span>
-<h3 class="mt-6 text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
-    DSV Intranet
-</h3>
-<p class="mt-2 text-gray-500 dark:text-gray-200">
-    {{__("The DSV Intranet website is under construction.")}}
-</p>
+<livewire:stats-user-registration />
