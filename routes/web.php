@@ -55,7 +55,7 @@ Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListControlle
 Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'swelist'])->name('swelist');
 
 //Test
-Route::get('/test', [TestController::class, 'test'])->name('test');
+Route::get('/test', [TestController::class, 'pp'])->name('test');
 
 
 
