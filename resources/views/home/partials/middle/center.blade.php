@@ -16,4 +16,11 @@
 </video>
 @endantlers
 {{--}}
+<h3 class="text-lg pb-2 md:text-xl font-semibold text-gray-800 dark:text-gray-200" style="text-align: left">
+    {{__("Calls from VR")}}
+</h3>
+
+<livewire:v-rrss />
+{{--}}
 <livewire:stats-user-registration />
+{{--}}

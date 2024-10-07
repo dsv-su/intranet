@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
+
 class TestController extends Controller
 {
    public function test()
