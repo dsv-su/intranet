@@ -1,6 +1,6 @@
 <div class="md:order-2 relative overflow-hidden rounded-xl">
     <div class="relative overflow-hidden p-6 flex flex-col justify-start items-start {{--}}md:min-h-[480px]{{--}}md:h-fit text-center rounded-xl
-                    border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800">
+                    border border-susecondary dark:border-gray-800">
         <div class="mt-0 text-left">
             @can('access cp')
                 <a href="/cp/collections/itnews" aria-label="IT news admin" class="float-right hover:border-blue-600">

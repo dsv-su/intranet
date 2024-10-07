@@ -11,7 +11,7 @@
 
                 <div class="mt-6 justify-center items-start text-center">
 
-                @include('home.partials.middle.center')
+                    @include('home.partials.middle.center')
 
             </div>
 

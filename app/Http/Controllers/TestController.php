@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
+
 class TestController extends Controller
 {
    public function test()
@@ -10,4 +12,12 @@ class TestController extends Controller
            ->template('home.partials.search.staff')
            ->layout('mylayout');
    }
+
+   public function pp()
+   {
+       return (new \Statamic\View\View)
+           ->template('pp.index')
+           ->layout('mylayout');
+   }
+
 }
