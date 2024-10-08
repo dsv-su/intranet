@@ -1,6 +1,4 @@
 @extends('layouts.app')
-<livewire:v-rrss />
-
 <div class="mt-6 mb-6 ms-6 grow max-w-96 mr-2 md:order-none">
     <div class="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
         <div class="p-4 sm:p-7">

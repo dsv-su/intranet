@@ -1,4 +1,4 @@
-<div class="md:order-2 text-left relative border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800 rounded-xl {{--}}md:min-h-[230px]{{--}} ">
+<div class="md:order-2 text-left relative border border-susecondary dark:border-gray-800 rounded-xl {{--}}md:min-h-[230px]{{--}} ">
     {{--}}<div class="relative overflow-hidden w-full h-full rounded-xl">{{--}}
         <div class="p-6 flex flex-col {{--}}md:min-h-[480px]{{--}} md:h-fit rounded-xl dark:border-gray-700">
             <div class="mt-0 text-left">

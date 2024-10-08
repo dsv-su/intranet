@@ -1,5 +1,5 @@
-<div class="md:order-1 relative p-6 flex flex-col justify-center items-start {{--}}md:min-h-[230px]{{--}} {{--}}md:h-fit{{--}} text-center rounded-xl
-                border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800">
+<div class="md:order-1 relative pl-6 flex flex-col justify-center items-start {{--}}md:min-h-[230px]{{--}} {{--}}md:h-fit{{--}} text-center rounded-xl
+                border border-susecondary dark:border-gray-800">
     <div class="mt-0 text-left">
         <h3 class="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200">
             DSV Helpdesk
