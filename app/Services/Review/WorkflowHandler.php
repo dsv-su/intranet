@@ -61,4 +61,20 @@ class WorkflowHandler
         $this->workflow->head_deny();
     }
 
+    //Vice
+    public function ViceApprove()
+    {
+        $this->workflow->vice_approve();
+    }
+
+    public function ViceReturn()
+    {
+        $this->workflow->vice_return();
+    }
+
+    public function ViceDeny()
+    {
+        $this->workflow->vice_deny();
+    }
+
 }

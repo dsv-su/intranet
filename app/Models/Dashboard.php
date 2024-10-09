@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Workflows\States\DashboardState;
+use App\Workflows\States\ProjectProState;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

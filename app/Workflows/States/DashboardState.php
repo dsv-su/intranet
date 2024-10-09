@@ -36,7 +36,6 @@ abstract class DashboardState extends State
             ->allowTransition(HeadDenied::class,ManagerApproved::class)
             ->allowTransition(HeadDenied::class,Submitted::class)
 
-
             ->allowTransition(HeadApproved::class, FOApproved::class)
             ->allowTransition(FOApproved::class,HeadApproved::class)
             ->allowTransition(FOApproved::class,Submitted::class)
@@ -45,6 +44,34 @@ abstract class DashboardState extends State
             ->allowTransition(FOReturned::class,Submitted::class)
             ->allowTransition(HeadApproved::class, FODenied::class)
             ->allowTransition(FODenied::class,HeadApproved::class)
+            ->allowTransition(FODenied::class,Submitted::class)
+            //PP
+            ->allowTransition(Submitted::class, HeadApproved::class)
+            ->allowTransition( HeadApproved::class, Submitted::class)
+            ->allowTransition(Submitted::class, HeadReturned::class)
+            ->allowTransition(HeadReturned::class, Submitted::class)
+            ->allowTransition(Submitted::class, HeadDenied::class)
+            ->allowTransition(HeadDenied::class, Submitted::class)
+
+            ->allowTransition(HeadApproved::class, ViceApproved::class)
+            ->allowTransition(ViceApproved::class,HeadApproved::class)
+            ->allowTransition(ViceApproved::class, Submitted::class)
+            ->allowTransition(HeadApproved::class, ViceReturned::class)
+
+            ->allowTransition(ViceReturned::class,HeadApproved::class)
+            ->allowTransition(ViceReturned::class,Submitted::class)
+            ->allowTransition(HeadApproved::class, ViceDenied::class)
+            ->allowTransition(ViceDenied::class,HeadApproved::class)
+            ->allowTransition(ViceDenied::class,Submitted::class)
+
+            ->allowTransition(ViceApproved::class, FOApproved::class)
+            ->allowTransition(FOApproved::class,ViceApproved::class)
+            ->allowTransition(FOApproved::class,Submitted::class)
+            ->allowTransition(ViceApproved::class, FOReturned::class)
+            ->allowTransition(FOReturned::class,ViceApproved::class)
+            ->allowTransition(FOReturned::class,Submitted::class)
+            ->allowTransition(ViceApproved::class, FODenied::class)
+            ->allowTransition(FODenied::class,ViceApproved::class)
             ->allowTransition(FODenied::class,Submitted::class)
             ;
     }
