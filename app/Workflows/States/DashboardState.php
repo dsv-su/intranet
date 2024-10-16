@@ -6,8 +6,10 @@ use Spatie\ModelStates\State;
 use Spatie\ModelStates\StateConfig;
 
 /**
-* @extends State<\App\Models\Dashboard>
+ * @extends State<\App\Models\Dashboard>
+ *
  */
+
 abstract class DashboardState extends State
 {
     abstract public function status(): string;
@@ -68,6 +70,8 @@ abstract class DashboardState extends State
             ->allowTransition(FOApproved::class,ViceApproved::class)
             ->allowTransition(FOApproved::class,Submitted::class)
             ->allowTransition(ViceApproved::class, FOReturned::class)
+
+
             ->allowTransition(FOReturned::class,ViceApproved::class)
             ->allowTransition(FOReturned::class,Submitted::class)
             ->allowTransition(ViceApproved::class, FODenied::class)

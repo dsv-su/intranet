@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Workflows\States\DashboardState;
-use App\Workflows\States\ProjectProState;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,5 +44,13 @@ class Dashboard extends Model
     public function travel(): BelongsTo
     {
         return $this->belongsTo(TravelRequest::class, 'request_id');
+    }
+
+    /**
+     * Get the projectproposal that belongs to the dashboard.
+     */
+    public function proposal(): BelongsTo
+    {
+        return $this->belongsTo(ProjectProposal::class, 'request_id');
     }
 }

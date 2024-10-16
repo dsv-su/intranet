@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('project_proposals', function (Blueprint $table) {
-            $table->uuid('id')->primary();;
+            $table->uuid('id')->primary();
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('name');
             $table->integer('created');
-            $table->string('state');
+            $table->string('status');
             $table->json('pp')->nullable();
             $table->timestamps();
         });

@@ -7,6 +7,7 @@ use App\Models\SettingsFo;
 use App\Services\Review\WorkflowHandler;
 use App\Workflows\DSVProjectPWorkflow;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Workflow\WorkflowStub;
 
@@ -30,24 +31,31 @@ class ProjectProposal extends Component
     {
         // Find or create the financial officer
         $fo = SettingsFo::find(1);
+        $user = Auth::user();
         $pp = new \App\Models\ProjectProposal();
+        $pp->user_id = auth()->id();
         $pp->name = $this->name;
         $pp->created = Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp;
-        $pp->state = 'submitted';
-        $pp->pp = ['title' => $this->name, 'main resercher' => 'Ryan Dias', 'co-applicants' => 'Jenny Lind, Jason Bourne'];
+        $pp->status = 'submitted';
+        $pp->pp = [
+            'title' => $this->name,
+            'main_researcher' => $user->name,
+            'co_applicants' => 'Linda, John, Olle, Anna',
+            'submitted' => '2024-10-14'
+        ];
         $pp->save();
         // Find or create Dashboard instance
         $dashboardData = [
             'request_id' => $pp->id,
             'name' => $this->name,
             'created' => Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp,
-            'state' => 'submitted',
+            //'state' => 'submitted',
             'status' => 'unread',
             'type' => 'projectproposal',
             'user_id' => auth()->id(),
-            'manager_id' => '9d2400f8-4789-4a91-a22a-fb9a97fbf27f',
-            'fo_id' => '9d2400f8-4789-4a91-a22a-fb9a97fbf27f',
-            'head_id' => '9d2400f8-4789-4a91-a22a-fb9a97fbf27f'
+            'manager_id' => '9b618981-74c2-45b0-9819-49f5d9bc206e',
+            'fo_id' => '9b618981-74c2-45b0-9819-49f5d9bc206e',
+            'head_id' => '9b618981-74c2-45b0-9819-49f5d9bc206e'
         ];
 
         //Create new dashboard instance
@@ -106,6 +114,8 @@ class ProjectProposal extends Component
     {
         $this->setProgress('UH Denied');
         $this->progressColor = 'bg-red-100';
+        $workflowhandler = new WorkflowHandler($this->workflowID);
+        $workflowhandler->HeadDeny();
     }
 
     public function VHApprove()
@@ -116,12 +126,15 @@ class ProjectProposal extends Component
         $this->setProgress('VH Approved');
         $this->vh = true;
         $this->checkApprove();
+        $this->dispatch('pp-update');
     }
 
     public function VHDeny()
     {
         $this->setProgress('VH Denied');
         $this->progressColor = 'bg-red-100';
+        $workflowhandler = new WorkflowHandler($this->workflowID);
+        $workflowhandler->ViceDeny();
     }
 
     public function checkApprove()

@@ -23,6 +23,7 @@ class NewProjectProposalNotification extends Activity
 
         // Send email based on recipient type
         $this->sendNotification($recipient, $users);
+
     }
 
     private function loadDashboard(int $id): void

@@ -6,7 +6,10 @@ use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
 use App\Workflows\Notifications\NewProjectProposalNotification;
 use App\Workflows\Partials\RequestStates;
+use App\Workflows\StatusUpdates\PPStatusUpdateUsersStage1;
 use Workflow\ActivityStub;
+use Workflow\ChildWorkflow;
+use Workflow\ChildWorkflowStub;
 use Workflow\Models\StoredWorkflow;
 use Workflow\Workflow;
 use Workflow\WorkflowStub;
@@ -87,20 +90,76 @@ class DSVProjectPWorkflow extends Workflow
 
         //Email to Head
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::UNIT_HEAD, $userRequest);
-
-        //Wait for head to process request
-        yield WorkflowStub::await(fn () => $this->HeadApproved() || $this->HeadDenied() || $this->HeadReturned());
+        //yield ActivityStub::make(PPStatusUpdateUsersStage1::class, RequestStates::UNIT_HEAD, 'review', $userRequest);
 
         //Email to Vice
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::VICE, $userRequest);
+        //yield ActivityStub::make(PPStatusUpdateUsersStage1::class, RequestStates::VICE, 'review', $userRequest);
 
-        //Wait for vice to process request
-        yield WorkflowStub::await(fn () => $this->ViceApproved() || $this->ViceDenied() || $this->ViceReturned());
+        //Wait for head decision
+        yield WorkflowStub::await(fn () => ($this->HeadApproved() || $this->HeadDenied() || $this->HeadReturned()));
 
+        //Handle Head decision
+        $newState = $this->getState();
+
+        switch ($newState) {
+            case RequestStates::HEAD_APPROVED:
+                //Request has been approved by head
+
+                //Notify vice
+                //TODO
+
+                break;
+            case RequestStates::HEAD_RETURNED:
+
+                //End workflow
+                return $this->stateMachine->state->status();
+            case RequestStates::HEAD_DENIED:
+                //Request has been returned or denied by head
+
+                //End workflow
+                return $this->stateMachine->state->status();
+        }
+
+        //Wait for vice decision
+        yield WorkflowStub::await(fn () => ($this->ViceApproved() || $this->ViceDenied() || $this->ViceReturned()));
+
+        //Handle vice decision
+        $newState = $this->getState();
+
+        switch ($newState) {
+            case RequestStates::VICE_APPROVED:
+                //Request has been approved by head
+
+                //Notify
+                //TODO
+
+                break;
+            case RequestStates::VICE_RETURNED:
+
+                //End workflow
+                return $this->stateMachine->state->status();
+            case RequestStates::VICE_DENIED:
+                //Request has been returned or denied by head
+
+                //End workflow
+                return $this->stateMachine->state->status();
+        }
+
+
+
+        //Request has been approved by head and vice
         //Email to FO
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::FINACIAL_OFFICER, $userRequest);
 
+
+
         //End workflow
+        return $this->stateMachine->state->status();
+    }
+
+    protected function getState()
+    {
         return $this->stateMachine->state->status();
     }
 }

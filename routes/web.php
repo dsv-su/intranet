@@ -57,9 +57,5 @@ Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListControlle
 //Test
 Route::get('/test', [TestController::class, 'pp'])->name('test');
 
-//PP
-Route::post('/pp', [TestController::class, 'submit'])->name('pp-submit');
-Route::get('/p', [TestController::class, 'show'])->name('pp');
-
 
 
