@@ -8,29 +8,39 @@
         <div wire:key="{{$proposal->id}}">
             <div x-data="{ id: $id('accordion') }" class="cursor-pointer group">
                 <button @click="setActiveAccordion(id)" class="flex items-center justify-between w-full p-4 text-left select-none">
-                    <!-- Flex container -->
-                    <div class="flex justify-between items-center w-full">
+                    <!-- Flex container with responsive adjustments and smaller md sizes -->
+                    <div class="flex flex-wrap justify-between items-center w-full">
                         <!-- Left side content (Main Researcher and Title) -->
-                        <div>
+                        <div class="w-full md:w-auto mb-4 md:mb-0">
                             <!-- Title of the Proposal -->
-                            <p class="text-lg font-bold text-gray-900 dark:text-white leading-tight">
+                            <p class="text-base md:text-lg font-normal text-gray-900 dark:text-white leading-tight">
                                 {{ $proposal->pp['title'] }}
                             </p>
-                            <!-- Main Researcher -->
-                            <h4 class="mb-1 text-xs md:text-sm font-normal text-gray-800 dark:text-neutral-200 tracking-wide">
-                                <span class="font-semibold">Main researcher:</span> {{ $proposal->pp['main_researcher'] }} &nbsp; | &nbsp;
-                                <span class="font-semibold">Submission deadline:</span> [NA] &nbsp; | &nbsp;
-                                <span class="font-semibold">Project duration:</span> [NA] &nbsp; | &nbsp;
-                                <span class="font-semibold">Economy owner:</span> [NA]
+                            <!-- Progress -->
+                            @include('livewire.pp.partials.progress')
+                            <!-- End Progress -->
+                            <!-- Main Researcher and other details -->
+                            <h4 class="text-xs md:text-sm font-medium text-gray-800 dark:text-neutral-200 tracking-wide">
+                                <span class="font-medium">Main researcher:</span> {{ $proposal->pp['main_researcher'] }} &nbsp; | &nbsp;
+                                <span class="font-medium">Submission deadline:</span> [N/A] &nbsp; | &nbsp;
+                                <span class="font-medium">Project duration:</span> [N/A] &nbsp; | &nbsp;
+                                <span class="font-medium">Economy owner:</span> [N/A]
                             </h4>
                         </div>
                         <!-- Right side (State label) -->
-                        <div class="flex-shrink-0 mr-4">
-                            <span class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-lg text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800/30 dark:text-blue-500">
-                                {{ $proposal->dashboard->state }}
-                            </span>
+                        <div class="w-full md:w-auto flex-shrink-0 md:ml-auto">
+                            <!--TODO-->
+                            @if($proposal->pp['status'] ?? false)
+                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                                    {{ $proposal->pp['status'] }}
+                                </span>
+                            @endif
+
+                            @include('livewire.pp.partials.state')
                         </div>
                     </div>
+
+
                     <svg class="w-4 h-4 duration-200 ease-out" :class="{ 'rotate-180': activeAccordion==id }" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                 </button>
                 <div x-show="activeAccordion==id" x-collapse x-cloak>

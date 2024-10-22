@@ -23,6 +23,11 @@ class ProjectProposalHome extends Component
         $this->myproposals = $this->proposals::where('user_id', $user->id)->get();
     }
 
+    public function allproposals()
+    {
+        $this->dispatch('allproposals');
+    }
+
     public function render()
     {
         return view('livewire.pp.project-proposal-home');

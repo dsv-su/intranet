@@ -41,7 +41,8 @@ class ProjectProposal extends Component
             'title' => $this->name,
             'main_researcher' => $user->name,
             'co_applicants' => 'Linda, John, Olle, Anna',
-            'submitted' => '2024-10-14'
+            'submitted' => '2024-10-14',
+            'status' => 'Submitted'
         ];
         $pp->save();
         // Find or create Dashboard instance
@@ -108,6 +109,7 @@ class ProjectProposal extends Component
         $this->setProgress('UH Approved');
         $this->uh = true;
         $this->checkApprove();
+        $this->dispatch('pp-update');
     }
 
     public function UHDeny()

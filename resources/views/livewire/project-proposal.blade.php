@@ -122,7 +122,7 @@
         <div class="{{$upload}} mt-6 mb-6 ms-6 grow max-w-96 mr-2">
             <div class="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
                 <form wire:submit="save">
-                    <input type="file" wire:model="photo">
+                    <input type="file">
                     @error('photo') <span class="error">{{ $message }}</span> @enderror
                 </form>
             </div>

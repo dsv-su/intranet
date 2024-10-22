@@ -3,7 +3,6 @@
 use App\Http\Controllers\FOController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\SystemController;
-use App\Http\Controllers\TestController;
 use App\Services\Settings\AuthHandler;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TravelRequestController;
@@ -54,8 +53,9 @@ Route::post('/fo', [\App\Http\Controllers\FOController::class, 'settings_fo'])->
 Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'list'])->name('list');
 Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'swelist'])->name('swelist');
 
-//Test
-Route::get('/test', [TestController::class, 'pp'])->name('test');
-
-
+//Project Proposals
+Route::get('/my_pp', [\App\Http\Controllers\ProjectProposalController::class, 'my_pp'])->name('my-projects');
+Route::get('/all_pp', [\App\Http\Controllers\ProjectProposalController::class, 'all_pp'])->name('all-projects');
+Route::get('/create_pp', [\App\Http\Controllers\ProjectProposalController::class, 'create'])->name('create-project');
+Route::post('/submit_pp', [\App\Http\Controllers\ProjectProposalController::class, 'submit'])->name('pp-submit');
 
