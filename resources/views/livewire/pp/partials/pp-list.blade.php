@@ -21,22 +21,23 @@
                             <!-- End Progress -->
                             <!-- Main Researcher and other details -->
                             <h4 class="text-xs md:text-sm font-medium text-gray-800 dark:text-neutral-200 tracking-wide">
-                                <span class="font-medium">Main researcher:</span> {{ $proposal->pp['main_researcher'] }} &nbsp; | &nbsp;
-                                <span class="font-medium">Submission deadline:</span> [N/A] &nbsp; | &nbsp;
-                                <span class="font-medium">Project duration:</span> [N/A] &nbsp; | &nbsp;
+                                <span class="font-medium">Main researcher:</span> {{ $proposal->pp['principal_investigator'] }} &nbsp; | &nbsp;
+                                <span class="font-medium">Submission deadline:</span> {{ $proposal->pp['submission_deadline'] }} &nbsp; | &nbsp;
+                                <span class="font-medium">Project duration:</span> {{ $proposal->pp['project_duration'] }} &nbsp; | &nbsp;
                                 <span class="font-medium">Economy owner:</span> [N/A]
                             </h4>
                         </div>
                         <!-- Right side (State label) -->
                         <div class="w-full md:w-auto flex-shrink-0 md:ml-auto">
                             <!--TODO-->
+
+                            @include('livewire.pp.partials.state')
+
                             @if($proposal->pp['status'] ?? false)
                                 <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
                                     {{ $proposal->pp['status'] }}
                                 </span>
                             @endif
-
-                            @include('livewire.pp.partials.state')
                         </div>
                     </div>
 
@@ -51,47 +52,52 @@
                                 <!-- DSV coordination -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
                                     <span class="font-semibold">Is DSV coordinating:</span><br>
-                                    [N/A]
+                                    @if($proposal->pp['dsvcoordinating'] == 'yes') Yes @else No @endif
                                 </p>
                                 <!-- Other coordination -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
                                     <span class="font-semibold">Other coordinator:</span><br>
-                                    [N/A]
+                                    {{$proposal->pp['other_coordination'] ?? ''}}
                                 </p>
                                 <!-- Co-Applicants -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
                                     <span class="font-semibold">Co-applicants:</span><br>
-                                    {{ $proposal->pp['co_applicants'] }}
+                                    @if($proposal->pp['co_investigator_name'])
+                                        @foreach($proposal->pp['co_investigator_name'] as $co)
+                                            {{$co}}@if(!$loop->last), @endif
+                                        @endforeach
+                                    @endif
+
                                 </p>
                                 <!-- Program/Call/Target -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
                                     <span class="font-semibold">Program/Call/Target:</span><br>
-                                    [N/A]
+                                    {{$proposal->pp['program']}}
                                 </p>
                                 <!-- Co-financing -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
                                     <span class="font-semibold">Co-financing needed:</span><br>
-                                    [N/A]
+                                    {{$proposal->pp['other_cofinancing']}}
                                 </p>
                                 <!-- OH -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
-                                    <span class="font-semibold">Percent OH cost covered:</span><br>
-                                    [N/A]
+                                    <span class="font-semibold">OH cost covered:</span><br>
+                                    {{$proposal->pp['oh_cost']}} %
                                 </p>
                                 <!-- Funding organization -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
                                     <span class="font-semibold">Funding organization:</span><br>
-                                    [N/A]
+                                    {{$proposal->pp['funding_organization']}}
                                 </p>
                                 <!-- Budget -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
                                     <span class="font-semibold">Budget for project:</span><br>
-                                    [N/A]
+                                    {{$proposal->pp['budget_project']}}
                                 </p>
                                 <!-- Budget DSV -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
                                     <span class="font-semibold">Budget for DSV:</span><br>
-                                    [N/A]
+                                    {{$proposal->pp['budget_dsv']}}
                                 </p>
                             </div>
 
@@ -103,15 +109,15 @@
                                 </p>
                                 <!-- OK from DSV economy -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
-                                    <span class="font-semibold">DSV economy:</span> [N/A]
+                                    <span class="font-semibold">Economy:</span> [N/A]
                                 </p>
                                 <!-- OK from vice head -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
-                                    <span class="font-semibold">OK from Vice head:</span> [N/A]
+                                    <span class="font-semibold">Vice head:</span> [N/A]
                                 </p>
                                 <!-- Final submission -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
-                                    <span class="font-semibold">Final submission:</span> [N/A]
+                                    <span class="font-semibold">Final submisson:</span> [N/A]
                                 </p>
                             </div>
                         </div>

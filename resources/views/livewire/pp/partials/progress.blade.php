@@ -1,26 +1,32 @@
-@if($proposal->dashboard->state == 'submitted')
+@if($proposal->dashboard->state ?? '' == 'submitted')
     @php
         $progress = 25;
         $color = 'bg-yellow-400';
     @endphp
-@elseif($proposal->dashboard->state == 'head_approved')
+@elseif($proposal->dashboard->state ?? '' == 'head_approved')
     @php
         $progress = 50;
         $color = 'bg-purple-600';
     @endphp
-@elseif($proposal->dashboard->state == 'vice_approved')
+@elseif($proposal->dashboard->state ?? '' == 'vice_approved')
     @php
         $progress = 75;
         $color = 'bg-blue-600';
     @endphp
-@elseif($proposal->dashboard->state == 'fo_approved')
+@elseif($proposal->dashboard->state ?? '' == 'fo_approved')
     @php
         $progress = 100;
         $color = 'bg-green-600';
     @endphp
+@elseif($proposal->dashboard->state ?? '' == 'pending')
+    @php
+        $progress = 0;
+        $color = 'bg-gray-200';
+    @endphp
 @else
     @php
         $progress = 0;
+        $color = 'bg-red-200';
     @endphp
 @endif
 <div class="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700" role="progressbar" aria-valuenow="{{$progress}}" aria-valuemin="0" aria-valuemax="100">

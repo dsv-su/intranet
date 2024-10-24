@@ -1,10 +1,22 @@
 <div wire:poll.keep-alive>
     @foreach($user_requests as $user_request)
-        <a href="{{route('travel-request-show', $user_request->id)}}" class="flex py-3 px-4 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">
+        <a @if($user_request->type == 'travelrequest')
+                href="{{route('travel-request-show', $user_request->id)}}"
+           @else
+                href="{{route('my-projects', $user_request->id)}}"
+           @endif
+           wire:click="read({{$user_request->id}})"
+           class="flex py-3 px-4 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">
             <div class="flex-shrink-0 mt-4">
+                @if($user_request->type == 'travelrequest')
                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                     <path stroke="currentColor" stroke-linejoin="round" stroke-width="1" d="M8 8v1h4V8m4 7H4a1 1 0 0 1-1-1V5h14v9a1 1 0 0 1-1 1ZM2 1h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Z"/>
                 </svg>
+                @else
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m16 10 3-3m0 0-3-3m3 3H5v3m3 4-3 3m0 0 3 3m-3-3h14v-3"/>
+                </svg>
+                @endif
             </div>
             <div class="pl-3 w-full">
                 <div class="text-gray-900 dark:text-white font-semibold text-sm mb-1.5 ">[{{$user_request->id}}] {{$user_request->name}}</div>
@@ -45,6 +57,9 @@
                         <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">
                     @endif
                         @switch($user_request->state)
+                            @case('pending')
+                            {{__("Pending")}}
+                            @break
                             @case('submitted')
                             {{__("Submitted")}}
                             @break
@@ -60,6 +75,9 @@
                             @case('head_approved')
                             {{__("Processing")}}
                             @break
+                            @case('vice_approved')
+                            {{__("Processing")}}
+                            @break
                             @case('fo_denied')
                             {{__("Denied")}}
                             @break
@@ -73,6 +91,9 @@
                             {{__("Denied")}}
                             @break
                             @case('head_returned')
+                            {{__("Returned")}}
+                            @break
+                            @case('vice_returned')
                             {{__("Returned")}}
                             @break
                         @endswitch

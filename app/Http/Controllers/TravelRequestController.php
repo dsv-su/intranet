@@ -133,7 +133,8 @@ class TravelRequestController extends Controller
             'user_id' => auth()->id(),
             'manager_id' => $request->project_leader,
             'fo_id' => $fo->user_id,
-            'head_id' => $request->unit_head
+            'head_id' => $request->unit_head,
+            'vice_id' => $this->getViceHeadUserId()
         ];
 
         $dashboard = Dashboard::where('request_id', $request->id)->first();
@@ -186,5 +187,12 @@ class TravelRequestController extends Controller
     private function getUserIdsByGroup($group)
     {
         return DB::table('group_user')->where('group_id', $group)->pluck('user_id');
+    }
+
+    private function getViceHeadUserId(): string
+    {
+        return DB::table('role_user')
+            ->where('role_id', 'vice_head')
+            ->value('user_id');
     }
 }

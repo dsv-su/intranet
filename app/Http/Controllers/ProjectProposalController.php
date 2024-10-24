@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dashboard;
+use App\Models\ResearchArea;
+use App\Models\SettingsFo;
 use App\Models\User;
+use App\Workflows\DSVProjectPWorkflow;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Statamic\View\View;
+use Workflow\WorkflowStub;
 
 class ProjectProposalController extends Controller
 {
@@ -15,10 +22,41 @@ class ProjectProposalController extends Controller
 
     }
 
-    public function my_pp()
+    public function pp($slug)
+    {
+        switch($slug) {
+            case 'my':
+                $page = $slug;
+                $breadcrumb = 'My proposals';
+                break;
+            case 'awaiting':
+                $page = $slug;
+                $breadcrumb = 'Awaiting review';
+                break;
+            case 'all':
+                $page = $slug;
+                $breadcrumb = 'Proposals';
+                break;
+        }
+
+        return (new \Statamic\View\View)
+            ->template('pp.index')
+            ->with(['page' => $page, 'breadcrumb' => $breadcrumb])
+            ->layout('mylayout');
+
+    }
+
+    /*public function my_pp()
     {
         return (new \Statamic\View\View)
             ->template('pp.index')
+            ->layout('mylayout');
+    }
+
+    public function awaiting_pp()
+    {
+        return (new \Statamic\View\View)
+            ->template('pp.awaiting_projects')
             ->layout('mylayout');
     }
 
@@ -27,7 +65,7 @@ class ProjectProposalController extends Controller
         return (new \Statamic\View\View)
             ->template('pp.all_projects')
             ->layout('mylayout');
-    }
+    }*/
 
     public function create()
     {
@@ -39,16 +77,112 @@ class ProjectProposalController extends Controller
 
     public function submit(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
+
+        // Finacial officer
+        $fo = SettingsFo::find(1);
+
+        //Retrive authenticated user
+        $user = Auth::user();
+        $pp = new \App\Models\ProjectProposal();
+        $pp->user_id = auth()->id();
+
+        //Retrive name of proposal
+        $pp->name = $request->title;
+        $pp->created = Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp;
+
+        //Initial status
+        $pp->status = 'pending';
+
+        //Formdata
+        $pp->pp = [
+            'title' => $request->title,
+            'objective' => $request->objective,
+            'principal_investigator' => $request->principal_investigator,
+            'co_investigator_name' => $request->coinvestigator_name,
+            'coinvestigator_email' => $request->coinvestigator_email,
+            'research_area' => $request->research_area,
+            'unit_head' => $request->unit_head,
+            'dsvcoordinating' => $request->dsvcoordinating,
+            'other_coordination' => $request->other_coordination,
+            'eu_wallenberg' => $request->eu_wallenberg,
+            'funding_organization' => $request->organization,
+            'program' => $request->program,
+            'decision_exp' => $request->decision_exp,
+            'start_date' => $request->start_date,
+            'submission_deadline' => $request->submission,
+            'project_duration' => $request->duration,
+            'budget_project' => $request->budget_project,
+            'budget_dsv' => $request->budget_dsv,
+            'currency' => $request->currency,
+            'cofinancing_needed' => $request->cofinancing,
+            'other_cofinancing' => $request->other_cofinancing,
+            'oh_cost' => $request->oh_cost,
+            'user_comments' => $request->user_comments,
+            'submitted' => $pp->created,
+            'status' => $pp->status
+        ];
+
+        //Save formdata
+        $pp->save();
+
+        // Find or create Dashboard instance
+        $dashboardData = [
+            'request_id' => $pp->id,
+            'name' => $request->title,
+            'created' => Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp,
+            'status' => 'unread',
+            'type' => 'projectproposal',
+            'user_id' => auth()->id(),
+            'manager_id' => $request->unit_head,
+            'fo_id' => $fo->user_id,
+            'head_id' => $this->getViceHeadUserId(),
+            'vice_id' => $this->getViceHeadUserId()
+        ];
+
+        //Create new dashboard instance
+        $dashboard = Dashboard::where('request_id', $pp->id)->first();
+        if (!$dashboard) {
+            $dashboard = Dashboard::create($dashboardData);
+        } else {
+            $dashboard->update($dashboardData);
+        }
+
+        //Start workflow
+        $workflow = $this->createAndStartWorkflow($dashboard);
+
+        //WorkflowID
+        $this->workflowID = $workflow->id();
+
+        return redirect()->route('my-projects')->with('success', 'Item successfully created!');
+    }
+
+    protected function createAndStartWorkflow($dashboard)
+    {
+        $workflow = WorkflowStub::make(DSVProjectPWorkflow::class);
+        $dashboard->workflow_id = $workflow->id();
+        $dashboard->save();
+        $workflow->start($dashboard);
+        $workflow->submit();
+        return $workflow;
+    }
+
+    private function getViceHeadUserId(): string
+    {
+        return DB::table('role_user')
+            ->where('role_id', 'vice_head')
+            ->value('user_id');
     }
 
     private function prepareProjectProposalData()
     {
         $roleIdsUnitHead = $this->getUserIdsByGroup('enhetschef');
         $unitheads = User::whereIn('id', $roleIdsUnitHead)->get();
+        $research_areas = ResearchArea::all();
 
         return [
             'unitheads' => $unitheads,
+            'research_areas' => $research_areas
         ];
     }
 

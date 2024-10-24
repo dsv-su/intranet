@@ -1,22 +1,22 @@
-@if($proposal->dashboard->state == 'submitted')
+@if($proposal->dashboard->state ?? '' == 'submitted')
     @php
         $state = 'SUBMITTED';
         $bgcolor = 'bg-yellow-100';
         $textcolor = 'text-yellow-800';
     @endphp
-@elseif($proposal->dashboard->state == 'head_approved')
+@elseif($proposal->dashboard->state ?? '' == 'head_approved')
     @php
         $state = 'REVIEW VH';
         $bgcolor = 'bg-purple-100';
         $textcolor = 'text-purple-800';
     @endphp
-@elseif($proposal->dashboard->state == 'vice_approved')
+@elseif($proposal->dashboard->state ?? '' == 'vice_approved')
     @php
         $state = 'REVIEW FO';
         $bgcolor = 'bg-blue-100';
         $textcolor = 'text-blue-800';
     @endphp
-@elseif($proposal->dashboard->state == 'fo_approved')
+@elseif($proposal->dashboard->state ?? '' == 'fo_approved')
     @php
         $state = 'APPROVED';
         $bgcolor = 'bg-yellow-100';

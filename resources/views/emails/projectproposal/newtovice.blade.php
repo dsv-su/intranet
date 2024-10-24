@@ -14,7 +14,7 @@ Here's a quick overview of the request:
 <br><br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
 <br><br>
-<b>ApplicationID:</b> {{$dashboard->request_id}}
+<b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>
 You can conveniently review the details and take necessary action by accessing the request through the following link:
 <br><br>

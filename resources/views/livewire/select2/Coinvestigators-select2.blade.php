@@ -1,6 +1,6 @@
 <div class="w-full sm:col-span-2">
     <!-- Co investigators label -->
-    <label for="coinvestigators" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Co investigators") }}
+    <label for="coinvestigators" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Co-investigators") }}
         <button id="coinvestigators" data-modal-toggle="coinvestigators-modal" class="inline" type="button">
             <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
@@ -14,7 +14,7 @@
                 <!-- Name -->
                 <div class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                     w-full md:w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                    {{$co['displayname'][0] ?? ''}}
+                    {{$co['displayname'][0] ?? 'Name is missing'}}
                 </div>
                 <!-- Email -->
 
@@ -46,7 +46,7 @@
                         w-full md:w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
                placeholder="{{__("Type Name")}}">
         <!-- Email -->
-        <input type="text" wire:model="external_coinvestigators_email"
+        <input type="email" wire:model="external_coinvestigators_email"
                class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                         w-full md:w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
                placeholder="{{__("Type Email")}}">
@@ -84,9 +84,8 @@
                    wire:keydown.arrow-down="incrementHighlight"
                    wire:keydown.enter="selectUser"
                    id="search"
-                   name="search"
-                   class="w-full py-2 pl-10 pr-4 text-black bg-white border border-susecondary focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-500
-                    sm:text-sm rounded-lg placeholder:text-black focus:border-blue-500 dark:bg-gray-900 dark:text-gray-200 dark:placeholder:text-gray-200"
+                   class="w-full py-2 pl-10 pr-4 text-gray-900 bg-white border border-susecondary focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-500
+                    sm:text-sm rounded-lg placeholder:text-gray-900 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-200 dark:placeholder:text-gray-200"
                    placeholder="{{__("Type to add a SUKAT user")}}"
                    type="search">
 
@@ -150,15 +149,15 @@
     <div class="relative flex items-center mt-4">
         <button type="button"
                 wire:click="addExternal"
-                class="w-full py-2 pl-4 pr-10 text-black bg-white border border-susecondary focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-500
-                sm:text-sm rounded-lg placeholder:text-blue-800 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-200 dark:placeholder:text-gray-200 inline-flex items-center">
-            <svg class="ml-3 shrink-0 size-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                class="w-full py-2 pl-3 pr-10 text-gray-900 bg-white border border-susecondary focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-500
+                sm:text-sm rounded-lg placeholder:text-gray-900 focus:border-blue-500 dark:bg-gray-900 dark:text-gray-200 dark:placeholder:text-gray-200 inline-flex items-center">
+            <svg class="shrink-0 size-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor"
                       stroke-linecap="round"
                       stroke-linejoin="round"
                       stroke-width="2" d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
             </svg>
-            <div class="ml-4">
+            <div class="ml-3 text-gray-900">
                 Add external
             </div>
 

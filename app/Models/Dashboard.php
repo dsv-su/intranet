@@ -22,8 +22,8 @@ class Dashboard extends Model
         'user_id',
         'manager_id',
         'fo_id',
-        'head_id'
-
+        'head_id',
+        'vice_id'
     ];
 
     protected $casts = [

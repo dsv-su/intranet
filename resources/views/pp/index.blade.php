@@ -1,23 +1,9 @@
 @extends('layouts.app')
 @section('content')
     @nocache('dsvheader')
-<style>
-    .container {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .container > div {
-        flex: 1;
-        max-width: 300px;
-    }
-</style>
-
-<!-- HEADER -->
+<!-- PP header -->
 @include('pp.partials.header')
-<!-- END HEADER  -->
-
-<!-- content-->
+    
 <div class="-mt-px">
     <!-- Breadcrumb -->
     <div class="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 lg:px-8 dark:bg-neutral-800 dark:border-neutral-700">
@@ -31,7 +17,7 @@
                     </svg>
                 </li>
                 <li class="text-sm font-semibold text-gray-800 truncate dark:text-neutral-400" aria-current="page">
-                    My proposals
+                    {{$breadcrumb}}
                 </li>
             </ol>
             <!-- End Breadcrumb -->
@@ -39,13 +25,31 @@
     </div>
     <!-- End Breadcrumb -->
 </div>
+    <!-- Flash message -->
+    @if (session('success'))
+        <div class="mx-auto max-w-screen-xl mt-4 px-4 lg:px-12">
+            @include('pp.partials.flash_submitted')
+        </div>
 
+    @endif
 <!-- Content -->
 <div class="w-full">
     <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
         <livewire:pp.project-proposal-home />
-        <livewire:pp.my-project-proposal-search />
+        @switch ($page)
+            @case ('my')
+                <livewire:pp.my-project-proposal-search />
+            @break
+            @case ('awaiting')
+                <livewire:pp.awaiting-project-proposal />
+            @break
+            @case ('all')
+                <livewire:pp.all-project-proposal-search />
+            @break
+        @endswitch
+        {{--}}
         <livewire:project-proposal />
+        {{--}}
     </div>
 </div>
 <!-- End Content -->

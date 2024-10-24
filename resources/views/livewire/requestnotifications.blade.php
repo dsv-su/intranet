@@ -2,9 +2,9 @@
     <!-- Notifications for role -->
     @foreach($requests as $request)
         <a @if($request->type == 'travelrequest')
-           href="{{route('travel-request-review', $request->id)}}"
+            href="{{route('travel-request-review', $request->id)}}"
            @else
-           href="#"
+            href="{{route('pp','awaiting')}}"
            @endif
            class="flex py-3 px-4 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">
             <div class="flex-shrink-0 mt-4">
@@ -30,18 +30,30 @@
                          <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">
                     @endif
                             @switch($request->state)
-                                @case('submitted')
-                                {{__("Submitted")}}
-                                @break
-                                @case('manager_approved')
-                                {{__("Approved by manager")}}
-                                @break
-                                @case('fo_approved')
-                                {{__("Approved by FO")}}
-                                @break
-                                @case('head_approved')
-                                {{__("Approved by Unit head")}}
-                                @break
+                                 @case('pending')
+                                 {{__("Pending")}}
+                                 @break
+                                 @case('submitted')
+                                 {{__("Submitted")}}
+                                 @break
+                                 @case('manager_approved')
+                                 {{__("Approved by manager")}}
+                                 @break
+                                 @case('fo_approved')
+                                 {{__("Approved by FO")}}
+                                 @break
+                                 @case('head_approved')
+                                 {{__("Approved by Unit head")}}
+                                 @break
+                                 @case('vice_approved')
+                                 {{__("Approved by Vice head")}}
+                                 @break
+                                 @case('vice_returned')
+                                 {{__("Returned by Vice head")}}
+                                 @break
+                                 @case('vice_denied')
+                                 {{__("Denied by Vice head")}}
+                                 @break
                             @endswitch
                           </span>
 

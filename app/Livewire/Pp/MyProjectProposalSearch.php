@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pp;
 
+use App\Models\Dashboard;
 use App\Models\ProjectProposal;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -20,13 +21,14 @@ class MyProjectProposalSearch extends Component
     public function render()
     {
         $user = Auth::user();
+        //My proposals
         $proposals = ProjectProposal::with('dashboard')
             ->where('user_id', $user->id)
             ->where(function($query) {
                 $query->where('name', 'like', '%'. $this->searchProposal .'%')
                     ->orWhere('pp', 'like', '%'. $this->searchProposal .'%');
             })
-            ->paginate(3);
+            ->paginate(5);
 
         return view('livewire.pp.my-project-proposal-search',
         ['proposals' => $proposals]);

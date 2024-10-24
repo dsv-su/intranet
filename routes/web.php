@@ -3,6 +3,7 @@
 use App\Http\Controllers\FOController;
 use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\SystemController;
+use App\Http\Controllers\TestController;
 use App\Services\Settings\AuthHandler;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TravelRequestController;
@@ -54,8 +55,14 @@ Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListControlle
 Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'swelist'])->name('swelist');
 
 //Project Proposals
+Route::get('/pp/{slug}', [\App\Http\Controllers\ProjectProposalController::class, 'pp'])->name('pp');
+/*
 Route::get('/my_pp', [\App\Http\Controllers\ProjectProposalController::class, 'my_pp'])->name('my-projects');
-Route::get('/all_pp', [\App\Http\Controllers\ProjectProposalController::class, 'all_pp'])->name('all-projects');
+Route::get('/awaiting_pp', [\App\Http\Controllers\ProjectProposalController::class, 'awaiting_pp'])->name('awaiting-projects');
+Route::get('/all_pp', [\App\Http\Controllers\ProjectProposalController::class, 'all_pp'])->name('all-projects');*/
 Route::get('/create_pp', [\App\Http\Controllers\ProjectProposalController::class, 'create'])->name('create-project');
 Route::post('/submit_pp', [\App\Http\Controllers\ProjectProposalController::class, 'submit'])->name('pp-submit');
+
+//Test
+Route::get('/test', [TestController::class, 'test'])->name('test');
 

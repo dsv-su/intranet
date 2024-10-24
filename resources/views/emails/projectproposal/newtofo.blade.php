@@ -12,7 +12,7 @@ Here's a quick overview of the request:
 <br><br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
 <br><br>
-<b>ApplicationID:</b> {{$dashboard->request_id}}
+<b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>
 <b>Approved by vice head:</b> {{$dashboard->updated_at}}
 <br><br>

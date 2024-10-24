@@ -4,32 +4,16 @@ namespace App\Livewire\Pp;
 
 use App\Models\Dashboard;
 use App\Models\ProjectProposal;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class ProjectProposalHome extends Component
+class AwaitingProjectProposal extends Component
 {
-    public $proposals;
-    public $myproposals;
-    public $awaiting;
-
-    public function mount(ProjectProposal $proposals)
+    public function render()
     {
-        $this->proposals = $proposals;
+        //Awaiting proposals
         $user = Auth::user();
-        $this->my($user);
-        $this->awaiting($user);
-    }
-
-    public function my($user)
-    {
-        $this->myproposals = $this->proposals::where('user_id', $user->id)->get();
-    }
-
-    public function awaiting($user)
-    {
-        $this->awaiting = Dashboard::where('type', 'projectproposal')
+        $awaitingDashboard = Dashboard::where('type', 'projectproposal')
             ->where(function ($query) use ($user) {
                 $query->where('state', 'submitted')
                     ->where('head_id', $user->id)
@@ -41,17 +25,12 @@ class ProjectProposalHome extends Component
                             ->where('fo_id', $user->id);
                     });
             })
-            ->count();
+            ->pluck('request_id');
 
-    }
+        $proposals = ProjectProposal::with('dashboard')
+            ->whereIn('id', $awaitingDashboard)->get();
 
-    public function allproposals()
-    {
-        $this->dispatch('allproposals');
-    }
-
-    public function render()
-    {
-        return view('livewire.pp.project-proposal-home');
+        return view('livewire.pp.awaiting-project-proposal',
+        ['proposals' => $proposals]);
     }
 }
