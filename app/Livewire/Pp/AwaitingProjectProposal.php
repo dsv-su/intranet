@@ -9,6 +9,8 @@ use Livewire\Component;
 
 class AwaitingProjectProposal extends Component
 {
+    public $review = false;
+
     public function render()
     {
         //Awaiting proposals
@@ -29,6 +31,7 @@ class AwaitingProjectProposal extends Component
 
         $proposals = ProjectProposal::with('dashboard')
             ->whereIn('id', $awaitingDashboard)->get();
+        $this->review = true;
 
         return view('livewire.pp.awaiting-project-proposal',
         ['proposals' => $proposals]);

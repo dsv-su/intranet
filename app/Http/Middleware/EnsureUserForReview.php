@@ -23,12 +23,23 @@ class EnsureUserForReview
 
         $id = basename($request->path());
         $user = User::current();
-        $dashboard = Dashboard::find($id);
+        if(!$dashboard = Dashboard::find($id)) {
+            $dashboard = Dashboard::where('request_id',$id)->first();
+        }
 
         switch($dashboard->state) {
             case('submitted'):
-                if($user->id == $dashboard->manager_id) {
-                    return $next($request);
+                switch($dashboard->type) {
+                    case('travelrequest'):
+                        if($user->id == $dashboard->manager_id) {
+                            return $next($request);
+                        }
+                        break;
+                    case('projectproposal'):
+                        if($user->id == $dashboard->head_id) {
+                            return $next($request);
+                        }
+                        break;
                 }
                 break;
             case('manager_approved'):
@@ -37,6 +48,20 @@ class EnsureUserForReview
                 }
                 break;
             case('head_approved'):
+                switch($dashboard->type) {
+                    case('travelrequest'):
+                        if($user->id == $dashboard->fo_id) {
+                            return $next($request);
+                        }
+                        break;
+                    case('projectpropsal'):
+                        if($user->id == $dashboard->vice_id) {
+                            return $next($request);
+                        }
+                        break;
+                }
+                break;
+            case('vice_approved'):
                 if($user->id == $dashboard->fo_id) {
                     return $next($request);
                 }

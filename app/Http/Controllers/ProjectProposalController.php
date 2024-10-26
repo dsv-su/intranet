@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dashboard;
+use App\Models\ProjectProposal;
 use App\Models\ResearchArea;
 use App\Models\SettingsFo;
 use App\Models\User;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Statamic\View\View;
 use Workflow\WorkflowStub;
 
@@ -19,7 +21,6 @@ class ProjectProposalController extends Controller
     public function __construct()
     {
         $this->middleware(['web', 'auth', 'dsv']);
-
     }
 
     public function pp($slug)
@@ -46,26 +47,20 @@ class ProjectProposalController extends Controller
 
     }
 
-    /*public function my_pp()
+    public function decision(Request $request)
     {
-        return (new \Statamic\View\View)
-            ->template('pp.index')
-            ->layout('mylayout');
-    }
+        dd($request->all());
+        ProjectProposal::where('id', $request->id)
+            ->update(['pp->user_comments' =>
+                Str::of('New Comment')->newLine()->append($request->comment)
+            ]);
 
-    public function awaiting_pp()
-    {
-        return (new \Statamic\View\View)
-            ->template('pp.awaiting_projects')
-            ->layout('mylayout');
-    }
 
-    public function all_pp()
-    {
-        return (new \Statamic\View\View)
-            ->template('pp.all_projects')
-            ->layout('mylayout');
-    }*/
+        return redirect()->back();
+
+
+
+    }
 
     public function create()
     {
@@ -99,8 +94,9 @@ class ProjectProposalController extends Controller
             'title' => $request->title,
             'objective' => $request->objective,
             'principal_investigator' => $request->principal_investigator,
+            'principal_investigator_email' => $request->principal_investigator_email,
             'co_investigator_name' => $request->coinvestigator_name,
-            'coinvestigator_email' => $request->coinvestigator_email,
+            'co_investigator_email' => $request->coinvestigator_email,
             'research_area' => $request->research_area,
             'unit_head' => $request->unit_head,
             'dsvcoordinating' => $request->dsvcoordinating,
@@ -154,7 +150,7 @@ class ProjectProposalController extends Controller
         //WorkflowID
         $this->workflowID = $workflow->id();
 
-        return redirect()->route('my-projects')->with('success', 'Item successfully created!');
+        return redirect()->route('pp', 'my')->with('success', 'Item successfully created!');
     }
 
     protected function createAndStartWorkflow($dashboard)

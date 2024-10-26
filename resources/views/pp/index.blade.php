@@ -3,7 +3,7 @@
     @nocache('dsvheader')
 <!-- PP header -->
 @include('pp.partials.header')
-    
+
 <div class="-mt-px">
     <!-- Breadcrumb -->
     <div class="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 lg:px-8 dark:bg-neutral-800 dark:border-neutral-700">
@@ -34,7 +34,7 @@
     @endif
 <!-- Content -->
 <div class="w-full">
-    <div class="p-4 sm:p-6 space-y-4 sm:space-y-6">
+    <div class="p-2 sm:p-4 space-y-2 sm:space-y-4">
         <livewire:pp.project-proposal-home />
         @switch ($page)
             @case ('my')

@@ -11,22 +11,20 @@
     <!-- Flex container to align radio and input -->
     <div class="flex items-center gap-2">
         <label for="cofinancing" class="flex items-center p-2 bg-white border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 w-1/3">
-            <input type="checkbox" wire:click="cofinancing" name="cofinancing" value="yes"
+            <input type="checkbox"
                    class="shrink-0 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                   id="cofinancing">
+                   @if($proposal['pp']['cofinancing_needed'] == 'yes') checked="" @endif readonly>
             <span class="text-sm text-gray-500 ml-3 dark:text-neutral-400">Yes</span>
         </label>
 
         <!-- Inline text input next to radio -->
-        @if($visibility)
-        <input type="text" name="other_cofinancing" id="other_cofinancing"
-               class="@if($visibility) block @else hidden @endif flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
+        @if($proposal['pp']['cofinancing_needed'] == 'yes')
+            <input type="text" name="other_cofinancing" id="other_cofinancing"
+                   class="@if($proposal['pp']['cofinancing_needed'] == 'yes') block @else hidden @endif flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                        p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-               value="{{ old('other_cofinancing') ? old('other_cofinancing'): $proposal->other_cofinancing ??  '' }}"
-               placeholder="Covered by" required>
+                   value="{{ old('other_cofinancing') ? old('other_cofinancing'): $proposal['pp']['other_cofinancing'] ??  '' }}"
+                   placeholder="Covered by" required>
         @endif
     </div>
 </div>
-
-
 

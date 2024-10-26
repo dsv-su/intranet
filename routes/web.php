@@ -56,13 +56,10 @@ Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListControlle
 
 //Project Proposals
 Route::get('/pp/{slug}', [\App\Http\Controllers\ProjectProposalController::class, 'pp'])->name('pp');
-/*
-Route::get('/my_pp', [\App\Http\Controllers\ProjectProposalController::class, 'my_pp'])->name('my-projects');
-Route::get('/awaiting_pp', [\App\Http\Controllers\ProjectProposalController::class, 'awaiting_pp'])->name('awaiting-projects');
-Route::get('/all_pp', [\App\Http\Controllers\ProjectProposalController::class, 'all_pp'])->name('all-projects');*/
 Route::get('/create_pp', [\App\Http\Controllers\ProjectProposalController::class, 'create'])->name('create-project');
 Route::post('/submit_pp', [\App\Http\Controllers\ProjectProposalController::class, 'submit'])->name('pp-submit');
-
+Route::get('/pp/review/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_show'])->name('pp-review');
+Route::post('/pp/decision', [\App\Http\Controllers\ProjectProposalController::class, 'decision'])->name('pp-decision');
 //Test
 Route::get('/test', [TestController::class, 'test'])->name('test');
 
