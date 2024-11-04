@@ -12,6 +12,8 @@ class AllProjectProposalSearch extends Component
     use WithPagination;
 
     public string $searchProposal = "";
+    public $review = false;
+    public $resume = false;
 
     protected $listeners = [
         'pp-update' => '$refresh'

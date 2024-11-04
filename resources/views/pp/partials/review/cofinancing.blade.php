@@ -11,10 +11,10 @@
     <!-- Flex container to align radio and input -->
     <div class="flex items-center gap-2">
         <label for="cofinancing" class="flex items-center p-2 bg-white border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 w-1/3">
-            <input type="checkbox"
+            <input type="radio"
                    class="shrink-0 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                   @if($proposal['pp']['cofinancing_needed'] == 'yes') checked="" @endif readonly>
-            <span class="text-sm text-gray-500 ml-3 dark:text-neutral-400">Yes</span>
+                    checked disabled>
+            <span class="text-sm text-gray-500 ml-3 dark:text-neutral-400">@if($proposal['pp']['cofinancing_needed'] == 'yes') Yes @else No @endif</span>
         </label>
 
         <!-- Inline text input next to radio -->

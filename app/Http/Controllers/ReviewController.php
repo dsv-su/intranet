@@ -18,10 +18,20 @@ class ReviewController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('review');
+        $this->middleware('review')->except(['pp_view']);
     }
 
-    public function pp_show($id)
+    public function pp_view($id)
+    {
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['proposal'] = ProjectProposal::find($id);
+
+        $viewData['type'] = 'view';
+        //dd($viewData);
+        return $this->createView('pp.create', 'mylayout', $viewData);
+    }
+
+    public function pp_review($id)
     {
         $viewData = $this->prepareProjectProposalData();
         $viewData['proposal'] = ProjectProposal::find($id);

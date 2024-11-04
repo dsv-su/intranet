@@ -27,7 +27,7 @@ class EnsureUserForReview
             $dashboard = Dashboard::where('request_id',$id)->first();
         }
 
-        switch($dashboard->state) {
+        switch( (string) $dashboard->state ) {
             case('submitted'):
                 switch($dashboard->type) {
                     case('travelrequest'):
@@ -54,7 +54,7 @@ class EnsureUserForReview
                             return $next($request);
                         }
                         break;
-                    case('projectpropsal'):
+                    case('projectproposal'):
                         if($user->id == $dashboard->vice_id) {
                             return $next($request);
                         }

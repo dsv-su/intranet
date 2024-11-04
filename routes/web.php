@@ -58,7 +58,8 @@ Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListControlle
 Route::get('/pp/{slug}', [\App\Http\Controllers\ProjectProposalController::class, 'pp'])->name('pp');
 Route::get('/create_pp', [\App\Http\Controllers\ProjectProposalController::class, 'create'])->name('create-project');
 Route::post('/submit_pp', [\App\Http\Controllers\ProjectProposalController::class, 'submit'])->name('pp-submit');
-Route::get('/pp/review/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_show'])->name('pp-review');
+Route::get('/pp/view/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_view'])->name('pp-view');
+Route::get('/pp/review/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_review'])->name('pp-review');
 Route::post('/pp/decision', [\App\Http\Controllers\ProjectProposalController::class, 'decision'])->name('pp-decision');
 //Test
 Route::get('/test', [TestController::class, 'test'])->name('test');

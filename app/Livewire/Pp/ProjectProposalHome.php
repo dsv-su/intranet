@@ -22,6 +22,12 @@ class ProjectProposalHome extends Component
         $this->awaiting($user);
     }
 
+    public function hydrate()
+    {
+        $user = Auth::user();
+        $this->awaiting($user);
+    }
+
     public function my($user)
     {
         $this->myproposals = $this->proposals::where('user_id', $user->id)->get();

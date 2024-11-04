@@ -7,6 +7,8 @@ use App\Models\ProjectProposal;
 use App\Models\ResearchArea;
 use App\Models\SettingsFo;
 use App\Models\User;
+use App\Services\Review\DashboardRole;
+use App\Services\Review\WorkflowHandler;
 use App\Workflows\DSVProjectPWorkflow;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -44,22 +46,61 @@ class ProjectProposalController extends Controller
             ->template('pp.index')
             ->with(['page' => $page, 'breadcrumb' => $breadcrumb])
             ->layout('mylayout');
-
     }
 
     public function decision(Request $request)
     {
-        dd($request->all());
-        ProjectProposal::where('id', $request->id)
-            ->update(['pp->user_comments' =>
-                Str::of('New Comment')->newLine()->append($request->comment)
-            ]);
+        //Update comments
+        $this->comments_update($request->id, $request->comment);
 
+        //Trigger signal
+        $dashboard = Dashboard::where('request_id', $request->id)->first();
+        $role = new DashboardRole($dashboard, $user = auth()->user());
+        $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
 
-        return redirect()->back();
+        switch($request->decision) {
+            case 'approve':
+                switch($role->check()) {
+                    case 'head':
+                        $workflowhandler->HeadApprove();
+                        break;
+                    case 'vice':
+                        $workflowhandler->ViceApprove();
+                        break;
+                    case 'fo':
+                        $workflowhandler->FOApprove();
+                        break;
+                }
+                break;
+            case 'deny':
+                switch($role->check()) {
+                    case 'head':
+                        $workflowhandler->HeadDeny();
+                        break;
+                    case 'vice':
+                        $workflowhandler->ViceDeny();
+                        break;
+                    case 'fo':
+                        $workflowhandler->FODeny();
+                        break;
+                }
+                break;
+            case 'return':
+                switch($role->check()) {
+                    case 'head':
+                        $workflowhandler->HeadReturn();
+                        break;
+                    case 'vice':
+                        $workflowhandler->ViceReturn();
+                        break;
+                    case 'fo':
+                        $workflowhandler->FOReturn();
+                        break;
+                }
+                break;
+        }
 
-
-
+        return redirect()->route('pp', ['slug' =>'awaiting']);
     }
 
     public function create()
@@ -132,7 +173,7 @@ class ProjectProposalController extends Controller
             'user_id' => auth()->id(),
             'manager_id' => $request->unit_head,
             'fo_id' => $fo->user_id,
-            'head_id' => $this->getViceHeadUserId(),
+            'head_id' => $request->unit_head,
             'vice_id' => $this->getViceHeadUserId()
         ];
 
@@ -151,6 +192,26 @@ class ProjectProposalController extends Controller
         $this->workflowID = $workflow->id();
 
         return redirect()->route('pp', 'my')->with('success', 'Item successfully created!');
+    }
+
+    protected function comments_update($id, $comment)
+    {
+        //Proposal user comments
+        $proposal = ProjectProposal::find($id);
+        $user_comments = $proposal->pp['user_comments'];
+
+        //Timestamp
+        $timestamp = now()->format('d/m/Y');
+        $user = auth()->user()->name;
+        $tag = '***';
+        $comments_tag = $tag . '  ' . $user . '  ' . $timestamp . '  ' . $tag;
+
+        //Merge with reviewer comments
+
+        return ProjectProposal::where('id', $id)
+            ->update(['pp->user_comments' =>
+                Str::of($user_comments . $comments_tag)->newLine()->append($comment)->newLine()->newLine()
+            ]);
     }
 
     protected function createAndStartWorkflow($dashboard)

@@ -146,13 +146,35 @@ class DSVProjectPWorkflow extends Workflow
                 return $this->stateMachine->state->status();
         }
 
-
-
         //Request has been approved by head and vice
         //Email to FO
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::FINACIAL_OFFICER, $userRequest);
 
+        //Wait for FO decision
+        yield WorkflowStub::await(fn () => ($this->FOApproved() || $this->FODenied() || $this->FOReturned()));
 
+        //Handle FO decision
+        $newState = $this->getState();
+
+        switch ($newState) {
+            case RequestStates::FO_APPROVED:
+                //Request has been approved by FO
+
+                //Notify
+                //TODO
+
+                break;
+            case RequestStates::FO_RETURNED:
+
+                //End workflow
+                return $this->stateMachine->state->status();
+
+            case RequestStates::FO_DENIED:
+                //Request has been returned or denied by FO
+
+                //End workflow
+                return $this->stateMachine->state->status();
+        }
 
         //End workflow
         return $this->stateMachine->state->status();

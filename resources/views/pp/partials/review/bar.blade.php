@@ -21,19 +21,19 @@
                 <span class="text-sm dark:text-gray-400 group-hover:text-white">{{ __("Cancel") }}</span>
             </a>
 
-            <button type="submit" name="decicion" value="deny"
+            <button type="submit" name="decision" value="deny"
                     class="inline-flex items-center justify-center px-5 py-2 text-red-600 font-semibold border border-red-600
                        rounded hover:bg-red-600 hover:text-white dark:hover:bg-gray-800 dark:border-gray-600 group">
                 <span class="text-sm dark:text-gray-400 group-hover:text-white">{{ __("Deny") }}</span>
             </button>
 
-            <button type="submit" name="decicion" value="return"
+            <button type="submit" name="decision" value="return"
                     class="inline-flex items-center justify-center px-5 py-2 font-semibold text-yellow-400 border border-yellow-400
                        rounded hover:bg-yellow-400 hover:text-white dark:hover:bg-gray-800 dark:border-gray-600 group">
                 <span class="text-sm dark:text-gray-400 group-hover:text-white">{{ __("Return") }}</span>
             </button>
 
-            <button type="submit" name="decicion" value="approve"
+            <button type="submit" name="decision" value="approve"
                     class="inline-flex items-center justify-center px-5 py-2 text-blue-700 font-semibold border border-blue-500
                        rounded hover:bg-blue-500 hover:text-white dark:hover:bg-gray-800 dark:border-gray-600 group">
                 <span class="text-sm dark:text-gray-400 group-hover:text-white">{{ __("Approve") }}</span>

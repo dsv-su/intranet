@@ -5,7 +5,7 @@
     <section class="bg-white dark:bg-gray-900">
         <div class="max-w-2xl px-4 py-8 mx-auto lg:py-16">
             <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                @if($type == 'review')
+                @if($type == 'review' or $type == 'view')
                     {{ __("Review:") }} {{$proposal['name']}}
                 @else
                 {{ __("Create a Project proposal") }}
@@ -32,7 +32,7 @@
                         <input type="text" name="title" id="project"
                                class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                         block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                               value="{{ old('title') ? old('title'): $proposal['pp']['title'] ??  '' }}" placeholder="Title" required="">
+                               value="{{ old('title') ? old('title'): $proposal['pp']['title'] ??  '' }}" placeholder="Title" @if($type == 'create' or $type == 'resume') required=""  @else readonly @endif>
                         @error('name')
                         <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}} </p>
                         @enderror
@@ -49,7 +49,7 @@
                         <textarea id="objective" rows="4" name="objective"
                                   class="@error('objective') border-red-500 @enderror font-mono block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300
                                   focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                  placeholder="{{__("Short description")}}" required>{{ old('objective') ? old('objective'): $proposal['pp']['objective'] ?? '' }}</textarea>
+                                  placeholder="{{__("Short description")}}" @if($type == 'create' or $type == 'resume') required="" @else readonly @endif>{{ old('objective') ? old('objective'): $proposal['pp']['objective'] ?? '' }}</textarea>
                         @error('objective')
                         <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}}</p>
                         @enderror
@@ -180,7 +180,7 @@
                         <input type="text" name="program" id="program"
                                class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                         block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                               value="{{ old('program') ? old('program'): $proposal['pp']['program'] ??  '' }}" placeholder="Link">
+                               value="{{ old('program') ? old('program'): $proposal['pp']['program'] ??  '' }}" placeholder="Link" @if($type == 'review' or $type == 'view') readonly @endif>
                     </div>
                     <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
                         Project dates
@@ -358,7 +358,7 @@
                                        @if($type == 'create' or $type == 'resume')
                                        checked="" required
                                        @else disabled @endif
-                                       @if($type == 'review')
+                                       @if($type == 'review' or $type == 'view')
                                         @if($proposal['pp']['currency'] == 'sek') checked="" @endif
                                         @endif >
                                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">SEK</span>
@@ -370,7 +370,7 @@
                                        id="currency"
                                        @if($type == 'create' or $type == 'resume')
                                        required @else disabled @endif
-                                       @if($type == 'review')
+                                       @if($type == 'review' or $type == 'view')
                                         @if($proposal['pp']['currency'] == 'us') checked="" @endif
                                        @endif >
                                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">$</span>
@@ -382,7 +382,7 @@
                                        id="currency"
                                        @if($type == 'create' or $type == 'resume')
                                        required @else disabled @endif
-                                       @if($type == 'review')
+                                       @if($type == 'review' or $type == 'view')
                                         @if($proposal['pp']['currency'] == 'euro') checked="" @endif
                                        @endif >
                                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">€</span>
@@ -422,7 +422,7 @@
                         </div>
                     </div>
                     <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
-                        Initial comments
+                        Comments
                     </div>
                     <!-- Initial comments -->
                     <div class="sm:col-span-2">
@@ -435,13 +435,11 @@
                         </label>
                         <textarea id="user_comments" rows="4" name="user_comments"
                                   class="font-mono block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300
-                                  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                  placeholder="{{__("Your comments")}}" @if($type == 'review') readonly @endif>{{ old('user_comments') ? old('user_comments'): $proposal['pp']['user_comments'] ?? '' }}</textarea>
+                                    focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                  placeholder="{{__("Your comments")}}" @if($type == 'review' or $type == 'view') readonly @endif>{{ old('user_comments') ? old('user_comments'): $proposal['pp']['user_comments'] ?? '' }}</textarea>
                     </div>
+                </div>
 
-
-
-                </div> <!-- end form -->
                 @if($type == 'create' or $type == 'resume')
                     <!-- Submit buttons -->
                     <div class="flex flex-col sm:flex-row gap-3">
@@ -464,12 +462,29 @@
                         </button>
                     </div>
                 @endif
-            </form>
+            </form> <!-- end form -->
+
             @if($type == 'review')
                 @include('pp.partials.review.bar')
             @endif
+
         </div>
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('user_comments');
+
+            const autoResize = () => {
+                textarea.style.height = 'auto'; // Reset the height to auto to calculate the new height
+                textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to the scroll height
+            };
+
+            textarea.addEventListener('input', autoResize);
+            autoResize(); // Call once on page load to set the initial height
+        });
+    </script>
+
 
     <!-- Modals -->
     @include('pp.modals.pp_help')

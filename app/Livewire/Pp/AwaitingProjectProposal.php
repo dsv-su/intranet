@@ -10,6 +10,7 @@ use Livewire\Component;
 class AwaitingProjectProposal extends Component
 {
     public $review = false;
+    public $resume = false;
 
     public function render()
     {
