@@ -1,6 +1,6 @@
 <div wire:poll.keep-alive>
     @foreach($user_requests as $user_request)
-        <a @if($user_request->type == 'travelrequest')
+        <a wire:key="{{$user_request->id}}" @if($user_request->type == 'travelrequest')
                 href="{{route('travel-request-show', $user_request->id)}}"
            @else
                 href="{{route('pp', 'my')}}"

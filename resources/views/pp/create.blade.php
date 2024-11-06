@@ -440,6 +440,13 @@
                     </div>
                 </div>
 
+                <!-- Upload component -->
+
+
+                    <livewire:pp.proposal-uploader />
+
+
+
                 @if($type == 'create' or $type == 'resume')
                     <!-- Submit buttons -->
                     <div class="flex flex-col sm:flex-row gap-3">

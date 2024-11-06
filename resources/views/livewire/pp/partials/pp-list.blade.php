@@ -29,15 +29,19 @@
                         </div>
                         <!-- Right side (State label) -->
                         <div class="w-full md:w-auto flex-shrink-0 ml-auto">
-                            <!--TODO-->
-
+                            <!-- Stage 1-->
                             @nocache('livewire.pp.partials.state')
-
+                            <!-- Stage 2 -->
                             @if($proposal->pp['status'] ?? false)
                                 <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
                                     {{ $proposal->pp['status'] }}
                                 </span>
                             @endif
+                            <!-- Stage 3 -->
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                                    {{ $proposal->pp['status'] }}
+                            </span>
+
                         </div>
                     </div>
                     <svg class="w-4 h-4 duration-200 ease-out" :class="{ 'rotate-180': activeAccordion==id }" viewBox="0 0 24 24"
@@ -145,24 +149,43 @@
                             </div>
 
                             <!-- Right aligned content -->
-                            <div class="flex flex-col items-end mt-4 md:mt-0">
+                            <div class="flex flex-col items-end mt-4 md:mt-0 w-full md:w-1/5">
                                 <!-- OK from UH -->
-                                <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
-                                    <span class="font-semibold">Unit head:</span> [N/A]
+                                <p class="text-xs text-gray-600 dark:text-neutral-400 text-right inline-flex items-center space-x-2">
+                                    <span class="font-semibold">Unit head:</span>
+                                    @if(in_array((string) $proposal->dashboard->state, ['head_approved', 'vice_approved', 'fo_approved']))
+                                        <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
+                                    @else
+                                        <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Processing</span>
+                                    @endif
                                 </p>
-                                <!-- OK from DSV economy -->
-                                <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
-                                    <span class="font-semibold">Economy:</span> [N/A]
-                                </p>
+
                                 <!-- OK from vice head -->
-                                <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
-                                    <span class="font-semibold">Vice head:</span> [N/A]
+                                <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
+                                    <span class="font-semibold">Vice head:</span>
+                                    @if(in_array((string) $proposal->dashboard->state, ['vice_approved', 'fo_approved']))
+                                        <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
+                                    @else
+                                        <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Processing</span>
+                                    @endif
                                 </p>
+
+                                <!-- OK from DSV economy -->
+                                <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
+                                    <span class="font-semibold">Economy:</span>
+                                    @if(in_array((string) $proposal->dashboard->state, ['fo_approved']))
+                                        <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
+                                    @else
+                                        <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Processing</span>
+                                    @endif
+                                </p>
+
                                 <!-- Final submission -->
-                                <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
-                                    <span class="font-semibold">Final submisson:</span> [N/A]
+                                <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
+                                    <span class="font-semibold">Final submission:</span> [N/A]
                                 </p>
                             </div>
+
                         </div>
                     </div>
                 </div>
