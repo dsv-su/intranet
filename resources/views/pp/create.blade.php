@@ -441,7 +441,7 @@
                 </div>
 
                 <!-- Upload component -->
-
+                {{--}}
                 @if($upload ?? false)
                     <div class="sm:col-span-2">
                         <label for="upload" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Proposal attachments") }}
@@ -454,7 +454,8 @@
                     </div>
                 <livewire:pp.proposal-uploader />
                 @endif
-
+                {{--}}
+                @include('pp.partials.test')
 
                 @if($type == 'create' or $type == 'resume')
                     <!-- Submit buttons -->
@@ -488,6 +489,7 @@
     </section>
 
     <script>
+        /* Textarea autosize */
         document.addEventListener('DOMContentLoaded', function() {
             const textarea = document.getElementById('user_comments');
 
