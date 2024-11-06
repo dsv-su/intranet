@@ -17,7 +17,9 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('name');
             $table->integer('created');
-            $table->string('status');
+            $table->string('status_stage1');
+            $table->string('status_stage2');
+            $table->string('status_stage3');
             $table->json('pp')->nullable();
             $table->timestamps();
         });

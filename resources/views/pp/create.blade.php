@@ -442,9 +442,9 @@
 
                 <!-- Upload component -->
 
-
-                    <livewire:pp.proposal-uploader />
-
+                {{--}}
+                <livewire:pp.proposal-uploader />
+                {{--}}
 
 
                 @if($type == 'create' or $type == 'resume')

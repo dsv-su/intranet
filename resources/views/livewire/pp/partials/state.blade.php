@@ -43,5 +43,5 @@
         @break
 @endswitch
 <span class="{{$bgcolor}} {{$textcolor}} text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-    {{ $state }} / {{ (string) $proposal->dashboard->state }}
+    {{ $state }}
 </span>

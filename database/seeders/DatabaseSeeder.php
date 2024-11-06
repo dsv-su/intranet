@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
         Model::unguard(); // Disable mass assignment
         $this->call(ProjectImportSeeder::class);
         $this->call(DailyAllowanceSeeder::class);
+        $this->call(FundingOrganizationSeeder::class);
+        $this->call(ResearchAreaSeeder::class);
         Model::reguard(); // Enable mass assignment
 
     }

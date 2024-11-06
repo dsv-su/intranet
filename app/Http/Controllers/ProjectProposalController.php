@@ -128,7 +128,9 @@ class ProjectProposalController extends Controller
         $pp->created = Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp;
 
         //Initial status
-        $pp->status = 'pending';
+        $pp->status_stage1 = 'pending';
+        $pp->status_stage2 = 'pending';
+        $pp->status_stage3 = 'pending';
 
         //Formdata
         $pp->pp = [

@@ -29,18 +29,16 @@
                         </div>
                         <!-- Right side (State label) -->
                         <div class="w-full md:w-auto flex-shrink-0 ml-auto">
+
                             <!-- Stage 1-->
                             @nocache('livewire.pp.partials.state')
+
                             <!-- Stage 2 -->
-                            @if($proposal->pp['status'] ?? false)
-                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-                                    {{ $proposal->pp['status'] }}
-                                </span>
-                            @endif
+                            @nocache('livewire.pp.partials.stage2_state')
+
                             <!-- Stage 3 -->
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-                                    {{ $proposal->pp['status'] }}
-                            </span>
+                            @nocache('livewire.pp.partials.stage3_state')
+
 
                         </div>
                     </div>
@@ -182,7 +180,10 @@
 
                                 <!-- Final submission -->
                                 <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
-                                    <span class="font-semibold">Final submission:</span> [N/A]
+                                    <span class="font-semibold">Final submission:</span>
+                                    <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[N/A]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </span>
                                 </p>
                             </div>
 
