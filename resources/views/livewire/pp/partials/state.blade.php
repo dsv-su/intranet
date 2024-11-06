@@ -30,8 +30,8 @@
     @case('fo_approved')
         @php
             $state = 'APPROVED';
-            $bgcolor = 'bg-yellow-100';
-            $textcolor = 'text-yellow-800';
+            $bgcolor = 'bg-green-100';
+            $textcolor = 'text-green-800';
         @endphp
         @break
     @default

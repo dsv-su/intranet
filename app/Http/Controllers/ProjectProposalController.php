@@ -111,6 +111,16 @@ class ProjectProposalController extends Controller
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
+    public function upload($id)
+    {
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['proposal'] = ProjectProposal::find($id);
+        $viewData['type'] = 'view';
+        $viewData['upload'] = true;
+        //dd($viewData);
+        return $this->createView('pp.create', 'mylayout', $viewData);
+    }
+
     public function submit(Request $request)
     {
         //dd($request->all());
@@ -200,7 +210,7 @@ class ProjectProposalController extends Controller
     {
         //Proposal user comments
         $proposal = ProjectProposal::find($id);
-        $user_comments = $proposal->pp['user_comments'];
+        $user_comments = $proposal->pp['user_comments']. "\n";
 
         //Timestamp
         $timestamp = now()->format('d/m/Y');
@@ -212,7 +222,7 @@ class ProjectProposalController extends Controller
 
         return ProjectProposal::where('id', $id)
             ->update(['pp->user_comments' =>
-                Str::of($user_comments . $comments_tag)->newLine()->append($comment)->newLine()->newLine()
+                Str::of($user_comments . $comments_tag)->newLine()->append($comment)->newLine()
             ]);
     }
 

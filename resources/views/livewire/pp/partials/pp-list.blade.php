@@ -105,14 +105,14 @@
                                 </p>
 
                                 <!-- Button group with spacing and rounded corners -->
-                                <div class="inline-flex space-x-2 rounded-md shadow-sm" role="group">
+
+                                <div class="opacity-100 inline-flex space-x-2 rounded-md shadow-sm" role="group">
                                     @if($review ?? false)
                                         <a type="button"
                                            href="{{route('pp-review', $proposal->id)}}"
-                                           class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
-                                            <svg class="w-3 h-3 me-2 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
-                                            </svg>
+                                           class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-transparent border border-blue-600 hover:border-blue-500
+                                           over:text-blue-500 focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
+                                           dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
                                             Review
                                         </a>
                                     @endif
@@ -124,32 +124,34 @@
                                         Resume
                                     </button>
                                     @endif
-                                    {{--}}
-                                    <button type="button"
-                                       class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
-                                        <svg class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z"/>
-                                            <path d="M18 12h-2.55l-2.975 2.975a3.5 3.5 0 0 1-4.95 0L4.55 12H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Zm-3 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>
-                                        </svg>
-                                        Download
-                                    </button>
-                                    {{--}}
+
                                     <a type="button"
                                        href="{{route('pp-view', $proposal->id)}}"
-                                       class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
+                                       class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
+                                       focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
+                                       dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
 
                                         View
                                     </a>
-
+                                    @if($proposal->status_stage1 == 'approved' ?? false)
+                                        <a type="button"
+                                           href="{{route('pp-upload', $proposal->id)}}"
+                                           class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
+                                       focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
+                                       dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
+                                            Upload
+                                        </a>
+                                   @endif
                                 </div>
                                 <!-- End button group -->
+
 
                             </div>
 
                             <!-- Right aligned content -->
-                            <div class="flex flex-col items-end mt-4 md:mt-0 w-full md:w-1/5">
+                            <div class="flex flex-col items-end mt-4 md:mt-0 w-full md:w-1/4">
                                 <!-- OK from UH -->
-                                <p class="text-xs text-gray-600 dark:text-neutral-400 text-right inline-flex items-center space-x-2">
+                                <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
                                     <span class="font-semibold">Unit head:</span>
                                     @if(in_array((string) $proposal->dashboard->state, ['head_approved', 'vice_approved', 'fo_approved']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
@@ -182,8 +184,27 @@
                                 <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
                                     <span class="font-semibold">Final submission:</span>
                                     <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[N/A]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;Not sent&nbsp;&nbsp;
                                     </span>
+                                </p>
+                                <!-- Decision expected -->
+                                <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
+                                    <span class="font-semibold">Decision expected:</span>
+                                    <span class="me-1.5 px-1 text-[0.65rem] text-black">{{$proposal->pp['decision_exp']}}</span>
+                                </p>
+                                <!-- Start date expected -->
+                                <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
+                                    <span class="font-semibold">Start date expected:</span>
+                                    <span class="me-1.5 px-1 text-[0.65rem] text-black">{{$proposal->pp['start_date']}}</span>
+                                </p>
+                                <!-- Final funding granted-->
+                                <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
+                                    <span class="font-semibold">Final funding granted:</span>
+                                    @if($proposal->status_stage3 == 'approved')
+                                        <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Yes</span>
+                                    @else
+                                        <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Not reported</span>
+                                    @endif
                                 </p>
                             </div>
 

@@ -61,6 +61,7 @@ Route::post('/submit_pp', [\App\Http\Controllers\ProjectProposalController::clas
 Route::get('/pp/view/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_view'])->name('pp-view');
 Route::get('/pp/review/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_review'])->name('pp-review');
 Route::post('/pp/decision', [\App\Http\Controllers\ProjectProposalController::class, 'decision'])->name('pp-decision');
+Route::get('/stage2_upload_pp/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'upload'])->name('pp-upload');
 //Test
 Route::get('/test', [TestController::class, 'test'])->name('test');
 

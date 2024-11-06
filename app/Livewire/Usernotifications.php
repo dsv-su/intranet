@@ -26,7 +26,7 @@ class Usernotifications extends Component
     public function read($id)
     {
         $dashboard = Dashboard::find($id);
-        if($dashboard->type == 'travelrequest' and $dashboard->state == 'fo_approved') {
+        if($dashboard->state == 'fo_approved') {
             $dashboard->status = 'read';
             $dashboard->save();
         }
