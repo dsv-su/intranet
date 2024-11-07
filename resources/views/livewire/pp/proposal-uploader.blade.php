@@ -1,5 +1,5 @@
 <div x-data="fileUpload()">
-
+    @include('livewire.pp.partials.fileupload_progress')
     <div class="relative cursor-pointer p-6 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600"
          x-on:drop="isDroppingFile = false"
          x-on:drop.prevent="handleFileDrop($event)"
@@ -23,91 +23,66 @@
           </span>
 
             <div class="mt-4 flex flex-wrap justify-center text-sm leading-6 text-gray-600">
-            <span class="pe-1 font-medium text-gray-800 dark:text-neutral-200">
-              Drop your file here or
-            </span>
-
-                <span class="bg-white font-semibold text-blue-600 hover:text-blue-700 rounded-lg decoration-2 hover:underline focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 dark:bg-neutral-800 dark:text-blue-500 dark:hover:text-blue-600">browse</span>
-
+                <span class="pe-1 font-medium text-gray-800 dark:text-neutral-200">
+                  Drop your file here or
+                </span>
+                <span class="bg-white font-semibold text-blue-600 hover:text-blue-700 rounded-lg decoration-2 hover:underline focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 dark:bg-neutral-800 dark:text-blue-500 dark:hover:text-blue-600">
+                    browse
+                </span>
             </div>
-
 
             <p class="mt-1 text-xs text-gray-400 dark:text-neutral-400">
                 File
             </p>
+
             <input type="file" id="file-upload" multiple @change="handleFileSelect" class="hidden" />
-
-
+            <button wire:click.prevent="storefile">Update</button>
 
         </label>
 
-        @if(count($files))
-
-            <ul class="mt-5 list-disc">
-
-                @foreach($files as $file)
-
-                    <li>{{$file->getClientOriginalName()}}</li>
-
-                @endforeach
-
-            </ul>
-
-        @endif
-        <div class="bg-gray-200 h-[2px] w-1/2 mt-3">
-
-            <div
-
-                class="bg-blue-500 h-[2px]"
-
-                style="transition: width 1s"
-
-                :style="`width: ${progress}%;`"
-
-                x-show="isUploading"
-
-            >
-
-            </div>
-
-        </div>
     </div>
-
-    <script>
-        function fileUpload() {
-            return {
-                isDropping: false,
-                isUploading: false,
-                progress: 0,
-                handleFileSelect(event) {
-                    if (event.target.files.length) {
-                        this.uploadFiles(event.target.files)
-                    }
-                },
-                handleFileDrop(event) {
-                    if (event.dataTransfer.files.length > 0) {
-                        this.uploadFiles(event.dataTransfer.files)
-                    }
-                },
-                uploadFiles(files) {
-                    const $this = this;
-                    this.isUploading = true
-                @this.uploadMultiple('files', files,
-                    function (success) {
-                        $this.isUploading = false
-                        $this.progress = 0
+    @include('livewire.pp.partials.uploadscript')
+        {{--}}
+        <script>
+            function fileUpload() {
+                return {
+                    isDropping: false,
+                    isUploading: false,
+                    progress: 0,
+                    handleFileSelect(event) {
+                        if (event.target.files.length) {
+                            this.uploadFiles(event.target.files)
+                        }
                     },
-                    function(error) {
-                        console.log('error', error)
+                    handleFileDrop(event) {
+                        if (event.dataTransfer.files.length > 0) {
+                            this.uploadFiles(event.dataTransfer.files)
+                        }
                     },
-                    function (event) {
-                        $this.progress = event.detail.progress
-                    }
-                )
+                    uploadFiles(files) {
+                        const $this = this;
+                        this.isUploading = true
+                    @this.uploadMultiple('files', files,
+                        function (success) {
+                            $this.isUploading = false
+                            $this.progress = 0
+                        },
+                        function(error) {
+                            console.log('error', error)
+                        },
+                        function (event) {
+                            $this.progress = event.detail.progress
+                        }
+                    )
+                    @this.checkToggle()
+                    },
+                    removeUpload(filename) {
+                    @this.removeUpload('files', filename)
+                    },
                 }
             }
-        }
-    </script>
+        </script>
+        {{--}}
 </div>
 
 

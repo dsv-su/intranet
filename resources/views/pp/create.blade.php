@@ -441,7 +441,7 @@
                 </div>
 
                 <!-- Upload component -->
-                {{--}}
+
                 @if($upload ?? false)
                     <div class="sm:col-span-2">
                         <label for="upload" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Proposal attachments") }}
@@ -450,13 +450,18 @@
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
                             </button>
+                            {{$upload}}
                         </label>
                     </div>
-                <livewire:pp.proposal-uploader />
+                    @if(count($proposal->files) > 0)
+                            <livewire:pp.proposal-files :proposal="$proposal" />
+                    @endif
+
+                <livewire:pp.proposal-uploader  :proposal="$proposal" />
                 @endif
                 {{--}}
                 @include('pp.partials.test')
-
+                {{--}}
                 @if($type == 'create' or $type == 'resume')
                     <!-- Submit buttons -->
                     <div class="flex flex-col sm:flex-row gap-3">
