@@ -172,6 +172,9 @@ class ProjectProposalController extends Controller
             'status' => $pp->status
         ];
 
+        //Files
+        $pp->files = [];
+
         //Save formdata
         $pp->save();
 

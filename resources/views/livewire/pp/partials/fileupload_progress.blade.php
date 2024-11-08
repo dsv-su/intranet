@@ -19,6 +19,7 @@
                             <div>
                                 <p class="text-sm font-medium text-gray-800 dark:text-white">{{$file->getClientOriginalName()}}</p>
                                 <p class="text-xs text-gray-500 dark:text-neutral-500">{{round($file->getSize()/1000)}} KB</p>
+
                             </div>
                         </div>
                         <div class="inline-flex items-center gap-x-2">

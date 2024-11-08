@@ -32,7 +32,7 @@
     "src": "node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
   },
   "resources/css/site.css": {
-    "file": "assets/site-a0d718ad.css",
+    "file": "assets/site-70636a28.css",
     "isEntry": true,
     "src": "resources/css/site.css"
   },
@@ -45,7 +45,7 @@
     "src": "resources/fonts/Rock_Salt/RockSalt-Regular.ttf"
   },
   "resources/js/site.js": {
-    "file": "assets/site-b4cfe2fc.js",
+    "file": "assets/site-ce7b1414.js",
     "isEntry": true,
     "src": "resources/js/site.js"
   }

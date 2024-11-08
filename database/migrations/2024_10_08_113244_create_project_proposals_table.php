@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('status_stage2');
             $table->string('status_stage3');
             $table->json('pp')->nullable();
-            $table->json('files')->nullable();
+            $table->json('files');
             $table->timestamps();
         });
     }

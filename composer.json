@@ -25,7 +25,8 @@
         "statamic/cms": "^5",
         "statamic/eloquent-driver": "^4",
         "uabookstores/laravel-shibboleth": "dev-master",
-        "ext-simplexml": "*"
+        "ext-simplexml": "*",
+        "ext-zip": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8.1",
