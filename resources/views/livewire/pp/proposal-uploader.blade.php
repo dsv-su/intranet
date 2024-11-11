@@ -1,5 +1,6 @@
 <div>
     @include('livewire.pp.partials.proposal_files')
+    @if($allow)
     <div x-data="fileUpload()">
         @include('livewire.pp.partials.fileupload_progress')
         <div class="relative cursor-pointer p-6 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600"
@@ -79,7 +80,7 @@
             }
         </script>
     </div>
-
+    @endif
 </div>
 
 

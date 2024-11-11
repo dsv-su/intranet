@@ -23,19 +23,20 @@
                             </div>
                         </div>
                         <div class="inline-flex items-center gap-x-2">
-
-                            <button wire:click.prevent="removefile('{{$key}}')"
-                                    type="button"
-                                    class="relative text-red-600 hover:text-red-800 focus:outline-none focus:text-red-800 disabled:opacity-50 disabled:pointer-events-none dark:text-red-400 dark:hover:text-red-500 dark:focus:text-red-500">
-                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M3 6h18"></path>
-                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                                    <line x1="10" x2="10" y1="11" y2="17"></line>
-                                    <line x1="14" x2="14" y1="11" y2="17"></line>
-                                </svg>
-                                <span class="sr-only">Delete</span>
-                            </button>
+                            @if($allow)
+                                <button wire:click.prevent="removefile('{{$key}}')"
+                                        type="button"
+                                        class="relative text-red-600 hover:text-red-800 focus:outline-none focus:text-red-800 disabled:opacity-50 disabled:pointer-events-none dark:text-red-400 dark:hover:text-red-500 dark:focus:text-red-500">
+                                    <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M3 6h18"></path>
+                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                        <line x1="10" x2="10" y1="11" y2="17"></line>
+                                        <line x1="14" x2="14" y1="11" y2="17"></line>
+                                    </svg>
+                                    <span class="sr-only">Delete</span>
+                                </button>
+                            @endif
                             <button wire:click.prevent="downloadfile('{{$key}}')"
                                     type="button"
                                     class="relative text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 px-4 py-2 text-base">
@@ -67,19 +68,20 @@
                     <!-- End Col -->
 
                     <div class="-me-2.5">
-
-                        <button wire:click.prevent="removefolder()"
-                                type="button"
-                                class="py-2 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border border-transparent text-red-600 hover:bg-red-100 hover:text-red-800 focus:outline-none focus:bg-red-100 focus:text-red-800 disabled:opacity-50 disabled:pointer-events-none dark:text-red-400 dark:hover:bg-red-900 dark:hover:text-red-300 dark:focus:bg-red-900 dark:focus:text-red-300">
-                            <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 6h18"></path>
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                                <line x1="10" x2="10" y1="11" y2="17"></line>
-                                <line x1="14" x2="14" y1="11" y2="17"></line>
-                            </svg>
-                            Delete All
-                        </button>
+                        @if($allow)
+                            <button wire:click.prevent="removefolder()"
+                                    type="button"
+                                    class="py-2 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border border-transparent text-red-600 hover:bg-red-100 hover:text-red-800 focus:outline-none focus:bg-red-100 focus:text-red-800 disabled:opacity-50 disabled:pointer-events-none dark:text-red-400 dark:hover:bg-red-900 dark:hover:text-red-300 dark:focus:bg-red-900 dark:focus:text-red-300">
+                                <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 6h18"></path>
+                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                    <line x1="10" x2="10" y1="11" y2="17"></line>
+                                    <line x1="14" x2="14" y1="11" y2="17"></line>
+                                </svg>
+                                Delete All
+                            </button>
+                        @endif
                         <button wire:click.prevent="downloadfolder()"
                                 type="button"
                                 class="py-2 px-3 inline-flex items-center gap-x-1.5 text-sm font-medium rounded-lg border border-transparent text-blue-600 hover:bg-blue-100 hover:text-blue-800 focus:outline-none focus:bg-blue-100 focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-400 dark:hover:bg-blue-900 dark:hover:text-blue-300 dark:focus:bg-blue-900 dark:focus:text-blue-300">
@@ -98,4 +100,6 @@
         <!-- End Footer -->
     </div>
     <!-- End File Uploading Progress Form -->
+@else
+    <div class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("No attachments have been uploaded") }}</div>
 @endif

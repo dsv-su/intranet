@@ -441,9 +441,8 @@
                 </div>
 
                 <!-- Upload component -->
-
-                @if($upload ?? false)
-                    <div class="sm:col-span-2">
+                @if($type == 'review' or $type == 'view' or $type == 'resume')
+                    <div id="proposal-attachments" class="sm:col-span-2">
                         <label for="upload" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Proposal attachments") }}
                             <button id="upload-button" data-modal-toggle="upload-modal" class="inline" type="button">
                                 <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -452,7 +451,7 @@
                             </button>
                         </label>
                     </div>
-                <livewire:pp.proposal-uploader  :proposal="$proposal" />
+                    <livewire:pp.proposal-uploader  :proposal="$proposal" />
                 @endif
 
                 @if($type == 'create' or $type == 'resume')

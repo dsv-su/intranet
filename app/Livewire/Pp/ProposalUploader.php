@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pp;
 
+use App\Models\Dashboard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -18,6 +19,7 @@ class ProposalUploader extends Component
     public $savedfiles = [];
     public $stored = false;
     public $directory;
+    public $allow;
 
     protected $listeners = [
         'upload_refresh' => '$refresh'
@@ -27,6 +29,19 @@ class ProposalUploader extends Component
     {
         $this->proposal = $proposal;
         $this->directory = '/proposals/' . $this->proposal->id;
+        $this->allowUpload();
+    }
+
+    public function allowUpload()
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
+        if($dashboard->user_id === $user->id or $dashboard->head_id === $user->id or $dashboard->vice_id === $user->id or $dashboard->fo_id === $user->id ) {
+            $this->allow = true;
+        } else {
+            $this->allow = false;
+        }
+
     }
 
     public function finishUpload($name, $tmpPath, $isMultiple)
