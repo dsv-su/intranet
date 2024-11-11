@@ -13,7 +13,7 @@ class ProjectProposal extends Model
 {
     use HasFactory, HasStates, HasUuids;
 
-    protected $fillable = ['created', 'status_stage1' ,'status_stage2', 'status_stage3', 'name', 'pp', 'files'];
+    protected $fillable = ['user_id', 'name', 'created', 'status_stage1' ,'status_stage2', 'status_stage3', 'pp', 'files'];
     protected $casts = [
         'pp' => 'array',
         'files' => 'array',

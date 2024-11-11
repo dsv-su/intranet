@@ -39,5 +39,5 @@
             </ul>
         </div>
     </div>
-    <input  name="organization" value="{{$organization->name}}" hidden>
+    <input  name="funding_organization" value="{{$organization->name}}" hidden>
 </div>

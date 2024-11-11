@@ -3,7 +3,7 @@
         setActiveAccordion(id) {
             this.activeAccordion = (this.activeAccordion == id) ? '' : id
         }
-    }" class="relative w-full mx-auto overflow-hidden text-sm font-normal bg-white border border-gray-200 divide-y divide-gray-200 rounded-md">
+    }" class="relative w-full mx-auto overflow-hidden text-sm font-normal bg-white border border-susecondary divide-y divide-susecondary rounded-md dark:bg-gray-800 dark:text-white">
     @forelse($proposals as $proposal)
         <div wire:key="{{$proposal->id}}">
             <div x-data="{ id: $id('accordion') }" class="cursor-pointer group">
@@ -66,7 +66,7 @@
                                 <!-- Co-Applicants -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
                                     <span class="font-semibold">Co-applicants:</span><br>
-                                    @if($proposal->pp['co_investigator_name'])
+                                    @if($proposal->pp['co_investigator_name'] ?? false)
                                         @foreach($proposal->pp['co_investigator_name'] as $co)
                                             {{$co}}@if(!$loop->last), @endif
                                         @endforeach
@@ -133,7 +133,7 @@
 
                                         View
                                     </a>
-                                    @if($proposal->status_stage1 == 'approved' ?? false)
+                                    @if($proposal->status_stage1 == 'fo_approved' ?? false)
                                         <a type="button"
                                            href="{{route('pp-upload', $proposal->id)}}"
                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
@@ -190,12 +190,12 @@
                                 <!-- Decision expected -->
                                 <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
                                     <span class="font-semibold">Decision expected:</span>
-                                    <span class="me-1.5 px-1 text-[0.65rem] text-black">{{$proposal->pp['decision_exp']}}</span>
+                                    <span class="me-1.5 px-1 text-[0.65rem] text-black dark:text-neutral-400">{{$proposal->pp['decision_exp']}}</span>
                                 </p>
                                 <!-- Start date expected -->
                                 <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
                                     <span class="font-semibold">Start date expected:</span>
-                                    <span class="me-1.5 px-1 text-[0.65rem] text-black">{{$proposal->pp['start_date']}}</span>
+                                    <span class="me-1.5 px-1 text-[0.65rem] text-black dark:text-neutral-400">{{$proposal->pp['start_date']}}</span>
                                 </p>
                                 <!-- Final funding granted-->
                                 <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
@@ -214,7 +214,7 @@
             </div>
         </div>
     @empty
-        <div class="px-6 py-4 text-sm">
+        <div class="px-6 py-4 text-sm dark:bg-gray-800 dark:text-white">
             @if($review ?? false)
                 No Awaiting proposals
             @else

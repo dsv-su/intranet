@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pp;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -50,7 +51,8 @@ class ProposalUploader extends Component
                 'path' => basename($file->store(path: 'proposals/'. $this->proposal->id)),
                 'tmp' => basename($file->getRealPath()),
                 'size' => round($file->getSize()/1000),
-                'date' => now()->format('d/m/Y')
+                'date' => now()->format('d/m/Y'),
+                'uploader' => Auth::user()->name
                 ];
         }
 

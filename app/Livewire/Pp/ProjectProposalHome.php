@@ -3,6 +3,7 @@
 namespace App\Livewire\Pp;
 
 use App\Models\Dashboard;
+use App\Models\FundingOrganization;
 use App\Models\ProjectProposal;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,7 @@ class ProjectProposalHome extends Component
     public $proposals;
     public $myproposals;
     public $awaiting;
+    public $funding_organizations;
 
     public function mount(ProjectProposal $proposals)
     {
@@ -20,6 +22,7 @@ class ProjectProposalHome extends Component
         $user = Auth::user();
         $this->my($user);
         $this->awaiting($user);
+        $this->funding_organizations = FundingOrganization::all()->count();
     }
 
     public function hydrate()

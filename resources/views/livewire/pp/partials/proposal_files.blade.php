@@ -17,8 +17,8 @@
                                   </span>
                             <div>
                                 <p class="text-sm font-medium text-gray-800 dark:text-white">{{$key}}</p>
-                                <p class="text-xs text-gray-500 dark:text-neutral-500">[{{$pp_file['size']}} KB] Date: {{$pp_file['date']}}
-                                </p>
+                                <p class="text-xs text-gray-500 dark:text-neutral-500">{{$pp_file['size']}} KB | Date: {{$pp_file['date']}} | Uploaded by: {{$pp_file['uploader']}}
+                                </span>
 
                             </div>
                         </div>

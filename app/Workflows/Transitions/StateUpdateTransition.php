@@ -3,6 +3,7 @@
 namespace App\Workflows\Transitions;
 
 use App\Models\Dashboard;
+use App\Models\ProjectProposal;
 use App\Models\TravelRequest;
 use Workflow\Activity;
 
@@ -23,6 +24,12 @@ class StateUpdateTransition extends Activity
                 $this->req = TravelRequest::find($this->dashboard->request_id);
                 //$this->req->state = $this->state;
                 $this->req->state = $this->dashboard->state;
+                $this->req->save();
+                break;
+            case('projectproposal'):
+                $this->req = ProjectProposal::find($this->dashboard->request_id);
+                //$this->req->state = $this->state;
+                $this->req->status_stage1 = $this->dashboard->state;
                 $this->req->save();
                 break;
         }

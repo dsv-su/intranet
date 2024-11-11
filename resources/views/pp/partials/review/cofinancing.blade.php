@@ -14,13 +14,13 @@
             <input type="radio"
                    class="shrink-0 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                     checked disabled>
-            <span class="text-sm text-gray-500 ml-3 dark:text-neutral-400">@if($proposal['pp']['cofinancing_needed'] == 'yes') Yes @else No @endif</span>
+            <span class="text-sm text-gray-500 ml-3 dark:text-neutral-400">@if($proposal['pp']['cofinancing'] ?? '' == 'yes') Yes @else No @endif</span>
         </label>
 
         <!-- Inline text input next to radio -->
-        @if($proposal['pp']['cofinancing_needed'] == 'yes')
+        @if($proposal['pp']['cofinancing'] ?? '' == 'yes')
             <input type="text" name="other_cofinancing" id="other_cofinancing"
-                   class="@if($proposal['pp']['cofinancing_needed'] == 'yes') block @else hidden @endif flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
+                   class="@if($proposal['pp']['cofinancing'] == 'yes') block @else hidden @endif flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                        p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
                    value="{{ old('other_cofinancing') ? old('other_cofinancing'): $proposal['pp']['other_cofinancing'] ??  '' }}"
                    placeholder="Covered by" required>

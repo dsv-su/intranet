@@ -33,8 +33,8 @@
                 </div>
             </div>
 
-            <input type="hidden" name="coinvestigator_name[]" value="{{$co['displayname'][0] ?? ''}}">
-            <input type="hidden" name="coinvestigator_email[]" value="{{$co['mail'][0] ?? ''}}">
+            <input type="hidden" name="co_investigator_name[]" value="{{$co['displayname'][0] ?? ''}}">
+            <input type="hidden" name="co_investigator_email[]" value="{{$co['mail'][0] ?? ''}}">
         @endforeach
     @endif
     <!-- External Co investigators -->

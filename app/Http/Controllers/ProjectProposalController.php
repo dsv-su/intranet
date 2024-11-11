@@ -123,90 +123,74 @@ class ProjectProposalController extends Controller
 
     public function submit(Request $request)
     {
-        //dd($request->all());
+        // Validate and retrieve request data
+        $this->validateRequest($request);
 
-        // Finacial officer
-        $fo = SettingsFo::find(1);
+        // Financial officer and authenticated user retrieval
+        $foUserId = SettingsFo::find(1)?->user_id;
+        //$userId = auth()->id();
+        $userId = Auth::user()->id;
 
-        //Retrive authenticated user
-        $user = Auth::user();
+        // Create Project Proposal instance
         $pp = new \App\Models\ProjectProposal();
-        $pp->user_id = auth()->id();
+        $timestamp = now()->startOfDay()->timestamp;
 
-        //Retrive name of proposal
-        $pp->name = $request->title;
-        $pp->created = Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp;
+        $pp->fill([
+            'user_id' => $userId,
+            'name' => $request->title,
+            'created' => $timestamp,
+            'status_stage1' => 'pending',
+            'status_stage2' => 'pending',
+            'status_stage3' => 'pending',
+            'pp' => $request->only([
+                    'title', 'objective', 'principal_investigator', 'principal_investigator_email',
+                    'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
+                    'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
+                    'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
+                    'budget_dsv', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
+                ]) + [
+                    'submitted' => $timestamp,
+                    'status' => 'pending'
+                ],
+            'files' => []
+        ]);
 
-        //Initial status
-        $pp->status_stage1 = 'pending';
-        $pp->status_stage2 = 'pending';
-        $pp->status_stage3 = 'pending';
-
-        //Formdata
-        $pp->pp = [
-            'title' => $request->title,
-            'objective' => $request->objective,
-            'principal_investigator' => $request->principal_investigator,
-            'principal_investigator_email' => $request->principal_investigator_email,
-            'co_investigator_name' => $request->coinvestigator_name,
-            'co_investigator_email' => $request->coinvestigator_email,
-            'research_area' => $request->research_area,
-            'unit_head' => $request->unit_head,
-            'dsvcoordinating' => $request->dsvcoordinating,
-            'other_coordination' => $request->other_coordination,
-            'eu_wallenberg' => $request->eu_wallenberg,
-            'funding_organization' => $request->organization,
-            'program' => $request->program,
-            'decision_exp' => $request->decision_exp,
-            'start_date' => $request->start_date,
-            'submission_deadline' => $request->submission,
-            'project_duration' => $request->duration,
-            'budget_project' => $request->budget_project,
-            'budget_dsv' => $request->budget_dsv,
-            'currency' => $request->currency,
-            'cofinancing_needed' => $request->cofinancing,
-            'other_cofinancing' => $request->other_cofinancing,
-            'oh_cost' => $request->oh_cost,
-            'user_comments' => $request->user_comments,
-            'submitted' => $pp->created,
-            'status' => $pp->status
-        ];
-
-        //Files
-        $pp->files = [];
-
-        //Save formdata
+        // Save Project Proposal
         $pp->save();
 
-        // Find or create Dashboard instance
+        // Dashboard instance creation or update
         $dashboardData = [
             'request_id' => $pp->id,
             'name' => $request->title,
-            'created' => Carbon::createFromFormat('d/m/Y', now()->format('d/m/Y'))->timestamp,
+            'created' => $timestamp,
             'status' => 'unread',
             'type' => 'projectproposal',
-            'user_id' => auth()->id(),
+            'user_id' => $userId,
             'manager_id' => $request->unit_head,
-            'fo_id' => $fo->user_id,
+            'fo_id' => $foUserId,
             'head_id' => $request->unit_head,
             'vice_id' => $this->getViceHeadUserId()
         ];
 
-        //Create new dashboard instance
-        $dashboard = Dashboard::where('request_id', $pp->id)->first();
-        if (!$dashboard) {
-            $dashboard = Dashboard::create($dashboardData);
-        } else {
-            $dashboard->update($dashboardData);
-        }
+        Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
 
-        //Start workflow
-        $workflow = $this->createAndStartWorkflow($dashboard);
-
-        //WorkflowID
+        // Start workflow and store workflow ID
+        $workflow = $this->createAndStartWorkflow($pp->dashboard);
         $this->workflowID = $workflow->id();
 
         return redirect()->route('pp', 'my')->with('success', 'Item successfully created!');
+    }
+
+    protected function validateRequest(Request $request)
+    {
+        $rules = [
+            'title' => 'required',
+            'objective' => 'required',
+            'principal_investigator' => 'required',
+        ];
+
+
+        return $this->validate($request, $rules);
     }
 
     protected function comments_update($id, $comment)

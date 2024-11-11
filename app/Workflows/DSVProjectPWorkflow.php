@@ -7,6 +7,7 @@ use App\Traits\ProjectProSignals;
 use App\Workflows\Notifications\NewProjectProposalNotification;
 use App\Workflows\Partials\RequestStates;
 use App\Workflows\StatusUpdates\PPStatusUpdateUsersStage1;
+use App\Workflows\Transitions\StateUpdateTransition;
 use Workflow\ActivityStub;
 use Workflow\ChildWorkflow;
 use Workflow\ChildWorkflowStub;
@@ -101,6 +102,10 @@ class DSVProjectPWorkflow extends Workflow
 
         //Handle Head decision
         $newState = $this->getState();
+        $commonActivities = $this->getCommonActivities($userRequest);
+
+        // Await stateupdate
+        yield $commonActivities[0];
 
         switch ($newState) {
             case RequestStates::HEAD_APPROVED:
@@ -126,6 +131,10 @@ class DSVProjectPWorkflow extends Workflow
 
         //Handle vice decision
         $newState = $this->getState();
+        $commonActivities = $this->getCommonActivities($userRequest);
+
+        // Await stateupdate
+        yield $commonActivities[0];
 
         switch ($newState) {
             case RequestStates::VICE_APPROVED:
@@ -155,6 +164,10 @@ class DSVProjectPWorkflow extends Workflow
 
         //Handle FO decision
         $newState = $this->getState();
+        $commonActivities = $this->getCommonActivities($userRequest);
+
+        // Await stateupdate
+        yield $commonActivities[0];
 
         switch ($newState) {
             case RequestStates::FO_APPROVED:
@@ -183,5 +196,13 @@ class DSVProjectPWorkflow extends Workflow
     protected function getState()
     {
         return $this->stateMachine->state->status();
+    }
+
+    protected function getCommonActivities($userRequest)
+    {
+        return [
+            ActivityStub::make(StateUpdateTransition::class, $userRequest),
+            //ActivityStub::make(StateUpdateNotification::class, $userRequest),
+        ];
     }
 }

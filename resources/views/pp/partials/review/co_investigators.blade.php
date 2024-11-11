@@ -1,5 +1,5 @@
 <!-- Review Co investigators-->
-@if($proposal['pp']['co_investigator_name'])
+@if($proposal['pp']['co_investigator_name'] ?? false)
     <div class="w-full sm:col-span-2">
         <label for="coinvestigators" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Co-investigators") }}
             <button id="coinvestigators" data-modal-toggle="coinvestigators-modal" class="inline" type="button">
