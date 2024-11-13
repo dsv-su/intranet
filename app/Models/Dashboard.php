@@ -22,8 +22,8 @@ class Dashboard extends Model
         'user_id',
         'manager_id',
         'fo_id',
-        'head_id'
-
+        'head_id',
+        'vice_id'
     ];
 
     protected $casts = [
@@ -44,5 +44,13 @@ class Dashboard extends Model
     public function travel(): BelongsTo
     {
         return $this->belongsTo(TravelRequest::class, 'request_id');
+    }
+
+    /**
+     * Get the projectproposal that belongs to the dashboard.
+     */
+    public function proposal(): BelongsTo
+    {
+        return $this->belongsTo(ProjectProposal::class, 'request_id');
     }
 }

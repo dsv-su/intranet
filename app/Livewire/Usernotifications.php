@@ -17,7 +17,19 @@ class Usernotifications extends Component
     {
         $this->user_roles = $this->getUserRoles();
         //Limit notifications
-        $this->user_requests = Dashboard::where('user_id', $this->auth_user)->orderBy('created_at', 'desc')->limit(10)->get();
+        $this->user_requests = Dashboard::with(['travel','proposal'])
+                                        ->where('user_id', $this->auth_user)
+                                        ->orderBy('created_at', 'desc')
+                                        ->limit(10)->get();
+    }
+
+    public function read($id)
+    {
+        $dashboard = Dashboard::find($id);
+        if($dashboard->state == 'fo_approved') {
+            $dashboard->status = 'read';
+            $dashboard->save();
+        }
     }
 
     private function getUserRoles()

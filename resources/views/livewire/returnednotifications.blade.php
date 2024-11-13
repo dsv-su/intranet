@@ -1,7 +1,12 @@
 <div wire:poll.keep-alive>
     <!-- Returned Notifications -->
     @foreach($returned as $return)
-        <a href="{{route('travel-request-show', $return->id)}}" wire:click="read({{$return->id}})"
+        <a @if($return->type == 'travelrequest')
+            href="{{route('travel-request-show', $return->id)}}"
+           @else
+            href="{{route('my-projects')}}"
+           @endif
+           wire:click="read({{$return->id}})"
            class="flex bg-red-200 py-3 px-4 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">
             <div class="flex-shrink-0 mt-4">
                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -51,6 +56,10 @@
                                         @break
                                         @case('head_returned')
                                         {{__("Returned")}}
+                                        @break
+                                        @case('vice_returned')
+                                        {{__("Returned")}}
+                                        @break
                                     @endswitch
                               </span>
 

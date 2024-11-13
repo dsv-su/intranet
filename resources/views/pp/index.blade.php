@@ -1,44 +1,57 @@
 @extends('layouts.app')
-<div class="mt-6 mb-6 ms-6 grow max-w-96 mr-2 md:order-none">
-    <div class="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
-        <div class="p-4 sm:p-7">
-            <div class="text-center">
-                <h1 class="block text-2xl font-bold text-gray-800 dark:text-white">PP workflow test</h1>
-            </div>
+@section('content')
+    @nocache('dsvheader')
+<!-- PP header -->
+@include('pp.partials.header')
 
-            <div class="mt-5">
-                <!-- Form -->
-                <form>
-                    <div class="grid gap-y-4">
-                        <!-- Form Group -->
-                        <div>
-                            <label for="email" class="block text-sm mb-2 dark:text-white">Application</label>
-                            <div class="relative">
-                                <input type="text" id="pp" name="pp"
-                                       class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500
-                                   disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400
-                                   dark:placeholder-neutral-500 dark:focus:ring-neutral-600" required aria-describedby="email-error">
-                                <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
-                                    <svg class="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-                                    </svg>
-                                </div>
-                            </div>
-
-                        </div>
-                        <!-- End Form Group -->
-
-                        <button type="submit"
-                                class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium
-                            rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none
-                            focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">Submit</button>
-                    </div>
-                </form>
-                <!-- End Form -->
-            </div>
+<div class="-mt-px">
+    <!-- Breadcrumb -->
+    <div class="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 lg:px-8 dark:bg-neutral-800 dark:border-neutral-700">
+        <div class="flex items-center py-2">
+            <!-- Breadcrumb -->
+            <ol class="ms-3 flex items-center whitespace-nowrap">
+                <li class="flex items-center text-sm text-gray-800 dark:text-neutral-400">
+                    Dashboard
+                    <svg class="shrink-0 mx-3 overflow-visible size-2.5 text-gray-400 dark:text-neutral-500" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 1L10.6869 7.16086C10.8637 7.35239 10.8637 7.64761 10.6869 7.83914L5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </li>
+                <li class="text-sm font-semibold text-gray-800 truncate dark:text-neutral-400" aria-current="page">
+                    {{$breadcrumb}}
+                </li>
+            </ol>
+            <!-- End Breadcrumb -->
         </div>
     </div>
-
+    <!-- End Breadcrumb -->
 </div>
+    <!-- Flash message -->
+    @if (session('success'))
+        <div class="mx-auto max-w-screen-xl mt-4 px-4 lg:px-12">
+            @include('pp.partials.flash_submitted')
+        </div>
 
-
+    @endif
+<!-- Content -->
+<div class="w-full">
+    <div class="p-2 sm:p-4 space-y-2 sm:space-y-4">
+        <livewire:pp.project-proposal-home />
+        @switch ($page)
+            @case ('my')
+                <livewire:pp.my-project-proposal-search />
+            @break
+            @case ('awaiting')
+                <livewire:pp.awaiting-project-proposal />
+            @break
+            @case ('all')
+                <livewire:pp.all-project-proposal-search />
+            @break
+        @endswitch
+        {{--}}
+        <livewire:project-proposal />
+        {{--}}
+    </div>
+</div>
+<!-- End Content -->
+    @nocache('layouts.darktoggler')
+@endsection

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
-    @include('dsvheader')
-    @include('navbar.navbar')
+    @nocache('dsvheader')
+    @nocache('navbar.navbar')
     @include('layouts.breadcrumbs')
 
     <!-- Sidenav with content -->
@@ -9,5 +9,5 @@
         @include('partials.page')
     </div>
 
-    @include('layouts.darktoggler')
+    @nocache('layouts.darktoggler')
 @endsection
