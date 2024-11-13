@@ -7,6 +7,37 @@
             </svg>
         </button>
     </label>
+    <!-- Edit or resume -->
+    @if(count($coinv) > 0)
+        @foreach($coinv as $key => $coinvestigator)
+        <div class="flex flex-col md:flex-row gap-4 mb-4 items-center">
+            <!-- Name -->
+            <div class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
+                    w-full md:w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                {{$coinvestigator['name'] ?? 'Name is missing'}}
+            </div>
+            <!-- Email -->
+
+            <div class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
+                    w-full md:w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                {{$coinvestigator['email'] ?? 'Email is missing'}}
+            </div>
+
+            <!-- Icon -->
+            <div class="flex items-center">
+                <button type="button" wire:click="Editremove({{$key}})">
+                    <svg class="shrink-0 size-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12h4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                    </svg>
+                </button>
+
+            </div>
+        </div>
+            <input type="hidden" name="co_investigator_name[]" value="{{$coinvestigator['name'] ?? ''}}">
+            <input type="hidden" name="co_investigator_email[]" value="{{$coinvestigator['email'] ?? ''}}">
+        @endforeach
+
+    @endif
     <!-- SUKAT Co investigators -->
     @if(count($coinvestigators) > 0 )
         @foreach($coinvestigators as $key => $co)

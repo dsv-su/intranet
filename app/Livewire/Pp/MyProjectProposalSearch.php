@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Pp;
 
-use App\Models\Dashboard;
 use App\Models\ProjectProposal;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -21,6 +20,7 @@ class MyProjectProposalSearch extends Component
     public function render()
     {
         $user = Auth::user();
+
         //My proposals
         $proposals = ProjectProposal::with('dashboard')
             ->where('user_id', $user->id)

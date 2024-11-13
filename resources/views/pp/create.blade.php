@@ -5,8 +5,12 @@
     <section class="bg-white dark:bg-gray-900">
         <div class="max-w-2xl px-4 py-8 mx-auto lg:py-16">
             <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                @if($type == 'review' or $type == 'view')
+                @if($type == 'review')
                     {{ __("Review:") }} {{$proposal['name']}}
+                @elseif($type == 'view')
+                    {{ __("View:") }} {{$proposal['name']}}
+                @elseif($type == 'edit')
+                    {{ __("Edit:") }} {{$proposal['name']}}
                 @else
                 {{ __("Create a Project proposal") }}
                 @endif
@@ -15,9 +19,11 @@
             <form method="post" action="{{route('pp-submit')}}">
                 @csrf
 
-                @if($type == 'resume')
+                @if($type == 'edit' or $type == 'resume')
                     <input type="hidden" name="id" value="{{$proposal->id}}">
                 @endif
+
+                <input type="hidden" name="type" value="{{$type}}">
 
                 <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
                     <!--Title-->
@@ -32,7 +38,7 @@
                         <input type="text" name="title" id="project"
                                class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                         block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                               value="{{ old('title') ? old('title'): $proposal['pp']['title'] ??  '' }}" placeholder="Title" @if($type == 'create' or $type == 'resume') required=""  @else readonly @endif>
+                               value="{{ old('title') ? old('title'): $proposal['pp']['title'] ??  '' }}" placeholder="Title" @if($type == 'create' or $type == 'edit' or $type == 'resume') required=""  @else readonly @endif>
                         @error('name')
                         <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}} </p>
                         @enderror
@@ -49,7 +55,7 @@
                         <textarea id="objective" rows="4" name="objective"
                                   class="@error('objective') border-red-500 @enderror font-mono block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300
                                   focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                  placeholder="{{__("Short description")}}" @if($type == 'create' or $type == 'resume') required="" @else readonly @endif>{{ old('objective') ? old('objective'): $proposal['pp']['objective'] ?? '' }}</textarea>
+                                  placeholder="{{__("Short description")}}" @if($type == 'create' or $type == 'edit' or $type == 'resume') required="" @else readonly @endif>{{ old('objective') ? old('objective'): $proposal['pp']['objective'] ?? '' }}</textarea>
                         @error('objective')
                         <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}}</p>
                         @enderror
@@ -86,7 +92,9 @@
                     </div>
                     <!-- Co Investigators -->
                     @if($type == 'create')
-                        <livewire:select2.Coinvestigators-select2 />
+                        <livewire:select2.Coinvestigators-select2 proposal=""/>
+                    @elseif( $type == 'edit' or $type == 'resume')
+                        <livewire:select2.Coinvestigators-select2 :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.co_investigators')
                     @endif
@@ -103,11 +111,15 @@
                                 </svg>
                             </button>
                         </label>
-                        @if($type == 'create')
+                        @if($type == 'create' or $type == 'edit' or $type == 'resume')
                             <select id="research_area" name="research_area"
                                     class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @foreach($research_areas as $research_area)
-                                    <option value="{{$research_area->name}}">{{$research_area->name}}</option>
+                                    @if($type == 'edit' or $type == 'resume')
+                                        <option value="{{$research_area->name}}" @if($proposal->pp['research_area'] == $research_area->name) selected="" @endif >{{$research_area->name}}</option>
+                                    @else
+                                        <option value="{{$research_area->name}}">{{$research_area->name}}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             @error('research_area')
@@ -126,12 +138,12 @@
                                 </svg>
                             </button>
                         </label>
-                        @if($type == 'create')
+                        @if($type == 'create' or $type == 'edit' or $type == 'resume')
                             <select id="unit_head" name="unit_head"
                                     class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                 @foreach($unitheads as $unithead)
-                                    @if($type == 'resume')
-                                        <option @if($unithead->id == $dashboard->head_id) selected="" @endif value="{{$unithead->id}}">{{$unithead->name}}</option>
+                                    @if($type == 'edit' or $type == 'resume')
+                                        <option value="{{$unithead->id}}" @if($unithead->id == $dashboard->head_id) selected="" @endif >{{$unithead->name}}</option>
                                     @else
                                         <option value="{{$unithead->id}}">{{$unithead->name}}</option>
                                     @endif
@@ -149,21 +161,27 @@
                     </div>
                     <!--DSV coordinating -->
                     @if($type == 'create')
-                        <livewire:pp.dsv-coordination />
+                        <livewire:pp.dsv-coordination proposal="" />
+                    @elseif ($type == 'edit' or $type == 'resume')
+                        <livewire:pp.dsv-coordination :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.dsvcoordination')
                     @endif
 
                     <!-- Eu Wallengenberg project -->
                     @if($type == 'create')
-                        <livewire:pp.eu-wallenberg-project />
+                        <livewire:pp.eu-wallenberg-project proposal="" />
+                    @elseif ($type == 'edit' or $type == 'resume')
+                            <livewire:pp.eu-wallenberg-project :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.eu_wallenberg')
                     @endif
 
                     <!-- Funding organization -->
                     @if($type == 'create')
-                        <livewire:select2.Org-select2 />
+                        <livewire:select2.Org-select2 proposal="" />
+                    @elseif ($type == 'edit' or $type == 'resume')
+                        <livewire:select2.Org-select2 :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.funding_org')
                     @endif
@@ -180,7 +198,7 @@
                         <input type="text" name="program" id="program"
                                class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                         block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                               value="{{ old('program') ? old('program'): $proposal['pp']['program'] ??  '' }}" placeholder="Link" @if($type == 'review' or $type == 'view') readonly @endif>
+                               value="{{ old('program') ? old('program'): $proposal->pp['program'] ??  '' }}" placeholder="Link" @if($type == 'review' or $type == 'view') readonly @endif>
                     </div>
                     <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
                         Project dates
@@ -195,7 +213,7 @@
                                 </svg>
                             </button>
                         </label>
-                        @if($type == 'create' or $type == 'resume')
+                        @if($type == 'create' or $type == 'edit' or $type == 'resume')
                             <div class="flex flex-col sm:flex-row items-center w-full">
                                 <div class="relative w-full">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -208,7 +226,7 @@
                                     @enderror
                                     <input datepicker datepicker-format="dd/mm/yyyy"
                                            name="decision_exp"
-                                           @if($type == 'resume')
+                                           @if($type == 'edit' or $type == 'resume')
                                            value="{{ $proposal['pp']['decision_exp'] }}"
                                            @endif
                                            id="startInput" type="text"
@@ -231,7 +249,7 @@
                                 </svg>
                             </button>
                         </label>
-                        @if($type == 'create' or $type == 'resume')
+                        @if($type == 'create' or $type == 'edit' or $type == 'resume')
                             <div class="flex flex-col sm:flex-row items-center w-full">
                                 <div class="relative w-full">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -244,7 +262,7 @@
                                     @enderror
                                     <input datepicker datepicker-format="dd/mm/yyyy"
                                             name="start_date"
-                                           @if($type == 'resume')
+                                           @if($type == 'edit' or $type == 'resume')
                                            value="{{ $proposal['pp']['start_date'] }}"
                                            @endif id="endInput" type="text"
                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
@@ -266,7 +284,7 @@
                                 </svg>
                             </button>
                         </label>
-                        @if($type == 'create' or $type == 'resume')
+                        @if($type == 'create' or $type == 'edit' or $type == 'resume')
                             <div class="flex flex-col sm:flex-row items-center w-full">
                                 <div class="relative w-full">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -279,7 +297,7 @@
                                     @enderror
                                     <input datepicker datepicker-format="dd/mm/yyyy"
                                            name="submission_deadline"
-                                           @if($type == 'resume')
+                                           @if($type == 'edit' or $type == 'resume')
                                            value="{{ $proposal['pp']['submission_deadline'] }}"
                                            @endif
                                            id="startInput" type="text"
@@ -304,8 +322,8 @@
                         <input type="text" name="project_duration" id="duration"
                                class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                         block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                               value="{{ old('duration') ? old('duration'): $proposal['pp']['project_duration'] ??  '' }}"
-                               placeholder="Duration" @if($type == 'create' or $type == 'resume') required @else readonly @endif>
+                               value="{{ old('duration') ? old('duration'): $proposal->pp['project_duration'] ??  '' }}"
+                               placeholder="Duration" @if($type == 'create' or $type == 'edit' or $type == 'resume') required @else readonly @endif>
                     </div>
                     <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
                         Project budget
@@ -322,8 +340,8 @@
                         <input type="number" name="budget_project" id="budget_project"
                                class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                         block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                               value="{{ old('budget_project') ? old('budget_project'): $proposal['pp']['budget_project'] ??  '' }}"
-                               placeholder="Project budget" @if($type == 'create' or $type == 'resume') required @else readonly @endif>
+                               value="{{ old('budget_project') ? old('budget_project'): $proposal->pp['budget_project'] ??  '' }}"
+                               placeholder="Project budget" @if($type == 'create' or $type == 'edit' or $type == 'resume') required @else readonly @endif>
                     </div>
                     <!-- Budget for DSV -->
                     <div class="w-full">
@@ -337,8 +355,8 @@
                         <input type="number" name="budget_dsv" id="budget_dsv"
                                class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                         block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                               value="{{ old('budget_dsv') ? old('budget_dsv'): $proposal['pp']['budget_dsv'] ??  '' }}"
-                               placeholder="DSV budget" @if($type == 'create' or $type == 'resume') required @else readonly @endif>
+                               value="{{ old('budget_dsv') ? old('budget_dsv'): $proposal->pp['budget_dsv'] ??  '' }}"
+                               placeholder="DSV budget" @if($type == 'create' or $type == 'edit' or $type == 'resume') required @else readonly @endif>
                     </div>
                     <!-- Currency -->
                     <div class="w-full sm:col-span-2">
@@ -355,9 +373,11 @@
                                 <input type="radio" name="currency" value="sek"
                                        class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                        id="currency"
-                                       @if($type == 'create' or $type == 'resume')
+                                       @if($type == 'create' or $type == 'edit' or $type == 'resume')
                                        checked="" required
-                                       @else disabled @endif
+                                       @else
+                                       disabled
+                                       @endif
                                        @if($type == 'review' or $type == 'view')
                                         @if($proposal['pp']['currency'] == 'sek') checked="" @endif
                                         @endif >
@@ -368,7 +388,7 @@
                                 <input type="radio" name="currency" value="us"
                                        class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                        id="currency"
-                                       @if($type == 'create' or $type == 'resume')
+                                       @if($type == 'create' or $type == 'edit' or $type == 'resume')
                                        required @else disabled @endif
                                        @if($type == 'review' or $type == 'view')
                                         @if($proposal['pp']['currency'] == 'us') checked="" @endif
@@ -380,7 +400,7 @@
                                 <input type="radio" name="currency" value="euro"
                                        class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                        id="currency"
-                                       @if($type == 'create' or $type == 'resume')
+                                       @if($type == 'create' or $type == 'edit' or $type == 'resume')
                                        required @else disabled @endif
                                        @if($type == 'review' or $type == 'view')
                                         @if($proposal['pp']['currency'] == 'euro') checked="" @endif
@@ -390,8 +410,10 @@
                         </div>
                     </div>
                     <!-- Co-financing -->
-                    @if($type == 'create' or $type == 'resume')
-                        <livewire:pp.cofinancing />
+                    @if($type == 'create')
+                        <livewire:pp.cofinancing proposal="" />
+                    @elseif ($type == 'edit' or $type == 'resume')
+                            <livewire:pp.cofinancing :proposal="$proposal"/>
                     @else
                         @include('pp.partials.review.cofinancing')
                     @endif
@@ -411,9 +433,9 @@
                             <input type="number" name="oh_cost" id="oh_cost"
                                    class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                             block w-[calc(100%-32px)] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                   value="{{ old('oh_cost') ? old('boh_cost'): $proposal['pp']['oh_cost'] ??  '' }}"
+                                   value="{{ old('oh_cost') ? old('boh_cost'): $proposal->pp['oh_cost'] ??  '' }}"
                                    placeholder="OH cost"
-                                   @if($type == 'create' or $type == 'resume')
+                                   @if($type == 'create' or $type == 'edit' or $type == 'resume')
                                    required
                                    @else
                                    readonly
@@ -436,8 +458,24 @@
                         <textarea id="user_comments" rows="4" name="user_comments"
                                   class="font-mono block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300
                                     focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                  placeholder="{{__("Your comments")}}" @if($type == 'review' or $type == 'view') readonly @endif>{{ old('user_comments') ? old('user_comments'): $proposal['pp']['user_comments'] ?? '' }}</textarea>
+                                  placeholder="{{__("Your comments")}}" @if($type == 'review' or $type == 'edit' or $type == 'view') readonly @endif>{{ old('user_comments') ? old('user_comments'): $proposal->pp['user_comments'] ?? '' }}</textarea>
                     </div>
+                    @if($type == 'edit' or $type == 'resume')
+                    <!-- Edited comments -->
+                    <div class="sm:col-span-2">
+                        <label for="edit_comments" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Edit Comments") }}
+                            <button id="edit_comments-button" data-modal-toggle="edit_comments-modal" class="inline" type="button">
+                                <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </button>
+                        </label>
+                        <textarea id="edit_comments" rows="4" name="edit_comments"
+                                  class="font-mono block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300
+                                    focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                  placeholder="{{__("Your comments")}}">{{ old('edit_comments') ? old('edit_comments'): $proposal->pp['edit_comments'] ?? '' }}</textarea>
+                    </div>
+                    @endif
                 </div>
 
                 <!-- Upload component -->
@@ -454,7 +492,7 @@
                     <livewire:pp.proposal-uploader  :proposal="$proposal" />
                 @endif
 
-                @if($type == 'create' or $type == 'resume')
+                @if($type == 'create' or $type == 'edit' or $type == 'resume')
                     <!-- Submit buttons -->
                     <div class="flex flex-col sm:flex-row gap-3">
                         <a type="button" href="{{ url()->previous() }}"
@@ -472,8 +510,23 @@
                                 text-blue-700 hover:text-white shadow-sm focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none
                                 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-300
                                 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
-                            {{__("Submit proposal")}}
+                            @if($type == 'edit')
+                                {{__("Edit proposal")}}
+                            @else
+                                {{__("Submit proposal")}}
+                            @endif
+
                         </button>
+                    </div>
+                @elseif($type == 'view')
+                    <div class="mt-4 flex flex-col sm:flex-row gap-3">
+                        <a type="button" href="{{ url()->previous() }}"
+                           class="py-2.5 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-susecondary bg-white text-gray-800 shadow-sm
+                                hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none
+                                dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-300
+                                dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
+                            {{__("Return")}}
+                        </a>
                     </div>
                 @endif
             </form> <!-- end form -->

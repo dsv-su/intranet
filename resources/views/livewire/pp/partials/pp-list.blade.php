@@ -22,7 +22,7 @@
                             <!-- Main Researcher and other details -->
                             <h4 class="text-xs font-medium text-gray-800 dark:text-neutral-200 tracking-wide">
                                 <span class="font-medium">Main researcher:</span> {{ $proposal->pp['principal_investigator'] }} &nbsp; | &nbsp;
-                                <span class="font-medium">Submission deadline:</span> {{ $proposal->pp['submission_deadline'] }} &nbsp; | &nbsp;
+                                <span class="font-medium">Submission deadline:</span> {{ $proposal->pp['submission_deadline'] ?? '' }} &nbsp; | &nbsp;
                                 <span class="font-medium">Project duration:</span> {{ $proposal->pp['project_duration'] }} &nbsp; | &nbsp;
                                 <span class="font-medium">Economy owner:</span> [N/A]
                             </h4>
@@ -132,6 +132,15 @@
                                        dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
                                         View
                                     </a>
+                                    @if($proposal->allowEdit())
+                                    <a type="button"
+                                       href="{{route('pp-edit', $proposal->id)}}"
+                                       class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
+                                        focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
+                                        dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
+                                        Edit
+                                    </a>
+                                    @endif
                                     @if($proposal->status_stage1 == 'fo_approved' ?? false)
                                         <a type="button"
                                            href="{{route('pp-upload', $proposal->id)}}#proposal-attachments"

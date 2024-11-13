@@ -11,7 +11,7 @@
         </div>
         <div class="ms-2">
             <h3 id="hs-dismiss-button-label" class="text-sm font-medium">
-                Your Project proposal has successfully been submitted.
+                {{ session('success') }}
             </h3>
         </div>
         <div class="ps-3 ms-auto">

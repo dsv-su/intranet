@@ -7,6 +7,26 @@ use Livewire\Component;
 class EuWallenbergProject extends Component
 {
     public $visibility = 'hidden';
+    public $proposal;
+
+    public function mount($proposal = null)
+    {
+        $this->proposal = $proposal;
+        $this->check();
+    }
+
+    public function check()
+    {
+        if($this->proposal->pp['eu_wallenberg'] ?? false) {
+            if($this->proposal->pp['eu_wallenberg'] == 'no') {
+                $this->no();
+            }
+            elseif ($this->proposal->pp['eu_wallenberg'] == 'yes') {
+                $this->yes();
+            }
+        }
+
+    }
 
     public function yes()
     {

@@ -48,6 +48,16 @@ class ProjectProposalController extends Controller
             ->layout('mylayout');
     }
 
+    public function pp_edit($id)
+    {
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['proposal'] = ProjectProposal::find($id);
+        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
+        $viewData['type'] = 'edit';
+
+        return $this->createView('pp.create', 'mylayout', $viewData);
+    }
+
     public function decision(Request $request)
     {
         //Update comments
@@ -128,57 +138,90 @@ class ProjectProposalController extends Controller
 
         // Financial officer and authenticated user retrieval
         $foUserId = SettingsFo::find(1)?->user_id;
-        //$userId = auth()->id();
+
+        //User
         $userId = Auth::user()->id;
 
-        // Create Project Proposal instance
-        $pp = new \App\Models\ProjectProposal();
+        //Timestamp
         $timestamp = now()->startOfDay()->timestamp;
 
-        $pp->fill([
-            'user_id' => $userId,
-            'name' => $request->title,
-            'created' => $timestamp,
-            'status_stage1' => 'pending',
-            'status_stage2' => 'pending',
-            'status_stage3' => 'pending',
-            'pp' => $request->only([
-                    'title', 'objective', 'principal_investigator', 'principal_investigator_email',
-                    'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
-                    'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
-                    'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
-                    'budget_dsv', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
-                ]) + [
-                    'submitted' => $timestamp,
-                    'status' => 'pending'
-                ],
-            'files' => []
-        ]);
+        //Check submit type
+        switch ($request->type) {
+            case 'create':
+                // Create Project Proposal instance
+                $pp = new \App\Models\ProjectProposal();
 
-        // Save Project Proposal
-        $pp->save();
+                $pp->fill([
+                    'user_id' => $userId,
+                    'name' => $request->title,
+                    'created' => $timestamp,
+                    'status_stage1' => 'pending',
+                    'status_stage2' => 'pending',
+                    'status_stage3' => 'pending',
+                    'pp' => $request->only([
+                            'title', 'objective', 'principal_investigator', 'principal_investigator_email',
+                            'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
+                            'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
+                            'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
+                            'budget_dsv', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
+                        ]) + [
+                            'submitted' => $timestamp,
+                            'status' => 'pending'
+                        ],
+                    'files' => []
+                ]);
 
-        // Dashboard instance creation or update
-        $dashboardData = [
-            'request_id' => $pp->id,
-            'name' => $request->title,
-            'created' => $timestamp,
-            'status' => 'unread',
-            'type' => 'projectproposal',
-            'user_id' => $userId,
-            'manager_id' => $request->unit_head,
-            'fo_id' => $foUserId,
-            'head_id' => $request->unit_head,
-            'vice_id' => $this->getViceHeadUserId()
-        ];
+                // Save Project Proposal
+                $pp->save();
 
-        Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
+                // Dashboard instance creation or update
+                $dashboardData = [
+                    'request_id' => $pp->id,
+                    'name' => $request->title,
+                    'created' => $timestamp,
+                    'status' => 'unread',
+                    'type' => 'projectproposal',
+                    'user_id' => $userId,
+                    'manager_id' => $request->unit_head,
+                    'fo_id' => $foUserId,
+                    'head_id' => $request->unit_head,
+                    'vice_id' => $this->getViceHeadUserId()
+                ];
 
-        // Start workflow and store workflow ID
-        $workflow = $this->createAndStartWorkflow($pp->dashboard);
-        $this->workflowID = $workflow->id();
+                Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
 
-        return redirect()->route('pp', 'my')->with('success', 'Item successfully created!');
+                // Start workflow and store workflow ID
+                $workflow = $this->createAndStartWorkflow($pp->dashboard);
+                $this->workflowID = $workflow->id();
+
+                return redirect()->route('pp', 'my')->with('success', 'Your Project proposal has successfully been submitted!');
+
+            case 'edit':
+                //
+                //dd($request->all());
+                $pp = ProjectProposal::find($request->id);
+                $pp->update([
+                    'user_id' => $userId,
+                    'name' => $request->title,
+                    'created' => $timestamp,
+                    'pp' => $request->only([
+                            'title', 'objective', 'principal_investigator', 'principal_investigator_email',
+                            'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
+                            'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
+                            'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
+                            'budget_dsv', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
+                        ])]);
+                // Save Project Proposal
+                $pp->save();
+                $this->comments_update($request->id, $request->edit_comments, 'edit');
+                return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
+                break;
+            case 'resume':
+                dd($request->type);
+                break;
+        }
+        dd('Error');
+
     }
 
     protected function validateRequest(Request $request)
@@ -193,23 +236,32 @@ class ProjectProposalController extends Controller
         return $this->validate($request, $rules);
     }
 
-    protected function comments_update($id, $comment)
+    protected function comments_update($id, $comment, $type = null)
     {
         //Proposal user comments
         $proposal = ProjectProposal::find($id);
-        $user_comments = $proposal->pp['user_comments']. "\n";
+        $user_comments = $proposal->pp['user_comments'] ?? '';
 
         //Timestamp
         $timestamp = now()->format('d/m/Y');
         $user = auth()->user()->name;
-        $tag = '***';
-        $comments_tag = $tag . '  ' . $user . '  ' . $timestamp . '  ' . $tag;
+        $tag = '**';
+        if($type == 'edit') {
+            $comments_tag = $tag . '  ' . 'Proposal has been edited by ' . $user . '  ' . $timestamp . '  ' . $tag;
+        } else {
+            $comments_tag = $tag . '  ' . $user . '  ' . $timestamp . '  ' . $tag;
+        }
+
 
         //Merge with reviewer comments
 
         return ProjectProposal::where('id', $id)
             ->update(['pp->user_comments' =>
-                Str::of($user_comments . $comments_tag)->newLine()->append($comment)->newLine()
+                Str::of($user_comments)->newLine()
+                    ->append($comments_tag)
+                    ->newLine()
+                    ->append($comment)
+                    ->newLine()
             ]);
     }
 

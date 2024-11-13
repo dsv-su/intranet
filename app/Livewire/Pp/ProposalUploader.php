@@ -36,11 +36,15 @@ class ProposalUploader extends Component
     {
         $user = Auth::user();
         $dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
-        if($dashboard->user_id === $user->id or $dashboard->head_id === $user->id or $dashboard->vice_id === $user->id or $dashboard->fo_id === $user->id ) {
+
+        $allowed_roles = [$dashboard->user_id, $dashboard->head_id, $dashboard->vice_id, $dashboard->fo_id];
+
+        if (in_array($user->id, $allowed_roles) && $dashboard->state == 'fo_approved') {
             $this->allow = true;
         } else {
             $this->allow = false;
         }
+
 
     }
 

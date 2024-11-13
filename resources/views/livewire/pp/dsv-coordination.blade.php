@@ -17,7 +17,11 @@
                 <input type="radio" name="dsvcoordinating" value="yes"
                        wire:click="yes"
                        class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                       id="dsvcoordinating" checked="" required>
+                       id="dsvcoordinating"
+                       @if($proposal->pp['dsvcoordinating'] ?? '' == 'yes')
+                       checked=""
+                       @endif
+                       required>
                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Yes</span>
             </label>
 
@@ -26,7 +30,11 @@
                 <input type="radio" name="dsvcoordinating" value="no"
                        wire:click="no"
                        class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                       id="dsvcoordinating" required>
+                       id="dsvcoordinating"
+                       @if($proposal->pp['dsvcoordinating'] ?? '' == 'no')
+                       checked=""
+                       @endif
+                       required>
                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">No</span>
             </label>
         </div>
@@ -35,6 +43,6 @@
         <input type="text" name="other_coordination" id="other_coordination"
                class="{{$visibility}} font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-               value="{{ old('other_coordination') ? old('other_coordination'): $proposal->other_coordination ??  '' }}" placeholder="Other coordinator">
+               value="{{ old('other_coordination') ? old('other_coordination'): $proposal->pp['other_coordination'] ??  '' }}" placeholder="Other coordinator">
     </div>
 </div>

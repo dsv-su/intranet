@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Auth;
 use Spatie\ModelStates\HasStates;
 
 class ProjectProposal extends Model
@@ -25,5 +26,20 @@ class ProjectProposal extends Model
     public function dashboard(): HasOne
     {
         return $this->hasOne(Dashboard::class, 'request_id');
+    }
+
+    public function allowEdit()
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        $allowed_roles = [$dashboard->user_id, $dashboard->head_id, $dashboard->vice_id, $dashboard->fo_id];
+
+        // && $dashboard->state == 'fo_approved' //alternative for only approved proposals
+        if (in_array($user->id, $allowed_roles)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

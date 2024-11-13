@@ -18,10 +18,24 @@ class CoinvestigatorsSelect2 extends Component
     public $coinvestigators_external = [];
     public $external = 'hidden';
     public $external_coinvestigators_name, $external_coinvestigators_email;
+    public $proposal;
+    public $coinv = [];
 
-    public function mount()
+    public function mount($proposal = null)
     {
         $this->resetData();
+        $this->proposal = $proposal;
+        $this->editCo();
+    }
+
+    public function editCo()
+    {
+        if(count($this->proposal->pp['co_investigator_name'] ?? []) > 0) {
+            foreach ($this->proposal->pp['co_investigator_name'] as $key => $co_name) {
+                $this->coinv[$key]['name'] = $co_name;
+                $this->coinv[$key]['email'] = $this->proposal->pp['co_investigator_email'][$key];
+            }
+        }
     }
 
     public function resetData()
@@ -63,6 +77,11 @@ class CoinvestigatorsSelect2 extends Component
 
         $this->coinvestigators[] = $this->person;
         $this->resetData();
+    }
+
+    public function Editremove($key)
+    {
+        unset($this->coinv[$key]);
     }
 
     public function remove($key)

@@ -11,16 +11,29 @@ class OrgSelect2 extends Component
 {
     public FundingOrganization $organization;
     public $search;
+    public $proposal;
 
     protected $listeners = [
         'set-Org' => 'set_Org',
         'clearorganization'
     ];
 
-    public function mount()
+    public function mount($proposal = null)
     {
         $this->organization = new FundingOrganization;
+        $this->proposal = $proposal;
+        $this->editOrg();
     }
+
+    public function editOrg()
+    {
+        if(!empty($this->proposal->pp['funding_organization'])) {
+            $organization = FundingOrganization::where('name',$this->proposal->pp['funding_organization'])->first();
+            $this->organization = $organization;
+            $this->dispatch('selectedOrganization', $this->organization->id);
+        }
+    }
+
 
     public function getOptionsProperty()
     {

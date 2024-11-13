@@ -7,6 +7,20 @@ use Livewire\Component;
 class DsvCoordination extends Component
 {
     public $visibility = 'hidden';
+    public $proposal;
+
+    public function mount($proposal = null)
+    {
+        $this->proposal = $proposal;
+        $this->check();
+    }
+
+    public function check()
+    {
+        if($this->proposal->pp['dsvcoordinating'] ?? '' == 'no') {
+            $this->no();
+        }
+    }
 
     public function no()
     {
