@@ -82,20 +82,16 @@
 }
 
 /* Fix for preventing titles in navbar from wrapping */
-#navbar-multi-level ul {
-    white-space: nowrap; /* Prevent text wrapping */
+#navbar-multi-level > ul > li {
+    white-space: nowrap; /* Prevent text wrapping for top-level items */
     overflow-x: auto; /* Allow horizontal scroll if the content is too wide */
-}
-
-#navbar-multi-level li {
-    max-width: 100%; /* Ensure each item doesn't exceed container width */
     display: inline-block; /* Ensure items stay inline */
 }
 
-#navbar-multi-level a, #navbar-multi-level button {
-    white-space: nowrap; /* Prevent wrapping on buttons and links */
+#navbar-multi-level > ul > li > a,
+#navbar-multi-level > ul > li > button {
+    white-space: nowrap; /* Prevent wrapping on top-level links and buttons */
 }
-
 
 /* Media query for mobile devices */
 @media only screen and (max-width: 768px) {
