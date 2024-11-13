@@ -50,12 +50,12 @@
                     <div class="text-sm font-medium text-blue-600 dark:text-white">{{__("Travel Request")}}</div>
                 </a>
                 <!-- Project proposals -->
-                <a href="#" class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 group">
-                    <svg class="mx-auto mb-2 w-5 h-5 text-gray-300 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <a href="{{route('pp', 'my')}}" class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 group">
+                    <svg class="mx-auto mb-2 w-5 h-5 text-blue-600 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h4M9 3v4a1 1 0 0 1-1 1H4m11 6v4m-2-2h4m3 0a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z"/>
                     </svg>
 
-                    <div class="text-sm font-medium text-gray-300 dark:text-white">Project Proposals</div>
+                    <div class="text-sm font-medium text-blue-600 dark:text-white">Project Proposals</div>
                 </a>
 
                 {{--}}
