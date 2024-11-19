@@ -1,4 +1,4 @@
-@switch((string) $proposal->dashboard->state ?? '')
+@switch( (string) $proposal->dashboard->state )
     @case('pending')
         @php
             $state = 'PENDING';
@@ -34,11 +34,29 @@
             $textcolor = 'text-green-800';
         @endphp
         @break
+    @case('head_denied')
+    @case('vice_denied')
+    @case('fo_denied')
+        @php
+            $state = 'DENIED';
+            $bgcolor = 'bg-red-100';
+            $textcolor = 'text-red-800';
+        @endphp
+        @break
+    @case('head_returned')
+    @case('vice_returned')
+    @case('fo_returned')
+        @php
+            $state = 'RETURNED';
+            $bgcolor = 'bg-yellow-100';
+            $textcolor = 'text-yellow-800';
+        @endphp
+        @break
     @default
         @php
             $state = 'ERROR';
-            $bgcolor = 'bg-yellow-100';
-            $textcolor = 'text-yellow-800';
+            $bgcolor = 'bg-red-100';
+            $textcolor = 'text-red-800';
         @endphp
         @break
 @endswitch

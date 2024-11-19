@@ -1,4 +1,10 @@
-New Project Proposal Submitted for Review - <b>Action Required</b><br><br>
+<b>PLEASE NOTE! </b>
+<br>
+<b>ProjectProposal will be in test mode during the period December 15–20, 2024, and all proposals generated during this time are fabricated for testing purposes only.</b>
+<br><br>
+---
+<br>
+New Project Proposal Submitted for Review<br><br>
 Dear {{$head->name}},
 <br><br>
 A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been submitted and is now available for your review.
@@ -6,7 +12,7 @@ A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has b
 <br><br>
 Here's a quick overview of the request:
 <br><br>
-<b>Application:</b> {{$dashboard->name}}
+<b>Proposal:</b> {{$dashboard->name}}
 <br><br>
 <b>Requester:</b> {{$user->name}}
 <br><br>
@@ -16,11 +22,9 @@ Here's a quick overview of the request:
 <br><br>
 <b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>
-You can conveniently review the details and take necessary action by accessing the request through the following link:
+You can review the details and take necessary action by accessing the proposal through the following link:
 <br><br>
-<a href="{{ url('') }}">{{url('')}}</a>
-<br><br>
-Thank you for your prompt attention to this request.
+<a href="{{ url('') }}/pp/view/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}}</a>
 <br><br>
 ---
 <br>
