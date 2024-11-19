@@ -18,6 +18,7 @@ class ReviewController extends Controller
 {
     public function __construct()
     {
+        $this->middleware(['web', 'auth', 'dsv']);
         $this->middleware('review')->except(['pp_view']);
     }
 
