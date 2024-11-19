@@ -4,7 +4,7 @@
         <a @if($return->type == 'travelrequest')
             href="{{route('travel-request-show', $return->id)}}"
            @else
-            href="{{route('my-projects')}}"
+            href="{{route('pp', 'my')}}"
            @endif
            wire:click="read({{$return->id}})"
            class="flex bg-red-200 py-3 px-4 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">

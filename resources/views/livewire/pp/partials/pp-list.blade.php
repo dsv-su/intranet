@@ -145,11 +145,22 @@
                                         <a type="button"
                                            href="{{route('pp-upload', $proposal->id)}}#proposal-attachments"
                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
-                                       focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
-                                       dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
+                                            focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
+                                            dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
                                             Upload
                                         </a>
                                    @endif
+                                    <!-- Resume -->
+                                    @if($proposal->allowEdit() and in_array((string) $proposal->status_stage1, ['head_returned', 'vice_returned', 'fo_returned']))
+                                        <a type="button"
+                                           href="#"
+                                           class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
+                                            focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
+                                            dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
+                                            Resume
+                                        </a>
+                                    @endif
+
                                 </div>
                                 <!-- End button group -->
 
@@ -163,6 +174,10 @@
                                     <span class="font-semibold">Unit head:</span>
                                     @if(in_array((string) $proposal->dashboard->state, ['head_approved', 'vice_approved', 'fo_approved']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
+                                    @elseif(in_array((string) $proposal->dashboard->state, ['head_denied', 'vice_denied', 'fo_denied']))
+                                        <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
+                                    @elseif(in_array((string) $proposal->dashboard->state, ['head_returned', 'vice_returned', 'fo_returned']))
+                                        <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Returned</span>
                                     @else
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Processing</span>
                                     @endif
@@ -173,6 +188,10 @@
                                     <span class="font-semibold">Vice head:</span>
                                     @if(in_array((string) $proposal->dashboard->state, ['vice_approved', 'fo_approved']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
+                                    @elseif(in_array((string) $proposal->dashboard->state, ['vice_denied', 'fo_denied']))
+                                        <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
+                                    @elseif(in_array((string) $proposal->dashboard->state, ['vice_returned', 'fo_returned']))
+                                        <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Returned</span>
                                     @else
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Processing</span>
                                     @endif
@@ -183,6 +202,10 @@
                                     <span class="font-semibold">Economy:</span>
                                     @if(in_array((string) $proposal->dashboard->state, ['fo_approved']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
+                                    @elseif(in_array((string) $proposal->dashboard->state, ['fo_denied']))
+                                        <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
+                                    @elseif(in_array((string) $proposal->dashboard->state, ['fo_returned']))
+                                        <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Returned</span>
                                     @else
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Processing</span>
                                     @endif

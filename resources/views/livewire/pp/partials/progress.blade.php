@@ -1,34 +1,50 @@
 @switch((string) $proposal->dashboard->state ?? '')
     @case('submitted')
-    @php
-        $progress = 25;
-        $color = 'bg-yellow-400';
-    @endphp
-    @break
+        @php
+            $progress = 25;
+            $color = 'bg-yellow-400';
+        @endphp
+        @break
     @case('head_approved')
-    @php
-        $progress = 50;
-        $color = 'bg-purple-600';
-    @endphp
-    @break
+        @php
+            $progress = 50;
+            $color = 'bg-purple-600';
+        @endphp
+        @break
     @case('vice_approved')
-    @php
-        $progress = 75;
-        $color = 'bg-blue-600';
-    @endphp
-    @break
+        @php
+            $progress = 75;
+            $color = 'bg-blue-600';
+        @endphp
+        @break
     @case('fo_approved')
-    @php
-        $progress = 100;
-        $color = 'bg-green-600';
-    @endphp
-    @break
+        @php
+            $progress = 100;
+            $color = 'bg-green-600';
+        @endphp
+        @break
+    @case('head_denied')
+    @case('vice_denied')
+    @case('fo_denied')
+        @php
+            $progress = 100;
+            $color = 'bg-red-600';
+        @endphp
+        @break
+    @case('head_returned')
+    @case('vice_returned')
+    @case('fo_returned')
+        @php
+            $progress = 100;
+            $color = 'bg-yellow-200';
+        @endphp
+        @break
     @default
-    @php
-        $progress = 0;
-        $color = 'bg-red-200';
-    @endphp
-    @break
+        @php
+            $progress = 0;
+            $color = 'bg-red-200';
+        @endphp
+        @break
 @endswitch
 
 

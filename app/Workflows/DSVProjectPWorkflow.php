@@ -5,6 +5,7 @@ namespace App\Workflows;
 use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
 use App\Workflows\Notifications\NewProjectProposalNotification;
+use App\Workflows\Notifications\StateUpdateNotification;
 use App\Workflows\Partials\RequestStates;
 use App\Workflows\StatusUpdates\PPStatusUpdateUsersStage1;
 use App\Workflows\Transitions\StateUpdateTransition;
@@ -116,12 +117,11 @@ class DSVProjectPWorkflow extends Workflow
 
                 break;
             case RequestStates::HEAD_RETURNED:
-
-                //End workflow
-                return $this->stateMachine->state->status();
             case RequestStates::HEAD_DENIED:
                 //Request has been returned or denied by head
-
+                foreach ($commonActivities as $activity) {
+                    yield $activity;
+                }
                 //End workflow
                 return $this->stateMachine->state->status();
         }
@@ -145,11 +145,11 @@ class DSVProjectPWorkflow extends Workflow
 
                 break;
             case RequestStates::VICE_RETURNED:
-
-                //End workflow
-                return $this->stateMachine->state->status();
             case RequestStates::VICE_DENIED:
-                //Request has been returned or denied by head
+            //Request has been returned or denied by vice
+            foreach ($commonActivities as $activity) {
+                yield $activity;
+            }
 
                 //End workflow
                 return $this->stateMachine->state->status();
@@ -171,20 +171,18 @@ class DSVProjectPWorkflow extends Workflow
 
         switch ($newState) {
             case RequestStates::FO_APPROVED:
-                //Request has been approved by FO
-
-                //Notify
-                //TODO
+                //Request has been approved by fo
+                foreach ($commonActivities as $activity) {
+                    yield $activity;
+                }
 
                 break;
             case RequestStates::FO_RETURNED:
-
-                //End workflow
-                return $this->stateMachine->state->status();
-
             case RequestStates::FO_DENIED:
                 //Request has been returned or denied by FO
-
+                foreach ($commonActivities as $activity) {
+                    yield $activity;
+                }
                 //End workflow
                 return $this->stateMachine->state->status();
         }
@@ -202,7 +200,7 @@ class DSVProjectPWorkflow extends Workflow
     {
         return [
             ActivityStub::make(StateUpdateTransition::class, $userRequest),
-            //ActivityStub::make(StateUpdateNotification::class, $userRequest),
+            ActivityStub::make(StateUpdateNotification::class, $userRequest),
         ];
     }
 }
