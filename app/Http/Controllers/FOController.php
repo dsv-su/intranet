@@ -27,13 +27,23 @@ class FOController extends Controller
      */
     public function show($id)
     {
-        $tr = TravelRequest::find($id);
-        $formtype = 'show';
+        //Check type
+        $dashboard = Dashboard::where('request_id', $id)->first();
+        switch($dashboard->type) {
+            case 'travelrequest':
+                $tr = TravelRequest::find($id);
+                $formtype = 'show';
+                return (new \Statamic\View\View)
+                    ->template('requests.travel.show')
+                    ->layout('mylayout')
+                    ->with(['tr' => $tr, 'formtype' => $formtype]);
+                break;
+            case 'projectproposal':
+                return redirect()->action([ReviewController::class, 'pp_view'], ['id' => $id]);
+                break;
+        }
 
-        return (new \Statamic\View\View)
-            ->template('requests.travel.show')
-            ->layout('mylayout')
-            ->with(['tr' => $tr, 'formtype' => $formtype]);
+
     }
 
     public function list()
