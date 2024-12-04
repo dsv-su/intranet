@@ -312,14 +312,14 @@
                     </div>
                     <!-- Project duration -->
                     <div class="w-full">
-                        <label for="duration" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Project duration") }}<span class="text-red-600"> *</span>
+                        <label for="duration" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Project duration in months") }}<span class="text-red-600"> *</span>
                             <button id="duration-button" data-modal-toggle="duration-modal" class="inline" type="button">
                                 <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
                             </button>
                         </label>
-                        <input type="text" name="project_duration" id="duration"
+                        <input type="number" name="project_duration" id="duration"
                                class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                         block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                value="{{ old('duration') ? old('duration'): $proposal->pp['project_duration'] ??  '' }}"
@@ -419,6 +419,8 @@
                     @endif
 
                     <!-- Percent OH-costs -->
+                    <livewire:pp.ohcost :type="$type" :proposal="$proposal ?? null"/>
+                    {{--}}
                     <div class="w-full">
                         <label for="oh_cost" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                             {{ __("Percent OH cost covered") }}
@@ -443,6 +445,8 @@
                             <span class="inline-block ml-2 text-gray-900 dark:text-gray-200">%</span>
                         </div>
                     </div>
+                    {{--}}
+                    <!-- Comments -->
                     <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
                         Comments
                     </div>

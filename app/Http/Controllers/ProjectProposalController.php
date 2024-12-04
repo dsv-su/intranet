@@ -230,6 +230,8 @@ class ProjectProposalController extends Controller
             'title' => 'required',
             'objective' => 'required',
             'principal_investigator' => 'required',
+            'project_duration' => 'required|numeric|integer',
+            'oh_cost' => 'required|numeric|max:56'
         ];
 
 
