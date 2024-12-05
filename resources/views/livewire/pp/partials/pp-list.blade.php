@@ -17,6 +17,7 @@
                                 {{ $proposal->pp['title'] }}
                             </p>
                             <!-- Progress -->
+                            {{--}}@nocache('livewire.pp.partials.progress'){{--}}
                             @nocache('livewire.pp.partials.progress')
                             <!-- End Progress -->
                             <!-- Main Researcher and other details -->
