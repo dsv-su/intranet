@@ -1,9 +1,12 @@
 [global]
+app_name='DSVIntranet'
+app_env=local
 app_env=local                           ; Make sure this is set to production for production enviroments
 app_debug=true                          ; Make sure this is set to false for production enviroments
 app_url=http://localhost                ; Set this to your domain
 authorization_parameter=entitlement     ; The authorization parameter
 authorization=                          ; Authorization entitlements
+login_route=
 
 [database]
 db=mysql                                ; Here you can specify which database you use: mysql, sqlite, pgsql, sqlsrv or redis
@@ -12,3 +15,20 @@ db_port=3306
 db_database=
 db_username=
 db_password=
+
+[email]
+dsv_info=                               ; Entire DSV
+dsv_teachers=                           ; Teachers
+dsv_phd=                                ; PhD
+
+[sukat]
+host=
+username=
+password=
+port=636
+base_dn='dc=su,dc=se'
+timeout=5
+
+[rss]
+su_drift=https://stockholmuniversitysystemstatus.wordpress.com/feed/
+vr='https://www.vr.se/4.4f3e672a18df2c1c2d21dbef/12.4f3e672a18df2c1c2d21dbff.portlet?state=rss&sv.contenttype=text/xml;charset=UTF-8'

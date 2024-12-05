@@ -24,7 +24,7 @@ Here's a quick overview of the request:
 <br><br>
 You can review the details and take necessary action by accessing the proposal through the following link:
 <br><br>
-<a href="{{ url('') }}/pp/view/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}}</a>
+<a href="{{ url('') }}/pp/review/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}}</a>
 <br><br>
 ---
 <br>
