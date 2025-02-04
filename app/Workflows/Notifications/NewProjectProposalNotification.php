@@ -6,6 +6,8 @@ use App\Mail\NotifyFONewProjectProposal;
 use App\Mail\NotifyHeadNewProjectProposal;
 use App\Mail\NotifyViceNewProjectProposal;
 use App\Models\Dashboard;
+use App\Models\HeadGroup;
+use App\Models\ProjectProposal;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -15,10 +17,12 @@ use Workflow\Activity;
 class NewProjectProposalNotification extends Activity
 {
     protected Dashboard $dashboard;
+    protected ProjectProposal $proposal;
 
     public function execute(string $recipient, int $request): void
     {
         $this->loadDashboard($request);
+        $this->loadPP($this->dashboard->request_id);
         $users = $this->loadUsers();
 
         // Send email based on recipient type
@@ -31,15 +35,34 @@ class NewProjectProposalNotification extends Activity
         $this->dashboard = Dashboard::findOrFail($id);
     }
 
+    private function loadPP(string $uuid): void
+    {
+        $this->proposal = ProjectProposal::findOrFail($uuid);
+    }
+
     private function loadUsers(): array
     {
-        // Fetch all relevant users
-        $userIds = [
-            $this->dashboard->user_id,
-            $this->dashboard->fo_id,
-            $this->dashboard->head_id,
-            $this->getViceHeadUserId(),
-        ];
+        // Check if there are multiple unitheads in request
+        if($this->proposal->pp['unit_heads_to_approve'] > 1) {
+            // Fetch all relevant users for multiple heads
+            $this->head_group = HeadGroup::where('request_id', $this->proposal->id)->first();
+
+            $userIds = array_merge([
+                $this->dashboard->user_id,
+                $this->dashboard->fo_id,
+                $this->getViceHeadUserId(),
+            ], $this->head_group->unit_heads);
+        } else {
+            // Fetch all relevant users
+            $userIds = [
+                $this->dashboard->user_id,
+                $this->dashboard->fo_id,
+                $this->dashboard->head_id,
+                $this->getViceHeadUserId(),
+            ];
+        }
+
+
 
         $users = User::whereIn('id', $userIds)->get()->keyBy('id');
 

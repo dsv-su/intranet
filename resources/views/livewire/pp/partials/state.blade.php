@@ -1,4 +1,4 @@
-@switch( (string) $proposal->dashboard->state )
+@switch( (string) $proposal->dashboard?->state )
     @case('pending')
         @php
             $state = 'PENDING';

@@ -135,7 +135,7 @@ class ProjectProposalController extends Controller
     {
         // Validate and retrieve request data
         $this->validateRequest($request);
-
+        //dd($request->all(), $request->unit_head);
         // Financial officer and authenticated user retrieval
         $foUserId = SettingsFo::find(1)?->user_id;
 
@@ -151,6 +151,15 @@ class ProjectProposalController extends Controller
                 // Create Project Proposal instance
                 $pp = new \App\Models\ProjectProposal();
 
+                // Check number of added UH
+                if (($unitheads_to_approve = count($request->unit_head)) > 1) {
+                    $uh_group = new \App\Models\HeadGroup();
+                    $uh_group->unit_heads = $request->unit_head;
+                    $uh_group->save();
+                } else {
+                    $unitheads_to_approve = 1;
+                }
+
                 $pp->fill([
                     'user_id' => $userId,
                     'name' => $request->title,
@@ -165,6 +174,7 @@ class ProjectProposalController extends Controller
                             'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
                             'budget_dsv', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
                         ]) + [
+                            'unit_heads_to_approve' => $unitheads_to_approve,
                             'submitted' => $timestamp,
                             'status' => 'pending'
                         ],
@@ -182,13 +192,19 @@ class ProjectProposalController extends Controller
                     'status' => 'unread',
                     'type' => 'projectproposal',
                     'user_id' => $userId,
-                    'manager_id' => $request->unit_head,
+                    'manager_id' => $request->unit_head[0],
                     'fo_id' => $foUserId,
-                    'head_id' => $request->unit_head,
+                    'head_id' => $request->unit_head[0],
                     'vice_id' => $this->getViceHeadUserId()
                 ];
 
                 Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
+
+                //Update head group if multiple heads
+                if($pp->pp['unit_heads_to_approve'] > 1) {
+                    $uh_group->request_id = $pp->id;
+                    $uh_group->save();
+                }
 
                 // Start workflow and store workflow ID
                 $workflow = $this->createAndStartWorkflow($pp->dashboard);

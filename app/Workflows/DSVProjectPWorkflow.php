@@ -90,6 +90,10 @@ class DSVProjectPWorkflow extends Workflow
         //Submitted by requester
         yield WorkflowStub::await(fn () => $this->isSubmitted());
 
+        //Update pp with dashboardstate
+        $commonActivities = $this->getCommonActivities($userRequest);
+        yield $commonActivities[0];
+
         //Email to Head
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::UNIT_HEAD, $userRequest);
         //yield ActivityStub::make(PPStatusUpdateUsersStage1::class, RequestStates::UNIT_HEAD, 'review', $userRequest);
