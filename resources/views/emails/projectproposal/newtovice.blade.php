@@ -1,7 +1,11 @@
 <b>PLEASE NOTE! </b>
 <br>
-<b>ProjectProposal will be in test mode during the period December 15–20, 2024, and all proposals generated during this time are fabricated for testing purposes only.</b>
+<b>ProjectProposal is currently in test mode, and all created proposals are fictitious and intended for testing purposes only.</b>
 <br><br>
+---
+<br>
+To vicehead
+<br>
 ---
 <br>
 New Project Proposal Submitted for Review <br><br>
@@ -16,7 +20,7 @@ Here's a quick overview of the request:
 <br><br>
 <b>Requester:</b> {{$user->name}}
 <br><br>
-<b>Unit Head:</b> {{$head->name}}
+<b>Responsible Unit Head:</b> {{$head->name}}
 <br><br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
 <br><br>

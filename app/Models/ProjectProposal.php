@@ -33,7 +33,7 @@ class ProjectProposal extends Model
         $user = Auth::user();
         $dashboard = Dashboard::where('request_id', $this->id)->first();
 
-        $allowed_roles = [$dashboard->user_id, $dashboard->head_id, $dashboard->vice_id, $dashboard->fo_id];
+        $allowed_roles = [$dashboard?->user_id, $dashboard?->head_id, $dashboard?->vice_id, $dashboard?->fo_id];
 
         // && $dashboard->state == 'fo_approved' //alternative for only approved proposals
         if (in_array($user->id, $allowed_roles)) {

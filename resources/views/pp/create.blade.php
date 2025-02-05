@@ -4,6 +4,10 @@
     @include('pp.partials.header')
     <section class="bg-white dark:bg-gray-900">
         <div class="max-w-2xl px-4 py-8 mx-auto lg:py-16">
+            @if(in_array($type, ['edit', 'view', 'resume']))
+                @include(('pp.partials.overview'))
+            @endif
+
             <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
                 @if($type == 'review')
                     {{ __("Review:") }} {{$proposal['name']}}
@@ -15,7 +19,6 @@
                 {{ __("Create a Project proposal") }}
                 @endif
             </h2>
-
             <form method="post" action="{{route('pp-submit')}}">
                 @csrf
 
@@ -129,33 +132,72 @@
                             @include('pp.partials.review.research_area')
                         @endif
                     </div>
+
                     <!--Unithead-->
+
                     <div>
-                        <label for="unit_head" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Unit Head to approve by") }}<span class="text-red-600"> *</span>
-                            <button id="unithead-button" data-modal-toggle="unithead-modal" class="inline" type="button">
+                        <label for="unit_head" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            {{ __("Unit Head to approve by") }}<span class="text-red-600"> *</span>
+                            <button id="unithead-button" data-modal-toggle="unithead-modal" type="button" class="inline">
                                 <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"
+                                          d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
                             </button>
                         </label>
-                        @if($type == 'create' or $type == 'edit' or $type == 'resume')
-                            <select id="unit_head" name="unit_head"
-                                    class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                @foreach($unitheads as $unithead)
-                                    @if($type == 'edit' or $type == 'resume')
-                                        <option value="{{$unithead->id}}" @if($unithead->id == $dashboard->head_id) selected="" @endif >{{$unithead->name}}</option>
-                                    @else
-                                        <option value="{{$unithead->id}}">{{$unithead->name}}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            @error('unit_head')
-                            <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
-                            @enderror
+
+                        @if(in_array($type, ['create', 'edit', 'resume']))
+                            <div id="unithead-container">
+                                @php
+                                    $selectedUnitHeads = $type == 'create' ? [] : ($proposal['pp']['unit_head'] ?? []);
+                                @endphp
+
+                                @if(count($selectedUnitHeads) > 1)
+                                    <!-- Multiple Unit Heads -->
+                                    @foreach($selectedUnitHeads as $selectedUnitHead)
+                                        <select name="unit_head[]" class="mb-2 font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                            @foreach($unitheads as $unithead)
+                                                <option value="{{ $unithead->id }}" {{ $unithead->id == $selectedUnitHead ? 'selected' : '' }}>
+                                                    {{ $unithead->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endforeach
+                                @else
+                                    <!-- Single Unit Head -->
+                                    <select id="unit_head" name="unit_head[]" class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        @foreach($unitheads as $unithead)
+                                            <option value="{{ $unithead->id }}" {{ $unithead->id == ($dashboard->head_id ?? null) ? 'selected' : '' }}>
+                                                {{ $unithead->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                @endif
+
+                                @error('unit_head')
+                                    <p class="mt-3 text-sm leading-6 text-red-600">{{ __("This is a required input") }}</p>
+                                @enderror
+                            </div>
                         @else
                             @include('pp.partials.review.unithead')
                         @endif
                     </div>
+
+                    <!-- -->
+                    <div>
+                        <label for="unit_head" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            {{ __("Add a Unit Head to approve by") }}
+                            <button id="add-unithead-button"
+                                    class="inline py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium rounded-lg border border-blue-600 text-blue-600 hover:border-blue-500 hover:text-blue-500 focus:outline-none focus:border-blue-500 focus:text-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:border-blue-500 dark:text-blue-500 dark:hover:text-blue-400 dark:hover:border-blue-400"
+                                    type="button">
+                                Add+
+                            </button>
+                        </label>
+                    </div>
+
+
+
+                    <!-- -->
                     <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
                         Project organization
                     </div>
@@ -464,6 +506,20 @@
                                     focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                   placeholder="{{__("Your comments")}}" @if($type == 'review' or $type == 'edit' or $type == 'view') readonly @endif>{{ old('user_comments') ? old('user_comments'): $proposal->pp['user_comments'] ?? '' }}</textarea>
                     </div>
+                    <!-- Message notice -->
+                    @if(!in_array($proposal->status_stage1 ?? '', ['vice_approved', 'fo_approved']))
+                        <div class="w-full sm:col-span-2 mb-4 space-y-4">
+                            <div class="pointer-events-auto rounded-lg bg-white p-4 text-[0.8125rem]/5 shadow-xl shadow-black/5 hover:bg-slate-50 ring-1 ring-blue-500">
+                                <div class="lg:flex lg:items-center lg:justify-between">
+                                    <span class="block text-sm/6 font-medium text-gray-900">
+                                        The submission paper and budget can only be uploaded once the pre-approval process has been successfully completed.
+                                    </span>
+
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     @if($type == 'edit' or $type == 'resume')
                     <!-- Edited comments -->
                     <div class="sm:col-span-2">
@@ -554,6 +610,31 @@
 
             textarea.addEventListener('input', autoResize);
             autoResize(); // Call once on page load to set the initial height
+        });
+
+        /* Add unit head */
+        document.getElementById('add-unithead-button').addEventListener('click', function () {
+            // Get the container where the new selects will be added
+            const container = document.getElementById('unithead-container');
+
+            // Find the existing select dropdown to clone
+            const existingSelect = document.querySelector('#unithead-container select');
+
+            // Clone the select element
+            const newSelect = existingSelect.cloneNode(true);
+
+            // Clear selection in the new dropdown
+            newSelect.selectedIndex = -1;
+
+            // Create a wrapper div with spacing
+            const wrapperDiv = document.createElement('div');
+            wrapperDiv.className = 'mt-4'; // Add margin-top
+
+            // Append the new select to the wrapper div
+            wrapperDiv.appendChild(newSelect);
+
+            // Append the wrapper div to the container
+            container.appendChild(wrapperDiv);
         });
     </script>
 
