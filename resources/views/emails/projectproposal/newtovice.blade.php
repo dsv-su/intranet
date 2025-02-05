@@ -20,7 +20,7 @@ Here's a quick overview of the request:
 <br><br>
 <b>Requester:</b> {{$user->name}}
 <br><br>
-<b>Unit Head:</b> {{$head->name}}
+<b>Responsible Unit Head:</b> {{$head->name}}
 <br><br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
 <br><br>

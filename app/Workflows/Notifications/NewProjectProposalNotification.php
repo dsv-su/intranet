@@ -17,17 +17,14 @@ use Workflow\Activity;
 class NewProjectProposalNotification extends Activity
 {
     protected Dashboard $dashboard;
-    protected ProjectProposal $proposal;
 
     public function execute(string $recipient, int $request): void
     {
         $this->loadDashboard($request);
-        $this->loadPP($this->dashboard->request_id);
         $users = $this->loadUsers();
 
         // Send email based on recipient type
         $this->sendNotification($recipient, $users);
-
     }
 
     private function loadDashboard(int $id): void
@@ -35,41 +32,25 @@ class NewProjectProposalNotification extends Activity
         $this->dashboard = Dashboard::findOrFail($id);
     }
 
-    private function loadPP(string $uuid): void
-    {
-        $this->proposal = ProjectProposal::findOrFail($uuid);
-    }
-
     private function loadUsers(): array
     {
-        // Check if there are multiple unitheads in request
-        if($this->proposal->pp['unit_heads_to_approve'] > 1) {
-            // Fetch all relevant users for multiple heads
-            $this->head_group = HeadGroup::where('request_id', $this->proposal->id)->first();
+        // Fetch all relevant users
+        $userIds = [
+            $this->dashboard->user_id,
+            $this->dashboard->fo_id,
+            $this->getViceHeadUserId(),
+        ];
 
-            $userIds = array_merge([
-                $this->dashboard->user_id,
-                $this->dashboard->fo_id,
-                $this->getViceHeadUserId(),
-            ], $this->head_group->unit_heads);
-        } else {
-            // Fetch all relevant users
-            $userIds = [
-                $this->dashboard->user_id,
-                $this->dashboard->fo_id,
-                $this->dashboard->head_id,
-                $this->getViceHeadUserId(),
-            ];
-        }
-
-
+        // Fetch multiple heads
+        $headIds = $this->getHeadUserIds($this->dashboard->request_id);
+        $userIds = array_merge($userIds, $headIds);
 
         $users = User::whereIn('id', $userIds)->get()->keyBy('id');
 
         return [
             'user' => $users[$this->dashboard->user_id],
             'fo' => $users[$this->dashboard->fo_id],
-            'head' => $users[$this->dashboard->head_id],
+            'heads' => $users->only($headIds)->values(), // Multiple heads
             'vice' => $users[$this->getViceHeadUserId()],
         ];
     }
@@ -81,23 +62,51 @@ class NewProjectProposalNotification extends Activity
             ->value('user_id');
     }
 
+    private function getHeadUserIds($uuid): array
+    {
+       if($unitheads = HeadGroup::where('request_id', $uuid)->first()) {
+           return $unitheads->unit_heads;
+       } else {
+           $unitheads = [$this->dashboard->head_id];
+           return $unitheads;
+       }
+    }
+
     private function sendNotification(string $recipient, array $users): void
     {
-        $emailData = [$users['user'], $users['head'], $users['vice'], $this->dashboard];
-
         switch ($recipient) {
             case 'head':
-                Mail::to($users['head']->email)->send(new NotifyHeadNewProjectProposal(...$emailData));
+                foreach ($users['heads'] as $head) {
+                    Mail::to($head->email)->send(
+                        new NotifyHeadNewProjectProposal($users['user'], $head, $users['vice'], $this->dashboard)
+                    );
+                }
                 break;
+
             case 'vice':
-                Mail::to($users['vice']->email)->send(new NotifyViceNewProjectProposal(...$emailData));
+                $head = $users['heads']->first() ?? null;
+
+                if (!$head) {
+                    throw new InvalidArgumentException("No head found to notify the vice.");
+                }
+                
+                Mail::to($users['vice']->email)->send(
+                    new NotifyViceNewProjectProposal($users['user'], $head, $users['vice'], $this->dashboard)
+                );
                 break;
+
             case 'fo':
-                Mail::to($users['fo']->email)->send(new NotifyFONewProjectProposal(...$emailData));
+                Mail::to($users['fo']->email)->send(
+                    new NotifyFONewProjectProposal($users['user'], $users['fo'], $users['vice'], $this->dashboard)
+                );
                 break;
+
             default:
                 throw new InvalidArgumentException("Invalid recipient type: $recipient");
         }
     }
+
+
+
 
 }
