@@ -174,7 +174,7 @@
                             <div class="flex flex-col items-end mt-4 md:mt-0 w-full md:w-1/4">
                                 <!-- OK from UH -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
-                                    @if(($UnitHeads = count($proposal['pp']['unit_head'])) > 1)
+                                    @if(($UnitHeads = count($proposal['pp']['unit_head'] ?? [])) > 1)
                                         <span class="font-semibold">Unit heads({{$UnitHeads}}):</span>
                                     @else
                                         <span class="font-semibold">Unit head:</span>

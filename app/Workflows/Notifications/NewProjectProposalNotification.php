@@ -89,7 +89,7 @@ class NewProjectProposalNotification extends Activity
                 if (!$head) {
                     throw new InvalidArgumentException("No head found to notify the vice.");
                 }
-                
+
                 Mail::to($users['vice']->email)->send(
                     new NotifyViceNewProjectProposal($users['user'], $head, $users['vice'], $this->dashboard)
                 );
