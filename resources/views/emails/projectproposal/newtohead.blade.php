@@ -21,6 +21,10 @@ Here's a quick overview of the request:
 <b>Requester:</b> {{$user->name}}
 <br><br>
 <b>Unit Head:</b> {{$head->name}}
+<br>
+@foreach($dashboard->unit_heads as $head)
+{{ \App\Models\User::find($head)->name }},
+@endforeach
 <br><br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
 <br><br>
