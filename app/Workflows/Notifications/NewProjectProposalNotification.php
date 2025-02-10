@@ -6,8 +6,6 @@ use App\Mail\NotifyFONewProjectProposal;
 use App\Mail\NotifyHeadNewProjectProposal;
 use App\Mail\NotifyViceNewProjectProposal;
 use App\Models\Dashboard;
-use App\Models\HeadGroup;
-use App\Models\ProjectProposal;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -42,7 +40,7 @@ class NewProjectProposalNotification extends Activity
         ];
 
         // Fetch multiple heads
-        $headIds = $this->getHeadUserIds($this->dashboard->request_id);
+        $headIds = $this->getHeadUserIds();
         $userIds = array_merge($userIds, $headIds);
 
         $users = User::whereIn('id', $userIds)->get()->keyBy('id');
@@ -62,14 +60,14 @@ class NewProjectProposalNotification extends Activity
             ->value('user_id');
     }
 
-    private function getHeadUserIds($uuid): array
+    private function getHeadUserIds(): array
     {
-       if($unitheads = HeadGroup::where('request_id', $uuid)->first()) {
-           return $unitheads->unit_heads;
-       } else {
-           $unitheads = [$this->dashboard->head_id];
-           return $unitheads;
-       }
+        if($this->dashboard->multiple_heads) {
+            return $this->dashboard->unit_heads;
+        } else {
+            return [$this->dashboard->head_id];
+
+        }
     }
 
     private function sendNotification(string $recipient, array $users): void

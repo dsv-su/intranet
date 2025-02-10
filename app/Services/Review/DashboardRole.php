@@ -26,12 +26,12 @@ class DashboardRole
         ];
 
         // Get the state as a string
-        $currentState = (string) $this->dashboard->state; // Ensure it's a string
+        $currentState = (string) $this->dashboard->state;
 
-        // Check if the current state is in the roles mapping
-        if (array_key_exists($currentState, $roles) && $this->dashboard->{$roles[$currentState]} == $this->reviewer->id) {
+        if (array_key_exists($currentState, $roles) && in_array($this->reviewer->id, $this->dashboard->unit_heads, true)) {
             return $this->getRoleFromState($currentState);
         }
+
 
         return false;
     }

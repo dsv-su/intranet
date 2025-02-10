@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Services\Review\DashboardRole;
 use App\Services\Review\WorkflowHandler;
 use App\Workflows\DSVProjectPWorkflow;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -72,8 +71,24 @@ class ProjectProposalController extends Controller
             case 'approve':
                 switch($role->check()) {
                     case 'head':
-                        $workflowhandler->HeadApprove();
+                        //Flag approved
+                        $headGroup = $dashboard;
+                        $unitHeadApproved = json_decode($headGroup->unit_head_approved, true);
+                        $keyToUpdate = $user->id;
+
+                        if (isset($unitHeadApproved[$keyToUpdate]) && $unitHeadApproved[$keyToUpdate] === 0) {
+                            $unitHeadApproved[$keyToUpdate] = 1;
+                        }
+
+                        $headGroup->unit_head_approved = json_encode($unitHeadApproved);
+                        $headGroup->save();
+
+
+                        if (!in_array(0, json_decode($dashboard->unit_head_approved, true))) {
+                            $workflowhandler->HeadApprove();
+                        }
                         break;
+
                     case 'vice':
                         $workflowhandler->ViceApprove();
                         break;
@@ -151,15 +166,6 @@ class ProjectProposalController extends Controller
                 // Create Project Proposal instance
                 $pp = new \App\Models\ProjectProposal();
 
-                // Check number of added UH
-                if (($unitheads_to_approve = count($request->unit_head)) > 1) {
-                    $uh_group = new \App\Models\HeadGroup();
-                    $uh_group->unit_heads = $request->unit_head;
-                    $uh_group->save();
-                } else {
-                    $unitheads_to_approve = 1;
-                }
-
                 $pp->fill([
                     'user_id' => $userId,
                     'name' => $request->title,
@@ -174,7 +180,6 @@ class ProjectProposalController extends Controller
                             'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
                             'budget_dsv', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
                         ]) + [
-                            'unit_heads_to_approve' => $unitheads_to_approve,
                             'submitted' => $timestamp,
                             'status' => 'pending'
                         ],
@@ -198,11 +203,21 @@ class ProjectProposalController extends Controller
                     'vice_id' => $this->getViceHeadUserId()
                 ];
 
-                Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
+                $dashboard = Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
 
-                //Update head group if multiple heads
-                if($pp->pp['unit_heads_to_approve'] > 1) {
-                    $uh_group->request_id = $pp->id;
+                // Create unit head approved array
+                $uh_group = $dashboard;
+                $uh_group->unit_heads = $request->unit_head;
+                $unit_head_approved = [];
+                foreach ($request->unit_head as $uh) {
+                    $unit_head_approved[$uh] = 0;
+                }
+                // Encode associative array to JSON
+                $uh_group->unit_head_approved = json_encode($unit_head_approved);
+                $uh_group->save();
+                if (count($request->unit_head) > 1) {
+                    //Flag multiple
+                    $uh_group->multiple_heads = true;
                     $uh_group->save();
                 }
 

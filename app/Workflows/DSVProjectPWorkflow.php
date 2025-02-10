@@ -7,11 +7,8 @@ use App\Traits\ProjectProSignals;
 use App\Workflows\Notifications\NewProjectProposalNotification;
 use App\Workflows\Notifications\StateUpdateNotification;
 use App\Workflows\Partials\RequestStates;
-use App\Workflows\StatusUpdates\PPStatusUpdateUsersStage1;
 use App\Workflows\Transitions\StateUpdateTransition;
 use Workflow\ActivityStub;
-use Workflow\ChildWorkflow;
-use Workflow\ChildWorkflowStub;
 use Workflow\Models\StoredWorkflow;
 use Workflow\Workflow;
 use Workflow\WorkflowStub;
@@ -19,6 +16,8 @@ use Workflow\WorkflowStub;
 class DSVProjectPWorkflow extends Workflow
 {
     private $stateMachine;
+    protected $heads;
+
     use ProjectProSignals;
 
     //Head
@@ -206,5 +205,10 @@ class DSVProjectPWorkflow extends Workflow
             ActivityStub::make(StateUpdateTransition::class, $userRequest),
             ActivityStub::make(StateUpdateNotification::class, $userRequest),
         ];
+    }
+
+    protected function getHeads($userRequest)
+    {
+        return ActivityStub::make(HeadsStatus::class, $userRequest);
     }
 }

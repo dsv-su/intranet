@@ -36,7 +36,7 @@ class EnsureUserForReview
                         }
                         break;
                     case('projectproposal'):
-                        if($user->id == $dashboard->head_id) {
+                        if(in_array($user->id,  $dashboard->unit_heads)) {
                             return $next($request);
                         }
                         break;

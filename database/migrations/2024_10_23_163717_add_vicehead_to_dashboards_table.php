@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::table('dashboards', function (Blueprint $table) {
             $table->uuid('vice_id')->after('head_id');
             $table->foreign('vice_id')->references('id')->on('users');
+            $table->boolean('multiple_heads')->default(false)->after('user_id');
+            $table->json('unit_heads')->nullable()->after('vice_id');
+            $table->json('unit_head_approved')->nullable()->after('vice_id');
         });
     }
 
@@ -25,6 +28,9 @@ return new class extends Migration
         Schema::table('dashboards', function (Blueprint $table) {
             $table->dropForeign(['vice_id']);
             $table->dropColumn('vice_id');
+            $table->dropColumn('multiple_heads');
+            $table->dropColumn('unit_heads');
+            $table->dropColumn('unit_head_approved');
 
         });
     }

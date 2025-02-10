@@ -40,7 +40,6 @@ class ClearTest extends Command
         DB::table('fo_comments')->truncate();
         DB::table('head_comments')->truncate();
         DB::table('project_proposals')->truncate();
-        DB::table('head_groups')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
