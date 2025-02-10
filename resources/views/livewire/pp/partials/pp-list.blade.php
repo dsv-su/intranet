@@ -25,12 +25,13 @@
                                 <span class="font-medium">Main researcher:</span> {{ $proposal->pp['principal_investigator'] }} &nbsp; | &nbsp;
                                 <span class="font-medium">Submission deadline:</span> {{ $proposal->pp['submission_deadline'] ?? '' }} &nbsp; | &nbsp;
                                 <span class="font-medium">Project duration:</span> {{ $proposal->pp['project_duration'] }} &nbsp; | &nbsp;
-                                <span class="font-medium">Economy owner:</span> [N/A] |
+                                <span class="font-medium">Economy owner:</span> [N/A]
+                                {{--}}
                                 <span class="font-medium">Uploaded files:</span>
                                     <span class="bg-blue-100 text-blue-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400 border border-blue-500">
                                     {{count($proposal->files ?? [])}}
                                     </span>
-
+                                {{--}}
                             </h4>
                         </div>
                         <!-- Right side (State label) -->
@@ -169,6 +170,7 @@
 
                                 </div>
                                 <!-- End button group -->
+
                             </div>
                             <!-- Right aligned content -->
                             <div class="flex flex-col items-end mt-4 md:mt-0 w-full md:w-1/4">
@@ -241,7 +243,7 @@
                                 </p>
                                 <!-- Final funding granted-->
                                 <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
-                                    <span class="font-semibold">Final funding granted:</span>
+                                    <span class="font-semibold">Funding granted:</span>
                                     @if($proposal->status_stage3 == 'approved')
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Yes</span>
                                     @else

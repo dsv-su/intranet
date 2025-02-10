@@ -19,7 +19,7 @@ class AwaitingProjectProposal extends Component
         $awaitingDashboard = Dashboard::where('type', 'projectproposal')
             ->where(function ($query) use ($user) {
                 $query->where('state', 'submitted')
-                    ->where('head_id', $user->id)
+                    ->whereJsonContains('unit_head_approved', [$user->id => 0])
                     ->orWhere(function ($query) use ($user) {
                         $query->where('state', 'head_approved')
                             ->where('vice_id', $user->id);

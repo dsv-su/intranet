@@ -23,11 +23,16 @@ class Dashboard extends Model
         'manager_id',
         'fo_id',
         'head_id',
-        'vice_id'
+        'vice_id',
+        'multiple_heads',
+        'unit_heads',
+        'unit_head_approve'
     ];
 
     protected $casts = [
         'state' => DashboardState::class,
+        'unit_heads' => 'array',
+        'unit_head_approve' => 'array',
     ];
 
     /**
