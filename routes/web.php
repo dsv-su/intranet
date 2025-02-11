@@ -54,6 +54,9 @@ Route::post('/fo', [\App\Http\Controllers\FOController::class, 'settings_fo'])->
 Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'list'])->name('list');
 Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'swelist'])->name('swelist');
 
+//Vice settings
+Route::get('/vice_settings', [\App\Http\Controllers\ViceController::class, 'settings'])->name('vice_settings');
+
 //Project Proposals
 Route::get('/pp/{slug}', [\App\Http\Controllers\ProjectProposalController::class, 'pp'])->name('pp');
 Route::get('/create_pp', [\App\Http\Controllers\ProjectProposalController::class, 'create'])->name('create-project');

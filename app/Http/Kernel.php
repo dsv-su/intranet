@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'checklang' => \App\Http\Middleware\CheckLocalizaion::class,
         'locale' => \App\Http\Middleware\Switchlocale::class,
         'download' => \App\Http\Middleware\EnsureUserForDownload::class,
+        'vicehead' => \App\Http\Middleware\EnsureUserIsVice::class,
     ];
 }
