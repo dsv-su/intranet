@@ -47,6 +47,7 @@
                                         </div>
                                     </div>
                                 <!-- Research area -->
+                                <p class="mt-1 text-gray-600 dark:text-gray-400">Research areas</p>
                                 <div class="mt-4 bg-blue-50 border border-blue-500 text-sm text-gray-500 rounded-lg p-5 dark:bg-blue-600/[.15]">
                                     <div class="flex">
                                         <svg class="flex-shrink-0 h-4 w-4 text-blue-600 mt-0.5 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
