@@ -43,7 +43,7 @@ class ResearchArea extends Component
 
     public function resetAreas()
     {
-        Artisan::call('/usr/bin/php artisan clear-areas');
+        Artisan::call('clear-areas');
         $this->reset();
     }
 
