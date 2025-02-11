@@ -31,7 +31,8 @@ class ClearAreas extends Command
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         // Run a specific seeder
         $this->call('db:seed', [
-            '--class' => 'ResearchAreaSeeder'
+            '--class' => 'ResearchAreaSeeder',
+            '--force' => true,
         ]);
 
         $this->info('Research areas restored!');
