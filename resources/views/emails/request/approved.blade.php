@@ -25,9 +25,9 @@ Below, you will find the details pertaining to the approved request:
 <br><br>
 <b>Name:</b> {{$dashboard->name}}
 <br><br>
-<b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
+<b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}}
 <br><br>
-<b>Approval Date:</b> {{$dashboard->updated_at}}
+<b>Approval Date:</b> {{Carbon\Carbon::parse($dashboard->updated_at)->format('Y-m-d')}}
 <br><br>
 With your request approved, this request workflow is now closed. Should you require any further assistance or clarification, please do not hesitate to reach out to: <b>ekonomi@dsv.su.se</b>
 <br><br>
