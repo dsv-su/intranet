@@ -26,7 +26,7 @@ Here's a quick overview of the request:
     ,
 @endforeach
 <br><br>
-<b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
+<b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}}
 <br><br>
 <b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>

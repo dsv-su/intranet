@@ -5,6 +5,7 @@ namespace App\Workflows;
 use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
 use App\Workflows\Notifications\NewProjectProposalNotification;
+use App\Workflows\Notifications\RequestFilesUploadNotification;
 use App\Workflows\Notifications\StateUpdateNotification;
 use App\Workflows\Partials\RequestStates;
 use App\Workflows\Transitions\StateUpdateTransition;
@@ -149,8 +150,8 @@ class DSVProjectPWorkflow extends Workflow
             case RequestStates::VICE_APPROVED:
                 //Request has been approved by head
 
-                //Notify user
-                //TODO
+                //Notify user request files upload
+                yield ActivityStub::make(RequestFilesUploadNotification::class, $userRequest);
 
                 break;
             case RequestStates::VICE_RETURNED:
