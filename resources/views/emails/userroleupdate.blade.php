@@ -27,6 +27,8 @@ Your roles have been updated to:
             <b>PROJECT LEADER</b> - Review, approve, deny, or return user requests within your project group.
         @elseif ($role->title == 'unit_head')
             <b>UNIT HEAD</b> - Review, grant, deny, or return user requests within your unit.
+        @elseif ($role->title == 'vice_head')
+            <b>VICE HEAD</b> - Review, grant, deny, or return project proposals within your unit.
         @elseif ($role->title == 'site_administrator')
             <b>ADMINISTRATOR</b> - Full administrative access to the CMS, including managing, configuring, and maintaining the system. Responsibilities also include user management and role assignment, ensuring that user roles and permissions are correctly configured.
         @else

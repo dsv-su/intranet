@@ -30,7 +30,9 @@ class Returnednotifications extends Component
                     ->orWhere('state', 'fo_returned')
                     ->orWhere('state', 'fo_denied')
                     ->orWhere('state', 'head_returned')
-                    ->orWhere('state', 'head_denied');
+                    ->orWhere('state', 'head_denied')
+                    ->orWhere('state', 'vice_returned')
+                    ->orWhere('state', 'vice_denied');
             })
             ->get();
         if($this->returned == null) {

@@ -9,9 +9,9 @@ use Statamic\Eloquent\Forms\SubmissionModel;
 return new class extends Migration {
     public function up()
     {
-        Schema::table($this->prefix('form_submissions'), function (Blueprint $table) {
+        /*Schema::table($this->prefix('form_submissions'), function (Blueprint $table) {
             $table->string('form', 30)->nullable()->index()->after('id');
-        });
+        });*/
 
         $forms = FormModel::all()->pluck('handle', 'id');
 
@@ -23,9 +23,9 @@ return new class extends Migration {
                 }
             });
 
-        Schema::table($this->prefix('form_submissions'), function (Blueprint $table) {
+        /*Schema::table($this->prefix('form_submissions'), function (Blueprint $table) {
             $table->dropColumn('form_id');
-        });
+        });*/
     }
 
     public function down()

@@ -1,7 +1,7 @@
-<div class="md:order-2 text-left relative border border-susecondary {{--}}border-gray-200{{--}} dark:border-gray-800 rounded-xl md:min-h-[230px]">
+<div class="md:order-2 text-left relative border border-susecondary dark:border-gray-800 rounded-xl {{--}}md:min-h-[230px]{{--}} ">
     {{--}}<div class="relative overflow-hidden w-full h-full rounded-xl">{{--}}
-        <div class="p-6 flex flex-col md:min-h-[480px] rounded-xl dark:border-gray-700">
-
+        <div class="p-6 flex flex-col {{--}}md:min-h-[480px]{{--}} md:h-fit rounded-xl dark:border-gray-700">
+            <div class="mt-0 text-left">
                 @can('access cp')
                     <a href="/cp/collections/news" aria-label="Internal news admin" class="float-right hover:border-blue-600">
                         <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
@@ -13,6 +13,8 @@
                     {{__("Internal information")}}
                 </h3>
                 @nocache('home.partials.internal')
+            </div>
+
         </div>
     {{--}}</div>{{--}}
 </div>

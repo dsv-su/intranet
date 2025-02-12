@@ -2,7 +2,20 @@
 <br><br>
 Dear {{$user->name}},
 <br><br>
-We are pleased to inform you that your request has been successfully approved.
+We are pleased to inform you that your
+@if($dashboard->type == 'projectproposal')
+    projectproposal
+@else
+    request
+@endif
+
+has been approved
+@if($dashboard->type == 'projectproposal')
+    for submission.
+@else
+    .
+@endif
+
 <br>
 Below, you will find the details pertaining to the approved request:
 <br><br>
@@ -14,7 +27,7 @@ Below, you will find the details pertaining to the approved request:
 <br><br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}
 <br><br>
-<b>Approval Date:</b>{{$dashboard->updated_at}}
+<b>Approval Date:</b> {{$dashboard->updated_at}}
 <br><br>
 With your request approved, this request workflow is now closed. Should you require any further assistance or clarification, please do not hesitate to reach out to: <b>ekonomi@dsv.su.se</b>
 <br><br>

@@ -3,12 +3,15 @@
 namespace App\Livewire;
 
 use App\Models\Dashboard;
+use App\Traits\DashboardRequests;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Statamic\Auth\User;
 
 class Requestnotifications extends Component
 {
+    use DashboardRequests;
+
     public $auth_user;
     public $user_roles;
     public $requests;
@@ -21,10 +24,7 @@ class Requestnotifications extends Component
 
     public function getRequests()
     {
-        $manager = collect(Dashboard::where('state', 'submitted')->where('manager_id', $this->auth_user)->get());
-        $head = collect(Dashboard::where('state', 'manager_approved')->where('head_id', $this->auth_user)->get());
-        $fo = collect(Dashboard::where('state', 'head_approved')->where('fo_id', $this->auth_user)->get());
-        $this->requests = $manager->merge($fo)->merge($head);
+        $this->requests = $this->Dashboardtask($this->auth_user);
     }
 
     public function hydrate()

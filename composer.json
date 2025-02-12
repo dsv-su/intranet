@@ -13,6 +13,7 @@
         "barryvdh/laravel-dompdf": "^2.0",
         "directorytree/ldaprecord-laravel": "^3.3",
         "guzzlehttp/guzzle": "^7.2",
+        "icehouse-ventures/laravel-chartjs": "^4.1",
         "jonassiewertsen/statamic-live-search": "^2",
         "jonassiewertsen/statamic-livewire": "^3",
         "laravel-workflow/laravel-workflow": "^1.0",
@@ -23,7 +24,9 @@
         "spatie/laravel-model-states": "^2.7",
         "statamic/cms": "^5",
         "statamic/eloquent-driver": "^4",
-        "uabookstores/laravel-shibboleth": "dev-master"
+        "uabookstores/laravel-shibboleth": "dev-master",
+        "ext-simplexml": "*",
+        "ext-zip": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8.1",

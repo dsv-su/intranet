@@ -1,4 +1,4 @@
-@foreach (\Statamic\Statamic::tag('collection:itnews')->limit(3)->fetch() as $entry)
+@foreach (\Statamic\Statamic::tag('collection:itnews')->limit(3)->fetch()->sortByDesc('date') as $entry)
     <div>
         <div class="mt-4 text-gray-900 text-[0.65rem] dark:text-gray-300">
             {{ $entry['date'] }}  {{-- $entry['author']->name ?? '' --}}
@@ -10,7 +10,6 @@
             </svg>
         </a>
     </div>
-
 @endforeach
 <div class="grid grid-cols-1 mt-2">
     <a href="{{app()->getLocale()}}/newslist/{{ $entry['collection'] }}" class="inline-flex items-center justify-center gap-x-1.5 text-blue-800 font-medium py-2 px-4 border border-susecondary rounded-lg w-full text-center dark:text-white">

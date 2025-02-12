@@ -1,4 +1,4 @@
-@foreach (\Statamic\Statamic::tag('collection:teachernews')->limit(3)->fetch() as $entry)
+@foreach (\Statamic\Statamic::tag('collection:teachernews')->limit(5)->fetch()->sortByDesc('date') as $entry)
     <div class="mt-4 text-gray-900 text-[0.65rem] dark:text-gray-300">
         {{ $entry['date'] }}  {{-- $entry['author']->name ?? '' --}}
     </div>

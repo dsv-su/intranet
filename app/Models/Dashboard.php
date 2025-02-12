@@ -22,12 +22,17 @@ class Dashboard extends Model
         'user_id',
         'manager_id',
         'fo_id',
-        'head_id'
-
+        'head_id',
+        'vice_id',
+        'multiple_heads',
+        'unit_heads',
+        'unit_head_approve'
     ];
 
     protected $casts = [
         'state' => DashboardState::class,
+        'unit_heads' => 'array',
+        'unit_head_approve' => 'array',
     ];
 
     /**
@@ -44,5 +49,13 @@ class Dashboard extends Model
     public function travel(): BelongsTo
     {
         return $this->belongsTo(TravelRequest::class, 'request_id');
+    }
+
+    /**
+     * Get the projectproposal that belongs to the dashboard.
+     */
+    public function proposal(): BelongsTo
+    {
+        return $this->belongsTo(ProjectProposal::class, 'request_id');
     }
 }
