@@ -909,7 +909,7 @@
             <div class="flex justify-between mb-4 rounded-t sm:mb-5">
                 <div class="text-lg text-gray-900 md:text-xl dark:text-white">
                     <h3 class="font-semibold ">
-                        {{__("Comments")}}
+                        {{__("Proposal attachments")}}
                     </h3>
 
                 </div>
@@ -922,7 +922,7 @@
             </div>
             <dl>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("All files that belong to the proposal should be added here. This is mandatory that you should upload the proposal's budget once you have it.")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("All files that belong to the proposal should be added here. This is mandatory that you should upload the proposal's budget once you have it and a short description file of the proposal.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
             </dl>

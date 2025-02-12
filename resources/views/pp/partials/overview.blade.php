@@ -35,15 +35,17 @@
                         {{$proposal->status_stage1}}</span>
             </div>
             <!-- Second -->
+            @php
+                $budget = $proposal->pp['budget_dsv'];
+                $max = 50000;
+
+            @endphp
+            <div class="min-w-0 flex-1">
+                <h2 class="text-xs leading-5 font-semibold text-gray-900">Total budget DSV</h2>
+                <span class="inline-flex uppercase items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">{{$max}}
+            </div>
             <div class="min-w-0 flex-1">
                 <h2 class="text-xs leading-5 font-semibold text-gray-900">Budget DSV</h2>
-
-                @php
-                    $budget = $proposal->pp['budget_dsv'];
-                    $max = 50000;
-
-                @endphp
-
                 @if ($budget > $max)
                     <span class="inline-flex items-center uppercase rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                 @else

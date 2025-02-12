@@ -26,12 +26,6 @@
                                 <span class="font-medium">Submission deadline:</span> {{ $proposal->pp['submission_deadline'] ?? '' }} &nbsp; | &nbsp;
                                 <span class="font-medium">Project duration:</span> {{ $proposal->pp['project_duration'] }} &nbsp; | &nbsp;
                                 <span class="font-medium">Economy owner:</span> [N/A]
-                                {{--}}
-                                <span class="font-medium">Uploaded files:</span>
-                                    <span class="bg-blue-100 text-blue-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400 border border-blue-500">
-                                    {{count($proposal->files ?? [])}}
-                                    </span>
-                                {{--}}
                             </h4>
                         </div>
                         <!-- Right side (State label) -->
@@ -250,6 +244,13 @@
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Not reported</span>
                                     @endif
                                 </p>
+                                <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
+                                    <span class="font-semibold">Uploaded files:</span>
+                                    <span class="bg-blue-100 text-blue-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400 border border-blue-500">
+                                    {{count($proposal->files ?? [])}}
+                                    </span>
+                                </p>
+
                             </div>
 
                         </div>

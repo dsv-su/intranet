@@ -16,15 +16,15 @@
     @case('head_approved')
         @php
             $state = 'REVIEW VH';
-            $bgcolor = 'bg-purple-100';
-            $textcolor = 'text-purple-800';
+            $bgcolor = 'bg-blue-100';
+            $textcolor = 'text-blue-800';
         @endphp
         @break
     @case('vice_approved')
         @php
-            $state = 'REVIEW FO';
-            $bgcolor = 'bg-blue-100';
-            $textcolor = 'text-blue-800';
+            $state = 'PREAPPROVED';
+            $bgcolor = 'bg-green-100';
+            $textcolor = 'text-green-800';
         @endphp
         @break
     @case('fo_approved')

@@ -52,6 +52,12 @@ class DSVProjectPWorkflow extends Workflow
         return $this->stateMachine->state->status() === 'vice_denied';
     }
 
+    //Uploaded files
+    public function UploadedFiles()
+    {
+        return $this->files_uploaded;
+    }
+
     //Finacial officer
     public function FOApproved()
     {
@@ -143,7 +149,7 @@ class DSVProjectPWorkflow extends Workflow
             case RequestStates::VICE_APPROVED:
                 //Request has been approved by head
 
-                //Notify
+                //Notify user
                 //TODO
 
                 break;
@@ -158,8 +164,10 @@ class DSVProjectPWorkflow extends Workflow
                 return $this->stateMachine->state->status();
         }
 
-        //Request has been approved by head and vice
-        //Email to FO
+        //Wait for user to upload files
+        yield WorkflowStub::await(fn () => ($this->UploadedFiles()));
+
+        //Email to FO for review
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::FINACIAL_OFFICER, $userRequest);
 
         //Wait for FO decision

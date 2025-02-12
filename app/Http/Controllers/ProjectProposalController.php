@@ -140,6 +140,7 @@ class ProjectProposalController extends Controller
     {
         $viewData = $this->prepareProjectProposalData();
         $viewData['proposal'] = ProjectProposal::find($id);
+        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['type'] = 'view';
         $viewData['upload'] = true;
         //dd($viewData);

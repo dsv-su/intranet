@@ -21,12 +21,12 @@ class NotifyFONewProjectProposal extends Mailable
      * Create a new message instance.
      */
 
-    public $user, $head, $vice, $dashboard;
+    public $user, $fo, $vice, $dashboard;
 
-    public function __construct(User $user, User $head, User $vice, Dashboard $dashboard)
+    public function __construct(User $user, User $fo, User $vice, Dashboard $dashboard)
     {
         $this->user = $user;
-        $this->head = $head;
+        $this->fo = $fo;
         $this->vice = $vice;
         $this->dashboard = $dashboard;
     }

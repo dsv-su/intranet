@@ -3,6 +3,8 @@
 namespace App\Livewire\Pp;
 
 use App\Models\Dashboard;
+use App\Models\ProjectProposal;
+use App\Services\Review\WorkflowHandler;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -17,6 +19,7 @@ class ProposalUploader extends Component
     const PREAPPROVED = 'vice_approved';
 
     public $proposal;
+    public $dashboard;
     public $files = [];
     public $savedfiles = [];
     public $stored = false;
@@ -31,23 +34,44 @@ class ProposalUploader extends Component
     {
         $this->proposal = $proposal;
         $this->directory = '/proposals/' . $this->proposal->id;
+        $this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
         $this->allowUpload();
+    }
+
+    public function checkFileStatus()
+    {
+        $files = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
+
+        if (count($files) >= 2) {
+            //Signal workflow
+            $workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
+            $workflowhandler->UploadedFiles();
+
+            return $this->reportStageStatus('uploaded');
+        }
+
+        return $this->reportStageStatus('waiting');
+    }
+
+
+    public function reportStageStatus($status)
+    {
+        $this->proposal->status_stage2 = $status;
+        $this->proposal->save();
     }
 
     public function allowUpload()
     {
         $user = Auth::user();
-        $dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
+        //$dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
 
-        $allowed_roles = [$dashboard->user_id, $dashboard->head_id, $dashboard->vice_id, $dashboard->fo_id];
+        $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
-        if (in_array($user->id, $allowed_roles) && $dashboard->state == self::PREAPPROVED) {
+        if (in_array($user->id, $allowed_roles) && $this->dashboard->state == self::PREAPPROVED) {
             $this->allow = true;
         } else {
             $this->allow = false;
         }
-
-
     }
 
     public function finishUpload($name, $tmpPath, $isMultiple)
@@ -62,7 +86,6 @@ class ProposalUploader extends Component
 
         $files = array_merge($this->getPropertyValue($name), $files);
         $this->syncInput($name, $files);
-
     }
 
     public function storefiles()
@@ -79,6 +102,7 @@ class ProposalUploader extends Component
 
         //Update files to model
         $this->updateProposal();
+        $this->checkFileStatus();
 
         //Toggled buttons
         $this->toggleStored();
@@ -128,7 +152,7 @@ class ProposalUploader extends Component
 
         // Persist changes to the database
         $this->proposal->save();
-
+        $this->checkFileStatus();
     }
 
     public function removefolder()
@@ -137,6 +161,7 @@ class ProposalUploader extends Component
         Storage::deleteDirectory($this->directory);
         $this->proposal->save();
         $this->files = [];
+        $this->reportStageStatus('pending');
     }
 
     public function downloadfile($id)

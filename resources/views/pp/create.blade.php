@@ -4,7 +4,7 @@
     @include('pp.partials.header')
     <section class="bg-white dark:bg-gray-900">
         <div class="max-w-2xl px-4 py-8 mx-auto lg:py-16">
-            @if(in_array($type, ['edit', 'view', 'resume']))
+            @if(in_array($type, ['edit', 'review', 'view', 'resume']))
                 @include(('pp.partials.overview'))
             @endif
 
@@ -565,13 +565,13 @@
 
                         <div class="border-t sm:border-t-0 sm:border-s border-gray-200 dark:border-neutral-700"></div>
 
-                        <button type="submit"
+                        <button type="submit"  @if($type == 'edit') disabled @endif
                                 class="py-2.5 px-3 w-full inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-blue-700 bg-white hover:bg-blue-800
                                 text-blue-700 hover:text-white shadow-sm focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none
                                 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-300
                                 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
                             @if($type == 'edit')
-                                {{__("Edit proposal")}}
+                                {{__("Edit proposal - disabled")}}
                             @else
                                 {{__("Submit proposal")}}
                             @endif
