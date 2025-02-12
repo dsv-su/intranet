@@ -6,14 +6,27 @@
         $textcolor = 'text-gray-800';
     @endphp
     @break
-    @case('submitted')
+    @case('waiting')
     @php
-        $state = 'SUBMITTED';
-        $bgcolor = 'bg-yellow-100';
-        $textcolor = 'text-yellow-800';
+        $state = 'WAITING';
+        $bgcolor = 'bg-blue-100';
+        $textcolor = 'text-blue-800';
     @endphp
     @break
-
+    @case('uploaded')
+    @php
+        $state = 'REVIEW';
+        $bgcolor = 'bg-purple-100';
+        $textcolor = 'text-purple-800';
+    @endphp
+    @break
+    @case('fo_approved')
+    @php
+        $state = 'APPROVED';
+        $bgcolor = 'bg-green-100';
+        $textcolor = 'text-green-800';
+    @endphp
+    @break
     @default
     @php
         $state = 'ERROR';

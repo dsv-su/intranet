@@ -16,6 +16,8 @@ use Workflow\SignalMethod;
 
 trait ProjectProSignals
 {
+    protected $files_uploaded = false;
+
     #[SignalMethod]
     public function submit()
     {
@@ -56,6 +58,12 @@ trait ProjectProSignals
     public function vice_deny()
     {
         $this->stateMachine->state->transitionTo(ViceDenied::class);
+    }
+
+    #[SignalMethod]
+    public function setfilesUploaded($status)
+    {
+        $this->files_uploaded = $status;
     }
 
     #[SignalMethod]

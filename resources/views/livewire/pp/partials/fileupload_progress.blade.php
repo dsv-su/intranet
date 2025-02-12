@@ -78,10 +78,11 @@
             <!-- End Col -->
             @if(!$stored)
             <div class="-me-2.5">
+                {{--}}
                 <button type="button" wire:click.prevent="storefiles"
-                        class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100
-                        font-medium rounded-lg text-sm px-3 py-1.5 text-center inline-flex items-center dark:focus:ring-gray-800
-                        dark:bg-white dark:border-gray-700 dark:text-gray-900 dark:hover:bg-gray-200 me-2 mb-2">
+                        class="text-blue-500 bg-white hover:bg-gray-100 border border-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-100
+                        font-medium rounded-lg text-sm px-3 py-1.5 text-center inline-flex items-center dark:focus:ring-blue-800
+                        dark:bg-white dark:border-blue-400 dark:text-blue-400 dark:hover:bg-gray-200 me-2 mb-2">
                     <svg class="shrink-0 size-4 dark:text-white"
                          aria-hidden="true"
                          xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -89,6 +90,19 @@
                     </svg>
                     Save
                 </button>
+                {{--}}
+                <button type="button" wire:click.prevent="storefiles"
+                        class="text-blue-600 bg-white hover:bg-gray-100 border border-blue-500 focus:ring-4 focus:outline-none focus:ring-blue-100
+                        font-medium rounded-lg text-sm px-3 py-1.5 text-center inline-flex items-center dark:focus:ring-blue-800
+                        dark:bg-white dark:border-blue-400 dark:text-blue-400 dark:hover:bg-gray-200 me-2 mb-2">
+                    <svg class="flex-shrink-0 size-4 animate-spin dark:text-white"
+                         aria-hidden="true"
+                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                    Save
+                </button>
+
             </div>
             @endif
             <!-- End Col -->

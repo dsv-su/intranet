@@ -31,7 +31,9 @@ class AwaitingProjectProposal extends Component
             ->pluck('request_id');
 
         $proposals = ProjectProposal::with('dashboard')
-            ->whereIn('id', $awaitingDashboard)->get();
+            ->whereIn('id', $awaitingDashboard)
+            ->get();
+
         $this->review = true;
 
         return view('livewire.pp.awaiting-project-proposal',

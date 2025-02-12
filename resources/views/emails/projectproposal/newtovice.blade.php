@@ -20,10 +20,10 @@ Here's a quick overview of the request:
 <br><br>
 <b>Requester:</b> {{$user->name}}
 <br><br>
-<b>Responsible Unit Head:</b> {{$head->name}}
-<br>
+<b>Unit Head(s):</b>
 @foreach($dashboard->unit_heads as $head)
-    {{ \App\Models\User::find($head)->name }},
+    {{ \App\Models\User::find($head)->name }}
+    ,
 @endforeach
 <br><br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->toDateTimeString()}}

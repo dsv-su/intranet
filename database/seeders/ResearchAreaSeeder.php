@@ -14,6 +14,7 @@ class ResearchAreaSeeder extends Seeder
      */
     public function run(): void
     {
+        //Restore default research areas
         Excel::import(new ResearchAreaImport, 'researcharea.xlsx');
     }
 }

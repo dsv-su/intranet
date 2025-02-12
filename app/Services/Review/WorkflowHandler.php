@@ -77,4 +77,9 @@ class WorkflowHandler
         $this->workflow->vice_deny();
     }
 
+    //Files have been uploaded
+    public function UploadedFiles()
+    {
+        $this->workflow->setfilesUploaded(true);
+    }
 }
