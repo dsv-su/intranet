@@ -36,7 +36,7 @@ Here's a quick overview of the request:
 <br><br>
 You can review the details and upload the requested files by accessing the proposal through the following link:
 <br><br>
-<a href="{{ url('') }}/pp/review/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}}</a>
+<a href="{{ url('') }}/pp/stage2_upload_pp/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}}</a>
 <br><br>
 ---
 <br>
