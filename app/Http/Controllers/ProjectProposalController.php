@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dashboard;
+use App\Models\DsvBudget;
 use App\Models\ProjectProposal;
 use App\Models\ResearchArea;
 use App\Models\SettingsFo;
 use App\Models\User;
+use App\Services\Budget\Budget;
 use App\Services\Review\DashboardRole;
 use App\Services\Review\WorkflowHandler;
 use App\Workflows\DSVProjectPWorkflow;
@@ -90,7 +92,17 @@ class ProjectProposalController extends Controller
                         break;
 
                     case 'vice':
+                        //Signal state change
                         $workflowhandler->ViceApprove();
+                        //Update budget stats
+                        $proposal = ProjectProposal::find($dashboard->request_id);
+                        $budget = new Budget($proposal);
+                        //Preapproval count
+                        $budget->preapproved_increment($proposal->pp['research_area']);
+                        //Budget
+                        $budget->budget_increment($proposal->pp['research_area']);
+
+
                         break;
                     case 'fo':
                         $workflowhandler->FOApprove();
