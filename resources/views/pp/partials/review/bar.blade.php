@@ -5,6 +5,7 @@
             <label for="comment" class="block mb-2 text-sm font-medium text-blue-600 dark:text-white">
                 {{ __("Please Review and Comment") }}
             </label>
+            @include('pp.partials.review.review_overview')
             <textarea id="comment" rows="4" name="comment"
                       class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-blue-600
                          focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600

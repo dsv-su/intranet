@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class ClearAreas extends Command
+class ClearBudget extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'clear-areas';
+    protected $signature = 'clear-budget';
 
     /**
      * The console command description.
@@ -39,6 +39,6 @@ class ClearAreas extends Command
             '--class' => 'DsvBudgetsSeeder',
             '--force' => true,
         ]);
-        $this->info('Research areas restored!');
+        
     }
 }
