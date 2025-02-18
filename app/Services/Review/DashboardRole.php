@@ -27,8 +27,8 @@ class DashboardRole
 
         // Get the state as a string
         $currentState = (string) $this->dashboard->state;
-
-        if (array_key_exists($currentState, $roles) && in_array($this->reviewer->id, $this->dashboard->unit_heads, true)) {
+        // && in_array($this->reviewer->id, $this->dashboard->unit_heads, true
+        if (array_key_exists($currentState, $roles)) {
             return $this->getRoleFromState($currentState);
         }
 

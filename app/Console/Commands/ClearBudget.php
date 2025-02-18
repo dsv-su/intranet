@@ -39,6 +39,6 @@ class ClearBudget extends Command
             '--class' => 'DsvBudgetsSeeder',
             '--force' => true,
         ]);
-        
+
     }
 }
