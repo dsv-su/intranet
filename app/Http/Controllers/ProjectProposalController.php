@@ -68,7 +68,7 @@ class ProjectProposalController extends Controller
         $dashboard = Dashboard::where('request_id', $request->id)->first();
         $role = new DashboardRole($dashboard, $user = auth()->user());
         $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
-
+        //dd($request->decision, $user, $role->check());
         switch($request->decision) {
             case 'approve':
                 switch($role->check()) {

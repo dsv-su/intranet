@@ -23,7 +23,9 @@ class DsvBudgetsSeeder extends Seeder
             $researchAreaData[$area] = [
                 'preapproved' => 0,
                 'budget' => 0,
-                'cost' => 0
+                'cost' => 0,
+                'approved' => 0,
+                'final' => 0,
             ];
         }
 

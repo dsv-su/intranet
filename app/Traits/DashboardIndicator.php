@@ -13,7 +13,8 @@ trait DashboardIndicator
         $head = collect(Dashboard::where('state', 'manager_approved')->where('head_id', $user)->get());
         $fo = collect(Dashboard::where('state', 'head_approved')->where('fo_id', $user)->get());
         //pp
-        $head_pp = collect(Dashboard::where('state', 'submitted')->where('head_id', $user)->where('type', 'projectproposal')->get());
+        //$head_pp = collect(Dashboard::where('state', 'submitted')->where('head_id', $user)->where('type', 'projectproposal')->get());
+        $head_pp = collect(Dashboard::where('state', 'submitted')->where('type', 'projectproposal')->whereJsonContains('unit_head_approved', [$user => 0])->get());
         $vice_pp = collect(Dashboard::where('state', 'head_approved')->where('vice_id', $user)->where('type', 'projectproposal')->get());
         $fo_pp = collect(Dashboard::where('state', 'vice_approved')->where('fo_id', $user)->where('type', 'projectproposal')->get());
 
