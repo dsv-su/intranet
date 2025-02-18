@@ -21,8 +21,9 @@ class Indicator extends Component
     public function mount()
     {
         $this->dashboard = null;
-        $this->status = 'Rt';
-        $this->user_roles = $this->getUserRoles();
+        //$this->status = 'Rt';
+        //$this->user_roles = $this->getUserRoles();
+        $this->auth_user = Auth::user()->id;
         $this->checkDashboard();
     }
 
