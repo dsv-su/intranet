@@ -16,7 +16,7 @@ class ProposalUploader extends Component
 {
     use WithFileUploads;
 
-    const PREAPPROVED = 'vice_approved';
+    const PREAPPROVED = 'head_approved';
 
     public $proposal;
     public $dashboard;

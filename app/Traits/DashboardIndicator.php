@@ -14,9 +14,9 @@ trait DashboardIndicator
         $fo = collect(Dashboard::where('state', 'head_approved')->where('type', 'travelrequest')->where('fo_id', $user)->get());
         //pp
         //$head_pp = collect(Dashboard::where('state', 'submitted')->where('head_id', $user)->where('type', 'projectproposal')->get());
-        $head_pp = collect(Dashboard::where('state', 'submitted')->where('type', 'projectproposal')->whereJsonContains('unit_head_approved', [$user => 0])->get());
-        $vice_pp = collect(Dashboard::where('state', 'head_approved')->where('vice_id', $user)->where('type', 'projectproposal')->get());
-        $fo_pp = collect(Dashboard::where('state', 'vice_approved')->where('fo_id', $user)->where('type', 'projectproposal')->get());
+        $vice_pp = collect(Dashboard::where('state', 'submitted')->where('vice_id', $user)->where('type', 'projectproposal')->get());
+        $head_pp = collect(Dashboard::where('state', 'complete')->where('type', 'projectproposal')->whereJsonContains('unit_head_approved', [$user => 0])->get());
+        $fo_pp = collect(Dashboard::where('state', 'head_approved')->where('fo_id', $user)->where('type', 'projectproposal')->get());
 
         //User
         $manager_return = collect(Dashboard::where('state', 'manager_returned')->where('user_id', $user)->where('status', 'unread')->get());

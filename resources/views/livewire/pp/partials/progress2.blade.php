@@ -47,7 +47,6 @@
     @endphp
     @break
 @endswitch
-
 <div class="w-full">
     <div class="relative grid w-full h-20 m-0 overflow-hidden place-items-center bg-transparent">
         <div class="w-full px-10 pb-4">

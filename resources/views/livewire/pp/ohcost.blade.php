@@ -96,7 +96,7 @@
                                         block w-[calc(100%-32px)] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
                {{--}}value="{{ old('oh_cost') ? old('oh_cost'): $proposal->pp['oh_cost'] ??  '' }}{{--}} "
                placeholder="OH cost"
-               @if($type == 'create' or $type == 'edit' or $type == 'resume')
+               @if($type == 'complete' or $type == 'edit' or $type == 'resume')
                required
                @else
                readonly

@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Services\Budget\Budget;
 use App\Services\Review\DashboardRole;
 use App\Services\Review\WorkflowHandler;
-use App\Workflows\DSVProjectPWorkflow;
+use App\Workflows\ProjectWorkflow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -72,6 +72,17 @@ class ProjectProposalController extends Controller
         switch($request->decision) {
             case 'approve':
                 switch($role->check()) {
+                    case 'vice':
+                        //Signal state change
+                        $workflowhandler->ViceApprove();
+                        //Update budget stats
+                        $proposal = ProjectProposal::find($dashboard->request_id);
+                        $budget = new Budget($proposal);
+                        //Preapproval count
+                        $budget->preapproved_increment($proposal->pp['research_area']);
+                        //Budget
+                        $budget->budget_increment($proposal->pp['research_area']);
+                        break;
                     case 'head':
                         //Flag approved
                         $headGroup = $dashboard;
@@ -90,32 +101,21 @@ class ProjectProposalController extends Controller
                             $workflowhandler->HeadApprove();
                         }
                         break;
-
-                    case 'vice':
-                        //Signal state change
-                        $workflowhandler->ViceApprove();
-                        //Update budget stats
-                        $proposal = ProjectProposal::find($dashboard->request_id);
-                        $budget = new Budget($proposal);
-                        //Preapproval count
-                        $budget->preapproved_increment($proposal->pp['research_area']);
-                        //Budget
-                        $budget->budget_increment($proposal->pp['research_area']);
-
-
-                        break;
                     case 'fo':
                         $workflowhandler->FOApprove();
+                        break;
+                    case 'vice_final':
+                        $workflowhandler->FinalApprove();
                         break;
                 }
                 break;
             case 'deny':
                 switch($role->check()) {
-                    case 'head':
-                        $workflowhandler->HeadDeny();
-                        break;
                     case 'vice':
                         $workflowhandler->ViceDeny();
+                        break;
+                    case 'head':
+                        $workflowhandler->HeadDeny();
                         break;
                     case 'fo':
                         $workflowhandler->FODeny();
@@ -124,11 +124,11 @@ class ProjectProposalController extends Controller
                 break;
             case 'return':
                 switch($role->check()) {
-                    case 'head':
-                        $workflowhandler->HeadReturn();
-                        break;
                     case 'vice':
                         $workflowhandler->ViceReturn();
+                        break;
+                    case 'head':
+                        $workflowhandler->HeadReturn();
                         break;
                     case 'fo':
                         $workflowhandler->FOReturn();
@@ -144,6 +144,7 @@ class ProjectProposalController extends Controller
     {
         $viewData = $this->prepareProjectProposalData();
         $viewData['type'] = 'create';
+        //$viewData['type'] = 'preapproval';
 
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
@@ -163,7 +164,7 @@ class ProjectProposalController extends Controller
     {
         // Validate and retrieve request data
         $this->validateRequest($request);
-        //dd($request->all(), $request->unit_head);
+
         // Financial officer and authenticated user retrieval
         $foUserId = SettingsFo::find(1)?->user_id;
 
@@ -313,7 +314,8 @@ class ProjectProposalController extends Controller
 
     protected function createAndStartWorkflow($dashboard)
     {
-        $workflow = WorkflowStub::make(DSVProjectPWorkflow::class);
+        //$workflow = WorkflowStub::make(DSVProjectPWorkflow::class);
+        $workflow = WorkflowStub::make(ProjectWorkflow::class);
         $dashboard->workflow_id = $workflow->id();
         $dashboard->save();
         $workflow->start($dashboard);

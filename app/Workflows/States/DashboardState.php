@@ -48,6 +48,49 @@ abstract class DashboardState extends State
             ->allowTransition(FODenied::class,HeadApproved::class)
             ->allowTransition(FODenied::class,Submitted::class)
             //PP
+                //Vice
+            ->allowTransition(Submitted::class, ViceApproved::class)
+            ->allowTransition( ViceApproved::class, Submitted::class)
+            ->allowTransition(Submitted::class, ViceReturned::class)
+            ->allowTransition(ViceReturned::class, Submitted::class)
+            ->allowTransition(Submitted::class, ViceDenied::class)
+            ->allowTransition(ViceDenied::class, Submitted::class)
+                //Complete
+            ->allowTransition(ViceApproved::class, Complete::class)
+            ->allowTransition(Complete::class, Submitted::class)
+                //Head
+            ->allowTransition(Complete::class, HeadApproved::class)
+            ->allowTransition(HeadApproved::class,Complete::class)
+            ->allowTransition(HeadApproved::class, Submitted::class)
+            ->allowTransition(Complete::class, HeadReturned::class)
+            ->allowTransition(HeadReturned::class,Complete::class)
+            ->allowTransition(HeadReturned::class,Submitted::class)
+            ->allowTransition(Complete::class, HeadDenied::class)
+            ->allowTransition(HeadDenied::class,Complete::class)
+            ->allowTransition(HeadDenied::class,Submitted::class)
+                //FO
+            ->allowTransition(HeadApproved::class, FOApproved::class)
+            ->allowTransition(FOApproved::class,HeadApproved::class)
+            ->allowTransition(FOApproved::class,Submitted::class)
+            ->allowTransition(HeadApproved::class, FOReturned::class)
+
+            ->allowTransition(FOReturned::class,HeadApproved::class)
+            ->allowTransition(FOReturned::class,Submitted::class)
+            ->allowTransition(HeadApproved::class, FODenied::class)
+            ->allowTransition(FODenied::class,HeadApproved::class)
+            ->allowTransition(FODenied::class,Submitted::class)
+                //Final
+            ->allowTransition(FOApproved::class, FinalApproved::class)
+            ->allowTransition(FinalApproved::class,FOApproved::class)
+            ->allowTransition(FinalApproved::class,Submitted::class)
+            ->allowTransition(FOApproved::class, FinalReturned::class)
+
+            ->allowTransition(FinalReturned::class,FOApproved::class)
+            ->allowTransition(FinalReturned::class,Submitted::class)
+            ->allowTransition(FOApproved::class, FinalDenied::class)
+            ->allowTransition(FinalDenied::class,FOApproved::class)
+            ->allowTransition(FinalDenied::class,Submitted::class)
+            /* old flow
             ->allowTransition(Submitted::class, HeadApproved::class)
             ->allowTransition( HeadApproved::class, Submitted::class)
             ->allowTransition(Submitted::class, HeadReturned::class)
@@ -71,12 +114,12 @@ abstract class DashboardState extends State
             ->allowTransition(FOApproved::class,Submitted::class)
             ->allowTransition(ViceApproved::class, FOReturned::class)
 
-
             ->allowTransition(FOReturned::class,ViceApproved::class)
             ->allowTransition(FOReturned::class,Submitted::class)
             ->allowTransition(ViceApproved::class, FODenied::class)
             ->allowTransition(FODenied::class,ViceApproved::class)
             ->allowTransition(FODenied::class,Submitted::class)
+            */
             ;
     }
 }

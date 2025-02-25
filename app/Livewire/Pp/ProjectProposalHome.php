@@ -41,14 +41,13 @@ class ProjectProposalHome extends Component
         $this->awaiting = Dashboard::where('type', 'projectproposal')
             ->where(function ($query) use ($user) {
                 $query->where('state', 'submitted')
-                    //->where('head_id', $user->id)
-                    ->whereJsonContains('unit_head_approved', [$user->id => 0])
+                    ->where('vice_id', $user->id)
                     ->orWhere(function ($query) use ($user) {
                         $query->where('state', 'head_approved')
-                            ->where('vice_id', $user->id);
-                    })->orWhere(function ($query) use ($user) {
-                        $query->where('state', 'vice_approved')
                             ->where('fo_id', $user->id);
+                    })->orWhere(function ($query) use ($user) {
+                        $query->where('state', 'complete')
+                            ->whereJsonContains('unit_head_approved', [$user->id => 0]);
                     });
             })
             ->count();

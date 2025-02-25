@@ -22,7 +22,7 @@
     @break
     @case('fo_approved')
     @php
-        $state = 'APPROVED';
+        $state = 'PREAPPROVED';
         $bgcolor = 'bg-green-100';
         $textcolor = 'text-green-800';
     @endphp

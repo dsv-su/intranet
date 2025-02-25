@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Workflow\WorkflowStub;
 
-class ProjectProposal extends Component
+class oldProjectProposal extends Component
 {
     public $progress = 'Waiting', $progressColor;
     public $name = '';

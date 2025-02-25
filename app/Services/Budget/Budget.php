@@ -51,13 +51,14 @@ class Budget
             $this->research_area[$researchAreaToUpdate] = ['budget' => 0];
         }
         // Increase the 'budget' for the specific research area
-        $this->research_area[$researchAreaToUpdate]['budget'] = $this->research_area[$researchAreaToUpdate]['budget'] + $this->proposal->pp['budget_dsv'];
+        $this->research_area[$researchAreaToUpdate]['budget'] += $this->proposal->pp['budget_dsv'] ?? 0;
+
 
         //Update research_area
         $this->budget->research_area = $this->research_area;
 
         //Update total
-        $this->budget->budget_total = $this->budget->budget_total + $this->proposal->pp['budget_dsv'];
+        $this->budget->budget_total += $this->proposal->pp['budget_dsv'] ?? 0;
 
         // Save the updated JSON
         $this->budget->save();
