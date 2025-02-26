@@ -22,7 +22,8 @@ class UserRoleUpdate
      */
     public function handle(object $event): void
     {
-        $user = $event->user;
-        Mail::to($user->email)->send(new NotifyUserRoleUpdate($user));
+        //Disabled
+        //$user = $event->user;
+        //Mail::to($user->email)->send(new NotifyUserRoleUpdate($user));
     }
 }
