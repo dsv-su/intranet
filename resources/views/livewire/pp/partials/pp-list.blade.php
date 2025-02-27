@@ -35,7 +35,7 @@
                             @nocache('livewire.pp.partials.state')
 
                             <!-- Stage 2 -->
-                            {{--}}@nocache('livewire.pp.partials.stage2_state'){{--}}
+                            @nocache('livewire.pp.partials.stage2_state')
 
                             <!-- Stage 3 -->
                             {{--}}@nocache('livewire.pp.partials.stage3_state'){{--}}
@@ -80,9 +80,9 @@
                                     {{$proposal->pp['program'] ?? ''}}
                                 </p>
                                 <!-- Co-financing -->
-                                <p class="text-xs text-gray-600 dark:text-neutral-400">
+                                <p class="uppercase text-xs text-gray-600 dark:text-neutral-400">
                                     <span class="font-semibold">Co-financing needed:</span><br>
-                                    {{$proposal->pp['other_cofinancing']}}
+                                    {{$proposal->pp['cofinancing'] ?? 'No'}}
                                 </p>
                                 <!-- OH -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
@@ -210,7 +210,7 @@
                                         <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['head_returned', 'vice_returned', 'fo_returned']))
                                         <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Returned</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['vice_approved']))
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['complete']))
                                         <span class="bg-blue-100 text-blue-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400 border border-blue-500">Processing</span>
                                     @else
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Waiting</span>
@@ -228,9 +228,9 @@
                                         <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Returned</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['head_returned', 'vice_returned']))
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Pending</span>
-                                    @elseif($proposal->status_stage2 == 'uploaded')
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['head_approved']))
                                         <span class="bg-blue-100 text-blue-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400 border border-blue-500">Processing</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['submitted', 'head_approved', 'vice_approved']))
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['submitted', 'complete', 'vice_approved']))
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Waiting</span>
                                     @else
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Waiting</span>

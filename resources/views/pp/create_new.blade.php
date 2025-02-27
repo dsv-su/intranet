@@ -12,16 +12,14 @@
             {{--}}
 
             <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                @if($type == 'complete')
-                    Complete: {{$proposal['name']}}
-
-                @elseif($type == 'view')
-                    {{ __("View:") }} {{$proposal['name']}}
-                @elseif($type == 'edit')
-                    {{ __("Edit:") }} {{$proposal['name']}}
-                @else
-                {{ __("New Project proposal") }}
-                @endif
+                @php
+                    $labels = [
+                        'complete' => isset($proposal) ? __("Complete: ") . $proposal['name'] : __("Complete"),
+                        'view' => isset($proposal) ? __("View: ") . $proposal['name'] : __("View"),
+                        'edit' => isset($proposal) ? __("Edit: ") . $proposal['name'] : __("Edit"),
+                    ];
+                @endphp
+                {{ $labels[$type] ?? __("New Project Proposal") }}
             </h2>
 
             @include(('pp.partials.progress_stage'))
@@ -46,8 +44,11 @@
                             </button>
                         </label>
                         <input type="text" name="title" id="project"
-                               class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
-                                        block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               class="font-mono @if($type == 'complete') bg-blue-300 @else bg-gray-50 @endif
+                                        border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
+                                        block w-full p-2.5
+                                        @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
+                                        dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                value="{{ old('title') ? old('title'): $proposal['pp']['title'] ??  '' }}" placeholder="Title" @if($type == 'preapproval' or $type == 'edit' or $type == 'resume') required=""  @else readonly @endif>
                         @error('name')
                         <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}} </p>
@@ -55,12 +56,14 @@
                     </div>
 
                     <!--Research area-->
-                    <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
-                        Research area
+                    <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
+                                before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
+                                dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
+                        Research subject
                     </div>
 
                     <div class="w-full sm:col-span-2">
-                        <label for="research_area" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Research area") }}<span class="text-red-600"> *</span>
+                        <label for="research_area" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Research subject") }}<span class="text-red-600"> *</span>
                             <button id="research_area-button" data-modal-toggle="research_area-modal" class="inline" type="button">
                                 <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
@@ -97,15 +100,20 @@
                             </button>
                         </label>
                         <textarea id="objective" rows="4" name="objective"
-                                  class="@error('objective') border-red-500 @enderror font-mono block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300
-                                  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                  class="@error('objective') border-red-500 @enderror font-mono block p-2.5 w-full text-sm text-gray-900
+                                  @if($type == 'complete') bg-blue-300 @else bg-gray-50 @endif rounded-lg border border-gray-300
+                                  focus:ring-blue-500 focus:border-blue-500
+                                  @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
+                                      dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                   placeholder="{{__("Outline of the Proposal")}}" @if($type == 'preapproval' or $type == 'edit' or $type == 'resume') required="" @else readonly @endif>{{ old('objective') ? old('objective'): $proposal['pp']['objective'] ?? '' }}</textarea>
                         @error('objective')
                         <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}}</p>
                         @enderror
                     </div>
 
-                    <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
+                    <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
+                                before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
+                                dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
                         Research collaborators
                     </div>
 
@@ -119,8 +127,10 @@
                             </button>
                         </label>
                         <input type="text" name="principal_investigator" id="principal_investigator" readonly
-                               class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
-                                        block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               class="font-mono @if($type == 'complete') bg-blue-300 @else bg-gray-50 @endif
+                                   border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
+                                        block w-full p-2.5 @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
+                                   dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                value="{{ old('principal_investigator') ? old('principal_investigator'): $proposal['pp']['principal_investigator'] ??  auth()->user()->name  }}" placeholder="Title" required="">
                     </div>
                     <div class="w-full">
@@ -132,8 +142,10 @@
                             </button>
                         </label>
                         <input type="text" name="principal_investigator_email" id="principal_investigator_email" readonly
-                               class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
-                                        block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               class="font-mono @if($type == 'complete') bg-blue-300 @else bg-gray-50 @endif
+                                   border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
+                                        block w-full p-2.5 @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
+                                   dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                value="{{ old('principal_investigator_email') ? old('principal_investigator_email'): $proposal['pp']['principal_investigator_email'] ??  auth()->user()->email  }}" placeholder="Title" required="">
                     </div>
 
@@ -146,74 +158,22 @@
                         @include('pp.partials.review.co_investigators')
                     @endif
 
-                    @if(in_array($type, ['complete', 'review', 'view', 'resume']))
-                    <!--Unithead-->
-                    <div>
-                        <label for="unit_head" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            {{ __("Unit Head for approval") }}<span class="text-red-600"> *</span>
-                            <button id="unithead-button" data-modal-toggle="unithead-modal" type="button" class="inline">
-                                <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"
-                                          d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                </svg>
-                            </button>
-                        </label>
 
-                        @if(in_array($type, ['complete', 'edit', 'resume']))
-                            <div id="unithead-container">
-                            @php
-                                $selectedUnitHeads = $type == 'create' ? [] : ($proposal['pp']['unit_head'] ?? []);
-                            @endphp
-
-                            @if(count($selectedUnitHeads) > 1)
-                                <!-- Multiple Unit Heads -->
-                                @foreach($selectedUnitHeads as $selectedUnitHead)
-                                    <select name="unit_head[]" class="mb-2 font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                        @foreach($unitheads as $unithead)
-                                            <option value="{{ $unithead->id }}" {{ $unithead->id == $selectedUnitHead ? 'selected' : '' }}>
-                                                {{ $unithead->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                @endforeach
-                            @else
-                                <!-- Single Unit Head -->
-                                <select id="unit_head" name="unit_head[]" class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                    @foreach($unitheads as $unithead)
-                                        <option value="{{ $unithead->id }}" {{ $unithead->id == ($dashboard->head_id ?? null) ? 'selected' : '' }}>
-                                            {{ $unithead->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            @endif
-
-                            @error('unit_head')
-                            <p class="mt-3 text-sm leading-6 text-red-600">{{ __("This is a required input") }}</p>
-                            @enderror
-                            </div>
-                        @else
-                            @include('pp.partials.review.unithead')
-                        @endif
-
-                        @if(in_array($type, ['complete', 'edit', 'resume']))
-                        <!-- Add Unit Head-->
-                        <div class="mt-4">
-                            <label for="unit_head" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                {{ __("Add a Unit Head for approval") }}
-                                <button id="add-unithead-button"
-                                        class="inline py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium rounded-lg border border-blue-600 text-blue-600 hover:border-blue-500 hover:text-blue-500 focus:outline-none focus:border-blue-500 focus:text-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:border-blue-500 dark:text-blue-500 dark:hover:text-blue-400 dark:hover:border-blue-400"
-                                        type="button">
-                                    Add+
-                                </button>
-                            </label>
-                        </div>
-                        @endif
-                    </div>
-                    @endif
                     <!-- Project organization -->
-                    <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
+                    <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
+                                before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
+                                dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
                         Project organization
                     </div>
+                    <!-- Funding organization -->
+                    @if($type == 'preapproval')
+                        <livewire:select2.Org-select2 proposal="" />
+                    @elseif ( $type == 'edit' or $type == 'resume')
+                        <livewire:select2.Org-select2 :proposal="$proposal" />
+                    @else
+                        @include('pp.partials.review.funding_org')
+                    @endif
+
                     <!--DSV coordinating -->
                     @if($type == 'preapproval')
                         <livewire:pp.dsv-coordination proposal="" />
@@ -241,13 +201,85 @@
                         @include('pp.partials.review.cofinancing')
                     @endif
 
-                    @if(in_array($type, ['complete', 'edit', 'resume']))
+                    @if(in_array($type, ['complete', 'review', 'view', 'resume']))
+                    <!-- Unit Head -->
+                        <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
+                                before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
+                                dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
+                            Unit Head
+                        </div>
+                    <!--Unithead-->
+                        <div>
+                            <label for="unit_head" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                {{ __("Unit Head for approval") }}<span class="text-red-600"> *</span>
+                                <button id="unithead-button" data-modal-toggle="unithead-modal" type="button" class="inline">
+                                    <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"
+                                              d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    </svg>
+                                </button>
+                            </label>
+
+                            @if(in_array($type, ['complete', 'edit', 'resume']))
+                                <div id="unithead-container">
+                                @php
+                                    $selectedUnitHeads = $type == 'create' ? [] : ($proposal['pp']['unit_head'] ?? []);
+                                @endphp
+
+                                @if(count($selectedUnitHeads) > 1)
+                                    <!-- Multiple Unit Heads -->
+                                        @foreach($selectedUnitHeads as $selectedUnitHead)
+                                            <select name="unit_head[]" class="mb-2 font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                @foreach($unitheads as $unithead)
+                                                    <option value="{{ $unithead->id }}" {{ $unithead->id == $selectedUnitHead ? 'selected' : '' }}>
+                                                        {{ $unithead->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endforeach
+                                    @else
+                                    <!-- Single Unit Head -->
+                                        <select id="unit_head" name="unit_head[]" class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                            @foreach($unitheads as $unithead)
+                                                <option value="{{ $unithead->id }}" {{ $unithead->id == ($dashboard->head_id ?? null) ? 'selected' : '' }}>
+                                                    {{ $unithead->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+
+                                    @error('unit_head')
+                                    <p class="mt-3 text-sm leading-6 text-red-600">{{ __("This is a required input") }}</p>
+                                    @enderror
+                                </div>
+                            @else
+                                @include('pp.partials.review.unithead')
+                            @endif
+
+                            @if(in_array($type, ['complete', 'edit', 'resume']))
+                            <!-- Add Unit Head-->
+                                <div class="mt-4">
+                                    <label for="unit_head" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{ __("Add a Unit Head for approval") }}
+                                        <button id="add-unithead-button"
+                                                class="inline py-1 px-2 inline-flex items-center gap-x-1 text-xs font-medium rounded-lg border border-blue-600 text-blue-600 hover:border-blue-500 hover:text-blue-500 focus:outline-none focus:border-blue-500 focus:text-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:border-blue-500 dark:text-blue-500 dark:hover:text-blue-400 dark:hover:border-blue-400"
+                                                type="button">
+                                            Add+
+                                        </button>
+                                    </label>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+
+                    @if(in_array($type, ['complete', 'review', 'edit', 'resume', 'view']))
                     <!-- Project budget -->
-                    <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
+                    <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
+                                before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
+                                dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
                         Project budget
                     </div>
-                    <!-- Funding organization -->
-                    <livewire:select2.Org-select2 proposal="" />
+
                     <!-- Budget for complete project -->
                     <div class="w-full">
                         <label for="budget_project" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Budget for complete project") }}<span class="text-red-600"> *</span>
@@ -294,7 +326,16 @@
                                 <input type="radio" name="currency" value="sek"
                                        class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                        id="currency"
-                                       checked="" required>
+                                       @if(in_array($type, ['complete', 'edit', 'resume']))
+                                            checked required
+                                       @elseif(in_array($type, ['review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'sek')
+                                            checked
+                                       @endif
+                                       @unless(in_array($type, ['complete', 'edit', 'resume']))
+                                            disabled
+                                       @endunless
+                                       >
+
                                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">SEK</span>
                             </label>
 
@@ -302,7 +343,15 @@
                                 <input type="radio" name="currency" value="us"
                                        class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                        id="currency"
-                                       required>
+                                       @if(in_array($type, ['complete', 'edit', 'resume']))
+                                       required
+                                       @elseif(!in_array($type, ['review', 'view']) || ($proposal['pp']['currency'] ?? '') != 'us')
+                                       disabled
+                                       @endif
+                                       @if(in_array($type, ['review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'us')
+                                       checked
+                                    @endif>
+
                                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">$</span>
                             </label>
 
@@ -310,7 +359,15 @@
                                 <input type="radio" name="currency" value="euro"
                                        class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                        id="currency"
-                                       required>
+                                       @if(in_array($type, ['complete', 'edit', 'resume']))
+                                       required
+                                       @elseif(!in_array($type, ['review', 'view']) || ($proposal['pp']['currency'] ?? '') != 'euro')
+                                       disabled
+                                       @endif
+                                       @if(in_array($type, ['review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'euro')
+                                       checked
+                                    @endif>
+
                                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">€</span>
                             </label>
                         </div>
@@ -320,9 +377,145 @@
                     <livewire:pp.ohcost :type="$type" :proposal="$proposal ?? null"/>
 
                     @endif
+                    <!-- Project dates -->
+                    <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
+                                before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
+                                dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
+                        Project dates
+                    </div>
+                    @if($type != 'preapproval')
+                    <!--Decision expected-->
+                    <div class="flex flex-col w-full">
+                        <label for="decision_exp" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">
+                            {{ __("Decision expected") }}
+                            <button id="decision_exp-button" data-modal-toggle="decision_exp-modal" class="inline" type="button">
+                                <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </button>
+                        </label>
+                        @if( $type == 'complete' or $type == 'edit' or $type == 'resume')
+                            <div class="flex flex-col sm:flex-row items-center w-full">
+                                <div class="relative w-full">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-blue-700 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    @error('decision_exp')
+                                    <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
+                                    @enderror
+                                    <input datepicker datepicker-format="dd/mm/yyyy"
+                                           name="decision_exp"
+                                           @if($type == 'edit' or $type == 'resume')
+                                           value="{{ $proposal['pp']['decision_exp'] }}"
+                                           @endif
+                                           id="startInput" type="text"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
+                                                  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                           placeholder="{{__("Select date")}}">
+                                </div>
+                            </div>
+                        @else
+                            @include('pp.partials.review.decision_exp')
+                        @endif
+                    </div>
+                    @endif
+                    <!-- Start date -->
+                    @if($type != 'preapproval')
+                    <div class="flex flex-col w-full">
+                        <label for="start_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">
+                            {{ __("Start date expected") }}<span class="text-red-600"> *</span>
+                            <button id="start_date-button" data-modal-toggle="start_date-modal" class="inline" type="button">
+                                <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </button>
+                        </label>
+                        @if($type == 'complete' or $type == 'edit' or $type == 'resume')
+                            <div class="flex flex-col sm:flex-row items-center w-full">
+                                <div class="relative w-full">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-blue-700 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    @error('start_date')
+                                    <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
+                                    @enderror
+                                    <input datepicker datepicker-format="dd/mm/yyyy"
+                                           name="start_date"
+                                           @if($type == 'edit' or $type == 'resume')
+                                           value="{{ $proposal['pp']['start_date'] }}"
+                                           @endif id="endInput" type="text"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
+                                                  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                           placeholder="{{__("Select date")}}" required>
+                                </div>
+                            </div>
+                        @else
+                            @include('pp.partials.review.start_date')
+                        @endif
+                    </div>
+                    @endif
+                    <!-- Submission deadline -->
+                    @if($type != 'preapproval')
+                    <div class="flex flex-col w-full">
+                        <label for="submission" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">
+                            {{ __("Submission deadline") }}<span class="text-red-600"> *</span>
+                            <button id="submission-button" data-modal-toggle="submission-modal" class="inline" type="button">
+                                <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </button>
+                        </label>
+                        @if($type == 'complete' or $type == 'edit' or $type == 'resume')
+                            <div class="flex flex-col sm:flex-row items-center w-full">
+                                <div class="relative w-full">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-blue-700 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    @error('submission')
+                                    <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
+                                    @enderror
+                                    <input datepicker datepicker-format="dd/mm/yyyy"
+                                           name="submission_deadline"
+                                           @if($type == 'edit' or $type == 'resume')
+                                           value="{{ $proposal['pp']['submission_deadline'] }}"
+                                           @endif
+                                           id="startInput" type="text"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
+                                                  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                           placeholder="{{__("Select date")}}" required>
+                                </div>
+                            </div>
+                        @else
+                            @include('pp.partials.review.submission')
+                        @endif
+                    </div>
+                    @endif
+                    <!-- Project duration -->
+                    <div class="w-full">
+                        <label for="duration" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Project duration in months") }}<span class="text-red-600"> *</span>
+                            <button id="duration-button" data-modal-toggle="duration-modal" class="inline" type="button">
+                                <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </button>
+                        </label>
+                        <input type="number" name="project_duration" id="duration"
+                               class="font-mono @if($type == 'complete') bg-blue-300 @else bg-gray-50 @endif border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
+                                        block w-full p-2.5 @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                               value="{{ old('duration') ? old('duration'): $proposal->pp['project_duration'] ??  '' }}"
+                               placeholder="Duration" @if($type == 'preapproval' or $type == 'edit' or $type == 'resume') required @else readonly @endif>
+                    </div>
 
                     <!-- Comments -->
-                    <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-gray-400 uppercase before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6 dark:text-neutral-500 dark:before:border-neutral-600 dark:after:border-neutral-600">
+                    <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
+                                before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
+                                dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
                         Comments
                     </div>
                     <!-- Initial comments -->
@@ -340,6 +533,20 @@
                                   placeholder="{{__("Your comments")}}" @if($type == 'view' or $type == 'review') readonly @endif>{{ old('user_comments') ? old('user_comments'): $proposal->pp['user_comments'] ?? '' }}</textarea>
                     </div>
                 </div>
+
+                <!-- Upload component -->
+                @if($type == 'complete' or $type == 'review' or $type == 'view' or $type == 'resume')
+                    <div id="proposal-attachments" class="sm:col-span-2">
+                        <label for="upload" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Proposal attachments") }}
+                            <button id="upload-button" data-modal-toggle="upload-modal" class="inline" type="button">
+                                <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M8 9h2v5m-2 0h4M9.408 5.5h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                            </button>
+                        </label>
+                    </div>
+                    <livewire:pp.proposal-uploader  :proposal="$proposal" />
+                @endif
 
                     @if(in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
                     <!-- Submit buttons -->
@@ -361,6 +568,10 @@
                                 dark:hover:bg-neutral-800 dark:focus:bg-neutral-800">
                             @if($type == 'edit')
                                 {{__("Edit proposal - disabled")}}
+                            @elseif($type == 'preapproval')
+                                {{__("Submit proposal draft")}}
+                            @elseif($type == 'complete')
+                                {{__("Submit complete proposal")}}
                             @else
                                 {{__("Submit proposal")}}
                             @endif
@@ -387,6 +598,17 @@
         /* Textarea autosize */
         document.addEventListener('DOMContentLoaded', function() {
             const textarea = document.getElementById('user_comments');
+
+            const autoResize = () => {
+                textarea.style.height = 'auto'; // Reset the height to auto to calculate the new height
+                textarea.style.height = `${textarea.scrollHeight}px`; // Set the height to the scroll height
+            };
+
+            textarea.addEventListener('input', autoResize);
+            autoResize(); // Call once on page load to set the initial height
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('objective');
 
             const autoResize = () => {
                 textarea.style.height = 'auto'; // Reset the height to auto to calculate the new height

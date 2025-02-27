@@ -34,7 +34,7 @@ class StateUpdateNotification extends Activity
         $vice = User::find($this->dashboard->vice_id);
 
         //Notify user of changed Request State
-        $state = $this->dashboard->state;
+        $state = (string)$this->dashboard->state;
 
         switch($state) {
             case('manager_returned'):
@@ -57,7 +57,7 @@ class StateUpdateNotification extends Activity
                 //Notify
                 Mail::to($user->email)->send(new NotifyUserChangedState($user, $vice, $this->dashboard));
                 break;
-            case('fo_approved'):
+            case('final_approved'):
                 //Approved Request
                 //Notify
                 Mail::to($user->email)->send(new NotifyRequestApproved($user, $this->dashboard));

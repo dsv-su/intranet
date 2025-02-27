@@ -49,6 +49,17 @@ class ProjectProposalNewController extends Controller
         return $this->createView('pp.create_new', 'mylayout', $viewData);
     }
 
+    public function upload($id)
+    {
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['proposal'] = ProjectProposal::find($id);
+        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
+        $viewData['type'] = 'view';
+        $viewData['upload'] = true;
+        //dd($viewData);
+        return $this->createView('pp.create_new', 'mylayout', $viewData);
+    }
+
     /***
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
@@ -84,8 +95,8 @@ class ProjectProposalNewController extends Controller
                     'pp' => $request->only([
                             'title', 'objective', 'principal_investigator', 'principal_investigator_email',
                             'co_investigator_name', 'co_investigator_email', 'research_area',
-                            'dsvcoordinating', 'other_coordination', 'eu_wallenberg',
-                            'cofinancing', 'other_cofinancing', 'user_comments'
+                            'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
+                            'cofinancing', 'other_cofinancing', 'project_duration', 'user_comments'
                         ]) + [
                             'submitted' => $timestamp,
                             'status' => 'pending'
@@ -115,28 +126,33 @@ class ProjectProposalNewController extends Controller
                 $workflow = $this->createAndStartWorkflow($pp->dashboard);
                 $this->workflowID = $workflow->id();
 
-                return redirect()->route('pp', 'my')->with('success', 'Your Project proposal has successfully been submitted!');
+                return redirect()->route('pp', 'my')->with('success', 'Your Project proposal draft has successfully been submitted!');
                 break;
             case 'complete':
                 $pp = ProjectProposal::find($request->id);
-
                 $existingPp = $pp->pp; // Get existing JSON attribute as an array
-
                 // Merge new values while keeping existing subattributes
                 $updatedPp = array_merge($existingPp, $request->only([
-                    'unit_head', 'funding_organization', 'program', 'decision_exp',
-                    'start_date', 'submission_deadline', 'project_duration',
+                    'unit_head', 'program', 'decision_exp',
+                    'start_date', 'submission_deadline',
                     'budget_project', 'budget_dsv', 'currency', 'oh_cost', 'user_comments'
                 ]), [
                     'submitted' => now(),
                     'status' => 'completed'
                 ]);
 
+                // Update only the 'co_investigator_name' and 'co_investigator_email' attributes if they exist in the request
+                if ($request->has('co_investigator_name')) {
+                    $updatedPp['co_investigator_name'] = $request->co_investigator_name;
+                }
+                if ($request->has('co_investigator_email')) {
+                    $updatedPp['co_investigator_email'] = $request->co_investigator_email;
+                }
+
                 // Update the model without clearing existing 'files'
                 $pp->update([
                     'pp' => $updatedPp,  // Merged JSON attributes
                 ]);
-
                 $pp->save();
 
                 $this->comments_update($request->id, $request->edit_comments, 'edit');
@@ -157,6 +173,9 @@ class ProjectProposalNewController extends Controller
                     $uh_group->multiple_heads = true;
                     $uh_group->save();
                 }
+                //Budget
+                $budget = new Budget($pp);
+                $budget->budget_increment($pp->pp['research_area']);
 
                 //Transition
                 $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
@@ -212,8 +231,8 @@ class ProjectProposalNewController extends Controller
                         $budget = new Budget($proposal);
                         //Preapproval count
                         $budget->preapproved_increment($proposal->pp['research_area']);
-                        //Budget
-                        $budget->budget_increment($proposal->pp['research_area']);
+                        //Budget (Disabled)
+                        //$budget->budget_increment($proposal->pp['research_area']);
                         break;
                     case 'head':
                         //Flag approved

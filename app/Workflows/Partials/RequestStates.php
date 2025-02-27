@@ -5,6 +5,7 @@ namespace App\Workflows\Partials;
 class RequestStates
 {
     const SUBMITTED = 'submitted';
+    const USER = 'user';
     const MANAGER = 'manager';
     const UNIT_HEAD = 'head';
     const VICE = 'vice';

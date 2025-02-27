@@ -4,6 +4,7 @@ namespace App\Workflows;
 
 use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
+use App\Workflows\Notifications\CompletProjectProposalNotification;
 use App\Workflows\Notifications\NewPreApprovalNotification;
 use App\Workflows\Notifications\NewProjectProposalNotification;
 use App\Workflows\Notifications\RequestFilesUploadNotification;
@@ -140,7 +141,7 @@ class ProjectWorkflow extends Workflow
         switch ($newState) {
             case RequestStates::VICE_APPROVED:
                 //Email user to complete proposal
-
+                yield ActivityStub::make(CompletProjectProposalNotification::class, RequestStates::USER, $userRequest);
                 break;
             case RequestStates::VICE_RETURNED:
             case RequestStates::VICE_DENIED:
@@ -155,6 +156,16 @@ class ProjectWorkflow extends Workflow
 
         //Wait for completed proposal
         yield WorkflowStub::await(fn () => ($this->Completed()));
+
+        //Wait for user to upload files
+        yield WorkflowStub::await(fn () => ($this->UploadedFiles()));
+
+        //Notify user request files upload
+        //yield ActivityStub::make(RequestFilesUploadNotification::class, $userRequest);
+
+        //Update state progress
+        $commonActivities = $this->getCommonActivities($userRequest);
+        yield $commonActivities[0];
 
         //Email to Head
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::UNIT_HEAD, $userRequest);
@@ -172,10 +183,10 @@ class ProjectWorkflow extends Workflow
         switch ($newState) {
             case RequestStates::HEAD_APPROVED:
                 //Request has been approved by head
-
-                //Notify user request files upload
-                yield ActivityStub::make(RequestFilesUploadNotification::class, $userRequest);
-
+                //Update stage2
+                yield ActivityStub::make(Stage2UpdateTransition::class, $userRequest);
+                //Email to FO for review
+                yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::FINACIAL_OFFICER, $userRequest);
                 break;
             case RequestStates::HEAD_RETURNED:
             case RequestStates::HEAD_DENIED:
@@ -186,12 +197,6 @@ class ProjectWorkflow extends Workflow
                 //End workflow
                 return $this->stateMachine->state->status();
         }
-
-        //Wait for user to upload files
-        yield WorkflowStub::await(fn () => ($this->UploadedFiles()));
-
-        //Email to FO for review
-        yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::FINACIAL_OFFICER, $userRequest);
 
         //Wait for FO decision
         yield WorkflowStub::await(fn () => ($this->FOApproved() || $this->FODenied() || $this->FOReturned()));
@@ -206,12 +211,9 @@ class ProjectWorkflow extends Workflow
         switch ($newState) {
             case RequestStates::FO_APPROVED:
                 //Request has been approved by fo
-                foreach ($commonActivities as $activity) {
-                    yield $activity;
-                }
 
                 //Update stage2
-                ActivityStub::make(Stage2UpdateTransition::class, $userRequest);
+                yield ActivityStub::make(Stage2UpdateTransition::class, $userRequest);
                 //Final approval
                 //ToDo
 
@@ -228,6 +230,12 @@ class ProjectWorkflow extends Workflow
 
         //Wait for Final decision
         yield WorkflowStub::await(fn () => ($this->FinalApproved() || $this->FinalDenied() || $this->FinalReturned()));
+
+        //Notify user
+        $commonActivities = $this->getCommonActivities($userRequest);
+        foreach ($commonActivities as $activity) {
+            yield $activity;
+        }
 
         //End workflow
         return $this->stateMachine->state->status();

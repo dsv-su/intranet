@@ -1,7 +1,8 @@
 {{--}}
 10% → Submitted
-20% → Preapproval
-40% → UHApproval
+25% → Preapproval
+40% → Complete
+50% → UHApproval
 60% → Submission
 80% → Budget Review
 100% → Final Approval
@@ -19,6 +20,12 @@
             $color = 'bg-purple-600';
         @endphp
         @break
+    @case('complete')
+    @php
+        $progress = 40;
+        $color = 'bg-blue-600';
+    @endphp
+    @break
     @case('head_approved')
         @php
             $progress = 50;
@@ -84,7 +91,7 @@
                     <div class="absolute -bottom-[1.8rem] w-max text-center text-xs">
                         <h6 class="block uppercase font-sans text-[0.65rem] antialiased font-semibold leading-relaxed tracking-normal
                             {{ $progress >= 0 ? 'text-blue-500' : 'text-gray-500' }}">
-                            Submitted
+                            Draft
                         </h6>
                     </div>
                 </div>
