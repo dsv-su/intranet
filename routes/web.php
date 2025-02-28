@@ -57,17 +57,8 @@ Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListControlle
 //Vice settings
 Route::get('/vice_settings', [\App\Http\Controllers\ViceController::class, 'settings'])->name('vice_settings');
 
-//Project Proposals
-Route::get('/pp/{slug}', [\App\Http\Controllers\ProjectProposalController::class, 'pp'])->name('pp');
-Route::get('/create_pp', [\App\Http\Controllers\ProjectProposalController::class, 'create'])->name('create-project');
-Route::post('/submit_pp', [\App\Http\Controllers\ProjectProposalController::class, 'submit'])->name('pp-submit');
-//Route::get('/pp/view/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_view'])->name('pp-view');
-//Route::get('/pp/edit/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_edit'])->name('pp-edit');
-//Route::get('/pp/review/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_review'])->name('pp-review');
-//Route::post('/pp/decision', [\App\Http\Controllers\ProjectProposalController::class, 'decision'])->name('pp-decision');
-//Route::get('/pp/stage2_upload_pp/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'upload'])->name('pp-upload');
-
 //Project Proposals new
+Route::get('/pp/{slug}', [\App\Http\Controllers\ProjectProposalNewController::class, 'pp'])->name('pp');
 Route::get('/pp/view/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_view'])->name('pp-view');
 Route::get('/new_pp', [\App\Http\Controllers\ProjectProposalNewController::class, 'create'])->name('new-project');
 Route::post('/submit_preapproval', [\App\Http\Controllers\ProjectProposalNewController::class, 'submit'])->name('new-submit');

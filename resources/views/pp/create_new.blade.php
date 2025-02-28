@@ -407,8 +407,8 @@
                                     @enderror
                                     <input datepicker datepicker-format="dd/mm/yyyy"
                                            name="decision_exp"
-                                           @if($type == 'edit' or $type == 'resume')
-                                           value="{{ $proposal['pp']['decision_exp'] }}"
+                                           @if($type == 'complete' or $type == 'edit' or $type == 'resume')
+                                           value="{{ $proposal['pp']['decision_exp'] ?? '' }}"
                                            @endif
                                            id="startInput" type="text"
                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
@@ -445,8 +445,8 @@
                                     @enderror
                                     <input datepicker datepicker-format="dd/mm/yyyy"
                                            name="start_date"
-                                           @if($type == 'edit' or $type == 'resume')
-                                           value="{{ $proposal['pp']['start_date'] }}"
+                                           @if($type == 'complete' or $type == 'edit' or $type == 'resume')
+                                           value="{{ $proposal['pp']['start_date'] ?? ''}}"
                                            @endif id="endInput" type="text"
                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
                                                   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -482,8 +482,8 @@
                                     @enderror
                                     <input datepicker datepicker-format="dd/mm/yyyy"
                                            name="submission_deadline"
-                                           @if($type == 'edit' or $type == 'resume')
-                                           value="{{ $proposal['pp']['submission_deadline'] }}"
+                                           @if($type == 'complete' or $type == 'edit' or $type == 'resume')
+                                           value="{{ $proposal['pp']['submission_deadline'] ?? ''}}"
                                            @endif
                                            id="startInput" type="text"
                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5

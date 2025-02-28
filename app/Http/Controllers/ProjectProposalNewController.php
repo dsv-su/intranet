@@ -25,6 +25,39 @@ class ProjectProposalNewController extends Controller
         $this->middleware(['web', 'auth', 'dsv']);
     }
 
+    public function pp($slug)
+    {
+        switch($slug) {
+            case 'my':
+                $page = $slug;
+                $breadcrumb = 'My proposals';
+                break;
+            case 'awaiting':
+                $page = $slug;
+                $breadcrumb = 'Awaiting review';
+                break;
+            case 'all':
+                $page = $slug;
+                $breadcrumb = 'Proposals';
+                break;
+        }
+
+        return (new \Statamic\View\View)
+            ->template('pp.index')
+            ->with(['page' => $page, 'breadcrumb' => $breadcrumb])
+            ->layout('mylayout');
+    }
+
+    public function pp_edit($id)
+    {
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['proposal'] = ProjectProposal::find($id);
+        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
+        $viewData['type'] = 'edit';
+
+        return $this->createView('pp.create_new', 'mylayout', $viewData);
+    }
+
     /***
      * @return View
      *
@@ -54,7 +87,7 @@ class ProjectProposalNewController extends Controller
         $viewData = $this->prepareProjectProposalData();
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-        $viewData['type'] = 'view';
+        $viewData['type'] = 'complete';
         $viewData['upload'] = true;
         //dd($viewData);
         return $this->createView('pp.create_new', 'mylayout', $viewData);
@@ -142,12 +175,17 @@ class ProjectProposalNewController extends Controller
                 ]);
 
                 // Update only the 'co_investigator_name' and 'co_investigator_email' attributes if they exist in the request
-                if ($request->has('co_investigator_name')) {
+
+                /*if ($request->has('co_investigator_name')) {
                     $updatedPp['co_investigator_name'] = $request->co_investigator_name;
                 }
+
                 if ($request->has('co_investigator_email')) {
                     $updatedPp['co_investigator_email'] = $request->co_investigator_email;
-                }
+                }*/
+                $updatedPp['co_investigator_name'] = $request->co_investigator_name;
+                $updatedPp['co_investigator_email'] = $request->co_investigator_email;
+
 
                 // Update the model without clearing existing 'files'
                 $pp->update([

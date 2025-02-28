@@ -5,6 +5,7 @@ namespace App\Workflows;
 use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
 use App\Workflows\Notifications\CompletProjectProposalNotification;
+use App\Workflows\Notifications\NewFinalApprovalNotification;
 use App\Workflows\Notifications\NewPreApprovalNotification;
 use App\Workflows\Notifications\NewProjectProposalNotification;
 use App\Workflows\Notifications\RequestFilesUploadNotification;
@@ -157,11 +158,14 @@ class ProjectWorkflow extends Workflow
         //Wait for completed proposal
         yield WorkflowStub::await(fn () => ($this->Completed()));
 
+        //Check for files
+        if(!$this->UploadedFiles()) {
+            //Notify user request files upload
+            yield ActivityStub::make(RequestFilesUploadNotification::class, $userRequest);
+        }
+
         //Wait for user to upload files
         yield WorkflowStub::await(fn () => ($this->UploadedFiles()));
-
-        //Notify user request files upload
-        //yield ActivityStub::make(RequestFilesUploadNotification::class, $userRequest);
 
         //Update state progress
         $commonActivities = $this->getCommonActivities($userRequest);
@@ -214,8 +218,9 @@ class ProjectWorkflow extends Workflow
 
                 //Update stage2
                 yield ActivityStub::make(Stage2UpdateTransition::class, $userRequest);
-                //Final approval
-                //ToDo
+
+                //Final approval request Email to Vice
+                yield ActivityStub::make(NewFinalApprovalNotification::class, RequestStates::VICE, $userRequest);
 
                 break;
             case RequestStates::FO_RETURNED:

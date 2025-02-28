@@ -40,7 +40,7 @@
         @break
     @case('complete')
         @php
-            $state = 'AWAITING UH';
+            $state = 'AWAITING';
             $bgcolor = 'bg-yellow-100';
             $textcolor = 'text-yellow-800';
         @endphp

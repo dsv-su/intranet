@@ -17,6 +17,7 @@ class ProposalUploader extends Component
     use WithFileUploads;
 
     const PREAPPROVED = 'vice_approved';
+    const COMPLETE = 'complete';
 
     public $proposal;
     public $dashboard;
@@ -67,7 +68,7 @@ class ProposalUploader extends Component
 
         $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
-        if (in_array($user->id, $allowed_roles) && $this->dashboard->state == self::PREAPPROVED) {
+        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::COMPLETE)) {
             $this->allow = true;
         } else {
             $this->allow = false;

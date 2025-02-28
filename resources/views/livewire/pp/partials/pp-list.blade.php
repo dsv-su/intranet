@@ -24,7 +24,7 @@
                             <h4 class="text-xs font-medium text-gray-800 dark:text-neutral-200 tracking-wide">
                                 <span class="font-medium">Main researcher:</span> {{ $proposal->pp['principal_investigator'] }} &nbsp; | &nbsp;
                                 <span class="font-medium">Submission deadline:</span> {{ $proposal->pp['submission_deadline'] ?? '' }} &nbsp; | &nbsp;
-                                <span class="font-medium">Project duration:</span> {{ $proposal->pp['project_duration'] ?? '' }} &nbsp; | &nbsp;
+                                <span class="font-medium">Project duration:</span> {{ $proposal->pp['project_duration'] ?? '' }} (months) &nbsp; | &nbsp;
                                 <span class="font-medium">Economy owner:</span> [N/A]
                             </h4>
                         </div>
@@ -35,7 +35,7 @@
                             @nocache('livewire.pp.partials.state')
 
                             <!-- Stage 2 -->
-                            @nocache('livewire.pp.partials.stage2_state')
+                            {{--}}@nocache('livewire.pp.partials.stage2_state'){{--}}
 
                             <!-- Stage 3 -->
                             {{--}}@nocache('livewire.pp.partials.stage3_state'){{--}}
@@ -111,54 +111,56 @@
                                     @if($review ?? false)
                                         <a type="button"
                                            href="{{route('pp-review', $proposal->id)}}"
-                                           class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-transparent border border-blue-600 hover:border-blue-500
-                                           over:text-blue-500 focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
-                                           dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
+                                           class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                            uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
+                                            disabled:opacity-25 transition ease-in-out duration-150">
                                             Review
                                         </a>
                                     @endif
                                     @if($resume ?? false)
-                                    <button type="button" class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
-                                        <svg class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12.25V1m0 11.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M4 19v-2.25m6-13.5V1m0 2.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M10 19V7.75m6 4.5V1m0 11.25a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM16 19v-2"/>
-                                        </svg>
-                                        Resume
-                                    </button>
+                                        <button type="button"
+                                            class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                            uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
+                                            disabled:opacity-25 transition ease-in-out duration-150">
+                                            <svg class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12.25V1m0 11.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M4 19v-2.25m6-13.5V1m0 2.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M10 19V7.75m6 4.5V1m0 11.25a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM16 19v-2"/>
+                                            </svg>
+                                            Resume
+                                        </button>
                                     @endif
-
-                                    <a type="button"
-                                       href="{{route('pp-view', $proposal->id)}}"
-                                       class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
-                                       focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
-                                       dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
-                                        View
-                                    </a>
-                                    {{--}}
-                                    @if($proposal->allowEdit())
-                                    <a type="button"
-                                       href="{{route('pp-edit', $proposal->id)}}"
-                                       class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
-                                        focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
-                                        dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
-                                        Edit
-                                    </a>
-                                    @endif
-                                    {{--}}
+                                        <a type="button"
+                                           href="{{route('pp-view', $proposal->id)}}"
+                                           class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                            uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
+                                            disabled:opacity-25 transition ease-in-out duration-150">
+                                            View
+                                        </a>
+                                        {{--}}
+                                        @if($proposal->allowEdit())
+                                        <a type="button"
+                                           href="{{route('pp-edit', $proposal->id)}}"
+                                           class="inline-flex items-center px-2 py-2 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
+                                            focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
+                                            dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
+                                            Edit
+                                        </a>
+                                        @endif
+                                        {{--}}
                                     @if($proposal->allowComplete())
                                         <a type="button"
                                            href="{{route('pp-complete', $proposal->id)}}"
-                                           class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
-                                            focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
-                                            dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
+                                           class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                            uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
+                                            disabled:opacity-25 transition ease-in-out duration-150">
                                             Complete
                                         </a>
                                     @endif
-                                    @if($proposal->status_stage1 == 'head_approved' ?? false)
+                                    @if((string)$proposal->dashboard->state == 'complete' ?? false)
                                         <a type="button"
                                            href="{{route('pp-upload', $proposal->id)}}#proposal-attachments"
-                                           class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
-                                            focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
-                                            dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
+                                           class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                            uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
+                                            disabled:opacity-25 transition ease-in-out duration-150">
                                             Upload
                                         </a>
                                    @endif
@@ -166,9 +168,9 @@
                                     @if($proposal->allowEdit() and in_array((string) $proposal->status_stage1, ['head_returned', 'vice_returned', 'fo_returned']))
                                         <a type="button"
                                            href="#"
-                                           class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
-                                            focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
-                                            dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
+                                           class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                            uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
+                                            disabled:opacity-25 transition ease-in-out duration-150">
                                             Resume
                                         </a>
                                     @endif
@@ -182,7 +184,7 @@
                                 <!-- vice head -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
                                     <span class="font-semibold">Vice head:</span>
-                                    @if(in_array((string) $proposal->dashboard?->state, ['vice_approved', 'head_approved', 'fo_approved', 'final_approved']))
+                                    @if(in_array((string) $proposal->dashboard?->state, ['vice_approved', 'complete', 'head_approved', 'fo_approved', 'final_approved']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['vice_denied', 'head_denied', 'fo_denied']))
                                         <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
@@ -210,7 +212,7 @@
                                         <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['head_returned', 'vice_returned', 'fo_returned']))
                                         <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Returned</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['complete']))
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['complete']) && (count($proposal->files ?? []) > 1))
                                         <span class="bg-blue-100 text-blue-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400 border border-blue-500">Processing</span>
                                     @else
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Waiting</span>

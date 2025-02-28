@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
 use Statamic\View\View;
 use Workflow\WorkflowStub;
 
-class ProjectProposalController extends Controller
+class oldProjectProposalController extends Controller
 {
     public function __construct()
     {
@@ -140,16 +140,16 @@ class ProjectProposalController extends Controller
         return redirect()->route('pp', ['slug' =>'awaiting']);
     }
 
-    public function create()
+    /*public function create()
     {
         $viewData = $this->prepareProjectProposalData();
         $viewData['type'] = 'create';
         //$viewData['type'] = 'preapproval';
 
         return $this->createView('pp.create', 'mylayout', $viewData);
-    }
+    }*/
 
-    public function upload($id)
+    /*public function upload($id)
     {
         $viewData = $this->prepareProjectProposalData();
         $viewData['proposal'] = ProjectProposal::find($id);
@@ -158,7 +158,7 @@ class ProjectProposalController extends Controller
         $viewData['upload'] = true;
         //dd($viewData);
         return $this->createView('pp.create', 'mylayout', $viewData);
-    }
+    }*/
 
     public function submit(Request $request)
     {
