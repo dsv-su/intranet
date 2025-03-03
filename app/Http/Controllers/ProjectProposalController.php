@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
 use Statamic\View\View;
 use Workflow\WorkflowStub;
 
-class ProjectProposalNewController extends Controller
+class ProjectProposalController extends Controller
 {
     public function __construct()
     {
@@ -55,7 +55,7 @@ class ProjectProposalNewController extends Controller
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['type'] = 'edit';
 
-        return $this->createView('pp.create_new', 'mylayout', $viewData);
+        return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
     /***
@@ -68,8 +68,8 @@ class ProjectProposalNewController extends Controller
     {
         $viewData = $this->prepareProjectProposalData();
         $viewData['type'] = 'preapproval';
-        //return $this->createView('pp.create', 'mylayout', $viewData);
-        return $this->createView('pp.create_new', 'mylayout', $viewData);
+
+        return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
     public function pp_complete($id)
@@ -79,7 +79,7 @@ class ProjectProposalNewController extends Controller
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['type'] = 'complete';
 
-        return $this->createView('pp.create_new', 'mylayout', $viewData);
+        return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
     public function upload($id)
@@ -90,7 +90,7 @@ class ProjectProposalNewController extends Controller
         $viewData['type'] = 'complete';
         $viewData['upload'] = true;
         //dd($viewData);
-        return $this->createView('pp.create_new', 'mylayout', $viewData);
+        return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
     /***

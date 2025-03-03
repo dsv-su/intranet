@@ -30,9 +30,8 @@ class ReviewController extends Controller
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['type'] = 'view';
-        //dd($viewData);
-        //return $this->createView('pp.create', 'mylayout', $viewData);
-        return $this->createView('pp.create_new', 'mylayout', $viewData);
+
+        return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
     public function pp_review($id)
@@ -43,9 +42,8 @@ class ReviewController extends Controller
         $viewData['budget'] = DsvBudget::find(1);
         $viewData['reviewer'] =  auth()->user();
         $viewData['type'] = 'review';
-        //dd($viewData);
-        //return $this->createView('pp.create', 'mylayout', $viewData);
-        return $this->createView('pp.create_new', 'mylayout', $viewData);
+
+        return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
     /***
@@ -53,7 +51,6 @@ class ReviewController extends Controller
      *
      * New Review flow
      */
-
 
     private function prepareProjectProposalData()
     {

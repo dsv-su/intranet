@@ -196,6 +196,14 @@
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Waiting</span>
                                     @endif
                                 </p>
+
+                                <!-- Uncomplete proposal -->
+                                @if(in_array((string) $proposal->dashboard?->state, ['complete']) && (count($proposal->files ?? []) < 1))
+                                    <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
+                                        <span class="font-semibold">Upload files:</span>
+                                        <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Waiting</span>
+                                    </p>
+                                @endif
                                 <!-- UH -->
                                 <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
 
@@ -267,7 +275,8 @@
                                 </p>
                                 <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
                                     <span class="font-semibold">Uploaded files:</span>
-                                    <span class="bg-blue-100 text-blue-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400 border border-blue-500">
+                                    <span class="@if(count($proposal->files ?? []) > 0) bg-blue-100  text-blue-800 border border-blue-500 @else bg-grey-100 text-gray-800 border border-grey-500 @endif
+                                                 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400">
                                     {{count($proposal->files ?? [])}}
                                     </span>
                                 </p>

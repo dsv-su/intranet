@@ -58,14 +58,14 @@ Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListControlle
 Route::get('/vice_settings', [\App\Http\Controllers\ViceController::class, 'settings'])->name('vice_settings');
 
 //Project Proposals new
-Route::get('/pp/{slug}', [\App\Http\Controllers\ProjectProposalNewController::class, 'pp'])->name('pp');
+Route::get('/pp/{slug}', [\App\Http\Controllers\ProjectProposalController::class, 'pp'])->name('pp');
 Route::get('/pp/view/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_view'])->name('pp-view');
-Route::get('/new_pp', [\App\Http\Controllers\ProjectProposalNewController::class, 'create'])->name('new-project');
-Route::post('/submit_preapproval', [\App\Http\Controllers\ProjectProposalNewController::class, 'submit'])->name('new-submit');
+Route::get('/new_pp', [\App\Http\Controllers\ProjectProposalController::class, 'create'])->name('new-project');
+Route::post('/submit_preapproval', [\App\Http\Controllers\ProjectProposalController::class, 'submit'])->name('new-submit');
 Route::get('/pp/review/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_review'])->name('pp-review');
-Route::post('/pp/decision', [\App\Http\Controllers\ProjectProposalNewController::class, 'decision'])->name('pp-decision');
-Route::get('/pp/complete/{id}', [\App\Http\Controllers\ProjectProposalNewController::class, 'pp_complete'])->name('pp-complete');
-Route::get('/pp/stage2_upload_pp/{id}', [\App\Http\Controllers\ProjectProposalNewController::class, 'upload'])->name('pp-upload');
+Route::post('/pp/decision', [\App\Http\Controllers\ProjectProposalController::class, 'decision'])->name('pp-decision');
+Route::get('/pp/complete/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_complete'])->name('pp-complete');
+Route::get('/pp/stage2_upload_pp/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'upload'])->name('pp-upload');
 //Test
 Route::get('/test', [TestController::class, 'test'])->name('test');
 
