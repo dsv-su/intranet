@@ -1,4 +1,4 @@
-<div class="w-full sm:col-span-2">
+<div class="w-full mt-2 sm:col-span-2">
     <!-- Label  -->
     <label for="eu_wallenberg_project" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
         {{ __("Is it an EU/Wallenberg project?") }}<span class="text-red-600"> *</span>
@@ -43,9 +43,12 @@
         </div>
 
         <!-- Forskningsservice Label -->
-        <label for="forskningsservice" class="{{$visibility}} flex items-center p-2 w-full bg-white border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 flex-1">
-            Forskningsservice will be notified
+        <label for="forskningsservice"
+               class="{{$visibility}} flex items-center p-2 w-full bg-white border border-gray-500 rounded-lg text-sm font-semibold text-gray-900 focus:border-blue-600 focus:ring-blue-600
+       dark:bg-neutral-900 dark:border-neutral-600 dark:text-neutral-200 flex-1">
+            <strong>Approval from Forskningsservice is required!</strong>
         </label>
+
     </div>
 </div>
 

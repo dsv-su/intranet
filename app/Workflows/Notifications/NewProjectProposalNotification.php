@@ -62,12 +62,13 @@ class NewProjectProposalNotification extends Activity
 
     private function getHeadUserIds(): array
     {
-        if($this->dashboard->multiple_heads) {
+        return $this->dashboard->unit_heads;
+        /*if($this->dashboard->multiple_heads) {
             return $this->dashboard->unit_heads;
         } else {
             return [$this->dashboard->head_id];
 
-        }
+        }*/
     }
 
     private function sendNotification(string $recipient, array $users): void

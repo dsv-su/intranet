@@ -59,12 +59,7 @@ class RequestFilesUploadNotification extends Activity
 
     private function getHeadUserIds(): array
     {
-        if($this->dashboard->multiple_heads) {
-            return $this->dashboard->unit_heads;
-        } else {
-            return [$this->dashboard->head_id];
-
-        }
+        return $this->dashboard->unit_heads;
     }
 
     private function sendNotification(array $users): void

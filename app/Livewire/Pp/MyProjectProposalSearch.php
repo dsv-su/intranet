@@ -26,7 +26,11 @@ class MyProjectProposalSearch extends Component
             ->where('user_id', $user->id)
             ->where(function($query) {
                 $query->where('name', 'like', '%'. $this->searchProposal .'%')
-                    ->orWhere('pp', 'like', '%'. $this->searchProposal .'%');
+                    ->orWhere('id', 'like', '%'. $this->searchProposal .'%')
+                    ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(pp, '$.*')) LIKE ?", ['%' . $this->searchProposal . '%']);
+            })
+            ->orWhereHas('dashboard', function($query) {
+                $query->where('state', 'like', '%'. $this->searchProposal .'%');
             })
             ->paginate(5);
 

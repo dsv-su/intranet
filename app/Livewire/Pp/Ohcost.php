@@ -21,7 +21,7 @@ class Ohcost extends Component
         $this->type = $type;
         $this->proposal = $proposal;
         if($this->proposal) {
-            $this->ohcost = $proposal->pp['oh_cost'];
+            $this->ohcost = $proposal->pp['oh_cost'] ?? 0;
         }
     }
 

@@ -6,7 +6,7 @@
         $textcolor = 'text-gray-800';
     @endphp
     @break
-    @case('waiting')
+    @case('vice_approved')
     @php
         $state = 'WAITING';
         $bgcolor = 'bg-blue-100';
@@ -22,7 +22,7 @@
     @break
     @case('fo_approved')
     @php
-        $state = 'APPROVED';
+        $state = 'PREAPPROVED';
         $bgcolor = 'bg-green-100';
         $textcolor = 'text-green-800';
     @endphp
@@ -36,5 +36,5 @@
     @break
 @endswitch
 <span class="{{$bgcolor}} {{$textcolor}} text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-    {{ $state }}
+    {{$proposal->dashboard->state}}
 </span>

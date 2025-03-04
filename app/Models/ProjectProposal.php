@@ -38,4 +38,17 @@ class ProjectProposal extends Model
         // && $dashboard->state == 'fo_approved' //alternative for only approved proposals
         return in_array($user->id, $allowed_roles);
     }
+
+    public function allowComplete(): bool
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        if (!$dashboard || (string) $dashboard->state !== 'vice_approved') {
+            return false;
+        }
+
+        return $user->id === $dashboard->user_id;
+    }
+
 }

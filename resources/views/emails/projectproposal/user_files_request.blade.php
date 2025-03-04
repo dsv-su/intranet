@@ -8,13 +8,16 @@ To User(Project proposer)
 <br>
 ---
 <br>
-Your Project Proposal Submitted for Review has been preapproved<br><br>
+Your Project Proposal Submitted for Review is missing <br><br>
 Dear {{$user->name}},
 <br><br>
 Your project proposal, submitted on {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}},
-has been reviewed by the Unit Head(s) and the Vice Head and has been reapproved for further processing.
-<br><br>
-Please upload the <strong>DSV budget file</strong>, a <strong>short description of the proposal</strong>, and any <strong>additional relevant files</strong> for review by the <strong>Financial Officer</strong>.
+is <strong>missing necessary files</strong>. Please upload: <br><br>
+<strong> - A budget file </strong>
+<br>
+<strong> - A brief description of the proposal </strong>
+<br>
+<strong> - Any other relevant supporting documents </strong>
 <br><br>
 Here's a quick overview of the request:
 <br><br>
@@ -30,7 +33,7 @@ Here's a quick overview of the request:
 <br><br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}}
 <br><br>
-<b>Approved by vice head:</b> {{Carbon\Carbon::parse($dashboard->updated_at)->format('Y-m-d')}}
+<b>Preapproved by vice head:</b> {{Carbon\Carbon::parse($dashboard->updated_at)->format('Y-m-d')}}
 <br><br>
 <b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>

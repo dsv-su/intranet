@@ -1,5 +1,10 @@
-<div class="fixed bottom-20 left-0 z-50 w-full bg-white dark:bg-gray-900 dark:border-gray-600">
-    <form method="POST" action="{{route('pp-decision')}}">
+<!-- Toggle Button (Always Visible) -->
+<button id="toggleButton" class="fixed bottom-1 right-5 py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+    Toggle Review
+</button>
+
+<div id="reviewBox" class="fixed bottom-20 left-0 z-50 w-full bg-white dark:bg-gray-900 dark:border-gray-600">
+    <form method="POST" action="{{route('pp-decision')}}" >
         @csrf
         <div class="max-w-2xl mx-auto my-4">
             <label for="comment" class="block mb-2 text-sm font-medium text-blue-600 dark:text-white">
@@ -11,7 +16,7 @@
                          focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600
                          dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Please comment the request">
-        </textarea>
+            </textarea>
             <input type="hidden" name="id" value="{{$proposal->id}}">
         </div>
 
@@ -41,5 +46,21 @@
             </button>
         </div>
     </form>
+</div>
+<script>
+    document.getElementById("toggleButton").addEventListener("click", function () {
+        var box = document.getElementById("reviewBox");
+        var button = document.getElementById("toggleButton");
+
+        if (box.classList.contains("hidden")) {
+            box.classList.remove("hidden");
+            button.textContent = "Hide Review";
+        } else {
+            box.classList.add("hidden");
+            button.textContent = "Show Review";
+        }
+    });
+</script>
+
 
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dashboard;
-use App\Models\DsvBudget;
 use App\Models\ProjectProposal;
 use App\Models\ResearchArea;
 use App\Models\SettingsFo;
@@ -11,7 +10,7 @@ use App\Models\User;
 use App\Services\Budget\Budget;
 use App\Services\Review\DashboardRole;
 use App\Services\Review\WorkflowHandler;
-use App\Workflows\DSVProjectPWorkflow;
+use App\Workflows\ProjectWorkflow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -59,11 +58,201 @@ class ProjectProposalController extends Controller
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
+    /***
+     * @return View
+     *
+     * New Proposal
+     */
+
+    public function create()
+    {
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['type'] = 'preapproval';
+
+        return $this->createView('pp.create', 'mylayout', $viewData);
+    }
+
+    public function pp_complete($id)
+    {
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['proposal'] = ProjectProposal::find($id);
+        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
+        $viewData['type'] = 'complete';
+
+        return $this->createView('pp.create', 'mylayout', $viewData);
+    }
+
+    public function upload($id)
+    {
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['proposal'] = ProjectProposal::find($id);
+        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
+        $viewData['type'] = 'complete';
+        $viewData['upload'] = true;
+        //dd($viewData);
+        return $this->createView('pp.create', 'mylayout', $viewData);
+    }
+
+    /***
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
+    public function submit(Request $request)
+    {
+        // Validate and retrieve request data
+        $this->validateRequest($request);
+
+        // Financial officer and authenticated user retrieval
+        $foUserId = SettingsFo::find(1)?->user_id;
+
+        //User
+        $userId = Auth::user()->id;
+
+        //Timestamp
+        $timestamp = now()->startOfDay()->timestamp;
+
+        //Check submit type
+        switch ($request->type) {
+            case 'preapproval':
+                //dd($request->all());
+                // Create Project Proposal instance
+                $pp = new \App\Models\ProjectProposal();
+                $pp->fill([
+                    'user_id' => $userId,
+                    'name' => $request->title,
+                    'created' => $timestamp,
+                    'status_stage1' => 'pending',
+                    'status_stage2' => 'pending',
+                    'status_stage3' => 'pending',
+                    'pp' => $request->only([
+                            'title', 'objective', 'principal_investigator', 'principal_investigator_email',
+                            'co_investigator_name', 'co_investigator_email', 'research_area',
+                            'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
+                            'cofinancing', 'other_cofinancing', 'project_duration', 'user_comments'
+                        ]) + [
+                            'submitted' => $timestamp,
+                            'status' => 'pending'
+                        ],
+                    'files' => []
+                ]);
+                // Save Project Proposal
+                $pp->save();
+
+                // Dashboard instance creation or update
+                $dashboardData = [
+                    'request_id' => $pp->id,
+                    'name' => $request->title,
+                    'created' => $timestamp,
+                    'status' => 'unread',
+                    'type' => 'projectproposal',
+                    'user_id' => $userId,
+                    //'manager_id' => $request->unit_head[0],
+                    'fo_id' => $foUserId,
+                    //'head_id' => $request->unit_head[0],
+                    'vice_id' => $this->getViceHeadUserId()
+                ];
+
+                $dashboard = Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
+
+                // Start workflow and store workflow ID
+                $workflow = $this->createAndStartWorkflow($pp->dashboard);
+                $this->workflowID = $workflow->id();
+
+                return redirect()->route('pp', 'my')->with('success', 'Your Project proposal draft has successfully been submitted!');
+                break;
+            case 'complete':
+                $pp = ProjectProposal::find($request->id);
+                $existingPp = $pp->pp; // Get existing JSON attribute as an array
+                // Merge new values while keeping existing subattributes
+                $updatedPp = array_merge($existingPp, $request->only([
+                    'unit_head', 'program', 'decision_exp',
+                    'start_date', 'submission_deadline',
+                    'budget_project', 'budget_dsv', 'currency', 'oh_cost', 'user_comments'
+                ]), [
+                    'submitted' => now(),
+                    'status' => 'completed'
+                ]);
+
+                // Update only the 'co_investigator_name' and 'co_investigator_email' attributes if they exist in the request
+
+                /*if ($request->has('co_investigator_name')) {
+                    $updatedPp['co_investigator_name'] = $request->co_investigator_name;
+                }
+
+                if ($request->has('co_investigator_email')) {
+                    $updatedPp['co_investigator_email'] = $request->co_investigator_email;
+                }*/
+                $updatedPp['co_investigator_name'] = $request->co_investigator_name;
+                $updatedPp['co_investigator_email'] = $request->co_investigator_email;
+
+
+                // Update the model without clearing existing 'files'
+                $pp->update([
+                    'pp' => $updatedPp,  // Merged JSON attributes
+                ]);
+                $pp->save();
+
+                $this->comments_update($request->id, $request->edit_comments, 'edit');
+
+                $dashboard = Dashboard::where('request_id',  $pp->id)->first();
+                // Create unit head approved array
+                $uh_group = $dashboard;
+                $uh_group->unit_heads = $request->unit_head;
+                $unit_head_approved = [];
+                foreach ($request->unit_head as $uh) {
+                    $unit_head_approved[$uh] = 0;
+                }
+                // Encode associative array to JSON
+                $uh_group->unit_head_approved = json_encode($unit_head_approved);
+                $uh_group->save();
+                if (count($request->unit_head) > 1) {
+                    //Flag multiple
+                    $uh_group->multiple_heads = true;
+                    $uh_group->save();
+                }
+                //Budget
+                $budget = new Budget($pp);
+                $budget->budget_increment($pp->pp['research_area']);
+
+                //Transition
+                $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
+                $workflowhandler->Completed();
+
+                return redirect()->route('pp', 'my')->with('success', 'Your Project proposal has successfully been submitted!');
+
+            case 'edit':
+                //
+                //dd($request->all());
+                $pp = ProjectProposal::find($request->id);
+                $pp->update([
+                    'user_id' => $userId,
+                    'name' => $request->title,
+                    'created' => $timestamp,
+                    'pp' => $request->only([
+                        'title', 'objective', 'principal_investigator', 'principal_investigator_email',
+                        'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
+                        'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
+                        'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
+                        'budget_dsv', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
+                    ])]);
+                // Save Project Proposal
+                $pp->save();
+                $this->comments_update($request->id, $request->edit_comments, 'edit');
+                return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
+                break;
+            case 'resume':
+                dd($request->type);
+                break;
+        }
+        dd('Error');
+
+    }
+
     public function decision(Request $request)
     {
         //Update comments
         $this->comments_update($request->id, $request->comment);
-
         //Trigger signal
         $dashboard = Dashboard::where('request_id', $request->id)->first();
         $role = new DashboardRole($dashboard, $user = auth()->user());
@@ -72,6 +261,17 @@ class ProjectProposalController extends Controller
         switch($request->decision) {
             case 'approve':
                 switch($role->check()) {
+                    case 'vice':
+                        //Signal state change
+                        $workflowhandler->ViceApprove();
+                        //Update budget stats
+                        $proposal = ProjectProposal::find($dashboard->request_id);
+                        $budget = new Budget($proposal);
+                        //Preapproval count
+                        $budget->preapproved_increment($proposal->pp['research_area']);
+                        //Budget (Disabled)
+                        //$budget->budget_increment($proposal->pp['research_area']);
+                        break;
                     case 'head':
                         //Flag approved
                         $headGroup = $dashboard;
@@ -91,31 +291,21 @@ class ProjectProposalController extends Controller
                         }
                         break;
 
-                    case 'vice':
-                        //Signal state change
-                        $workflowhandler->ViceApprove();
-                        //Update budget stats
-                        $proposal = ProjectProposal::find($dashboard->request_id);
-                        $budget = new Budget($proposal);
-                        //Preapproval count
-                        $budget->preapproved_increment($proposal->pp['research_area']);
-                        //Budget
-                        $budget->budget_increment($proposal->pp['research_area']);
-
-
-                        break;
                     case 'fo':
                         $workflowhandler->FOApprove();
+                        break;
+                    case 'vice_final':
+                        $workflowhandler->FinalApprove();
                         break;
                 }
                 break;
             case 'deny':
                 switch($role->check()) {
-                    case 'head':
-                        $workflowhandler->HeadDeny();
-                        break;
                     case 'vice':
                         $workflowhandler->ViceDeny();
+                        break;
+                    case 'head':
+                        $workflowhandler->HeadDeny();
                         break;
                     case 'fo':
                         $workflowhandler->FODeny();
@@ -124,11 +314,11 @@ class ProjectProposalController extends Controller
                 break;
             case 'return':
                 switch($role->check()) {
-                    case 'head':
-                        $workflowhandler->HeadReturn();
-                        break;
                     case 'vice':
                         $workflowhandler->ViceReturn();
+                        break;
+                    case 'head':
+                        $workflowhandler->HeadReturn();
                         break;
                     case 'fo':
                         $workflowhandler->FOReturn();
@@ -136,136 +326,7 @@ class ProjectProposalController extends Controller
                 }
                 break;
         }
-
         return redirect()->route('pp', ['slug' =>'awaiting']);
-    }
-
-    public function create()
-    {
-        $viewData = $this->prepareProjectProposalData();
-        $viewData['type'] = 'create';
-
-        return $this->createView('pp.create', 'mylayout', $viewData);
-    }
-
-    public function upload($id)
-    {
-        $viewData = $this->prepareProjectProposalData();
-        $viewData['proposal'] = ProjectProposal::find($id);
-        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-        $viewData['type'] = 'view';
-        $viewData['upload'] = true;
-        //dd($viewData);
-        return $this->createView('pp.create', 'mylayout', $viewData);
-    }
-
-    public function submit(Request $request)
-    {
-        // Validate and retrieve request data
-        $this->validateRequest($request);
-        //dd($request->all(), $request->unit_head);
-        // Financial officer and authenticated user retrieval
-        $foUserId = SettingsFo::find(1)?->user_id;
-
-        //User
-        $userId = Auth::user()->id;
-
-        //Timestamp
-        $timestamp = now()->startOfDay()->timestamp;
-
-        //Check submit type
-        switch ($request->type) {
-            case 'create':
-                // Create Project Proposal instance
-                $pp = new \App\Models\ProjectProposal();
-
-                $pp->fill([
-                    'user_id' => $userId,
-                    'name' => $request->title,
-                    'created' => $timestamp,
-                    'status_stage1' => 'pending',
-                    'status_stage2' => 'pending',
-                    'status_stage3' => 'pending',
-                    'pp' => $request->only([
-                            'title', 'objective', 'principal_investigator', 'principal_investigator_email',
-                            'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
-                            'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
-                            'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
-                            'budget_dsv', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
-                        ]) + [
-                            'submitted' => $timestamp,
-                            'status' => 'pending'
-                        ],
-                    'files' => []
-                ]);
-
-                // Save Project Proposal
-                $pp->save();
-
-                // Dashboard instance creation or update
-                $dashboardData = [
-                    'request_id' => $pp->id,
-                    'name' => $request->title,
-                    'created' => $timestamp,
-                    'status' => 'unread',
-                    'type' => 'projectproposal',
-                    'user_id' => $userId,
-                    'manager_id' => $request->unit_head[0],
-                    'fo_id' => $foUserId,
-                    'head_id' => $request->unit_head[0],
-                    'vice_id' => $this->getViceHeadUserId()
-                ];
-
-                $dashboard = Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
-
-                // Create unit head approved array
-                $uh_group = $dashboard;
-                $uh_group->unit_heads = $request->unit_head;
-                $unit_head_approved = [];
-                foreach ($request->unit_head as $uh) {
-                    $unit_head_approved[$uh] = 0;
-                }
-                // Encode associative array to JSON
-                $uh_group->unit_head_approved = json_encode($unit_head_approved);
-                $uh_group->save();
-                if (count($request->unit_head) > 1) {
-                    //Flag multiple
-                    $uh_group->multiple_heads = true;
-                    $uh_group->save();
-                }
-
-                // Start workflow and store workflow ID
-                $workflow = $this->createAndStartWorkflow($pp->dashboard);
-                $this->workflowID = $workflow->id();
-
-                return redirect()->route('pp', 'my')->with('success', 'Your Project proposal has successfully been submitted!');
-
-            case 'edit':
-                //
-                //dd($request->all());
-                $pp = ProjectProposal::find($request->id);
-                $pp->update([
-                    'user_id' => $userId,
-                    'name' => $request->title,
-                    'created' => $timestamp,
-                    'pp' => $request->only([
-                            'title', 'objective', 'principal_investigator', 'principal_investigator_email',
-                            'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
-                            'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
-                            'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
-                            'budget_dsv', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
-                        ])]);
-                // Save Project Proposal
-                $pp->save();
-                $this->comments_update($request->id, $request->edit_comments, 'edit');
-                return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
-                break;
-            case 'resume':
-                dd($request->type);
-                break;
-        }
-        dd('Error');
-
     }
 
     protected function validateRequest(Request $request)
@@ -274,8 +335,8 @@ class ProjectProposalController extends Controller
             'title' => 'required',
             'objective' => 'required',
             'principal_investigator' => 'required',
-            'project_duration' => 'required|numeric|integer',
-            'oh_cost' => 'required|numeric|max:56'
+            //'project_duration' => 'required|numeric|integer',
+            //'oh_cost' => 'required|numeric|max:56'
         ];
 
 
@@ -313,7 +374,7 @@ class ProjectProposalController extends Controller
 
     protected function createAndStartWorkflow($dashboard)
     {
-        $workflow = WorkflowStub::make(DSVProjectPWorkflow::class);
+        $workflow = WorkflowStub::make(ProjectWorkflow::class);
         $dashboard->workflow_id = $workflow->id();
         $dashboard->save();
         $workflow->start($dashboard);

@@ -42,7 +42,11 @@
                 @can('vice_head')
                     <a type="button"
                        data-tooltip-target="stats-tooltip"
-                       href="#">
+                       href="#"
+                       class="size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold
+                        rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none
+                        focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white
+                        dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
                         <svg class="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                              stroke-linecap="round" stroke-linejoin="round">
@@ -68,24 +72,20 @@
 
                 </a>
                 @endcan
-
+                <!-- New proposal -->
                 <a type="button"
                    data-tooltip-target="add-proposal-tooltip"
-                   href="{{route('create-project')}}"
+                   href="{{route('new-project')}}"
                    class="size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold
-                        rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none
-                        focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white
+                        rounded-full border border-transparent text-blue-500 hover:bg-blue-100 focus:outline-none
+                        focus:bg-blue-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white
                         dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-
-
-
                     <svg class="shrink-0 size-6 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                     </svg>
-
                     <span class="sr-only">Activity</span>
                 </a>
-
+                <!-- end new creation flow -->
             </div>
         </div>
     </nav>
@@ -93,7 +93,7 @@
 <!-- Tooltipsa -->
 <div id="add-proposal-tooltip" role="tooltip"
      class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-     style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);" data-popper-placement="top">Add new proposal
+     style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);" data-popper-placement="top">New proposal
     <div class="tooltip-arrow" data-popper-arrow></div>
 </div>
 <div id="return-intranet-tooltip" role="tooltip"

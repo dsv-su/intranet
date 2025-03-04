@@ -76,34 +76,41 @@
             <!-- Third -->
             <div class="min-w-0 flex-1">
                 <h2 class="text-xs leading-5 font-semibold text-gray-900 dark:text-white">Days until submission</h2>
-                @php
-                    $deadline = \Carbon\Carbon::createFromFormat('d/m/Y', $proposal->pp['submission_deadline']);
-                    $daysLeft = now()->diffInDays($deadline, false);
-                @endphp
+                @if($proposal->pp['submission_deadline'] ?? false)
+                    @php
+                        $deadline = \Carbon\Carbon::createFromFormat('d/m/Y', $proposal->pp['submission_deadline']);
+                        $daysLeft = now()->diffInDays($deadline, false);
+                    @endphp
 
-                @if ($daysLeft > 0)
+                    @if ($daysLeft > 0)
+                        <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                                      bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10
+                                      dark:bg-blue-900 dark:text-blue-200 dark:ring-blue-400/30">
+                        {{ $daysLeft }} days left
+                    @elseif ($daysLeft === 0)
+                        <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                                  bg-yellow-50 text-yellow-800 ring-1 ring-inset ring-yellow-600/20
+                                  dark:bg-yellow-900 dark:text-yellow-200 dark:ring-yellow-400/30">
+
+                                Deadline is today!
+                    @else
+                        <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                                  bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/10
+                                  dark:bg-red-900 dark:text-red-200 dark:ring-red-400/30">
+
+                                Deadline passed {{ abs($daysLeft) }} days ago
+                    @endif
+                    </span>
+                @else
                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                   bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-700/10
                                   dark:bg-blue-900 dark:text-blue-200 dark:ring-blue-400/30">
-                    {{ $daysLeft }} days left
-                @elseif ($daysLeft === 0)
-                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
-                              bg-yellow-50 text-yellow-800 ring-1 ring-inset ring-yellow-600/20
-                              dark:bg-yellow-900 dark:text-yellow-200 dark:ring-yellow-400/30">
-
-                            Deadline is today!
-                @else
-                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
-                              bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/10
-                              dark:bg-red-900 dark:text-red-200 dark:ring-red-400/30">
-
-                            Deadline passed {{ abs($daysLeft) }} days ago
-                @endif
+                        N/A
                     </span>
-
+                @endif
             </div>
         </div>
-        @nocache('livewire.pp.partials.progress2')
+        @nocache('livewire.pp.partials.progress3')
     </div>
 </div>
 

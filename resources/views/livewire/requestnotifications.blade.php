@@ -48,6 +48,9 @@
                                  @case('vice_approved')
                                  {{__("Approved by Vice head")}}
                                  @break
+                                 @case('complete')
+                                 {{__("Review")}}
+                                 @break
                                  @case('vice_returned')
                                  {{__("Returned by Vice head")}}
                                  @break
