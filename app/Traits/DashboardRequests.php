@@ -23,6 +23,9 @@ trait DashboardRequests
                                     //->where('head_id', $user)
                                     ->whereJsonContains('unit_head_approved', [$user => 0])
                                     ->where('type', 'projectproposal')
+                                    ->whereHas('proposal', function ($projectQuery) {
+                                        $projectQuery->whereJsonLength('files', '>=', 2);
+                                    }) // Ensure 'files' contains at least 2 files
                                     ->get());
         $fo_pp = collect(Dashboard::where('state', 'head_approved')
                                     ->where('fo_id', $user)
