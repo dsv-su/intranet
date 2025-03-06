@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('preapproved_total');
             $table->decimal('budget_total');
             $table->decimal('cost_total');
+            $table->json('funding_org')->nullable();
             $table->timestamps();
         });
     }
