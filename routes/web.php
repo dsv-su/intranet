@@ -66,6 +66,8 @@ Route::get('/pp/review/{id}', [\App\Http\Controllers\ReviewController::class, 'p
 Route::post('/pp/decision', [\App\Http\Controllers\ProjectProposalController::class, 'decision'])->name('pp-decision');
 Route::get('/pp/complete/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_complete'])->name('pp-complete');
 Route::get('/pp/stage2_upload_pp/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'upload'])->name('pp-upload');
+Route::get('/pp/stats/commited', [\App\Http\Controllers\StatsController::class, 'preapproved'])->name('pp-stats');
+Route::get('/pp/stats/recalc', [\App\Http\Controllers\StatsController::class, 'recalcBudget'])->name('pp-recalc');
 //Test
 Route::get('/test', [TestController::class, 'test'])->name('test');
 

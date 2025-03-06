@@ -42,7 +42,7 @@
                 @can('vice_head')
                     <a type="button"
                        data-tooltip-target="stats-tooltip"
-                       href="#"
+                       href="{{route('pp-stats')}}"
                        class="size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold
                         rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none
                         focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white
@@ -108,6 +108,6 @@
 </div>
 <div id="stats-tooltip" role="tooltip"
      class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-     style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);" data-popper-placement="top">Stats (..in progress)
+     style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);" data-popper-placement="top">Stats
     <div class="tooltip-arrow" data-popper-arrow></div>
 </div>
