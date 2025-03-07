@@ -57,8 +57,36 @@ class Budget
         //Update research_area
         $this->budget->research_area = $this->research_area;
 
+        //Update dsv total
+        $this->budget->budget_dsv_total += $this->proposal->pp['budget_dsv'] ?? 0;
+
+        //Update project total
+        $this->budget->budget_project_total += $this->proposal->pp['budget_project'] ?? 0;
+
+        // Save the updated JSON
+        $this->budget->save();
+    }
+
+    public function phd_increment($researchAreaToUpdate)
+    {
+        $this->research_area = $this->budget->research_area;
+        // Ensure decoding was successful
+        if (!is_array($this->research_area)) {
+            $research_area = [];
+        }
+        // Ensure the research area exists
+        if (!isset($this->research_area[$researchAreaToUpdate])) {
+            $this->research_area[$researchAreaToUpdate] = ['phd' => 0];
+        }
+        // Increase the 'phd-budget' for the specific research area
+        $this->research_area[$researchAreaToUpdate]['phd'] += $this->proposal->pp['budget_phd'] ?? 0;
+
+
+        //Update research_area
+        $this->budget->research_area = $this->research_area;
+
         //Update total
-        $this->budget->budget_total += $this->proposal->pp['budget_dsv'] ?? 0;
+        $this->budget->phd_total += $this->proposal->pp['budget_phd'] ?? 0;
 
         // Save the updated JSON
         $this->budget->save();

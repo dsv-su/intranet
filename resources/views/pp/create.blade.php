@@ -20,7 +20,13 @@
                 {{ $labels[$type] ?? __("New Project Proposal") }}
             </h2>
 
+            <!-- Progress stepper stage -->
             @include(('pp.partials.progress_stage'))
+
+            <!-- Instruction -->
+            @if(in_array($type, ['preapproval', 'resume']))
+                @include('pp.partials.form.help')
+            @endif
 
             <form method="post" action="{{route('new-submit')}}">
                 @csrf
@@ -131,6 +137,8 @@
                         @include('pp.partials.form.budget_project')
                         <!-- Budget for DSV -->
                         @include('pp.partials.form.budget_dsv')
+                        <!-- Budget years of PHD -->
+                        @include('pp.partials.form.budget_phd')
                         <!-- Currency -->
                         @include('pp.partials.form.currency')
                         <!-- Percent OH-costs -->

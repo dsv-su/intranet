@@ -23,6 +23,7 @@ class DsvBudgetsSeeder extends Seeder
             $researchAreaData[$area] = [
                 'preapproved' => 0,
                 'budget' => 0,
+                'phd' => 0,
                 'cost' => 0,
                 'approved' => 0,
                 'final' => 0,
@@ -33,7 +34,9 @@ class DsvBudgetsSeeder extends Seeder
         DB::table('dsv_budgets')->insert([
             'research_area' => json_encode($researchAreaData),
             'preapproved_total' => 0,
-            'budget_total' => 0,
+            'budget_dsv_total' => 0,
+            'budget_project_total' => 0,
+            'phd_total' => 0,
             'cost_total' => 0,
             'created_at' => now(),
             'updated_at' => now(),
