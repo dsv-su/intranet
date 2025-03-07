@@ -48,7 +48,7 @@
                     <span class="inline-flex uppercase items-center rounded-md px-2 py-1 text-xs font-medium
                           bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
                           dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30">
-                                {{ $budget->budget_total }}
+                                {{ $budget->budget_dsv_total }}
                     </span>
 
             </div>

@@ -36,12 +36,14 @@ class StatsController extends Controller
         $labels = [];
         $preapproved = [];
         $commited = [];
+        $phd = [];
 
         //Research Subject preapproved and budget
         foreach ($budget->research_area as $key => $dsv) {
             $labels[] = strlen($key) > 20 ? substr($key, 0, 17) . '...' : $key; // Limit to 20 characters
             $preapproved[] = $dsv['preapproved'] ?? 0;
             $commited[] = $dsv['budget'] ?? 0;
+            $phd[] = $dsv['phd'] ?? 0;
         }
 
         //Funding Agency
@@ -51,7 +53,7 @@ class StatsController extends Controller
         }
 
         //Chart Research Subject
-        $chart['researchsubject'] = Chartjs::build()
+        /*$chart['researchsubject'] = Chartjs::build()
             ->name('barChartDualAxis')
             ->type('bar')
             ->size(['width' => 400, 'height' => 200])
@@ -94,6 +96,61 @@ class StatsController extends Controller
                         "stacked" => false
                     ]
                 ]
+            ]);*/
+        //Preapproved
+        $chart['researchsubject_preapproved'] = Chartjs::build()
+            ->name('barChartPreapproved')
+            ->type('bar')
+            ->size(['width' => 400, 'height' => 200])
+            ->labels($labels)
+            ->datasets([
+                [
+                    "label" => "PreApproved",
+                    'backgroundColor' => 'rgba(0, 123, 255, 1)', // Blue
+                    'borderWidth' => 1,
+                    'data' => $preapproved,
+                    'categoryPercentage' => 0.6,
+                    'barPercentage' => 0.6,
+                    'yAxisID' => 'y-left' // Assign to left y-axis
+                ],
+
+            ]);
+        //Commited budget
+        $chart['researchsubject_commited'] = Chartjs::build()
+            ->name('barChartCommited')
+            ->type('bar')
+            ->size(['width' => 400, 'height' => 200])
+            ->labels($labels)
+            ->datasets([
+                [
+                    "label" => "Commited budget (SEK)",
+                    'backgroundColor' => 'rgba(0, 255, 0, 1)',
+                    'borderWidth' => 1,
+                    'data' => $commited,
+                    'categoryPercentage' => 0.6,
+                    'barPercentage' => 0.6,
+                    'yAxisID' => 'y-left' // Assign to left y-axis
+                ],
+
+            ]);
+
+        //PhD budget
+        $chart['researchsubject_phd'] = Chartjs::build()
+            ->name('barChartPhD')
+            ->type('bar')
+            ->size(['width' => 400, 'height' => 200])
+            ->labels($labels)
+            ->datasets([
+                [
+                    "label" => "PhD years",
+                    'backgroundColor' => 'rgba(0, 123, 255, 1)', // Blue
+                    'borderWidth' => 1,
+                    'data' => $phd,
+                    'categoryPercentage' => 0.6,
+                    'barPercentage' => 0.6,
+                    'yAxisID' => 'y-left' // Assign to left y-axis
+                ],
+
             ]);
 
         //Chart Agency funding
@@ -104,8 +161,8 @@ class StatsController extends Controller
             ->labels($org)
             ->datasets([
                 [
-                    "label" => "PreApproved",
-                    'backgroundColor' => 'rgba(0, 123, 255, 1)', // Blue
+                    "label" => "Funding organization",
+                    'backgroundColor' => 'rgba(128, 0, 128, 1)',
                     'borderWidth' => 1,
                     'data' => $orgStats,
                     'categoryPercentage' => 0.6,

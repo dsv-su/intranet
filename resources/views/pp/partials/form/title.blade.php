@@ -1,5 +1,5 @@
 <!--Title-->
-<div class="w-full sm:col-span-2">
+<div class="mt-2 w-full sm:col-span-2">
     <label for="title" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Title") }}<span class="text-red-600"> *</span>
         <button id="title-button" data-modal-toggle="title-modal" class="inline" type="button">
             <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">

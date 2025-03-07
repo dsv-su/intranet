@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\Budget\Budget;
 use App\Services\Review\DashboardRole;
 use App\Services\Review\WorkflowHandler;
+use App\Services\Role\RoleHandler;
 use App\Workflows\ProjectWorkflow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +28,12 @@ class ProjectProposalController extends Controller
 
     public function pp($slug)
     {
+        //Testmode
+        $user = auth()->user();
+        $c = new RoleHandler($user);
+        $roles = $c->show();
+
+        //end testmode
         switch($slug) {
             case 'my':
                 $page = $slug;
@@ -44,7 +51,7 @@ class ProjectProposalController extends Controller
 
         return (new \Statamic\View\View)
             ->template('pp.index')
-            ->with(['page' => $page, 'breadcrumb' => $breadcrumb])
+            ->with(['page' => $page, 'breadcrumb' => $breadcrumb, 'roles' => $roles])
             ->layout('mylayout');
     }
 
@@ -168,21 +175,13 @@ class ProjectProposalController extends Controller
                 $updatedPp = array_merge($existingPp, $request->only([
                     'unit_head', 'program', 'decision_exp',
                     'start_date', 'submission_deadline',
-                    'budget_project', 'budget_dsv', 'currency', 'oh_cost', 'user_comments'
+                    'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'user_comments'
                 ]), [
                     'submitted' => now(),
                     'status' => 'completed'
                 ]);
 
-                // Update only the 'co_investigator_name' and 'co_investigator_email' attributes if they exist in the request
-
-                /*if ($request->has('co_investigator_name')) {
-                    $updatedPp['co_investigator_name'] = $request->co_investigator_name;
-                }
-
-                if ($request->has('co_investigator_email')) {
-                    $updatedPp['co_investigator_email'] = $request->co_investigator_email;
-                }*/
+                // Update only the 'co_investigator_name' and 'co_investigator_email' attributes
                 $updatedPp['co_investigator_name'] = $request->co_investigator_name;
                 $updatedPp['co_investigator_email'] = $request->co_investigator_email;
 
@@ -214,6 +213,7 @@ class ProjectProposalController extends Controller
                 //Budget
                 $budget = new Budget($pp);
                 $budget->budget_increment($pp->pp['research_area']);
+                $budget->phd_increment($pp->pp['research_area']);
 
                 //Transition
                 $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
