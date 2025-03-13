@@ -6,6 +6,7 @@ use App\Models\Dashboard;
 use App\Models\ProjectProposal;
 use App\Models\ResearchArea;
 use App\Models\SettingsFo;
+use App\Models\SettingsOh;
 use App\Models\User;
 use App\Services\Budget\Budget;
 use App\Services\Review\DashboardRole;
@@ -28,30 +29,31 @@ class ProjectProposalController extends Controller
 
     public function pp($slug)
     {
-        //Testmode
-        $user = auth()->user();
-        $c = new RoleHandler($user);
-        $roles = $c->show();
-
-        //end testmode
-        switch($slug) {
-            case 'my':
-                $page = $slug;
-                $breadcrumb = 'My proposals';
-                break;
-            case 'awaiting':
-                $page = $slug;
-                $breadcrumb = 'Awaiting review';
-                break;
-            case 'all':
-                $page = $slug;
-                $breadcrumb = 'Proposals';
-                break;
+        // Check if form is enabled
+        if (!SettingsOh::first()->form_enable) {
+            return (new \Statamic\View\View)
+                ->template('pp.disabled')
+                ->with(['breadcrumb' => 'Disabled'])
+                ->layout('mylayout');
         }
+
+        // User roles handling (testmode)
+        $roles = (new RoleHandler(auth()->user()))->show();
+
+        // Slug mapping
+        $breadcrumbs = [
+            'my' => 'My proposals',
+            'awaiting' => 'Awaiting review',
+            'all' => 'Proposals',
+        ];
 
         return (new \Statamic\View\View)
             ->template('pp.index')
-            ->with(['page' => $page, 'breadcrumb' => $breadcrumb, 'roles' => $roles])
+            ->with([
+                'page' => $slug,
+                'breadcrumb' => $breadcrumbs[$slug] ?? 'Unknown',
+                'roles' => $roles
+            ])
             ->layout('mylayout');
     }
 
@@ -173,7 +175,7 @@ class ProjectProposalController extends Controller
                 $existingPp = $pp->pp; // Get existing JSON attribute as an array
                 // Merge new values while keeping existing subattributes
                 $updatedPp = array_merge($existingPp, $request->only([
-                    'unit_head', 'program', 'decision_exp',
+                    'unit_head', 'program', 'decision_exp', 'funding_organization',
                     'start_date', 'submission_deadline',
                     'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'user_comments'
                 ]), [

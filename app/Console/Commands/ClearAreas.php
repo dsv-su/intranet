@@ -39,6 +39,7 @@ class ClearAreas extends Command
             '--class' => 'DsvBudgetsSeeder',
             '--force' => true,
         ]);
+
         $this->info('Research areas restored!');
     }
 }

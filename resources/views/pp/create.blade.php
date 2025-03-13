@@ -82,7 +82,7 @@
                     <!-- Funding organization -->
                     @if($type == 'preapproval')
                         <livewire:select2.Org-select2 proposal="" />
-                    @elseif ( $type == 'edit' or $type == 'resume')
+                    @elseif ( $type == 'complete' or $type == 'edit' or $type == 'resume')
                         <livewire:select2.Org-select2 :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.funding_org')

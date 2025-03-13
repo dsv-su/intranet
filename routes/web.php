@@ -56,6 +56,8 @@ Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListControlle
 
 //Vice settings
 Route::get('/vice_settings', [\App\Http\Controllers\ViceController::class, 'settings'])->name('vice_settings');
+Route::post('/settings/oh', [\App\Http\Controllers\ViceController::class, 'oh'])->name('oh_settings');
+Route::post('/settings/form', [\App\Http\Controllers\ViceController::class, 'form'])->name('form_settings');
 
 //Project Proposals new
 Route::get('/pp/{slug}', [\App\Http\Controllers\ProjectProposalController::class, 'pp'])->name('pp');
