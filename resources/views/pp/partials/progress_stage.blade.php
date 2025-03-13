@@ -4,10 +4,17 @@
     $stateToStep = [
         'submitted' => 1,
         'vice_approved' => 2,
+        'vice_returned' => 0,
+        'vice_denied' => 0,
         'complete' => 3,
         'head_approved'  => 4,
+        'head_returned'  => 0,
+        'head_denied'  => 0,
         'fo_approved' => 5,
+        'fo_returned' => 0,
+        'fo_denied' => 0,
         'final_approved' => 6,
+        'granted' => 7,
 
     ];
     // Determine the current step based on the dashboard state (or 1 if not set)

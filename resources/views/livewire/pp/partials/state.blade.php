@@ -38,6 +38,13 @@
             $textcolor = 'text-green-800';
         @endphp
         @break
+    @case('granted')
+    @php
+        $state = 'GRANTED';
+        $bgcolor = 'bg-purple-50';
+        $textcolor = 'text-purple-700';
+    @endphp
+    @break
     @case('complete')
         @php
             $state = 'AWAITING';

@@ -90,36 +90,10 @@ abstract class DashboardState extends State
             ->allowTransition(FOApproved::class, FinalDenied::class)
             ->allowTransition(FinalDenied::class,FOApproved::class)
             ->allowTransition(FinalDenied::class,Submitted::class)
-            /* old flow
-            ->allowTransition(Submitted::class, HeadApproved::class)
-            ->allowTransition( HeadApproved::class, Submitted::class)
-            ->allowTransition(Submitted::class, HeadReturned::class)
-            ->allowTransition(HeadReturned::class, Submitted::class)
-            ->allowTransition(Submitted::class, HeadDenied::class)
-            ->allowTransition(HeadDenied::class, Submitted::class)
 
-            ->allowTransition(HeadApproved::class, ViceApproved::class)
-            ->allowTransition(ViceApproved::class,HeadApproved::class)
-            ->allowTransition(ViceApproved::class, Submitted::class)
-            ->allowTransition(HeadApproved::class, ViceReturned::class)
-
-            ->allowTransition(ViceReturned::class,HeadApproved::class)
-            ->allowTransition(ViceReturned::class,Submitted::class)
-            ->allowTransition(HeadApproved::class, ViceDenied::class)
-            ->allowTransition(ViceDenied::class,HeadApproved::class)
-            ->allowTransition(ViceDenied::class,Submitted::class)
-
-            ->allowTransition(ViceApproved::class, FOApproved::class)
-            ->allowTransition(FOApproved::class,ViceApproved::class)
-            ->allowTransition(FOApproved::class,Submitted::class)
-            ->allowTransition(ViceApproved::class, FOReturned::class)
-
-            ->allowTransition(FOReturned::class,ViceApproved::class)
-            ->allowTransition(FOReturned::class,Submitted::class)
-            ->allowTransition(ViceApproved::class, FODenied::class)
-            ->allowTransition(FODenied::class,ViceApproved::class)
-            ->allowTransition(FODenied::class,Submitted::class)
-            */
+            ->allowTransition(FinalApproved::class, Granted::class)
+            ->allowTransition(Granted::class,FinalApproved::class)
+            ->allowTransition(Granted::class,Submitted::class)
             ;
     }
 }

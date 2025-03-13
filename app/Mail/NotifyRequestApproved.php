@@ -35,7 +35,7 @@ class NotifyRequestApproved extends Mailable
     {
         return new Envelope(
             from: new Address('noreply@dsv.su.se', 'DSVIntranet'),
-            subject: config('app.name'). ' Approved: '. Str::upper($this->dashboard->type),
+            subject: ' Approved: '. Str::limit($this->dashboard->name, 28),
         );
     }
 

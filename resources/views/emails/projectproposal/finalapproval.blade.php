@@ -10,7 +10,7 @@ To vicehead
 <br><br>
 FINAL APPROVAL
 <br><br>
-A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been submitted, reviewed and awaits your Final Approval.
+A new <strong>{{$dashboard->type}}</strong> awaits your Final Approval.
 <br><br>
 Here's a quick overview of the proposal:
 <br><br>

@@ -18,6 +18,7 @@ class ProposalUploader extends Component
 
     const PREAPPROVED = 'vice_approved';
     const COMPLETE = 'complete';
+    const APPROVED = 'final_approved';
 
     public $proposal;
     public $dashboard;
@@ -26,14 +27,16 @@ class ProposalUploader extends Component
     public $stored = false;
     public $directory;
     public $allow;
+    public $type;
 
     protected $listeners = [
         'upload_refresh' => '$refresh'
     ];
 
-    public function mount($proposal)
+    public function mount($proposal, $type)
     {
         $this->proposal = $proposal;
+        $this->type = $type;
         $this->directory = '/proposals/' . $this->proposal->id;
         $this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
         $this->allowUpload();
@@ -68,7 +71,7 @@ class ProposalUploader extends Component
 
         $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
-        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::COMPLETE)) {
+        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::COMPLETE or $this->dashboard->state == self::APPROVED) ) {
             $this->allow = true;
         } else {
             $this->allow = false;

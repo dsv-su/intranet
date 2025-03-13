@@ -40,6 +40,7 @@
         @endphp
         @break
     @case('final_approved')
+    @case('granted')
         @php
             $progress = 100;
             //$color = 'bg-green-600';
@@ -58,7 +59,7 @@
     @case('vice_returned')
     @case('fo_returned')
         @php
-            $progress = 100;
+            $progress = 0;
             $color = 'bg-yellow-200';
         @endphp
         @break
