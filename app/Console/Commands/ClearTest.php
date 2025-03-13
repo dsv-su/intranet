@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Database\Seeders\SettingsOhsSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -52,6 +53,8 @@ class ClearTest extends Command
             '--class' => 'DsvBudgetsSeeder',
             '--force' => true,
         ]);
+        // Run OH seeder
+        $this->call(SettingsOhsSeeder::class);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

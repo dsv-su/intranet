@@ -44,8 +44,8 @@
         <span class="ms-auto text-xs font-semibold text-gray-800 dark:text-neutral-400">
             @if($roles ?? false)
                 @foreach($roles as $role)
-                    <span class="bg-blue-100 text-blue-800 text-xxs font-medium me-1 px-1 py-0 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-                        {{$role}}
+                    <span class="bg-blue-100 text-blue-800 text-[10px] font-medium me-1 px-0.5 py-0 rounded-sm dark:bg-gray-700 dark:text-blue-400 border border-blue-400 leading-none">
+                    {{$role}}
                     </span>
                 @endforeach
             @endif

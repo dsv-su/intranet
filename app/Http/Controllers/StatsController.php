@@ -23,8 +23,10 @@ class StatsController extends Controller
             ];
 
         $proposals = ProjectProposal::whereIn('status_stage1', $available_states)->count();
+        $budget = DsvBudget::find(1);
 
-        if( $proposals > 0) {
+        //Check first if there are stats to show
+        if( $proposals > 0 && !empty(json_decode($budget->funding_org, true))) {
             //Recalculate
             $this->recalcBudget();
         } else {
@@ -32,7 +34,6 @@ class StatsController extends Controller
             return $this->createView('stats.unavailable', 'mylayout', $viewData);
         }
 
-        $budget = DsvBudget::find(1);
         $labels = [];
         $preapproved = [];
         $commited = [];

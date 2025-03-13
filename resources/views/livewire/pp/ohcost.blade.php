@@ -10,6 +10,7 @@
         </button>
     </label>
     <!-- OH  -->
+    {{--}}
     @if($progress)
     <div class="max-w-40 flex items-center gap-x-1">
         @if($progress_25)
@@ -57,6 +58,37 @@
             </div>
         </div>
     </div>
+    @endif
+    {{--}}
+    @if($progress)
+        <div class="max-w-40 flex items-center gap-x-1">
+            @php
+                $progressLevels = [25 => $progress_25, 50 => $progress_50, 75 => $progress_75, 100 => $progress_100];
+                $bars = 0;
+                foreach ($progressLevels as $value => $condition) {
+                    if ($condition) {
+                        $bars = $value / 25; // Determines how many bars to show
+                        break;
+                    }
+                }
+            @endphp
+
+            @for ($i = 0; $i < $bars; $i++)
+                <div class="w-full h-2.5 flex flex-col justify-center overflow-hidden bg-blue-600 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-blue-500"
+                     role="progressbar" aria-valuenow="{{ ($i + 1) * 25 }}" aria-valuemin="0" aria-valuemax="100">
+                </div>
+            @endfor
+
+            @if ($progress_100)
+                <div class="w-full h-2.5 flex flex-col justify-center overflow-hidden bg-gray-300 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-neutral-600"
+                     role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                </div>
+            @endif
+
+            <div class="w-10 text-end">
+                <span class="text-sm text-gray-800 dark:text-white">{{$ohcost}}%</span>
+            </div>
+        </div>
     @endif
     <!-- End OH Progress -->
 
