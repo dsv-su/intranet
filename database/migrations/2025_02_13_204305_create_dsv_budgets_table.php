@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->json('research_area');
             $table->integer('preapproved_total');
-            $table->decimal('budget_dsv_total', 8, 2);
+            $table->decimal('budget_dsv_total', 12, 2);
             $table->decimal('budget_project_total', 12, 2);
             $table->integer('phd_total');
             $table->decimal('cost_total');

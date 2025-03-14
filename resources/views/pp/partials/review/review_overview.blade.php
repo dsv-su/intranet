@@ -19,7 +19,20 @@
             <span class="inline-flex uppercase items-center rounded-md px-2 py-1 text-xs font-medium
                     bg-transparent text-blue-700 ring-1 ring-inset ring-blue-700/10
                     dark:bg-transparent dark:text-blue-200 dark:ring-blue-300/20">
-                {{$dashboard->state}}
+                @switch($dashboard->state)
+                    @case('complete')
+                        User has completed proposal
+                    @break
+                    @case('head_approved')
+                        Approved by vice head and unit head
+                    @break
+                    @case('fo_approved')
+                        Approved by Economy
+                    @break
+                    @default
+                        {{$dashboard->state}}
+                    @break
+                @endswitch
             </span>
         </div>
 
