@@ -43,6 +43,7 @@ class ClearTest extends Command
         DB::table('project_proposals')->truncate();
         DB::table('research_areas')->truncate();
         DB::table('dsv_budgets')->truncate();
+        DB::table('settings_ohs')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         // Run a specific seeder
         $this->call('db:seed', [
