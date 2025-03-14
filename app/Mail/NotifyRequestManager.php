@@ -37,7 +37,7 @@ class NotifyRequestManager extends Mailable
     {
         return new Envelope(
             from: new Address('noreply@dsv.su.se', 'DSVIntranet'),
-            subject: 'New: '. Str::limit($this->dashboard->name, 28),
+            subject: 'New Request: '. Str::limit($this->dashboard->name, 28),
         );
     }
 
