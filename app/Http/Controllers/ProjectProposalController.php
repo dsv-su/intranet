@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\GrantNotificationVice;
 use App\Models\Dashboard;
 use App\Models\ProjectProposal;
 use App\Models\ResearchArea;
@@ -16,6 +17,7 @@ use App\Workflows\ProjectWorkflow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Statamic\View\View;
 use Workflow\WorkflowStub;
@@ -217,11 +219,16 @@ class ProjectProposalController extends Controller
                 $budget->budget_increment($pp->pp['research_area']);
                 $budget->phd_increment($pp->pp['research_area']);
 
-                //Transition
-                $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
-                $workflowhandler->Completed();
+                if($dashboard->state == 'complete' && count($pp->files) > 0) {
+                    return redirect()->route('pp', 'my')->with('success', 'Your Project proposal files have successfully been uploaded!');
+                } else {
+                    //Transition
+                    $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
+                    $workflowhandler->Completed();
+                }
 
                 return redirect()->route('pp', 'my')->with('success', 'Your Project proposal has successfully been submitted!');
+
 
             case 'edit':
                 //
@@ -264,6 +271,12 @@ class ProjectProposalController extends Controller
                 $dashboard = Dashboard::where('request_id', $request->id)->first();
                 $dashboard->state = 'granted';
                 $dashboard->save();
+
+                //Send email to vice and fo
+                $user = User::find($dashboard->user_id);
+                $vice = $this->getViceHeadUser();
+                Mail::to($vice->email)->send(new GrantNotificationVice($user, $vice, $dashboard));
+
                 return redirect()->route('pp', 'my')->with('success', 'Your project proposal has been successfully registered as a granted project!');
                 break;
         }
@@ -439,6 +452,14 @@ class ProjectProposalController extends Controller
         return DB::table('role_user')
             ->where('role_id', 'vice_head')
             ->value('user_id');
+    }
+
+    private function getViceHeadUser()
+    {
+        $viceUserID = DB::table('role_user')
+            ->where('role_id', 'vice_head')
+            ->value('user_id');
+        return User::find($viceUserID);
     }
 
     private function prepareProjectProposalData()
