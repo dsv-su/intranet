@@ -194,7 +194,7 @@ class ProjectProposalController extends Controller
                 ]);
                 $pp->save();
 
-                $this->comments_update($request->id, $request->edit_comments, 'edit');
+                $this->comments_update($request->id, $request->edit_comments, 'completed');
 
                 $dashboard = Dashboard::where('request_id',  $pp->id)->first();
                 // Create unit head approved array
@@ -246,6 +246,26 @@ class ProjectProposalController extends Controller
             case 'resume':
                 dd($request->type);
                 break;
+            case 'granted':
+                $pp = ProjectProposal::find($request->id);
+                $existingPp = $pp->pp; // Get existing JSON attribute as an array
+                // Merge new values while keeping existing subattributes
+                $updatedPp = array_merge($existingPp, $request->only([
+                    'granted', 'granted_comments'
+                ]), [
+                    'submitted' => now(),
+                    'status' => 'granted'
+                ]);
+                // Update the model without clearing existing 'files'
+                $pp->update([
+                    'pp' => $updatedPp,  // Merged JSON attributes
+                ]);
+                $pp->save();
+                $dashboard = Dashboard::where('request_id', $request->id)->first();
+                $dashboard->state = 'granted';
+                $dashboard->save();
+                return redirect()->route('pp', 'my')->with('success', 'Your project proposal has been successfully registered as a granted project!');
+                break;
         }
         dd('Error');
 
@@ -253,8 +273,7 @@ class ProjectProposalController extends Controller
 
     public function decision(Request $request)
     {
-        //Update comments
-        $this->comments_update($request->id, $request->comment);
+
         //Trigger signal
         $dashboard = Dashboard::where('request_id', $request->id)->first();
         $role = new DashboardRole($dashboard, $user = auth()->user());
@@ -262,6 +281,8 @@ class ProjectProposalController extends Controller
         //dd($request->decision, $user, $role->check());
         switch($request->decision) {
             case 'approve':
+                //Update comments
+                $this->comments_update($request->id, $request->comment, 'approved');
                 switch($role->check()) {
                     case 'vice':
                         //Signal state change
@@ -302,6 +323,8 @@ class ProjectProposalController extends Controller
                 }
                 break;
             case 'deny':
+                //Update comments
+                $this->comments_update($request->id, $request->comment, 'denied');
                 switch($role->check()) {
                     case 'vice':
                         $workflowhandler->ViceDeny();
@@ -315,6 +338,8 @@ class ProjectProposalController extends Controller
                 }
                 break;
             case 'return':
+                //Update comments
+                $this->comments_update($request->id, $request->comment, 'returned');
                 switch($role->check()) {
                     case 'vice':
                         $workflowhandler->ViceReturn();
@@ -329,6 +354,16 @@ class ProjectProposalController extends Controller
                 break;
         }
         return redirect()->route('pp', ['slug' =>'awaiting']);
+    }
+
+    public function pp_granted($id)
+    {
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['proposal'] = ProjectProposal::find($id);
+        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
+        $viewData['type'] = 'granted';
+
+        return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
     protected function validateRequest(Request $request)
@@ -355,21 +390,36 @@ class ProjectProposalController extends Controller
         $timestamp = now()->format('d/m/Y');
         $user = auth()->user()->name;
         $tag = '**';
-        if($type == 'edit') {
-            $comments_tag = $tag . '  ' . 'Proposal has been edited by ' . $user . '  ' . $timestamp . '  ' . $tag;
-        } else {
-            $comments_tag = $tag . '  ' . $user . '  ' . $timestamp . '  ' . $tag;
+
+        switch ($type) {
+            case 'edit':
+                $comments_tag = $tag . '  ' . 'Proposal has been edited by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                break;
+            case 'completed':
+                $comments_tag = $tag . '  ' . 'Proposal has been completed by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                break;
+            case 'approved':
+                $comments_tag = $tag . '  ' . 'Proposal has been approved by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                break;
+            case 'returned':
+                $comments_tag = $tag . '  ' . 'Proposal has been returned by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                break;
+            case 'denied':
+                $comments_tag = $tag . '  ' . 'Proposal has been denied by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                break;
+            default:
+                $comments_tag = $tag . '  ' . $user . '  ' . $timestamp . '  ' . $tag;
+                break;
         }
 
-
         //Merge with reviewer comments
-
         return ProjectProposal::where('id', $id)
             ->update(['pp->user_comments' =>
                 Str::of($user_comments)->newLine()
                     ->append($comments_tag)
                     ->newLine()
                     ->append($comment)
+                    ->newLine()
                     ->newLine()
             ]);
     }

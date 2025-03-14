@@ -1,4 +1,4 @@
-@if(in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
+@if(in_array($type, ['preapproval', 'complete', 'edit', 'resume', 'granted']))
 
     <div class="flex flex-col sm:flex-row gap-3">
         <a type="button" href="{{ url()->previous() }}"
@@ -22,6 +22,8 @@
                 {{__("Submit proposal draft")}}
             @elseif($type == 'complete')
                 {{__("Submit complete proposal")}}
+            @elseif($type == 'granted')
+                {{__("Report granted")}}
             @else
                 {{__("Submit proposal")}}
             @endif

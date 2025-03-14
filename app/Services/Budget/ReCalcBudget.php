@@ -14,6 +14,14 @@ class ReCalcBudget
         //Reset budget table
         Artisan::call('clear-areas');
 
+        $available_states = [
+            'vice_approved',
+            'complete',
+            'head_approved',
+            'fo_approved',
+            'final_approved'
+        ];
+
         //Retrive proposal data
         $count = [];
         $commited = [];
@@ -22,7 +30,7 @@ class ReCalcBudget
         $total_dsv_budget = 0;
         $total_project_budget = 0;
         $total_phd = 0;
-        $proposals = ProjectProposal::all();
+        $proposals = ProjectProposal::whereIn('status_stage1', $available_states)->get();
         $budget = DsvBudget::find(1);
 
         // Retrieve research_area as an array

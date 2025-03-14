@@ -34,7 +34,7 @@ class NotifyUserChangedState extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: config('app.name'). ' '. Str::upper($this->dashboard->type) . ' Status update',
+            subject: Str::upper($this->dashboard->type) . ' Status update',
         );
     }
 

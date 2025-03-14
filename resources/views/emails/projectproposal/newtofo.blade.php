@@ -28,7 +28,7 @@ Here's a quick overview of the request:
 <br><br>
 <b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>
-<b>Approved by vice head:</b> {{Carbon\Carbon::parse($dashboard->updated_at)->format('Y-m-d')}}
+<b>Approved by vice head and unit head(s):</b> {{Carbon\Carbon::parse($dashboard->updated_at)->format('Y-m-d')}}
 <br><br>
 You can review the details and take necessary action by accessing the proposal through the following link:
 <br><br>

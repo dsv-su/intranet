@@ -12,7 +12,6 @@ New Project Proposal Submitted for Review<br><br>
 Dear {{$head->name}},
 <br><br>
 A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been submitted and is now available for your review.
-<b>The proposal is currently under review and has not yet been approved by either the unit head or the vice head.</b>
 <br><br>
 Here's a quick overview of the request:
 <br><br>

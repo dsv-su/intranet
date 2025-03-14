@@ -11,6 +11,7 @@ use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class FinalApproval extends Mailable
 {
@@ -36,7 +37,7 @@ class FinalApproval extends Mailable
     {
         return new Envelope(
             from: new Address('noreply@dsv.su.se', 'DSVIntranet'),
-            subject: 'Final Approval',
+            subject: 'Final Approval: '. Str::limit($this->dashboard->name, 28),
         );
     }
 

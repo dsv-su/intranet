@@ -31,7 +31,7 @@
             <form method="post" action="{{route('new-submit')}}">
                 @csrf
 
-                @if(in_array($type, ['complete', 'edit', 'resume']))
+                @if(in_array($type, ['complete', 'edit', 'resume', 'granted']))
                     <input type="hidden" name="id" value="{{$proposal->id}}">
                 @endif
 
@@ -175,6 +175,11 @@
 
                 <!-- Upload component -->
                 @include('pp.partials.form.upload')
+
+                <!-- Grant section -->
+                @if(in_array($type, ['granted', 'view']))
+                    @include('pp.partials.form.granted')
+                @endif
 
                 <!-- Submit buttons -->
                 @include('pp.partials.form.submit_buttons')

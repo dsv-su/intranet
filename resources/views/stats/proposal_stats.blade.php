@@ -45,6 +45,11 @@
                     <x-chartjs-component :chart="$chart['researchsubject_phd']" />
                 </div>
             </div>
+            {{--}}
+            <div class="flex justify-between items-center">
+                <h3 class="text-2xl dark:text-white">Granted Proposals</h3>
+            </div>
+            {{--}}
         </div>
     </section>
 

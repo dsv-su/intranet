@@ -1,6 +1,8 @@
 <div>
     @include('livewire.pp.partials.proposal_files')
-    @if($allow)
+
+    @if($allow && in_array($type, ['complete', 'edit', 'resume']))
+        @if(in_array($dashboard->state, ['vice_approved', 'complete']))
         <div class="mb-2 mt-4 bg-blue-50 border border-blue-500 text-sm text-gray-500 rounded-lg p-5 dark:bg-blue-600/[.15]">
             <div class="flex">
                 <svg class="flex-shrink-0 h-4 w-4 text-blue-600 mt-0.5 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -14,6 +16,22 @@
                 </div>
             </div>
         </div>
+        @endif
+        @if(in_array($dashboard->state, ['final_approved']))
+            <div class="mb-2 mt-4 bg-blue-50 border border-blue-500 text-sm text-gray-500 rounded-lg p-5 dark:bg-blue-600/[.15]">
+                <div class="flex">
+                    <svg class="flex-shrink-0 h-4 w-4 text-blue-600 mt-0.5 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 16v-4"></path>
+                        <path d="M12 8h.01"></path>
+                    </svg>
+                    <div class="ms-3">
+                        <h3 class="text-blue-600 font-semibold dark:font-medium dark:text-white">Congratulations!</h3>
+                        <p class="mt-2 text-gray-800 dark:text-slate-400">Please upload the final approved paper and enter the granted amount to complete the final registration.</p>
+                    </div>
+                </div>
+            </div>
+        @endif
     <div x-data="fileUpload()">
         @include('livewire.pp.partials.fileupload_progress')
         <div class="relative cursor-pointer p-6 flex justify-center bg-white border border-dashed border-gray-300 rounded-xl dark:bg-neutral-800 dark:border-neutral-600"

@@ -8,7 +8,7 @@ To User(Project proposer)
 <br>
 ---
 <br>
-Your Project Proposal Submitted for Review is missing <br><br>
+Your Project Proposal Submitted for Review is missing necessary files.<br><br>
 Dear {{$user->name}},
 <br><br>
 Your project proposal, submitted on {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}},
