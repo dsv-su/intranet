@@ -10,42 +10,32 @@ class CheckRoleforApprove
 
     public function isSameUserManager($request): bool
     {
-        // Logic to check if the user and manager are the same person
+        // Retrieve dashboard instance
+        $dashboard = Dashboard::find($request);
 
-        // Retrive request dashboard
-        //$id = $request[0];
-        $id = $request;
-        $this->dashboard = Dashboard::find($id);
-
-        //Users
-        $user = $this->dashboard->user_id;
-        $manager = $this->dashboard->manager_id;
-
-        if($user == $manager) {
-            return true;
+        // Ensure the dashboard exists before accessing properties
+        if (!$dashboard) {
+            return false;
         }
 
-        return false;
+        // Check if the user and manager are the same
+        return $dashboard->user_id === $dashboard->manager_id;
     }
+
 
     public function isSameManagerHead($request): bool
     {
-        // Logic to check if the manager and head are the same person
+        // Retrieve dashboard instance
+        $dashboard = Dashboard::find($request);
 
-        // Retrive request dashboard
-        //$id = $request[0];
-        $id = $request;
-        $this->dashboard = Dashboard::find($id);
-
-        //Users
-        $manager = $this->dashboard->manager_id;
-        $head = $this->dashboard->head_id;
-
-        if($manager == $head) {
-            return true;
+        // Ensure the dashboard exists before accessing properties
+        if (!$dashboard) {
+            return false;
         }
 
-        return false;
+        // Check if manager and head are the same
+        return $dashboard->manager_id === $dashboard->head_id;
     }
+
 
 }
