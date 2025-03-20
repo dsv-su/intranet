@@ -71,6 +71,15 @@
                     </svg>
 
                 </a>
+                <!-- Admin -->
+                <a type="button"
+                   data-tooltip-target="admin-tooltip"
+                   href="{{route('pp-admin')}}">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M20 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6h-2m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4m16 6H10m0 0a2 2 0 1 0-4 0m4 0a2 2 0 1 1-4 0m0 0H4"/>
+                    </svg>
+
+                </a>
                 @endcan
                 <!-- New proposal -->
                 <a type="button"
@@ -109,5 +118,10 @@
 <div id="stats-tooltip" role="tooltip"
      class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
      style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);" data-popper-placement="top">Stats
+    <div class="tooltip-arrow" data-popper-arrow></div>
+</div>
+<div id="admin-tooltip" role="tooltip"
+     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+     style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);" data-popper-placement="top">HelpDesk
     <div class="tooltip-arrow" data-popper-arrow></div>
 </div>

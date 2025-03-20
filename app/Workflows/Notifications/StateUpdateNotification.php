@@ -61,6 +61,10 @@ class StateUpdateNotification extends Activity
                 //Approved Request
                 //Notify
                 Mail::to($user->email)->send(new NotifyRequestApproved($user, $this->dashboard));
+            case('fo_approved'):
+                if($this->dashboard->type == 'travelrequest') {
+                    Mail::to($user->email)->send(new NotifyRequestApproved($user, $this->dashboard));
+                }
         }
     }
 }
