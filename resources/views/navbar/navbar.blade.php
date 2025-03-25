@@ -1,21 +1,15 @@
 <nav class="bg-white border-b border-susecondary dark:bg-gray-900 dark:border-gray-700">
-    <div class="relative flex flex-wrap md:flex-row lg:flex-nowrap w-full p-5 mx-auto bg-white items-center justify-between md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
+    <div class="relative flex flex-wrap md:flex-row lg:flex-nowrap w-full p-3 mx-auto bg-white items-center justify-between md:px-6 lg:px-8 dark:border-gray-600 dark:bg-gray-900">
         <a href="{{ config('app.url') }}" class="flex items-center mr-4">
+            <div class="flex items-center opacity-90 h-full ml-2 dark:text-white">
+                <span class="px-1.5 py-1 text-xl leading-none border-2 border-suprimary rounded-lg">
+                    DSV
+                </span>
+                <span class="ml-1 mb-1 text-xl font-sudepartment font whitespace-nowrap">
+                    {{ __("Intranet") }}
+                </span>
 
-            <span class="flex opacity-90  items-center h-full px-0.5 py-px ml-2 text-xl leading-none border-[2px] border-suprimary rounded dark:text-white dark:border-white">
-                DSV
-            </span>
-            {{--}}
-            <div class="inline-block bg-gradient-to-tl from-suprimary via-transparent to-susecondary p-px rounded-xl">
-                <div class="bg-white rounded-xl py-1 px-2 text-lg font-bold md:text-xl lg:text-2xl lg:leading-tight dark:bg-neutral-900">
-                    <span class="bg-clip-text bg-gradient-to-tl from-suprimary to-susecondary text-transparent">
-                      DSV
-                    </span>
-                </div>
             </div>
-            {{--}}
-            <span class="hidden md:block font-sudepartment ml-1 mb-1 text-xl font whitespace-nowrap dark:text-white">{{__("Intranet")}}</span>
-
             @if(config('app.name') == 'IntranetDev')
                 <span class="hidden md:block font-rock text-lg whitespace-nowrap dark:text-white">Dev</span>
             @endif

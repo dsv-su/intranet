@@ -242,6 +242,9 @@ class ProjectWorkflow extends Workflow
             yield $activity;
         }
 
+        //Update stage2
+        yield ActivityStub::make(Stage2UpdateTransition::class, $userRequest);
+
         //End workflow
         return $this->stateMachine->state->status();
 

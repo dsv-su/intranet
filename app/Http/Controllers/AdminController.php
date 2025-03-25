@@ -31,6 +31,6 @@ class AdminController extends Controller
         $dashboard = Dashboard::where('request_id' ,$id)->first();
         $workflow = WorkflowStub::load($dashboard->workflow_id);
 
-        return redirect()->back()->with('success', 'Your Project proposal has successfully been deleted!');
+        return redirect()->back()->with('success', 'Your Project proposal has successfully been archived!');
     }
 }
