@@ -3,16 +3,17 @@
         <div class="me-5">
             <!-- Logo -->
             <a href="{{ route('pp', 'my') }}" class="flex items-center mr-4">
-                <span class="flex opacity-90 items-center h-full px-0.5 py-px ml-2 text-xl leading-none border-[2px] border-suprimary rounded dark:text-white dark:border-white">
+                <div class="flex items-center opacity-90 h-full ml-2 dark:text-white">
+                <span class="px-1.5 py-1 text-xl leading-none border-2 border-suprimary rounded-lg">
                     DSV
                 </span>
-                <span class="hidden md:block font-sudepartment ml-1 mb-1 text-xl font whitespace-nowrap dark:text-white">
+                    <span class="ml-1 mb-1 text-xl font-sudepartment font whitespace-nowrap">
                     {{ __("ProjectProposals") }}
                 </span>
+
+                </div>
                 @if(config('app.name') == 'ProjectProposalsDev')
-                    <span class="hidden md:block font-rock text-lg whitespace-nowrap dark:text-white">
-                        Dev
-                    </span>
+                    <span class="hidden md:block font-rock text-lg whitespace-nowrap dark:text-white">Dev</span>
                 @endif
             </a>
             <!-- End Logo -->
