@@ -73,6 +73,12 @@
             $color = 'bg-yellow-200';
         @endphp
         @break
+    @case('final_returned')
+    @php
+        $progress = 75;
+        $color = 'bg-yellow-200';
+    @endphp
+    @break
     @default
         @php
             $progress = 0;
