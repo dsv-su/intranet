@@ -14,6 +14,7 @@
         'fo_returned' => 0,
         'fo_denied' => 0,
         'final_approved' => 6,
+        'final_returned' => 5,
         'granted' => 7,
 
     ];

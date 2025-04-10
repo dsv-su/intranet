@@ -71,6 +71,13 @@
             $textcolor = 'text-yellow-800';
         @endphp
         @break
+    @case('final_returned')
+    @php
+        $state = 'RETURNED';
+        $bgcolor = 'bg-yellow-100';
+        $textcolor = 'text-yellow-800';
+    @endphp
+    @break
     @default
         @php
             $state = 'ERROR';

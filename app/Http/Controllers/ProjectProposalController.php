@@ -405,6 +405,9 @@ class ProjectProposalController extends Controller
                     case 'fo':
                         $workflowhandler->FOReturn();
                         break;
+                    case 'vice_final':
+                        $workflowhandler->FinalReturn();
+                        break;
                 }
                 break;
         }
