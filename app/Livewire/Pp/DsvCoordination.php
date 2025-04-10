@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pp;
 
+use App\Models\ProjectProposal;
 use Livewire\Component;
 
 class DsvCoordination extends Component
@@ -12,12 +13,14 @@ class DsvCoordination extends Component
     public function mount($proposal = null)
     {
         $this->proposal = $proposal;
-        $this->check();
+        if($this->proposal) {
+            $this->check();
+        }
     }
 
     public function check()
     {
-        if($this->proposal->pp['dsvcoordinating'] ?? '' == 'no') {
+        if($this->proposal->pp['dsvcoordinating']  == 'no') {
             $this->no();
         }
     }

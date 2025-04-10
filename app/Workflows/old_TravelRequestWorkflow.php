@@ -16,7 +16,7 @@ use Workflow\SignalMethod;
 use Workflow\Workflow;
 use Workflow\WorkflowStub;
 
-class TravelRequestWorkflow extends Workflow implements StatefulInterface
+class oldTravelRequestWorkflow extends Workflow implements StatefulInterface
 {
     private $state;
     private $stateMachine;

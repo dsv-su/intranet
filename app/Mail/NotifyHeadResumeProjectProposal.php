@@ -13,20 +13,20 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
-class NotifyRequestFO extends Mailable
+class NotifyHeadResumeProjectProposal extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public $user, $manager, $head, $dashboard;
+    public $user, $head, $vice, $dashboard;
 
-    public function __construct(User $user, User $manager, User $head, Dashboard $dashboard)
+    public function __construct(User $user, User $head, User $vice, Dashboard $dashboard)
     {
         $this->user = $user;
-        $this->manager = $manager;
         $this->head = $head;
+        $this->vice = $vice;
         $this->dashboard = $dashboard;
     }
 
@@ -37,7 +37,7 @@ class NotifyRequestFO extends Mailable
     {
         return new Envelope(
             from: new Address('noreply@dsv.su.se', 'DSVIntranet'),
-            subject: Str::upper($this->dashboard->type) . ' New Request: '. Str::limit($this->dashboard->name, 28),
+            subject: Str::upper($this->dashboard->type) . ' Resumed: '. Str::limit($this->dashboard->name, 28),
         );
     }
 
@@ -47,7 +47,7 @@ class NotifyRequestFO extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.request.newtofo',
+            view: 'emails.projectproposal.resumetohead',
         );
     }
 

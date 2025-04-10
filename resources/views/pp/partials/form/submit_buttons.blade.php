@@ -22,6 +22,8 @@
                 {{__("Submit proposal draft")}}
             @elseif($type == 'complete')
                 {{__("Submit complete proposal")}}
+            @elseif($type == 'resume')
+                {{__("Resubmit updated proposal")}}
             @elseif($type == 'granted')
                 {{__("Report granted")}}
             @else

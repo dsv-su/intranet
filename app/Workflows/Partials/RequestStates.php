@@ -23,4 +23,7 @@ class RequestStates
     const FO_APPROVED = 'fo_approved';
     const FO_RETURNED = 'fo_returned';
     const FO_DENIED = 'fo_denied';
+    const FINAL_APPROVED = 'final_approved';
+    const FINAL_RETURNED = 'final_returned';
+    const FINAL_DENIED = 'final_denied';
 }

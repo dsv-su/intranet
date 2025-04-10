@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\GrantNotificationVice;
 use App\Models\Dashboard;
+use App\Models\DsvBudget;
 use App\Models\ProjectProposal;
 use App\Models\ResearchArea;
 use App\Models\SettingsFo;
@@ -13,6 +14,7 @@ use App\Services\Budget\Budget;
 use App\Services\Review\DashboardRole;
 use App\Services\Review\WorkflowHandler;
 use App\Services\Role\RoleHandler;
+use App\Workflows\Partials\RequestStates;
 use App\Workflows\ProjectWorkflow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -69,6 +71,16 @@ class ProjectProposalController extends Controller
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
+    public function pp_resume($id)
+    {
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['proposal'] = ProjectProposal::find($id);
+        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
+        $viewData['budget'] = DsvBudget::find(1);
+        $viewData['type'] = 'resume';
+
+        return $this->createView('pp.create', 'mylayout', $viewData);
+    }
     /***
      * @return View
      *
@@ -243,7 +255,7 @@ class ProjectProposalController extends Controller
                         'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
                         'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
                         'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
-                        'budget_dsv', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
+                        'budget_dsv', 'budget_phd', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
                     ])]);
                 // Save Project Proposal
                 $pp->save();
@@ -251,7 +263,37 @@ class ProjectProposalController extends Controller
                 return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
                 break;
             case 'resume':
-                dd($request->type);
+                $pp = ProjectProposal::find($request->id);
+                $pp->update([
+                    'user_id' => $userId,
+                    'name' => $request->title,
+                    'created' => $timestamp,
+                    'pp' => $request->only([
+                        'title', 'objective', 'principal_investigator', 'principal_investigator_email',
+                        'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
+                        'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
+                        'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
+                        'budget_dsv', 'budget_phd', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
+                    ])]);
+                // Save Project Proposal
+                $pp->save();
+                $this->comments_update($request->id, $request->edit_comments, 'resumed');
+                // Dashboard instance creation or update
+                $dashboardData = [
+                    'request_id' => $pp->id,
+                    'name' => $request->title,
+                    'created' => $timestamp,
+                    'user_id' => $userId,
+                    'fo_id' => $foUserId,
+                    'vice_id' => $this->getViceHeadUserId()
+                ];
+
+                $dashboard = Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
+
+                // Resume workflow and store workflow ID
+                $this->resumeWorkflow($dashboard);
+
+                return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
                 break;
             case 'granted':
                 $pp = ProjectProposal::find($request->id);
@@ -406,19 +448,22 @@ class ProjectProposalController extends Controller
 
         switch ($type) {
             case 'edit':
-                $comments_tag = $tag . '  ' . 'Proposal has been edited by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                $comments_tag = $tag . '  ' . 'Proposal has been EDITED by ' . $user . '  ' . $timestamp . '  ' . $tag;
                 break;
             case 'completed':
-                $comments_tag = $tag . '  ' . 'Proposal has been completed by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                $comments_tag = $tag . '  ' . 'Proposal has been COMPLETED by ' . $user . '  ' . $timestamp . '  ' . $tag;
                 break;
             case 'approved':
-                $comments_tag = $tag . '  ' . 'Proposal has been approved by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                $comments_tag = $tag . '  ' . 'Proposal has been APPROVED by ' . $user . '  ' . $timestamp . '  ' . $tag;
                 break;
             case 'returned':
-                $comments_tag = $tag . '  ' . 'Proposal has been returned by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                $comments_tag = $tag . '  ' . 'Proposal has been RETURNED by ' . $user . '  ' . $timestamp . '  ' . $tag;
                 break;
             case 'denied':
-                $comments_tag = $tag . '  ' . 'Proposal has been denied by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                $comments_tag = $tag . '  ' . 'Proposal has been DENIED by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                break;
+            case 'resumed':
+                $comments_tag = $tag . '  ' . 'Proposal has been RESUMED by ' . $user . '  ' . $timestamp . '  ' . $tag;
                 break;
             default:
                 $comments_tag = $tag . '  ' . $user . '  ' . $timestamp . '  ' . $tag;
@@ -444,6 +489,37 @@ class ProjectProposalController extends Controller
         $dashboard->save();
         $workflow->start($dashboard);
         $workflow->submit();
+        return $workflow;
+    }
+
+
+    protected function resumeWorkflow($dashboard)
+    {
+        switch($dashboard->state) {
+            case(RequestStates::VICE_RETURNED):
+                dd('ViceReturned');
+                break;
+            case(RequestStates::HEAD_RETURNED):
+                $dashboard->state = RequestStates::COMPLETED;
+                $dashboard->save();
+                $workflow = WorkflowStub::make(\App\Workflows\ResumeFromUHProjectWorkflow::class);
+                break;
+            case(RequestStates::FO_RETURNED):
+                $dashboard->state = RequestStates::HEAD_APPROVED;
+                $dashboard->save();
+                $workflow = WorkflowStub::make(\App\Workflows\ResumeFromFOProjectWorkflow::class);
+                break;
+            case(RequestStates::FINAL_RETURNED):
+                $dashboard->state = RequestStates::FO_APPROVED;
+                $dashboard->save();
+                $workflow = WorkflowStub::make(\App\Workflows\ResumeFromFinalProjectWorkflow::class);
+                break;
+        }
+
+        $dashboard->workflow_id = $workflow->id();
+        $dashboard->save();
+        $workflow->start($dashboard);
+
         return $workflow;
     }
 

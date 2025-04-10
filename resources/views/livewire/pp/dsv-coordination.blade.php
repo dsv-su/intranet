@@ -13,26 +13,30 @@
         <!-- Radio buttons (1/2 width) -->
         <div class="flex w-1/2 gap-4">
             <!-- Radio button - Yes -->
-            <label for="dsvcoordinating" class="flex items-center p-2 bg-white border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 w-full">
+            <label for="dsvcoordinating-yes" class="flex items-center p-2 bg-white border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 w-full">
                 <input type="radio" name="dsvcoordinating" value="yes"
                        wire:click="yes"
                        class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                       id="dsvcoordinating"
-                       @if($proposal->pp['dsvcoordinating'] ?? '' == 'yes')
+                       id="dsvcoordinating-yes"
+                       @if($proposal)
+                       @if($proposal->pp['dsvcoordinating'] == 'yes')
                        checked=""
+                       @endif
                        @endif
                        required>
                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Yes</span>
             </label>
 
             <!-- Radio button - No -->
-            <label for="hs-checkbox-checked-in-form" class="flex items-center p-2 bg-white border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 w-full">
+            <label for="dsvcoordinating-no" class="flex items-center p-2 bg-white border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 w-full">
                 <input type="radio" name="dsvcoordinating" value="no"
                        wire:click="no"
                        class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                       id="dsvcoordinating"
-                       @if($proposal->pp['dsvcoordinating'] ?? '' == 'no')
+                       id="dsvcoordinating-no"
+                       @if($proposal)
+                       @if($proposal->pp['dsvcoordinating'] == 'no')
                        checked=""
+                       @endif
                        @endif
                        required>
                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">No</span>

@@ -11,7 +11,7 @@ use Workflow\Activity;
 
 class StateUpdateNotification extends Activity
 {
-    protected $dashboard;
+    protected Dashboard $dashboard;
 
     /***********************
      * @param $request
@@ -22,7 +22,6 @@ class StateUpdateNotification extends Activity
     public function execute($request)
     {
         //Retrive request dashboard
-        //$id = $request[0];
         $id = $request;
         $this->dashboard = Dashboard::find($id);
 
@@ -30,7 +29,11 @@ class StateUpdateNotification extends Activity
         $user = User::find($this->dashboard->user_id);
         $manager = User::find($this->dashboard->manager_id);
         $fo = User::find($this->dashboard->fo_id);
-        $head = User::find($this->dashboard->head_id);
+        //$head = User::find($this->dashboard->head_id);
+        if(!is_null($headsIDs = $this->getHeadUserIds())) {
+            $heads = User::whereIn('id', $headsIDs)->get();
+        }
+
         $vice = User::find($this->dashboard->vice_id);
 
         //Notify user of changed Request State
@@ -50,7 +53,7 @@ class StateUpdateNotification extends Activity
             case('head_returned'):
             case('head_denied'):
                 //Notify
-                Mail::to($user->email)->send(new NotifyUserChangedState($user, $head, $this->dashboard));
+                Mail::to($user->email)->send(new NotifyUserChangedState($user, $heads[0], $this->dashboard));
                 break;
             case('vice_returned'):
             case('vice_denied'):
@@ -61,10 +64,17 @@ class StateUpdateNotification extends Activity
                 //Approved Request
                 //Notify
                 Mail::to($user->email)->send(new NotifyRequestApproved($user, $this->dashboard));
+                break;
             case('fo_approved'):
                 if($this->dashboard->type == 'travelrequest') {
                     Mail::to($user->email)->send(new NotifyRequestApproved($user, $this->dashboard));
                 }
+                break;
         }
+    }
+
+    private function getHeadUserIds()
+    {
+        return $this->dashboard->unit_heads;
     }
 }

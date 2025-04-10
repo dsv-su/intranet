@@ -72,6 +72,9 @@ Route::get('/pp/stats/commited', [\App\Http\Controllers\StatsController::class, 
 Route::get('/pp/stats/recalc', [\App\Http\Controllers\StatsController::class, 'recalcBudget'])->name('pp-recalc');
 Route::get('/pp/granted/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_granted'])->name('pp-granted');
 
+//Resume
+Route::get('/pp/resume/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_resume'])->name('pp-resume');
+
 //Admin
 Route::get('/admin', [\App\Http\Controllers\AdminController::class, 'pp'])->name('pp-admin');
 Route::get('/admin/del/{id}', [\App\Http\Controllers\AdminController::class, 'pp_delete'])->name('pp-delete');
