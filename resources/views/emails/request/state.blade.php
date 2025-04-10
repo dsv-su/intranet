@@ -10,22 +10,22 @@ We're reaching out to inform you that your <strong>{{Illuminate\Support\Str::upp
 <b>Status:</b>
 @switch($dashboard->state)
     @case('manager_returned')
-        returned
+        RETURNED
         @break
     @case('fo_returned')
-        returned
+        RETURNED
         @break
     @case('head_returned')
-        returned
+        RETURNED
         @break
     @case('manager_denied')
-        denied
+        DENIED
         @break
     @case('fo_denied')
-        denied
+        DENIED
         @break
     @case('head_denied')
-        denied
+        DENIED
         @break
 @endswitch
 

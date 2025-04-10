@@ -8,7 +8,7 @@
         'vice_denied' => 0,
         'complete' => 3,
         'head_approved'  => 4,
-        'head_returned'  => 0,
+        'head_returned'  => 3,
         'head_denied'  => 0,
         'fo_approved' => 5,
         'fo_returned' => 0,

@@ -37,7 +37,7 @@ class FinalApproval extends Mailable
     {
         return new Envelope(
             from: new Address('noreply@dsv.su.se', 'DSVIntranet'),
-            subject: 'Final Approval: '. Str::limit($this->dashboard->name, 28),
+            subject: Str::upper($this->dashboard->type) . ' Final Approval: '. Str::limit($this->dashboard->name, 28),
         );
     }
 

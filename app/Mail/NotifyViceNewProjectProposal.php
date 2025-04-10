@@ -38,7 +38,7 @@ class NotifyViceNewProjectProposal extends Mailable
     {
         return new Envelope(
             from: new Address('noreply@dsv.su.se', 'DSVIntranet'),
-            subject: 'New Project Proposal draft: '. Str::limit($this->dashboard->name, 28),
+            subject: Str::upper($this->dashboard->type) . ' New Proposal: '. Str::limit($this->dashboard->name, 28),
         );
     }
 

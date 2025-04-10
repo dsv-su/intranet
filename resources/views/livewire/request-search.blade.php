@@ -31,6 +31,7 @@
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 dark:text-white">
 
                     <th scope="row" class="px-4 py-3 text-xs text-gray-900 whitespace-nowrap dark:text-white">
+                        {{--}}
                         @if($dashboard->type == 'travelrequest')
                             <span class="bg-blue-100 text-xs mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-white border border-blue-400">
                             {{__("Travelrequest")}}
@@ -38,7 +39,10 @@
                         @else
                             {{$dashboard->type}}
                         @endif
-
+                        {{--}}
+                        <span class="bg-blue-100 text-xs mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-white border border-blue-400">
+                            {{$dashboard->type}}
+                        </span>
                     </th>
                     <td class="px-4 py-3 text-xs">{{$dashboard->name}}</td>
                     <td class="px-4 py-3 text-xs">{{$dashboard->request_id}}</td>

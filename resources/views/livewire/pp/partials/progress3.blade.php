@@ -56,10 +56,20 @@
         @endphp
         @break
     @case('head_returned')
+    @php
+        $progress = 40;
+        $color = 'bg-yellow-200';
+    @endphp
+    @break
     @case('vice_returned')
+    @php
+        $progress = 0;
+        $color = 'bg-yellow-200';
+    @endphp
+    @break
     @case('fo_returned')
         @php
-            $progress = 0;
+            $progress = 50;
             $color = 'bg-yellow-200';
         @endphp
         @break

@@ -8,10 +8,10 @@ To Unithead
 <br>
 ---
 <br>
-A New Proposal has been Submitted for Review<br><br>
+A Proposal has been ReSubmitted for Review<br><br>
 Dear {{$head->name}},
 <br><br>
-A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been submitted and is now available for your review.
+A <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been resubmitted and is now available for your review.
 <br><br>
 Here's a quick overview of the request:
 <br><br>
