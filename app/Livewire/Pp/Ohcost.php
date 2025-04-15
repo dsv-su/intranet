@@ -26,7 +26,12 @@ class Ohcost extends Component
             $this->ohcost = $proposal->pp['oh_cost'] ?? 0;
         }
         $oh_settings = SettingsOh::first();
-        $this->max = $oh_settings->oh_max;
+        if($proposal->pp['eu_wallenberg'] == 'yes') {
+            $this->max = $oh_settings->oh_eu;
+        } else {
+            $this->max = $oh_settings->oh_max;
+        }
+
         $this->threshold();
     }
 

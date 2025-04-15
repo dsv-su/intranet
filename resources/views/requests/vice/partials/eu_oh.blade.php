@@ -2,12 +2,13 @@
 </label>
 <input type="number"
        name="oh_eu"
-       class="font-mono bg-gray-100 border border-gray-300 text-gray-400 text-sm rounded-lg
-       w-full p-2.5 opacity-50 pointer-events-none
-       dark:bg-gray-800 dark:border-gray-600 dark:text-gray-500"
+       class="font-mono bg-gray-50 border border-blue-500 text-gray-900 text-sm rounded-lg
+                                                focus:ring-primary-600 focus:border-primary-600 w-full p-2.5
+                                                dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200
+                                                dark:focus:ring-primary-500 dark:focus:border-primary-500"
 
        placeholder="Max OH"
-       value="{{$oh->oh_eu}}" disabled>
+       value="{{$oh->oh_eu}}">
 @error('oh_max')
 <div class="text-red-600">{{ $message }}</div>
 @enderror

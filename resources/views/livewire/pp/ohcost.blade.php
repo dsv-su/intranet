@@ -1,7 +1,11 @@
 <div class="w-full">
-
     <label for="oh_cost" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-        {{ __("Percent OH cost covered") }}
+        @if($proposal->pp['eu_wallenberg'] == 'yes')
+            {{ __("Percent OH cost covered EU/Wallenberg") }}
+        @else
+            {{ __("Percent OH cost covered") }}
+        @endif
+
         <span class="text-red-600"> *</span>
         <button id="oh_cost-button" data-modal-toggle="oh_cost-modal" class="inline" type="button">
             <svg class="w-[16px] h-[16px] inline text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
