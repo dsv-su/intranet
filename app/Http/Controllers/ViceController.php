@@ -40,6 +40,7 @@ class ViceController extends Controller
 
         $oh = SettingsOh::first();
         $oh->oh_max = $request->oh_max;
+        $oh->oh_eu = $request->oh_eu;
         $oh->save();
 
         return redirect()->back();
