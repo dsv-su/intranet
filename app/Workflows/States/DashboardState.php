@@ -102,6 +102,9 @@ abstract class DashboardState extends State
             ->allowTransition(FinalApproved::class, Granted::class)
             ->allowTransition(Granted::class,FinalApproved::class)
             ->allowTransition(Granted::class,Submitted::class)
+            ->allowTransition(FinalApproved::class, Denied::class)
+            ->allowTransition(Denied::class,FinalApproved::class)
+            ->allowTransition(Denied::class,Submitted::class)
             ;
     }
 }

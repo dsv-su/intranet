@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Database\Seeders\SettingsOhsSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ClearTest extends Command
 {
@@ -57,5 +58,6 @@ class ClearTest extends Command
         // Run OH seeder
         $this->call(SettingsOhsSeeder::class);
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        Storage::deleteDirectory('proposals');
     }
 }

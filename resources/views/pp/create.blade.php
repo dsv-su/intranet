@@ -31,7 +31,7 @@
             <form method="post" action="{{route('new-submit')}}">
                 @csrf
 
-                @if(in_array($type, ['complete', 'edit', 'resume', 'granted']))
+                @if(in_array($type, ['complete', 'edit', 'resume', 'granted', 'denied']))
                     <input type="hidden" name="id" value="{{$proposal->id}}">
                 @endif
 
@@ -179,6 +179,11 @@
                 <!-- Grant section -->
                 @if(in_array($type, ['granted', 'view']))
                     @include('pp.partials.form.granted')
+                @endif
+
+                <!-- Denied section -->
+                @if(in_array($type, ['denied', 'view']))
+                    @include('pp.partials.form.denied')
                 @endif
 
                 <!-- Submit buttons -->

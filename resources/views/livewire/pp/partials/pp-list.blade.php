@@ -165,15 +165,28 @@
                                             Upload
                                         </a>
                                    @endif
+                                    <!-- Granted -->
                                     @if((string)$proposal->dashboard->state == 'final_approved' ?? false)
                                         <a type="button"
                                            href="{{route('pp-granted', $proposal->id)}}#granted"
-                                           class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
-                                        uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
-                                        disabled:opacity-25 transition ease-in-out duration-150">
+                                           class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                                    uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
+                                                    disabled:opacity-25 transition ease-in-out duration-150">
                                             Report: Granted
                                         </a>
                                     @endif
+
+                                    <!-- Not Granted -->
+                                    @if((string)$proposal->dashboard->state == 'final_approved' ?? false)
+                                        <a type="button"
+                                           href="{{route('pp-denied', $proposal->id)}}#notgranted"
+                                           class="inline-flex items-center px-1.5 py-1 bg-white border border-red-600 text-red-600 rounded-md font-semibold text-[0.65rem]
+                                                    uppercase tracking-widest hover:bg-red-600 hover:text-white active:bg-red-700 focus:outline-none focus:border-red-800 focus:ring ring-red-300
+                                                    disabled:opacity-25 transition ease-in-out duration-150">
+                                            Denied
+                                        </a>
+                                    @endif
+
                                     <!-- Resume -->
                                     @if($proposal->allowEdit() and in_array((string) $proposal->status_stage1, ['head_returned', 'vice_returned', 'fo_returned', 'final_returned']))
                                         <a type="button"
@@ -194,7 +207,7 @@
                                 <!-- vice head -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
                                     <span class="font-semibold">Vice head:</span>
-                                    @if(in_array((string) $proposal->dashboard?->state, ['vice_approved', 'complete', 'head_approved', 'fo_approved', 'final_approved', 'granted']))
+                                    @if(in_array((string) $proposal->dashboard?->state, ['vice_approved', 'complete', 'head_approved', 'fo_approved', 'final_approved', 'granted', 'denied']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['vice_denied', 'head_denied', 'fo_denied']))
                                         <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
@@ -224,7 +237,7 @@
                                     @endif
 
 
-                                @if(in_array((string) $proposal->dashboard?->state, ['head_approved', 'fo_approved', 'final_approved', 'granted']))
+                                @if(in_array((string) $proposal->dashboard?->state, ['head_approved', 'fo_approved', 'final_approved', 'granted', 'denied']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['head_denied', 'vice_denied', 'fo_denied']))
                                         <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
@@ -240,7 +253,7 @@
                                 <!-- DSV economy -->
                                 <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
                                     <span class="font-semibold">Economy:</span>
-                                    @if(in_array((string) $proposal->dashboard?->state, ['fo_approved', 'final_approved', 'granted']))
+                                    @if(in_array((string) $proposal->dashboard?->state, ['fo_approved', 'final_approved', 'granted', 'denied']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['head_denied', 'vice_denied', 'fo_denied']))
                                         <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
@@ -260,7 +273,7 @@
                                 <!-- Final submission -->
                                 <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
                                     <span class="font-semibold">Final submission:</span>
-                                    @if(in_array((string) $proposal->dashboard?->state, ['granted']))
+                                    @if(in_array((string) $proposal->dashboard?->state, ['granted','denied']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Sent</span>
                                     @else
                                     <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
@@ -283,6 +296,8 @@
                                     <span class="font-semibold">Funding granted:</span>
                                     @if(in_array((string) $proposal->dashboard?->state, ['granted']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Yes</span>
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['denied']))
+                                        <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">Denied</span>
                                     @else
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Not reported</span>
                                     @endif

@@ -321,6 +321,32 @@ class ProjectProposalController extends Controller
 
                 return redirect()->route('pp', 'my')->with('success', 'Your project proposal has been successfully registered as a granted project!');
                 break;
+            case 'denied':
+                $pp = ProjectProposal::find($request->id);
+                $existingPp = $pp->pp; // Get existing JSON attribute as an array
+                // Merge new values while keeping existing subattributes
+                $updatedPp = array_merge($existingPp, $request->only([
+                    'denied', 'denied_comments'
+                ]), [
+                    'submitted' => now(),
+                    'status' => 'denied'
+                ]);
+                // Update the model without clearing existing 'files'
+                $pp->update([
+                    'pp' => $updatedPp,  // Merged JSON attributes
+                ]);
+                $pp->save();
+                $dashboard = Dashboard::where('request_id', $request->id)->first();
+                $dashboard->state = 'denied';
+                $dashboard->save();
+
+                //Send email to vice and fo
+                $user = User::find($dashboard->user_id);
+                $vice = $this->getViceHeadUser();
+                //Mail::to($vice->email)->send(new GrantNotificationVice($user, $vice, $dashboard));
+
+                return redirect()->route('pp', 'my')->with('success', 'Your project proposal has been registered as a denied project!');
+                break;
         }
         dd('Error');
 
@@ -420,6 +446,16 @@ class ProjectProposalController extends Controller
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['type'] = 'granted';
+
+        return $this->createView('pp.create', 'mylayout', $viewData);
+    }
+
+    public function pp_denied($id)
+    {
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['proposal'] = ProjectProposal::find($id);
+        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
+        $viewData['type'] = 'denied';
 
         return $this->createView('pp.create', 'mylayout', $viewData);
     }

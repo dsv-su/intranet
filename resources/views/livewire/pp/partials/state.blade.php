@@ -78,6 +78,13 @@
         $textcolor = 'text-yellow-800';
     @endphp
     @break
+    @case('denied')
+    @php
+        $state = 'DENIED';
+        $bgcolor = 'bg-red-100';
+        $textcolor = 'text-red-800';
+    @endphp
+    @break
     @default
         @php
             $state = 'ERROR';
