@@ -16,6 +16,7 @@
         'final_approved' => 6,
         'final_returned' => 5,
         'granted' => 7,
+        'denied' => 7,
 
     ];
     // Determine the current step based on the dashboard state (or 1 if not set)

@@ -8,6 +8,8 @@
 
     @include('pp.partials.flashmessage')
 
+    @include('stats.partials.tabs')
+
     <section class="bg-white dark:bg-gray-900">
         <div class="max-w-6xl px-4 py-8 mx-auto lg:py-16">
             <!-- Flex container to align button to the right -->

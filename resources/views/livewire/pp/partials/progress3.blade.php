@@ -79,10 +79,16 @@
         $color = 'bg-yellow-200';
     @endphp
     @break
+    @case('denied')
+    @php
+        $progress = 100;
+        $color = 'bg-red-600';
+    @endphp
+    @break
     @default
         @php
             $progress = 0;
-            $color = 'bg-red-200';
+            $color = 'bg-red-600';
         @endphp
         @break
 @endswitch
