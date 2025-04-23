@@ -2,6 +2,7 @@
 
 namespace App\Services\Budget;
 
+use App\Models\Dashboard;
 use App\Models\DsvBudget;
 use App\Models\ProjectProposal;
 use Illuminate\Support\Facades\Artisan;
@@ -30,7 +31,8 @@ class ReCalcBudget
         $total_dsv_budget = 0;
         $total_project_budget = 0;
         $total_phd = 0;
-        $proposals = ProjectProposal::whereIn('status_stage1', $available_states)->get();
+        $dashboardRequests = Dashboard::whereIn('state', $available_states)->pluck('request_id');
+        $proposals = ProjectProposal::whereIn('id', $dashboardRequests)->get();
         $budget = DsvBudget::find(1);
 
         // Retrieve research_area as an array
