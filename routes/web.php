@@ -69,6 +69,7 @@ Route::post('/pp/decision', [\App\Http\Controllers\ProjectProposalController::cl
 Route::get('/pp/complete/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_complete'])->name('pp-complete');
 Route::get('/pp/stage2_upload_pp/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'upload'])->name('pp-upload');
 Route::get('/pp/stats/commited', [\App\Http\Controllers\StatsController::class, 'preapproved'])->name('pp-stats');
+Route::get('/pp/stats/approved', [\App\Http\Controllers\StatsController::class, 'approved'])->name('pp-stats-approved');
 Route::get('/pp/stats/recalc', [\App\Http\Controllers\StatsController::class, 'recalcBudget'])->name('pp-recalc');
 Route::get('/pp/granted/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_granted'])->name('pp-granted');
 Route::get('/pp/denied/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_denied'])->name('pp-denied');

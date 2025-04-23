@@ -161,6 +161,7 @@ class StatsController extends Controller
             $approved[] = $dsv['approved'] ?? 0;
             $commited[] = $dsv['budget'] ?? 0;
             $phd[] = $dsv['phd'] ?? 0;
+            $final[] = $dsv['final'] ?? 0;
         }
 
         //Funding Agency
@@ -169,15 +170,15 @@ class StatsController extends Controller
             $orgStats[] = $fundingOrg;
         }
 
-        //Preapproved
+        //Approved
         $chart['researchsubject_approved'] = Chartjs::build()
-            ->name('barChartPreapproved')
+            ->name('barChartApproved')
             ->type('bar')
             ->size(['width' => 400, 'height' => 200])
             ->labels($labels)
             ->datasets([
                 [
-                    "label" => "PreApproved",
+                    "label" => "Approved",
                     'backgroundColor' => 'rgba(0, 123, 255, 1)', // Blue
                     'borderWidth' => 1,
                     'data' => $approved,
@@ -187,18 +188,18 @@ class StatsController extends Controller
                 ],
 
             ]);
-        //Commited budget
-        $chart['researchsubject_commited'] = Chartjs::build()
-            ->name('barChartCommited')
+        //Final budget
+        $chart['researchsubject_final'] = Chartjs::build()
+            ->name('barChartFinal')
             ->type('bar')
             ->size(['width' => 400, 'height' => 200])
             ->labels($labels)
             ->datasets([
                 [
-                    "label" => "Commited budget (SEK)",
+                    "label" => "Final budget (SEK)",
                     'backgroundColor' => 'rgba(0, 255, 0, 1)',
                     'borderWidth' => 1,
-                    'data' => $commited,
+                    'data' => $final,
                     'categoryPercentage' => 0.6,
                     'barPercentage' => 0.6,
                     'yAxisID' => 'y-left' // Assign to left y-axis
@@ -245,7 +246,8 @@ class StatsController extends Controller
             ]);
 
         $breadcrumb = 'Stats';
-        return $this->createView('stats.proposal_stats', 'mylayout', compact('chart', 'breadcrumb'));
+
+        return $this->createView('stats.proposal_approved', 'mylayout', compact('chart', 'breadcrumb'));
     }
 
     public function recalcBudget()
