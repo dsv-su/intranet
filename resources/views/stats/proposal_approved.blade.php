@@ -30,10 +30,12 @@
                     <h5 class="text-xl dark:text-white">Granted Proposals</h5>
                     <x-chartjs-component :chart="$chart['researchsubject_approved']" />
                 </div>
+                {{--}}
                 <div class="w-full lg:w-1/2">
-                    <h5 class="text-xl dark:text-white">Final budget</h5>
+                    <h5 class="text-xl dark:text-white">Granted total</h5>
                     <x-chartjs-component :chart="$chart['researchsubject_final']" />
                 </div>
+                {{--}}
             </div>
 
             <!-- Second row -->

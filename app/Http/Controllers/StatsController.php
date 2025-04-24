@@ -154,6 +154,8 @@ class StatsController extends Controller
         $approved = [];
         $commited = [];
         $phd = [];
+        $final = [];
+        $granted = [];
 
         //Research Subject approved and budget
         foreach ($budget->research_area as $key => $dsv) {
@@ -162,6 +164,7 @@ class StatsController extends Controller
             $commited[] = $dsv['budget'] ?? 0;
             $phd[] = $dsv['phd'] ?? 0;
             $final[] = $dsv['final'] ?? 0;
+            $granted[] = $dsv['granted'] ?? 0;
         }
 
         //Funding Agency
@@ -181,7 +184,7 @@ class StatsController extends Controller
                     "label" => "Approved",
                     'backgroundColor' => 'rgba(0, 123, 255, 1)', // Blue
                     'borderWidth' => 1,
-                    'data' => $approved,
+                    'data' => $granted,
                     'categoryPercentage' => 0.6,
                     'barPercentage' => 0.6,
                     'yAxisID' => 'y-left' // Assign to left y-axis
@@ -196,7 +199,7 @@ class StatsController extends Controller
             ->labels($labels)
             ->datasets([
                 [
-                    "label" => "Final budget (SEK)",
+                    "label" => "Granted total (SEK)",
                     'backgroundColor' => 'rgba(0, 255, 0, 1)',
                     'borderWidth' => 1,
                     'data' => $final,
