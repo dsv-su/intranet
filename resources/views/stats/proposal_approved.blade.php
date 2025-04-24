@@ -27,7 +27,7 @@
             <!-- First row -->
             <div class="lg:flex lg:gap-8 mt-6">
                 <div class="w-full lg:w-1/2">
-                    <h5 class="text-xl dark:text-white">Granted Proposals</h5>
+                    <h5 class="text-xl dark:text-white">Granted Amount</h5>
                     <x-chartjs-component :chart="$chart['researchsubject_approved']" />
                 </div>
                 {{--}}
