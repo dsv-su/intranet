@@ -181,7 +181,7 @@ class StatsController extends Controller
             ->labels($labels)
             ->datasets([
                 [
-                    "label" => "Approved",
+                    "label" => "SEK",
                     'backgroundColor' => 'rgba(0, 123, 255, 1)', // Blue
                     'borderWidth' => 1,
                     'data' => $granted,
