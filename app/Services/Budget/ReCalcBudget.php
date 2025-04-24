@@ -20,7 +20,8 @@ class ReCalcBudget
             'complete',
             'head_approved',
             'fo_approved',
-            'final_approved'
+            'final_approved',
+            'granted'
         ];
 
         //Retrive proposal data
@@ -44,13 +45,15 @@ class ReCalcBudget
             $researchAreaBudget = $proposal->pp['budget_dsv'] ?? 0;
             $researchAreaPhd = $proposal->pp['budget_phd'] ?? 0;
             $projectBudget = $proposal->pp['budget_project'] ?? 0;
+            $projectGranted = $proposal->pp['granted'] ?? 0;
 
             // Ensure research area exists
             if (!isset($researchAreas[$researchArea])) {
                 $researchAreas[$researchArea] = [
                     'preapproved' => 0,
                     'budget' => 0,
-                    'phd' => 0
+                    'phd' => 0,
+                    'granted' => 0
                 ];
             }
 
@@ -67,6 +70,10 @@ class ReCalcBudget
                 $commited_phd[$researchArea] = 0;
             }
 
+            if (!isset($total_granted[$researchArea])) {
+                $total_granted[$researchArea] = 0;
+            }
+
             // Increment counters
             $count[$researchArea]++;
             $commited[$researchArea] += $researchAreaBudget;
@@ -74,6 +81,7 @@ class ReCalcBudget
             $total_dsv_budget += $researchAreaBudget;
             $total_project_budget += $projectBudget;
             $total_phd += $researchAreaPhd;
+            $total_granted[$researchArea] += $projectGranted;
         }
 
         // Update research area counts
@@ -82,6 +90,7 @@ class ReCalcBudget
             $total_preapproved = $newCount;
             $researchAreas[$researchArea]['budget'] = $commited[$researchArea];
             $researchAreas[$researchArea]['phd'] = $commited_phd[$researchArea];
+            $researchAreas[$researchArea]['granted'] = $total_granted[$researchArea];
         }
 
         // Set the modified researchAreas array back to the model
