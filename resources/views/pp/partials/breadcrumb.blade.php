@@ -45,14 +45,16 @@
             <span class="inline-flex items-center gap-x-1 py-0 px-1 rounded-full text-[10px] font-medium border border-yellow-500 text-yellow-500">
                 Testmode
             </span>
-
-            @if($roles ?? false)
-                @foreach($roles as $role)
-                    <span class="bg-blue-100 text-blue-800 text-[10px] font-medium me-1 px-1 py-0 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 leading-none">
+            <div class="hidden md:block md:inline">
+                @if($roles ?? false)
+                    @foreach($roles as $role)
+                        <span class="bg-blue-100 text-blue-800 text-[10px] font-medium me-1 px-1 py-0 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 leading-none">
                         {{$role}}
                     </span>
-                @endforeach
-            @endif
+                    @endforeach
+                @endif
+            </div>
+
         </span>
     </div>
 </div>

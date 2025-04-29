@@ -314,6 +314,8 @@ class ProjectProposalController extends Controller
                 $dashboard->state = 'granted';
                 $dashboard->save();
 
+                //Comments stamp
+                $this->comments_update($request->id, $request->edit_comments, 'granted');
                 //Send email to vice and fo
                 $user = User::find($dashboard->user_id);
                 $vice = $this->getViceHeadUser();
@@ -321,12 +323,12 @@ class ProjectProposalController extends Controller
 
                 return redirect()->route('pp', 'my')->with('success', 'Your project proposal has been successfully registered as a granted project!');
                 break;
-            case 'denied':
+            case 'rejected':
                 $pp = ProjectProposal::find($request->id);
                 $existingPp = $pp->pp; // Get existing JSON attribute as an array
                 // Merge new values while keeping existing subattributes
                 $updatedPp = array_merge($existingPp, $request->only([
-                    'denied', 'denied_comments'
+                    'rejected', 'rejected_comments'
                 ]), [
                     'submitted' => now(),
                     'status' => 'denied'
@@ -339,6 +341,8 @@ class ProjectProposalController extends Controller
                 $dashboard = Dashboard::where('request_id', $request->id)->first();
                 $dashboard->state = 'denied';
                 $dashboard->save();
+                //Comments stamp
+                $this->comments_update($request->id, $request->edit_comments, 'rejected');
 
                 //Send email to vice and fo
                 $user = User::find($dashboard->user_id);
@@ -450,12 +454,12 @@ class ProjectProposalController extends Controller
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
-    public function pp_denied($id)
+    public function pp_rejected($id)
     {
         $viewData = $this->prepareProjectProposalData();
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-        $viewData['type'] = 'denied';
+        $viewData['type'] = 'rejected';
 
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
@@ -503,6 +507,12 @@ class ProjectProposalController extends Controller
                 break;
             case 'resumed':
                 $comments_tag = $tag . '  ' . 'Proposal has been RESUMED by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                break;
+            case 'granted':
+                $comments_tag = $tag . '  ' . 'Proposal has been GRANTED reported by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                break;
+            case 'rejected':
+                $comments_tag = $tag . '  ' . 'Proposal has been REJECTED reported by ' . $user . '  ' . $timestamp . '  ' . $tag;
                 break;
             default:
                 $comments_tag = $tag . '  ' . $user . '  ' . $timestamp . '  ' . $tag;
