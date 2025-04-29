@@ -1,4 +1,4 @@
-@if(in_array($type, ['preapproval', 'complete', 'edit', 'resume', 'granted', 'denied']))
+@if(in_array($type, ['preapproval', 'complete', 'edit', 'resume', 'granted', 'rejected']))
 
     <div class="flex flex-col sm:flex-row gap-3">
         <a type="button" href="{{ url()->previous() }}"
@@ -26,8 +26,8 @@
                 {{__("Resubmit updated proposal")}}
             @elseif($type == 'granted')
                 {{__("Report granted")}}
-            @elseif($type == 'denied')
-                {{__("Report denied")}}
+            @elseif($type == 'rejected')
+                {{__("Report rejected")}}
             @else
                 {{__("Submit proposal")}}
             @endif

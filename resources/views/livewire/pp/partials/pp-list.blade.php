@@ -14,7 +14,10 @@
                         <div class="w-full md:w-auto mb-2 md:mb-0">
                             <!-- Title of the Proposal -->
                             <p class="text-xs md:text-base font-normal text-gray-900 dark:text-white leading-tight">
-                                {{ $proposal->pp['title'] }}
+                                <strong>
+                                    {{ $proposal->pp['title'] }}
+                                </strong>
+
                             </p>
                             <!-- Progress -->
                             {{--}}@nocache('livewire.pp.partials.progress'){{--}}
@@ -176,14 +179,14 @@
                                         </a>
                                     @endif
 
-                                    <!-- Not Granted -->
+                                    <!-- Rejected -->
                                     @if((string)$proposal->dashboard->state == 'final_approved' ?? false)
                                         <a type="button"
-                                           href="{{route('pp-denied', $proposal->id)}}#notgranted"
+                                           href="{{route('pp-rejected', $proposal->id)}}#rejected"
                                            class="inline-flex items-center px-1.5 py-1 bg-white border border-red-600 text-red-600 rounded-md font-semibold text-[0.65rem]
                                                     uppercase tracking-widest hover:bg-red-600 hover:text-white active:bg-red-700 focus:outline-none focus:border-red-800 focus:ring ring-red-300
                                                     disabled:opacity-25 transition ease-in-out duration-150">
-                                            Denied
+                                            Rejected
                                         </a>
                                     @endif
 

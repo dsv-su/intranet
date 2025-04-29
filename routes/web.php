@@ -72,7 +72,7 @@ Route::get('/pp/stats/commited', [\App\Http\Controllers\StatsController::class, 
 Route::get('/pp/stats/approved', [\App\Http\Controllers\StatsController::class, 'approved'])->name('pp-stats-approved');
 Route::get('/pp/stats/recalc', [\App\Http\Controllers\StatsController::class, 'recalcBudget'])->name('pp-recalc');
 Route::get('/pp/granted/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_granted'])->name('pp-granted');
-Route::get('/pp/denied/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_denied'])->name('pp-denied');
+Route::get('/pp/rejected/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_rejected'])->name('pp-rejected');
 //Resume
 Route::get('/pp/resume/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_resume'])->name('pp-resume');
 
