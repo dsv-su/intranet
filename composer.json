@@ -24,7 +24,6 @@
         "maatwebsite/excel": "^3.1",
         "marcorieser/statamic-live-search": "^3.0",
         "marcorieser/statamic-livewire": "^4.4",
-        "skynettechnologies/statamic-all-in-one-accessibility": "^1.1",
         "spatie/laravel-model-states": "^2.7",
         "statamic/cms": "^5",
         "statamic/eloquent-driver": "^4",
