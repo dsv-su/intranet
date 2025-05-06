@@ -11,7 +11,7 @@
             <div class="pt-2">
                 <!-- Card -->
                 <div class="bg-white border border-gray-200 rounded-2xl p-4 space-y-3 dark:bg-neutral-900 dark:border-neutral-700">
-                    <div class="space-y-1.5">
+                    <div class="space-y-1">
                         <div class="text-sm text-gray-800 dark:text-white">
                             {{ $tr->managercomment->comment }}
                         </div>
@@ -37,7 +37,7 @@
             <div class="pt-2">
                 <!-- Card -->
                 <div class="bg-white border border-gray-200 rounded-2xl p-4 space-y-3 dark:bg-neutral-900 dark:border-neutral-700">
-                    <div class="space-y-1.5">
+                    <div class="space-y-1">
                         <div class="text-sm text-gray-800 dark:text-white">
                             {{ $tr->headcomment->comment }}
                         </div>
@@ -64,7 +64,7 @@
             <div class="pt-2">
                 <!-- Card -->
                 <div class="bg-white border border-gray-200 rounded-2xl p-4 space-y-3 dark:bg-neutral-900 dark:border-neutral-700">
-                    <div class="space-y-1.5">
+                    <div class="space-y-1">
                         <div class="text-sm text-gray-800 dark:text-white">
                             {{ $tr->focomment->comment }}
                         </div>
