@@ -229,7 +229,7 @@
         });
 
         /* Add unit head */
-        @if(in_array($type, ['complete', 'review', 'view', 'resume']))
+        @if(in_array($type, ['complete', 'review', 'resume']))
         document.getElementById('add-unithead-button').addEventListener('click', function () {
             // Get the container where the new selects will be added
             const container = document.getElementById('unithead-container');
