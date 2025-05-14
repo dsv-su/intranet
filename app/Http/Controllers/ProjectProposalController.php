@@ -151,7 +151,7 @@ class ProjectProposalController extends Controller
                     'pp' => $request->only([
                             'title', 'objective', 'principal_investigator', 'principal_investigator_email',
                             'co_investigator_name', 'co_investigator_email', 'research_area',
-                            'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
+                            'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
                             'cofinancing', 'other_cofinancing', 'project_duration', 'user_comments'
                         ]) + [
                             'submitted' => $timestamp,
@@ -253,7 +253,7 @@ class ProjectProposalController extends Controller
                     'pp' => $request->only([
                         'title', 'objective', 'principal_investigator', 'principal_investigator_email',
                         'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
-                        'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
+                        'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
                         'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
                         'budget_dsv', 'budget_phd', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
                     ])]);
@@ -271,7 +271,7 @@ class ProjectProposalController extends Controller
                     'pp' => $request->only([
                         'title', 'objective', 'principal_investigator', 'principal_investigator_email',
                         'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
-                        'dsvcoordinating', 'other_coordination', 'eu_wallenberg', 'funding_organization',
+                        'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
                         'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
                         'budget_dsv', 'budget_phd', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
                     ])]);
