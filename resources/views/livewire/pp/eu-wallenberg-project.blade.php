@@ -29,9 +29,11 @@
                            @endif
                        @endif
                         @if($wallenbergOrg)
-                               disabled
-                       @endif
-                       required />
+                            disabled
+                        @else
+                            required
+                        @endif
+                        />
                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">No</span>
             </label>
             <label for="eu_wallenberg" class="flex items-center py-2 px-6 w-full bg-white border border-gray-300 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
