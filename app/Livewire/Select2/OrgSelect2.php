@@ -45,6 +45,7 @@ class OrgSelect2 extends Component
         $country = FundingOrganization::where('name',$this->search)->first();
         if(!empty($organization)) {
             $this->organization = $organization;
+
             $this->dispatch('selectedOrganization', $this->organization->id);
         }
         $this->search = "";
@@ -54,6 +55,12 @@ class OrgSelect2 extends Component
     {
         $this->organization = $organization;
         $this->dispatch('selectedOrganization', $this->organization->id);
+        if ($this->organization->name == 'Wallenberg') {
+            $this->dispatch('org_wallenberg');
+        }
+        else {
+            $this->dispatch('org_reset');
+        }
     }
 
     public function render()

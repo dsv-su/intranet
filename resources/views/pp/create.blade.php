@@ -97,6 +97,15 @@
                         @include('pp.partials.review.dsvcoordination')
                     @endif
 
+                    <!-- Eu project -->
+                    @if($type == 'preapproval')
+                        <livewire:pp.eu-project proposal="" />
+                    @elseif ($type == 'edit' or $type == 'resume')
+                        <livewire:pp.eu-project :proposal="$proposal" />
+                    @else
+                        @include('pp.partials.review.eu')
+                    @endif
+
                     <!-- Eu Wallengenberg project -->
                     @if($type == 'preapproval')
                         <livewire:pp.eu-wallenberg-project proposal="" />
@@ -220,6 +229,7 @@
         });
 
         /* Add unit head */
+        @if(in_array($type, ['complete', 'review', 'view', 'resume']))
         document.getElementById('add-unithead-button').addEventListener('click', function () {
             // Get the container where the new selects will be added
             const container = document.getElementById('unithead-container');
@@ -243,6 +253,7 @@
             // Append the wrapper div to the container
             container.appendChild(wrapperDiv);
         });
+        @endif
     </script>
 
     <!-- Modals -->

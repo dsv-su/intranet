@@ -4,16 +4,13 @@ namespace App\Livewire\Pp;
 
 use Livewire\Component;
 
-class EuWallenbergProject extends Component
+class EuProject extends Component
 {
     public $visibility = 'hidden';
     public $checkbox = 'block';
     public $proposal;
-    public $wallenbergOrg = false;
 
     protected $listeners = [
-        'eu_hide' => 'hideCheckbox',
-        'eu_show' => 'showCheckbox',
         'org_wallenberg' => 'wallenberg_org',
         'org_reset' => 'wallenberg_reset'
     ];
@@ -26,11 +23,11 @@ class EuWallenbergProject extends Component
 
     public function check()
     {
-        if($this->proposal->pp['eu_wallenberg'] ?? false) {
-            if($this->proposal->pp['eu_wallenberg'] == 'no') {
+        if($this->proposal->pp['eu'] ?? false) {
+            if($this->proposal->pp['eu'] == 'no') {
                 $this->no();
             }
-            elseif ($this->proposal->pp['eu_wallenberg'] == 'yes') {
+            elseif ($this->proposal->pp['eu'] == 'yes') {
                 $this->yes();
             }
         }
@@ -40,38 +37,29 @@ class EuWallenbergProject extends Component
     public function yes()
     {
         $this->visibility = 'block';
+        $this->dispatch('eu_hide');
     }
 
     public function no()
     {
         $this->visibility = 'hidden';
-    }
-
-    public function hideCheckbox()
-    {
-        $this->checkbox = 'hidden';
-    }
-
-    public function showCheckbox()
-    {
-        $this->checkbox = 'block';
+        $this->dispatch('eu_show');
     }
 
     public function wallenberg_org()
     {
-        $this->wallenbergOrg = true;
-        $this->yes();
+        $this->checkbox = 'hidden';
     }
 
     public function wallenberg_reset()
     {
-        $this->wallenbergOrg = false;
+        $this->checkbox = 'block';
         $this->no();
         $this->check();
     }
 
     public function render()
     {
-        return view('livewire.pp.eu-wallenberg-project');
+        return view('livewire.pp.eu-project');
     }
 }
