@@ -444,6 +444,18 @@ class ProjectProposalController extends Controller
         return redirect()->route('pp', ['slug' =>'awaiting']);
     }
 
+    public function pp_sent($id)
+    {
+        //$viewData = $this->prepareProjectProposalData();
+        //$viewData['proposal'] = ProjectProposal::find($id);
+        $dashboard = Dashboard::where('request_id', $id)->first();
+        $dashboard->state = 'sent';
+        $dashboard->save();
+
+        return redirect('/pp/my');
+
+    }
+
     public function pp_granted($id)
     {
         $viewData = $this->prepareProjectProposalData();
