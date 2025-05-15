@@ -91,7 +91,6 @@ abstract class DashboardState extends State
             ->allowTransition(FinalApproved::class,Submitted::class)
             ->allowTransition(FinalApproved::class,FinalApproved::class)
             ->allowTransition(FOApproved::class, FinalReturned::class)
-
             ->allowTransition(FinalReturned::class,FOApproved::class)
             ->allowTransition(FinalReturned::class,Submitted::class)
             ->allowTransition(FinalReturned::class,FinalReturned::class)
@@ -99,12 +98,20 @@ abstract class DashboardState extends State
             ->allowTransition(FinalDenied::class,FOApproved::class)
             ->allowTransition(FinalDenied::class,Submitted::class)
             ->allowTransition(FinalDenied::class,FinalDenied::class)
-            ->allowTransition(FinalApproved::class, Granted::class)
-            ->allowTransition(Granted::class,FinalApproved::class)
-            ->allowTransition(Granted::class,Submitted::class)
+            //Sent
+            ->allowTransition(FinalApproved::class, Sent::class)
+            ->allowTransition(Sent::class,FinalApproved::class)
+            ->allowTransition(Sent::class,Submitted::class)
             ->allowTransition(FinalApproved::class, Denied::class)
             ->allowTransition(Denied::class,FinalApproved::class)
             ->allowTransition(Denied::class,Submitted::class)
+            //Granted
+            ->allowTransition(Sent::class, Granted::class)
+            ->allowTransition(Granted::class,Sent::class)
+            ->allowTransition(Granted::class,Submitted::class)
+            ->allowTransition(Granted::class, Denied::class)
+            ->allowTransition(Denied::class,Granted::class)
+            //->allowTransition(Denied::class,Submitted::class)
             ;
     }
 }

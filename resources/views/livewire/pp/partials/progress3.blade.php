@@ -5,7 +5,8 @@
 50% → UHApproval
 60% → Submission
 80% → Budget Review
-100% → Final Approval
+98% → Final Approval
+100% → Sent
 {{--}}
 @switch((string) $proposal->dashboard?->state ?? '')
     @case('submitted')
@@ -40,13 +41,26 @@
         @endphp
         @break
     @case('final_approved')
-    @case('granted')
         @php
-            $progress = 100;
+            $progress = 98;
             //$color = 'bg-green-600';
             $color = 'bg-blue-600';
         @endphp
         @break
+    @case('sent')
+    @php
+        $progress = 100;
+        //$color = 'bg-green-600';
+        $color = 'bg-blue-600';
+    @endphp
+    @break
+    @case('granted')
+    @php
+        $progress = 100;
+        //$color = 'bg-green-600';
+        $color = 'bg-blue-600';
+    @endphp
+    @break
     @case('head_denied')
     @case('vice_denied')
     @case('fo_denied')
@@ -154,11 +168,15 @@
 
                 <!-- Step 5: Final Approval -->
                 <div class="relative z-10 grid h-3 w-3 cursor-pointer place-items-center rounded-full
-                    {{ $progress >= 100 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
+                    {{ $progress >= 98 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
                     <div class="absolute -bottom-[1.8rem] w-max text-center text-xs">
                         <h6 class="hidden md:block uppercase font-sans text-[0.65rem] antialiased font-semibold leading-relaxed tracking-normal
-                            {{ $progress >= 100 ? 'text-blue-500' : 'text-gray-500' }}">
-                            Final Approval
+                            {{ $progress >= 98 ? 'text-blue-500' : 'text-gray-500' }}">
+                            @if($proposal->dashboard?->state == 'sent')
+                                Sent
+                            @else
+                                Final Approval
+                            @endif
                         </h6>
                     </div>
                 </div>

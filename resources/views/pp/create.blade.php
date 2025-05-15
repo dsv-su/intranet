@@ -9,12 +9,16 @@
                 @include(('pp.partials.overview'))
             @endif
             {{--}}
+            @if(in_array($type, ['review']))
+                @include('pp.partials.form.review_help')
+            @endif
             <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
                 @php
                     $labels = [
                         'complete' => isset($proposal) ? __("Complete: ") . $proposal['name'] : __("Complete"),
                         'view' => isset($proposal) ? __("View: ") . $proposal['name'] : __("View"),
                         'edit' => isset($proposal) ? __("Edit: ") . $proposal['name'] : __("Edit"),
+                        'review' => isset($proposal) ? __("Review: ") . $proposal['name'] : __("Review"),
                     ];
                 @endphp
                 {{ $labels[$type] ?? __("New Project Proposal") }}
@@ -229,31 +233,32 @@
         });
 
         /* Add unit head */
-        @if(in_array($type, ['complete', 'review', 'resume']))
-        document.getElementById('add-unithead-button').addEventListener('click', function () {
-            // Get the container where the new selects will be added
-            const container = document.getElementById('unithead-container');
+        const addButton = document.getElementById('add-unithead-button');
+        if (addButton) {
+            document.getElementById('add-unithead-button').addEventListener('click', function () {
+                // Get the container where the new selects will be added
+                const container = document.getElementById('unithead-container');
 
-            // Find the existing select dropdown to clone
-            const existingSelect = document.querySelector('#unithead-container select');
+                // Find the existing select dropdown to clone
+                const existingSelect = document.querySelector('#unithead-container select');
 
-            // Clone the select element
-            const newSelect = existingSelect.cloneNode(true);
+                // Clone the select element
+                const newSelect = existingSelect.cloneNode(true);
 
-            // Clear selection in the new dropdown
-            newSelect.selectedIndex = -1;
+                // Clear selection in the new dropdown
+                newSelect.selectedIndex = -1;
 
-            // Create a wrapper div with spacing
-            const wrapperDiv = document.createElement('div');
-            wrapperDiv.className = 'mt-4'; // Add margin-top
+                // Create a wrapper div with spacing
+                const wrapperDiv = document.createElement('div');
+                wrapperDiv.className = 'mt-4'; // Add margin-top
 
-            // Append the new select to the wrapper div
-            wrapperDiv.appendChild(newSelect);
+                // Append the new select to the wrapper div
+                wrapperDiv.appendChild(newSelect);
 
-            // Append the wrapper div to the container
-            container.appendChild(wrapperDiv);
-        });
-        @endif
+                // Append the wrapper div to the container
+                container.appendChild(wrapperDiv);
+            });
+        }
     </script>
 
     <!-- Modals -->
