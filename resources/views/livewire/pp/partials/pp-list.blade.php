@@ -108,33 +108,32 @@
                                     {{$proposal->pp['budget_dsv'] ?? 'N/A'}}
                                 </p>
 
-                                <!-- Button group with spacing and rounded corners -->
-
-                                <div class="opacity-100 inline-flex space-x-2 rounded-md shadow-sm" role="group">
+                                <!-- Button group -->
+                                <div class="inline-flex space-x-1 rounded-md shadow-sm " role="group">
                                     @if($review ?? false)
                                         <a type="button"
                                            href="{{route('pp-review', $proposal->id)}}"
-                                           class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                           class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150">
                                             Review
                                         </a>
                                     @endif
                                     @if($resume ?? false)
-                                        <button type="button"
+                                        <a type="button"
                                             href="{{route('pp-resume', $proposal->id)}}"
-                                            class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                            class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150">
                                             <svg class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12.25V1m0 11.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M4 19v-2.25m6-13.5V1m0 2.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M10 19V7.75m6 4.5V1m0 11.25a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM16 19v-2"/>
                                             </svg>
                                             Resume
-                                        </button>
+                                        </a>
                                     @endif
                                         <a type="button"
                                            href="{{route('pp-view', $proposal->id)}}"
-                                           class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                           class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150">
                                             View
@@ -153,7 +152,7 @@
                                     @if($proposal->allowComplete())
                                         <a type="button"
                                            href="{{route('pp-complete', $proposal->id)}}"
-                                           class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                           class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150">
                                             Complete
@@ -162,7 +161,7 @@
                                     @if((string)$proposal->dashboard->state == 'complete' ?? false)
                                         <a type="button"
                                            href="{{route('pp-upload', $proposal->id)}}#proposal-attachments"
-                                           class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                           class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150">
                                             Upload
@@ -172,7 +171,7 @@
                                         @if((string)$proposal->dashboard->state == 'final_approved' ?? false)
                                             <a type="button"
                                                href="{{route('pp-sent', $proposal->id)}}#sent"
-                                               class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                               class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                                     uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                                     disabled:opacity-25 transition ease-in-out duration-150">
                                                 Report: Sent
@@ -182,7 +181,7 @@
                                     @if((string)$proposal->dashboard->state == 'final_approved' ?? false)
                                         <a type="button"
                                            href="{{route('pp-granted', $proposal->id)}}#granted"
-                                           class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                           class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                                     uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                                     disabled:opacity-25 transition ease-in-out duration-150">
                                             Report: Granted
@@ -193,7 +192,7 @@
                                     @if((string)$proposal->dashboard->state == 'final_approved' ?? false)
                                         <a type="button"
                                            href="{{route('pp-rejected', $proposal->id)}}#rejected"
-                                           class="inline-flex items-center px-1.5 py-1 bg-white border border-red-600 text-red-600 rounded-md font-semibold text-[0.65rem]
+                                           class="inline-flex items-center px-1.5 py-1 bg-white border border-red-600 text-red-600 rounded-md font-semibold text-[0.5rem]
                                                     uppercase tracking-widest hover:bg-red-600 hover:text-white active:bg-red-700 focus:outline-none focus:border-red-800 focus:ring ring-red-300
                                                     disabled:opacity-25 transition ease-in-out duration-150">
                                             Rejected
@@ -204,7 +203,7 @@
                                     @if($proposal->allowEdit() and in_array((string) $proposal->status_stage1, ['head_returned', 'vice_returned', 'fo_returned', 'final_returned']))
                                         <a type="button"
                                            href="{{route('pp-resume', $proposal->id)}}"
-                                           class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
+                                           class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150">
                                             Resume
