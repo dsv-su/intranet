@@ -178,7 +178,7 @@
                                             </a>
                                         @endif
                                     <!-- Granted -->
-                                    @if((string)$proposal->dashboard->state == 'final_approved' ?? false)
+                                    @if((string)$proposal->dashboard->state == 'sent' ?? false)
                                         <a type="button"
                                            href="{{route('pp-granted', $proposal->id)}}#granted"
                                            class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
@@ -189,7 +189,7 @@
                                     @endif
 
                                     <!-- Rejected -->
-                                    @if((string)$proposal->dashboard->state == 'final_approved' ?? false)
+                                    @if((string)$proposal->dashboard->state == 'sent' ?? false)
                                         <a type="button"
                                            href="{{route('pp-rejected', $proposal->id)}}#rejected"
                                            class="inline-flex items-center px-1.5 py-1 bg-white border border-red-600 text-red-600 rounded-md font-semibold text-[0.5rem]
