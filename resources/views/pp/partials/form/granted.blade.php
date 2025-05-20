@@ -1,5 +1,5 @@
 <!-- Granted -->
-@if(in_array($dashboard->state, ['final_approved', 'granted']))
+@if(in_array($dashboard->state, ['sent', 'granted']))
 <div id="granted" class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
                                 before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
                                 dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">

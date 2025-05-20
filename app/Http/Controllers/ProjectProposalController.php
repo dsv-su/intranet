@@ -452,8 +452,8 @@ class ProjectProposalController extends Controller
         $dashboard->state = 'sent';
         $dashboard->save();
 
-        return redirect('/pp/my');
-
+        //return redirect('/pp/my');
+        return redirect()->route('pp', 'my')->with('success', 'Your proposal has been successfully registered as sent. Thank you!');
     }
 
     public function pp_granted($id)
