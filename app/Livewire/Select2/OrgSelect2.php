@@ -55,7 +55,11 @@ class OrgSelect2 extends Component
     {
         $this->organization = $organization;
         $this->dispatch('selectedOrganization', $this->organization->id);
-        if ($this->organization->name == 'Wallenberg') {
+        //Wallenberg
+        if (in_array($this->organization->name, [
+            'Wallenberg', 'Wallenberg, MMW - föransökan',
+            'Wallenberg, MAW, föransökan', 'Wallenberg, MAW'
+        ])) {
             $this->dispatch('org_wallenberg');
         }
         else {

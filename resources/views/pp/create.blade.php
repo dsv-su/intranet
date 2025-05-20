@@ -263,5 +263,5 @@
 
     <!-- Modals -->
     @include('pp.modals.pp_help')
-    @include('layouts.darktoggler')
+    @nocache('layouts.darktoggler')
 @endsection
