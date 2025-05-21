@@ -191,7 +191,7 @@ class ProjectProposalController extends Controller
                 $updatedPp = array_merge($existingPp, $request->only([
                     'unit_head', 'program', 'decision_exp', 'funding_organization',
                     'start_date', 'submission_deadline',
-                    'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'user_comments'
+                    'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'cofinancing_needed', 'user_comments'
                 ]), [
                     'submitted' => now(),
                     'status' => 'completed'

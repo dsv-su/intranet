@@ -19,7 +19,7 @@
             @if($type == 'edit')
                 {{__("Edit proposal - disabled")}}
             @elseif($type == 'preapproval')
-                {{__("Submit proposal draft")}}
+                {{__("Request approval")}}
             @elseif($type == 'complete')
                 {{__("Submit complete proposal")}}
             @elseif($type == 'resume')
