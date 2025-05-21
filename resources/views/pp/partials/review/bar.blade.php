@@ -18,8 +18,10 @@
             <label for="comment" class="block mb-2 text-sm font-medium text-blue-600 dark:text-white">
                 {{ __("Please Review and Comment") }}
             </label>
-
-            @include('pp.partials.review.review_overview')
+            <!-- Lock overview for UnitHeads -->
+            @if(in_array($dashboard->state, ['submitted', 'head_approved', 'fo_approved']))
+                @include('pp.partials.review.review_overview')
+            @endif
 
             <textarea id="comment" name="comment" rows="4"
                       class="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-blue-600 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700
