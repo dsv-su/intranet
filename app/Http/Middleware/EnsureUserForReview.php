@@ -21,7 +21,13 @@ class EnsureUserForReview
         $id = basename($request->path());
         $user = User::current();
 
-        $dashboard = Dashboard::find($id) ?? Dashboard::where('request_id', $id)->first();
+        //$dashboard = Dashboard::find($id) ?? Dashboard::where('request_id', $id)->first();
+
+        if ($dashboard =  Dashboard::where('request_id', $id)->first()) {
+
+        } else {
+            $dashboard = Dashboard::find($id);
+        }
 
         if (!$dashboard) {
             abort(404, 'Dashboard not found');
@@ -59,7 +65,7 @@ class EnsureUserForReview
                 return $next($request);
             }
         }
-
+        
         abort(403, 'Unauthorized');
         return redirect('/');
     }
