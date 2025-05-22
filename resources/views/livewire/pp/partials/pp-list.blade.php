@@ -158,7 +158,7 @@
                                             Complete
                                         </a>
                                     @endif
-                                    @if((string)$proposal->dashboard->state == 'complete' ?? false)
+                                    @if($proposal->allowComplete())
                                         <a type="button"
                                            href="{{route('pp-upload', $proposal->id)}}#proposal-attachments"
                                            class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
@@ -168,7 +168,7 @@
                                         </a>
                                    @endif
                                     <!-- Sent -->
-                                        @if((string)$proposal->dashboard->state == 'final_approved' ?? false)
+                                        @if($proposal->allowSend())
                                             <a type="button"
                                                href="{{route('pp-sent', $proposal->id)}}#sent"
                                                class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
@@ -178,7 +178,7 @@
                                             </a>
                                         @endif
                                     <!-- Granted -->
-                                    @if((string)$proposal->dashboard->state == 'sent' ?? false)
+                                    @if($proposal->allowGrant())
                                         <a type="button"
                                            href="{{route('pp-granted', $proposal->id)}}#granted"
                                            class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
@@ -189,7 +189,7 @@
                                     @endif
 
                                     <!-- Rejected -->
-                                    @if((string)$proposal->dashboard->state == 'sent' ?? false)
+                                    @if($proposal->allowReject())
                                         <a type="button"
                                            href="{{route('pp-rejected', $proposal->id)}}#rejected"
                                            class="inline-flex items-center px-1.5 py-1 bg-white border border-red-600 text-red-600 rounded-md font-semibold text-[0.5rem]

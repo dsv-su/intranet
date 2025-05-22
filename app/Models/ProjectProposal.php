@@ -51,4 +51,40 @@ class ProjectProposal extends Model
         return $user->id === $dashboard->user_id;
     }
 
+    public function allowSend(): bool
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        if (!$dashboard || (string) $dashboard->state !== 'final_approved') {
+            return false;
+        }
+
+        return $user->id === $dashboard->user_id;
+    }
+
+    public function allowGrant(): bool
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        if (!$dashboard || (string) $dashboard->state !== 'sent') {
+            return false;
+        }
+
+        return $user->id === $dashboard->user_id;
+    }
+
+    public function allowReject(): bool
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        if (!$dashboard || (string) $dashboard->state !== 'sent') {
+            return false;
+        }
+
+        return $user->id === $dashboard->user_id;
+    }
+
 }
