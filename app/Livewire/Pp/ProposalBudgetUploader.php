@@ -3,7 +3,6 @@
 namespace App\Livewire\Pp;
 
 use App\Models\Dashboard;
-use App\Models\ProjectProposal;
 use App\Services\Review\WorkflowHandler;
 use App\Services\Settings\ProposalsDirectory;
 use Illuminate\Support\Facades\Auth;
@@ -11,9 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
-use ZipArchive;
 
-class ProposalUploader extends Component
+class ProposalBudgetUploader extends Component
 {
     use WithFileUploads;
 
@@ -23,7 +21,7 @@ class ProposalUploader extends Component
 
     public $proposal;
     public $dashboard;
-    public $files = [];
+    public $budgetfiles = [];
     public $savedfiles = [];
     public $stored = false;
     public $directory;
@@ -38,16 +36,16 @@ class ProposalUploader extends Component
     {
         $this->proposal = $proposal;
         $this->type = $type;
-        $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT;
+        $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET;
         $this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
         $this->allowUpload();
     }
 
     public function checkFileStatus()
     {
-        $files = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
+        $budgetfiles = is_array($this->proposal->budgetfiles ?? null) ? $this->proposal->budgetfiles : [];
 
-        if (count($files) >= 2) {
+        if (count($budgetfiles) >= 2) {
             //Signal workflow
             $workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
             $workflowhandler->UploadedFiles();
@@ -57,7 +55,6 @@ class ProposalUploader extends Component
 
         return $this->reportStageStatus('waiting');
     }
-
 
     public function reportStageStatus($status)
     {
@@ -84,26 +81,26 @@ class ProposalUploader extends Component
     {
         $this->toggleStored();
         $this->cleanupOldUploads();
-        $files = collect($tmpPath)->map(function ($i) {
+        $budgetfiles = collect($tmpPath)->map(function ($i) {
             return TemporaryUploadedFile::createFromLivewire($i);
         })->toArray();
-        $this->emitSelf('upload:finished', $name, collect($files)->map->getFilename()->toArray());
+        $this->emitSelf('upload:finished', $name, collect($budgetfiles)->map->getFilename()->toArray());
 
-        $files = array_merge($this->getPropertyValue($name), $files);
-        $this->syncInput($name, $files);
+        $budgetfiles = array_merge($this->getPropertyValue($name), $budgetfiles);
+        $this->syncInput($name, $budgetfiles);
     }
 
     public function storefiles()
     {
-        foreach($this->files as $file) {
+        foreach($this->budgetfiles as $file) {
             $this->savedfiles[$file->getClientOriginalName()] = [
                 'path' => basename($file->store(path: $this->directory)),
                 'tmp' => basename($file->getRealPath()),
                 'size' => round($file->getSize()/1000),
                 'date' => now()->format('d/m/Y'),
-                'type' => 'draft',
+                'type' => 'budget',
                 'uploader' => Auth::user()->name
-                ];
+            ];
         }
 
         //Update files to model
@@ -112,7 +109,8 @@ class ProposalUploader extends Component
 
         //Toggled buttons
         $this->toggleStored();
-        $this->files = [];
+        $this->budgetfiles = [];
+        $this->dispatch('upload_refresh');
     }
 
     public function updateProposal()
@@ -137,56 +135,51 @@ class ProposalUploader extends Component
     public function removefile($id)
     {
         // Get the current files array
-        $files = $this->proposal->files;
-        $remove = $this->directory . $files[$id]['path'];
+        $budgetfiles = $this->proposal->files;
+        $remove = $this->directory . $budgetfiles[$id]['path'];
 
         //For debugging
-        //$livewireID = $files[$id]['path'];
-        //$tmp = $files[$id]['tmp'];
+        //$livewireID = $budgetfiles[$id]['path'];
+        //$tmp = $budgetfiles[$id]['tmp'];
 
         if (Storage::exists($remove)) {
             Storage::delete($remove);
         }
 
         // Remove the specific item by key
-        if (isset($files[$id])) {
-            unset($files[$id]);
+        if (isset($budgetfiles[$id])) {
+            unset($budgetfiles[$id]);
         }
 
         // Save the modified array back to the property
-        $this->proposal->files = $files;
+        $this->proposal->files = $budgetfiles;
 
         // Persist changes to the database
         $this->proposal->save();
         $this->checkFileStatus();
     }
 
-    public function removefolder()
+    /*public function removefolder()
     {
         $this->proposal->files = [];
-        //Storage::deleteDirectory($this->directory);
-        Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT);
-        Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET);
+        Storage::deleteDirectory($this->directory);
         $this->proposal->save();
-        $this->files = [];
+        $this->budgetfiles = [];
         $this->reportStageStatus('pending');
-    }
+    }*/
 
     public function downloadfile($id)
     {
         // Get the current files array
-        $files = $this->proposal->files;
-        $downloadfile = $this->directory . $files[$id]['path'];
+        $budgetfiles = $this->proposal->files;
+        $downloadfile = $this->directory . $budgetfiles[$id]['path'];
 
         return Storage::download($downloadfile, $id);
     }
 
-    public function downloadfolder()
+    /*public function downloadfolder()
     {
-        $draft = Storage::files(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT);
-        $budget = Storage::files(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET);
-        $files = array_merge($draft, $budget);
-
+        $budgetfiles = Storage::files($this->directory);
         $originalfiles = $this->proposal->files;
         $zip = new ZipArchive;
         $zipFileName = "download/" . 'ProjectProposal-' . $this->proposal->name . '.zip';
@@ -199,7 +192,7 @@ class ProposalUploader extends Component
 
         // Open the zip file for writing
         if ($zip->open($zipFilePath, ZipArchive::CREATE) === TRUE) {
-            foreach ($files as $file) {
+            foreach ($budgetfiles as $file) {
                 $filePath = Storage::path($file); // Get absolute path
                 // Match name from model
                 foreach ($originalfiles as $key => $orignal) {
@@ -220,10 +213,10 @@ class ProposalUploader extends Component
         // Return response with download and delete after sending
         return response()->download($zipFilePath)->deleteFileAfterSend(true);
 
-    }
+    }*/
 
     public function render()
     {
-        return view('livewire.pp.proposal-uploader');
+        return view('livewire.pp.proposal-budget-uploader');
     }
 }
