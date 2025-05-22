@@ -24,7 +24,6 @@ class EnsureUserForReview
         //$dashboard = Dashboard::find($id) ?? Dashboard::where('request_id', $id)->first();
 
         if ($dashboard =  Dashboard::where('request_id', $id)->first()) {
-
         } else {
             $dashboard = Dashboard::find($id);
         }
@@ -65,7 +64,7 @@ class EnsureUserForReview
                 return $next($request);
             }
         }
-        
+
         abort(403, 'Unauthorized');
         return redirect('/');
     }
