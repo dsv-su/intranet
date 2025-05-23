@@ -88,6 +88,12 @@ class WorkflowHandler
         $this->workflow->setfilesUploaded(true);
     }
 
+    //A File has been removed
+    public function RemovedFile()
+    {
+        $this->workflow->setfilesUploaded(false);
+    }
+
     //Final
     public function FinalApprove()
     {

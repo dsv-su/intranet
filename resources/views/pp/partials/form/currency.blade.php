@@ -14,7 +14,7 @@
                    id="currency"
                    @if(in_array($type, ['complete', 'edit', 'resume']))
                    checked required
-                   @elseif(in_array($type, ['review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'sek')
+                   @elseif(in_array($type, ['review', 'view', 'sent', 'granted']) && ($proposal['pp']['currency'] ?? '') == 'sek')
                    checked
                    @endif
                    @unless(in_array($type, ['complete', 'edit', 'resume']))
@@ -31,7 +31,7 @@
                    id="currency"
                    @if(in_array($type, ['complete', 'edit', 'resume']))
                    required
-                   @elseif(!in_array($type, ['review', 'view']) || ($proposal['pp']['currency'] ?? '') != 'us')
+                   @elseif(!in_array($type, ['review', 'view', 'sent', 'granted']) || ($proposal['pp']['currency'] ?? '') != 'us')
                    disabled
                    @endif
                    @if(in_array($type, ['review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'us')
@@ -47,7 +47,7 @@
                    id="currency"
                    @if(in_array($type, ['complete', 'edit', 'resume']))
                    required
-                   @elseif(!in_array($type, ['review', 'view']) || ($proposal['pp']['currency'] ?? '') != 'euro')
+                   @elseif(!in_array($type, ['review', 'view', 'sent', 'granted']) || ($proposal['pp']['currency'] ?? '') != 'euro')
                    disabled
                    @endif
                    @if(in_array($type, ['review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'euro')

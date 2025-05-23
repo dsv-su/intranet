@@ -46,13 +46,15 @@ class ProposalUploader extends Component
     public function checkFileStatus()
     {
         $files = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
+        $workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
 
         if (count($files) >= 2) {
             //Signal workflow
-            $workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
             $workflowhandler->UploadedFiles();
-
             return $this->reportStageStatus('uploaded');
+        } else {
+            //Signal workflow
+            $workflowhandler->RemovedFile();
         }
 
         return $this->reportStageStatus('waiting');
@@ -68,7 +70,6 @@ class ProposalUploader extends Component
     public function allowUpload()
     {
         $user = Auth::user();
-        //$dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
 
         $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
@@ -97,7 +98,7 @@ class ProposalUploader extends Component
     {
         foreach($this->files as $file) {
             $this->savedfiles[$file->getClientOriginalName()] = [
-                'path' => basename($file->store(path: $this->directory)),
+                'path' => $file->store(path: $this->directory),
                 'tmp' => basename($file->getRealPath()),
                 'size' => round($file->getSize()/1000),
                 'date' => now()->format('d/m/Y'),
@@ -138,7 +139,7 @@ class ProposalUploader extends Component
     {
         // Get the current files array
         $files = $this->proposal->files;
-        $remove = $this->directory . $files[$id]['path'];
+        $remove = $files[$id]['path'];
 
         //For debugging
         //$livewireID = $files[$id]['path'];
@@ -164,9 +165,9 @@ class ProposalUploader extends Component
     public function removefolder()
     {
         $this->proposal->files = [];
-        //Storage::deleteDirectory($this->directory);
         Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT);
         Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET);
+        Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::FINAL);
         $this->proposal->save();
         $this->files = [];
         $this->reportStageStatus('pending');
@@ -176,7 +177,7 @@ class ProposalUploader extends Component
     {
         // Get the current files array
         $files = $this->proposal->files;
-        $downloadfile = $this->directory . $files[$id]['path'];
+        $downloadfile = $files[$id]['path'];
 
         return Storage::download($downloadfile, $id);
     }
@@ -185,7 +186,8 @@ class ProposalUploader extends Component
     {
         $draft = Storage::files(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT);
         $budget = Storage::files(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET);
-        $files = array_merge($draft, $budget);
+        $final = Storage::files(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::FINAL);
+        $files = array_merge($draft, $budget, $final);
 
         $originalfiles = $this->proposal->files;
         $zip = new ZipArchive;
@@ -203,7 +205,7 @@ class ProposalUploader extends Component
                 $filePath = Storage::path($file); // Get absolute path
                 // Match name from model
                 foreach ($originalfiles as $key => $orignal) {
-                    if($orignal['path'] == basename($file)) {
+                    if(basename($orignal['path']) == basename($file)) {
                         $set_zipname = $key;
                     }
                 }

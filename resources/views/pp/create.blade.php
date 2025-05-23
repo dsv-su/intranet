@@ -35,7 +35,7 @@
             <form method="post" action="{{route('new-submit')}}">
                 @csrf
 
-                @if(in_array($type, ['complete', 'edit', 'resume', 'granted', 'rejected']))
+                @if(in_array($type, ['complete', 'edit', 'resume', 'sent', 'granted', 'rejected']))
                     <input type="hidden" name="id" value="{{$proposal->id}}">
                 @endif
 
@@ -129,7 +129,7 @@
                     @endif
 
                     <!-- Unit Head -->
-                    @if(in_array($type, ['complete', 'review', 'view', 'resume']))
+                    @if(in_array($type, ['complete', 'review', 'view', 'resume', 'sent', 'granted']))
                         <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
                                 before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
                                 dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
@@ -140,7 +140,7 @@
                     @endif
 
                     <!-- Project budget -->
-                    @if(in_array($type, ['complete', 'review', 'edit', 'resume', 'view']))
+                    @if(in_array($type, ['complete', 'review', 'edit', 'resume', 'view', 'sent', 'granted']))
                         <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
                                     before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
                                     dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">

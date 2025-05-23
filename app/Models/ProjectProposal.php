@@ -51,6 +51,18 @@ class ProjectProposal extends Model
         return $user->id === $dashboard->user_id;
     }
 
+    public function allowUpload(): bool
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        if (!$dashboard || !in_array((string)$dashboard->state, ['vice_approved', 'complete'])) {
+            return false;
+        }
+
+        return $user->id === $dashboard->user_id;
+    }
+
     public function allowSend(): bool
     {
         $user = Auth::user();
