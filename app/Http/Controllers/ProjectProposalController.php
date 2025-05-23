@@ -295,12 +295,45 @@ class ProjectProposalController extends Controller
 
                 return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
                 break;
+            case 'sent':
+                $pp = ProjectProposal::find($request->id);
+                // Check if final application has been uploaded
+                $files = is_array($pp->files ?? null) ? $pp->files : [];
+
+                // Search for a file with type == 'final'
+                $finalFile = collect($files)->first(function ($file) {
+                    return isset($file['type']) && $file['type'] === 'final';
+                });
+
+                if ($finalFile) {
+                    // A final file exists
+                    $existingPp = $pp->pp; // Get existing JSON attribute as an array
+                    // Merge new values while keeping existing subattributes
+                    $updatedPp = array_merge($existingPp, [
+                        'submitted' => now(),
+                        'status' => 'sent'
+                    ]);
+                    // Update the model without clearing existing 'files'
+                    $pp->update([
+                        'pp' => $updatedPp,  // Merged JSON attributes
+                    ]);
+                    $pp->save();
+                    $dashboard = Dashboard::where('request_id', $request->id)->first();
+                    $dashboard->state = 'sent';
+                    $dashboard->save();
+
+                    return redirect()->route('pp', 'my')->with('success', 'Your proposal has been successfully registered as sent. Thank you!');
+                } else {
+                    // No final file found
+                    return redirect()->route('pp', 'my')->with('error', 'Please make sure to upload your final application before the reporting');
+                }
+                break;
             case 'granted':
                 $pp = ProjectProposal::find($request->id);
                 $existingPp = $pp->pp; // Get existing JSON attribute as an array
                 // Merge new values while keeping existing subattributes
                 $updatedPp = array_merge($existingPp, $request->only([
-                    'granted', 'granted_comments'
+                    'granted', 'cofinanced_promised', 'phd_promised', 'granted_comments'
                 ]), [
                     'submitted' => now(),
                     'status' => 'granted'
@@ -446,14 +479,12 @@ class ProjectProposalController extends Controller
 
     public function pp_sent($id)
     {
-        //$viewData = $this->prepareProjectProposalData();
-        //$viewData['proposal'] = ProjectProposal::find($id);
-        $dashboard = Dashboard::where('request_id', $id)->first();
-        $dashboard->state = 'sent';
-        $dashboard->save();
+        $viewData = $this->prepareProjectProposalData();
+        $viewData['proposal'] = ProjectProposal::find($id);
+        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
+        $viewData['type'] = 'sent';
 
-        //return redirect('/pp/my');
-        return redirect()->route('pp', 'my')->with('success', 'Your proposal has been successfully registered as sent. Thank you!');
+        return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
     public function pp_granted($id)

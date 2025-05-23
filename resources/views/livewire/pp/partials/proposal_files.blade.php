@@ -13,11 +13,13 @@
                               <span class="inline-block px-2 py-1 text-xs
                                     @if($pp_file['type'] == 'draft') text-yellow-600
                                     @elseif($pp_file['type'] == 'budget') text-purple-600
+                                    @elseif($pp_file['type'] == 'final') text-blue-600
                                     @else text-gray-500
                                     @endif
                                     border
                                     @if($pp_file['type'] == 'draft') border-yellow-600
                                     @elseif($pp_file['type'] == 'budget') border-purple-600
+                                    @elseif($pp_file['type'] == 'final') border-blue-600
                                     @else  border-gray-200
                                     @endif
 

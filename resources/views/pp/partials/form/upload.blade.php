@@ -1,4 +1,4 @@
-@if(in_array($type, ['complete', 'review', 'view', 'resume', 'granted']))
+@if(in_array($type, ['complete', 'review', 'view', 'resume', 'sent', 'granted']))
     <div id="proposal-attachments" class="sm:col-span-2">
         <label for="upload" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Proposal attachments") }}
             <button id="upload-button" data-modal-toggle="upload-modal" class="inline" type="button">
@@ -27,4 +27,7 @@
     <livewire:pp.proposal-uploader  :proposal="$proposal" :type="$type" />
 
     <livewire:pp.proposal-budget-uploader  :proposal="$proposal" :type="$type" />
+@endif
+@if(in_array($type, ['sent']))
+    @include('pp.partials.form.sent')
 @endif

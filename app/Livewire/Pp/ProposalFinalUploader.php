@@ -11,7 +11,7 @@ use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 
-class ProposalBudgetUploader extends Component
+class ProposalFinalUploader extends Component
 {
     use WithFileUploads;
 
@@ -21,7 +21,7 @@ class ProposalBudgetUploader extends Component
 
     public $proposal;
     public $dashboard;
-    public $budgetfiles = [];
+    public $finalfiles = [];
     public $savedfiles = [];
     public $stored = false;
     public $directory;
@@ -36,17 +36,18 @@ class ProposalBudgetUploader extends Component
     {
         $this->proposal = $proposal;
         $this->type = $type;
-        $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET;
+        $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::FINAL;
         $this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
         $this->allowUpload();
     }
 
     public function checkFileStatus()
     {
-        $budgetfiles = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
+        /*
+        $finalfiles = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
         $workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
 
-        if (count($budgetfiles) >= 2) {
+        if (count($finalfiles) >= 2) {
             //Signal workflow
             $workflowhandler->UploadedFiles();
             return $this->reportStageStatus('uploaded');
@@ -56,6 +57,7 @@ class ProposalBudgetUploader extends Component
         }
 
         return $this->reportStageStatus('waiting');
+        */
     }
 
     public function reportStageStatus($status)
@@ -67,7 +69,6 @@ class ProposalBudgetUploader extends Component
     public function allowUpload()
     {
         $user = Auth::user();
-        //$dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
 
         $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
@@ -83,35 +84,35 @@ class ProposalBudgetUploader extends Component
     {
         $this->toggleStored();
         $this->cleanupOldUploads();
-        $budgetfiles = collect($tmpPath)->map(function ($i) {
+        $finalfiles = collect($tmpPath)->map(function ($i) {
             return TemporaryUploadedFile::createFromLivewire($i);
         })->toArray();
-        $this->emitSelf('upload:finished', $name, collect($budgetfiles)->map->getFilename()->toArray());
+        $this->emitSelf('upload:finished', $name, collect($finalfiles)->map->getFilename()->toArray());
 
-        $budgetfiles = array_merge($this->getPropertyValue($name), $budgetfiles);
-        $this->syncInput($name, $budgetfiles);
+        $finalfiles = array_merge($this->getPropertyValue($name), $finalfiles);
+        $this->syncInput($name, $finalfiles);
     }
 
     public function storefiles()
     {
-        foreach($this->budgetfiles as $file) {
+        foreach($this->finalfiles as $file) {
             $this->savedfiles[$file->getClientOriginalName()] = [
                 'path' => $file->store(path: $this->directory),
                 'tmp' => basename($file->getRealPath()),
                 'size' => round($file->getSize()/1000),
                 'date' => now()->format('d/m/Y'),
-                'type' => 'budget',
+                'type' => 'final',
                 'uploader' => Auth::user()->name
             ];
         }
 
         //Update files to model
         $this->updateProposal();
-        $this->checkFileStatus();
+        //$this->checkFileStatus();
 
         //Toggled buttons
         $this->toggleStored();
-        $this->budgetfiles = [];
+        $this->finalfiles = [];
         $this->dispatch('upload_refresh');
     }
 
@@ -136,6 +137,6 @@ class ProposalBudgetUploader extends Component
 
     public function render()
     {
-        return view('livewire.pp.proposal-budget-uploader');
+        return view('livewire.pp.proposal-final-uploader');
     }
 }

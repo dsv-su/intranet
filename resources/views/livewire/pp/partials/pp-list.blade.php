@@ -158,7 +158,7 @@
                                             Complete
                                         </a>
                                     @endif
-                                    @if($proposal->allowComplete())
+                                    @if($proposal->allowUpload())
                                         <a type="button"
                                            href="{{route('pp-upload', $proposal->id)}}#proposal-attachments"
                                            class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
