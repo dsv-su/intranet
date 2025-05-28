@@ -91,4 +91,29 @@ class Budget
         // Save the updated JSON
         $this->budget->save();
     }
+
+    public function cost_increment($researchAreaToUpdate)
+    {
+        $this->research_area = $this->budget->research_area;
+        // Ensure decoding was successful
+        if (!is_array($this->research_area)) {
+            $research_area = [];
+        }
+        // Ensure the research area exists
+        if (!isset($this->research_area[$researchAreaToUpdate])) {
+            $this->research_area[$researchAreaToUpdate] = ['cost' => 0];
+        }
+        // Increase the 'cost' for the specific research area
+        $this->research_area[$researchAreaToUpdate]['cost'] += $this->proposal->pp['cofinancing_needed'] ?? 0;
+
+
+        //Update research_area
+        $this->budget->research_area = $this->research_area;
+
+        //Update total
+        $this->budget->cost_total += $this->proposal->pp['cofinancing_needed'] ?? 0;
+
+        // Save the updated JSON
+        $this->budget->save();
+    }
 }

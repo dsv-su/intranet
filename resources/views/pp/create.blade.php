@@ -12,17 +12,8 @@
             @if(in_array($type, ['review']))
                 @include('pp.partials.form.review_help')
             @endif
-            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-                @php
-                    $labels = [
-                        'complete' => isset($proposal) ? __("Complete: ") . $proposal['name'] : __("Complete"),
-                        'view' => isset($proposal) ? __("View: ") . $proposal['name'] : __("View"),
-                        'edit' => isset($proposal) ? __("Edit: ") . $proposal['name'] : __("Edit"),
-                        'review' => isset($proposal) ? __("Review: ") . $proposal['name'] : __("Review"),
-                    ];
-                @endphp
-                {{ $labels[$type] ?? __("New Project Proposal") }}
-            </h2>
+
+            @include('pp.partials.form.form_title')
 
             <!-- Progress stepper stage -->
             @include(('pp.partials.progress_stage'))
@@ -134,6 +125,22 @@
                                 before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
                                 dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
                             Unit Head
+                        </div>
+                        <div class="w-full sm:col-span-2 mb-4 mt-4 border border-blue-500 text-sm text-gray-500 rounded-lg p-5">
+                            <div class="flex">
+                                <svg class="flex-shrink-0 h-4 w-4 text-blue-600 mt-0.5 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 16v-4"></path>
+                                    <path d="M12 8h.01"></path>
+                                </svg>
+                                <div class="ms-3">
+                                    <h3 class="text-blue-600 font-semibold dark:font-medium dark:text-white">Please note!</h3>
+                                    <p class="mt-2 text-gray-800 dark:text-slate-400">
+                                        If more than one unit head needs to approve your proposal, add each required unit head to the approval list.
+                                    </p>
+
+                                </div>
+                            </div>
                         </div>
                     <!--Unithead-->
                         @include('pp.partials.form.unit_head')

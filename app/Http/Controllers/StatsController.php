@@ -19,7 +19,8 @@ class StatsController extends Controller
             'complete',
             'head_approved',
             'fo_approved',
-            'final_approved'
+            'final_approved',
+            'sent'
             ];
 
         $proposals = ProjectProposal::whereIn('status_stage1', $available_states)->count();
@@ -37,6 +38,7 @@ class StatsController extends Controller
         $labels = [];
         $preapproved = [];
         $commited = [];
+        $cost = [];
         $phd = [];
 
         //Research Subject preapproved and budget
@@ -44,6 +46,7 @@ class StatsController extends Controller
             $labels[] = strlen($key) > 20 ? substr($key, 0, 17) . '...' : $key; // Limit to 20 characters
             $preapproved[] = $dsv['preapproved'] ?? 0;
             $commited[] = $dsv['budget'] ?? 0;
+            $cost[] = $dsv['cost'] ?? 0;
             $phd[] = $dsv['phd'] ?? 0;
         }
 
@@ -135,7 +138,7 @@ class StatsController extends Controller
     public function approved()
     {
         $available_states = [
-            'final_approved'
+            'granted'
         ];
 
         $proposals = ProjectProposal::whereIn('status_stage1', $available_states)->count();
@@ -153,6 +156,7 @@ class StatsController extends Controller
         $labels = [];
         $approved = [];
         $commited = [];
+        $cost = [];
         $phd = [];
         $final = [];
         $granted = [];
@@ -162,6 +166,7 @@ class StatsController extends Controller
             $labels[] = strlen($key) > 20 ? substr($key, 0, 17) . '...' : $key; // Limit to 20 characters
             $approved[] = $dsv['approved'] ?? 0;
             $commited[] = $dsv['budget'] ?? 0;
+            $cost[] = $dsv['cost'] ?? 0;
             $phd[] = $dsv['phd'] ?? 0;
             $final[] = $dsv['final'] ?? 0;
             $granted[] = $dsv['granted'] ?? 0;
