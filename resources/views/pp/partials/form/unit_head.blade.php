@@ -49,6 +49,7 @@
 
     @if(in_array($type, ['complete', 'edit', 'resume']))
     <!-- Add Unit Head-->
+
         <div class="mt-4">
             <label for="unit_head" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 {{ __("Add a Unit Head for approval") }}

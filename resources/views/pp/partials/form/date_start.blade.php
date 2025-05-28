@@ -18,7 +18,7 @@
                 @error('start_date')
                 <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                 @enderror
-                <input datepicker datepicker-format="dd/mm/yyyy"
+                <input id="datepicker-autohide" datepicker datepicker-autohide datepicker-format="dd/mm/yyyy"
                        name="start_date"
                        @if($type == 'complete' or $type == 'edit' or $type == 'resume')
                        value="{{ $proposal['pp']['start_date'] ?? ''}}"

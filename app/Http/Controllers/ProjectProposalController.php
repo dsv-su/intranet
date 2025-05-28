@@ -230,6 +230,7 @@ class ProjectProposalController extends Controller
                 $budget = new Budget($pp);
                 $budget->budget_increment($pp->pp['research_area']);
                 $budget->phd_increment($pp->pp['research_area']);
+                $budget->cost_increment($pp->pp['research_area']);
 
                 if($dashboard->state == 'complete' && count($pp->files) > 0) {
                     return redirect()->route('pp', 'my')->with('success', 'Your Project proposal files have successfully been uploaded!');
@@ -317,6 +318,8 @@ class ProjectProposalController extends Controller
                     $pp->update([
                         'pp' => $updatedPp,  // Merged JSON attributes
                     ]);
+                    //Set status sent
+                    $pp->status_stage1 = 'sent';
                     $pp->save();
                     $dashboard = Dashboard::where('request_id', $request->id)->first();
                     $dashboard->state = 'sent';
@@ -342,6 +345,8 @@ class ProjectProposalController extends Controller
                 $pp->update([
                     'pp' => $updatedPp,  // Merged JSON attributes
                 ]);
+                //Set status sent
+                $pp->status_stage1 = 'granted';
                 $pp->save();
                 $dashboard = Dashboard::where('request_id', $request->id)->first();
                 $dashboard->state = 'granted';

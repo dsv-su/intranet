@@ -74,11 +74,20 @@
                 </div>
 
                 <div class="break-words">
-                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Total Budget DSV</h2>
+                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Total Budget (DSV)</h2>
                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                         bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
                         dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
                         {{ $budget->budget_dsv_total }}
+                    </span>
+                </div>
+
+                <div class="break-words">
+                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Total Cofinancing needed (DSV)</h2>
+                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                        bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
+                        dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
+                        {{ $budget->cost_total }}
                     </span>
                 </div>
 
