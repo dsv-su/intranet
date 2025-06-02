@@ -67,18 +67,11 @@
                 </a>
 
                 <!-- New proposal -->
-                <a role="button"
+                <a type="button"
                    data-tooltip-target="add-proposal-tooltip"
-                   href="{{route('new-project')}}"
-                   class="py-1.5 px-2.5 inline-flex items-center gap-x-1.5 text-xs font-medium rounded-md border
-                      border-blue-600 bg-white text-gray-800 shadow hover:bg-gray-50 focus:outline-none focus:bg-gray-50
-                      disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700
-                      dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-                    New PP
-                    <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14"></path>
-                        <path d="m12 5 7 7-7 7"></path>
+                   href="{{route('new-project')}}">
+                    <svg class="size-[18px] sm:size-[24px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 8H4m8 3.5v5M9.5 14h5M4 6v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z"/>
                     </svg>
                 </a>
                 <!-- end new creation flow -->
