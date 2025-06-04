@@ -196,6 +196,26 @@ class StatsController extends Controller
                 ],
 
             ]);
+
+        //Cost
+        $chart['researchsubject_cost'] = Chartjs::build()
+            ->name('barChartFinal')
+            ->type('bar')
+            ->size(['width' => 400, 'height' => 200])
+            ->labels($labels)
+            ->datasets([
+                [
+                    "label" => "Cofinacing needed (SEK)",
+                    'backgroundColor' => 'rgba(0, 255, 0, 1)',
+                    'borderWidth' => 1,
+                    'data' => $cost,
+                    'categoryPercentage' => 0.6,
+                    'barPercentage' => 0.6,
+                    'yAxisID' => 'y-left' // Assign to left y-axis
+                ],
+
+            ]);
+
         //Final budget
         $chart['researchsubject_final'] = Chartjs::build()
             ->name('barChartFinal')

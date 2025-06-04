@@ -42,6 +42,7 @@ class AllProjectProposalSearch extends Component
                     $query->where('name', 'like', '%'. $this->searchProposal .'%')
                         ->orWhere('pp', 'like', '%'. $this->searchProposal .'%');
                 })
+                ->orderBy('created_at', 'desc')
                 ->paginate(6);
         }
     }

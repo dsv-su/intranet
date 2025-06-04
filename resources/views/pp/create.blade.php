@@ -3,7 +3,7 @@
     @nocache('dsvheader')
     @include('pp.partials.header')
     <section class="bg-white dark:bg-gray-900">
-        <div class="max-w-2xl px-4 py-8 mx-auto lg:py-16">
+        <div class="max-w-2xl px-4 py-8 mx-auto lg:py-16 overflow-x-hidden">
             {{--}}
             @if(in_array($type, ['edit', 'review', 'view', 'resume']))
                 @include(('pp.partials.overview'))

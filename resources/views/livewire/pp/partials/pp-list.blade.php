@@ -17,7 +17,9 @@
                                 <strong>
                                     {{ $proposal->pp['title'] }}
                                 </strong>
-
+                                {{--}}
+                                {{ \Illuminate\Support\Carbon::parse($proposal->created)->format('Y-m-d') }}
+                                {{--}}
                             </p>
                             <!-- Progress -->
                             {{--}}@nocache('livewire.pp.partials.progress'){{--}}

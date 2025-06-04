@@ -15,7 +15,7 @@
     @vite(['resources/js/site.js'])
 </head>
 
-<body class="dark:bg-gray-800">
+<body class="overflow-x-hidden dark:bg-gray-800">
     <main>
         @yield('content')
     </main>
