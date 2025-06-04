@@ -32,6 +32,7 @@ class MyProjectProposalSearch extends Component
             ->orWhereHas('dashboard', function($query) {
                 $query->where('state', 'like', '%'. $this->searchProposal .'%');
             })
+            ->orderBy('created_at', 'desc')
             ->paginate(5);
 
         return view('livewire.pp.my-project-proposal-search',

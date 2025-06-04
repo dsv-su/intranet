@@ -22,6 +22,7 @@ class AwaitingProjectProposal extends Component
 
         $proposals = ProjectProposal::with('dashboard')
             ->whereIn('id', $awaitingDashboard)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $this->review = true;

@@ -32,6 +32,12 @@
                 </div>
                 {{--}}
                 <div class="w-full lg:w-1/2">
+                    <h5 class="text-xl dark:text-white">Co finacing needed</h5>
+                    <x-chartjs-component :chart="$chart['researchsubject_cost']" />
+                </div>
+                {{--}}
+                {{--}}
+                <div class="w-full lg:w-1/2">
                     <h5 class="text-xl dark:text-white">Granted total</h5>
                     <x-chartjs-component :chart="$chart['researchsubject_final']" />
                 </div>
