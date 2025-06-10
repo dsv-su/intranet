@@ -17,6 +17,9 @@ return new class extends Migration
             $table->boolean('multiple_heads')->default(false)->after('user_id');
             $table->json('unit_heads')->nullable()->after('vice_id');
             $table->json('unit_head_approved')->nullable()->after('vice_id');
+            $table->uuid('manager_id')->nullable()->change();
+            $table->uuid('head_id')->nullable()->change();
+            $table->uuid('fo_id')->nullable()->change();
         });
     }
 
@@ -31,7 +34,9 @@ return new class extends Migration
             $table->dropColumn('multiple_heads');
             $table->dropColumn('unit_heads');
             $table->dropColumn('unit_head_approved');
-
+            $table->uuid('manager_id')->nullable(false)->change();
+            $table->uuid('head_id')->nullable(false)->change();
+            $table->uuid('fo_id')->nullable(false)->change();
         });
     }
 };

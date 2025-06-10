@@ -5,8 +5,11 @@ namespace App\Livewire\Pp;
 use App\Models\Dashboard;
 use App\Models\FundingOrganization;
 use App\Models\ProjectProposal;
+use App\Services\Awaiting\AwaitingDashboard;
+use App\Services\Settings\ProposalsDirectory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 
 class ProjectProposalHome extends Component
@@ -16,13 +19,13 @@ class ProjectProposalHome extends Component
     public $awaiting;
     public $funding_organizations;
 
-    public function mount(ProjectProposal $proposals)
+    public function mount()
     {
-        $this->proposals = $proposals;
+        $this->proposals = ProjectProposal::where('status_stage3', '!=', 'pending')->get();
         $user = Auth::user();
         $this->my($user);
         $this->awaiting($user);
-        $this->funding_organizations = FundingOrganization::all()->count();
+        $this->funding_organizations = FundingOrganization::count();
     }
 
     public function hydrate()
@@ -33,26 +36,14 @@ class ProjectProposalHome extends Component
 
     public function my($user)
     {
-        $this->myproposals = $this->proposals::where('user_id', $user->id)->get();
+        $this->myproposals = ProjectProposal::where('user_id', $user->id)
+            ->where('status_stage3', '!=', 'pending')->get();
     }
 
     public function awaiting($user)
     {
-        $this->awaiting = Dashboard::where('type', 'projectproposal')
-            ->where(function ($query) use ($user) {
-                $query->where('state', 'submitted')
-                    //->where('head_id', $user->id)
-                    ->whereJsonContains('unit_head_approved', [$user->id => 0])
-                    ->orWhere(function ($query) use ($user) {
-                        $query->where('state', 'head_approved')
-                            ->where('vice_id', $user->id);
-                    })->orWhere(function ($query) use ($user) {
-                        $query->where('state', 'vice_approved')
-                            ->where('fo_id', $user->id);
-                    });
-            })
-            ->count();
-
+        $awiting = new AwaitingDashboard($user);
+        $this->awaiting =  $awiting->proposals()->count();
     }
 
     public function allproposals()

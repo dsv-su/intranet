@@ -1,5 +1,5 @@
 <!-- File Uploading Progress Form -->
-@if(count($files))
+@if(count($files ?? []))
 <div class="mb-2 flex flex-col bg-white border shadow-sm rounded-xl dark:bg-neutral-800 dark:border-neutral-700">
     <!-- Body -->
     <div class="p-4 md:p-5 space-y-7">

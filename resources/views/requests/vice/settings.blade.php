@@ -16,38 +16,9 @@
                                     <p class="mt-2 text-lg text-gray-800 dark:text-gray-400">Settings for vice head.</p>
                                 </header>
                                 <!-- Form enabled/disable -->
-                                <p class="mt-1 text-gray-600 dark:text-gray-400">Project proposal form</p>
-                                <div class="mt-5 space-y-4">
-                                    <div class="mt-3">
-                                        <div class="border rounded-xl shadow-sm p-6 dark:bg-slate-800 dark:border-gray-700">
-                                            <ul class="max-w-sm flex flex-col">
-
-                                                <li class="inline-flex items-center gap-x-2 py-3 px-4 text-sm font-medium bg-white border text-gray-800 -mt-px first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-                                                    <div class="relative flex items-start w-full">
-                                                        <div class="flex items-center h-5">
-                                                            <input id="hs-list-group-item-radio-1" name="hs-list-group-item-radio" type="radio" class="border-gray-200 rounded-full disabled:opacity-50 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800" checked="">
-                                                        </div>
-                                                        <label for="hs-list-group-item-radio-1" class="ms-3 block w-full text-sm text-gray-600 dark:text-gray-500">Enabled</label>
-                                                        <div class="flex items-center h-5">
-                                                            <input id="hs-list-group-item-radio-1" name="hs-list-group-item-radio" type="radio" class="border-gray-200 rounded-full disabled:opacity-50 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
-                                                        </div>
-                                                        <label for="hs-list-group-item-radio-1" class="ms-3 block w-full text-sm text-gray-600 dark:text-gray-500">Disabled</label>
-                                                    </div>
-                                                </li>
-
-                                            </ul>
-                                            <div class="mt-3">
-                                                <button type="submit"
-                                                        class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white
-                                                uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:border-indigo-800 focus:ring ring-indigo-300
-                                                disabled:opacity-25 transition ease-in-out duration-150" disabled>
-                                                    Update
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <livewire:pp.form-enable :fos="$fos" :vicehead="$vicehead" :oh="$oh"/>
                                 <!-- Research area -->
-                                <p class="mt-1 text-gray-600 dark:text-gray-400">Research areas</p>
+                                <p class="mt-1 text-gray-600 dark:text-gray-400">Research subjects</p>
                                 <div class="mt-4 bg-blue-50 border border-blue-500 text-sm text-gray-500 rounded-lg p-5 dark:bg-blue-600/[.15]">
                                     <div class="flex">
                                         <svg class="flex-shrink-0 h-4 w-4 text-blue-600 mt-0.5 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -57,31 +28,24 @@
                                         </svg>
                                         <div class="ms-3">
                                             <h3 class="text-blue-600 font-semibold dark:font-medium dark:text-white">Please note!</h3>
-                                            <p class="mt-2 text-gray-800 dark:text-slate-400">Please note that removing a research area in production may impact existing project proposals in the system. However, you can safely edit a research area's name or add a new one without any issues.</p>
+                                            <p class="mt-2 text-gray-800 dark:text-slate-400">
+                                                Removing a research area in production may impact existing project proposals in the system.
+                                                However, you can safely edit a research area's name or add a new one without any issues.
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 <livewire:pp.research-area />
                                 <br>
+                                <p class="mt-1 text-gray-600 font-semibold dark:text-gray-400">Overhead settings</p>
+                                @include('requests.vice.partials.oh')
+                                <!-- FO -->
+                                <br>
                                 <p class="mt-1 text-gray-600 dark:text-gray-400">Other settings</p>
-                                {{--}}
-                                <div class=" mt-5 border rounded-xl shadow-sm p-6 dark:bg-slate-800 dark:border-gray-700">
-                                    <div class="w-1/2 border border-blue-500 text-sm text-blue-600 rounded-lg p-5 dark:bg-blue-600/[.15]">
-                                        {{\App\Models\SettingsFo::find(1)->name ?? 'Not set'}}
-                                    </div>
-                                    <form action="{{ route('fo') }}" method="POST">
-                                        @csrf
-                                        <div class="mt-3">
-                                            <button type="submit"
-                                                    class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white
-                                            uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:border-indigo-800 focus:ring ring-indigo-300
-                                            disabled:opacity-25 transition ease-in-out duration-150">
-                                                Update
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                                {{--}}
+                                <p class="mt-1 text-gray-600 font-semibold dark:text-gray-400">Financial Officer</p>
+                                @include('requests.vice.partials.fo')
+                                <!-- end FO -->
+
                             </div>
                         </div>
                     </div>

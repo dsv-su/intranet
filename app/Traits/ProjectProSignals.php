@@ -2,6 +2,10 @@
 
 namespace App\Traits;
 
+use App\Workflows\States\Complete;
+use App\Workflows\States\FinalApproved;
+use App\Workflows\States\FinalDenied;
+use App\Workflows\States\FinalReturned;
 use App\Workflows\States\FOApproved;
 use App\Workflows\States\FODenied;
 use App\Workflows\States\FOReturned;
@@ -61,6 +65,12 @@ trait ProjectProSignals
     }
 
     #[SignalMethod]
+    public function complete()
+    {
+        $this->stateMachine->state->transitionTo(Complete::class);
+    }
+
+    #[SignalMethod]
     public function setfilesUploaded($status)
     {
         $this->files_uploaded = $status;
@@ -82,5 +92,23 @@ trait ProjectProSignals
     public function fo_deny()
     {
         $this->stateMachine->state->transitionTo(FODenied::class);
+    }
+
+    #[SignalMethod]
+    public function final_approve()
+    {
+        $this->stateMachine->state->transitionTo(FinalApproved::class);
+    }
+
+    #[SignalMethod]
+    public function final_return()
+    {
+        $this->stateMachine->state->transitionTo(FinalReturned::class);
+    }
+
+    #[SignalMethod]
+    public function final_deny()
+    {
+        $this->stateMachine->state->transitionTo(FinalDenied::class);
     }
 }

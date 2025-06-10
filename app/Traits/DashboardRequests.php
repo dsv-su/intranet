@@ -15,9 +15,22 @@ trait DashboardRequests
         $fo = collect(Dashboard::where('state', 'head_approved')->where('fo_id', $user)->where('type', 'travelrequest')->get());
 
         //PP
-        $head_pp = collect(Dashboard::where('state', 'submitted')->where('head_id', $user)->where('type', 'projectproposal')->get());
-        $vice_pp = collect(Dashboard::where('state', 'head_approved')->where('vice_id', $user)->where('type', 'projectproposal')->get());
-        $fo_pp = collect(Dashboard::where('state', 'vice_approved')->where('fo_id', $user)->where('type', 'projectproposal')->get());
+        $vice_pp = collect(Dashboard::where('state', 'submitted')
+                                    ->where('vice_id', $user)
+                                    ->where('type', 'projectproposal')
+                                    ->get());
+        $head_pp = collect(Dashboard::where('state', 'complete')
+                                    //->where('head_id', $user)
+                                    ->whereJsonContains('unit_head_approved', [$user => 0])
+                                    ->where('type', 'projectproposal')
+                                    ->whereHas('proposal', function ($projectQuery) {
+                                        $projectQuery->whereJsonLength('files', '>=', 2);
+                                    }) // Ensure 'files' contains at least 2 files
+                                    ->get());
+        $fo_pp = collect(Dashboard::where('state', 'head_approved')
+                                    ->where('fo_id', $user)
+                                    ->where('type', 'projectproposal')
+                                    ->get());
 
         return $manager->merge($fo)->merge($fo_pp)->merge($head)->merge($head_pp)->merge($vice_pp);
     }

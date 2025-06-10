@@ -77,9 +77,36 @@ class WorkflowHandler
         $this->workflow->vice_deny();
     }
 
+    public function Completed()
+    {
+        $this->workflow->complete();
+    }
+
     //Files have been uploaded
     public function UploadedFiles()
     {
         $this->workflow->setfilesUploaded(true);
+    }
+
+    //A File has been removed
+    public function RemovedFile()
+    {
+        $this->workflow->setfilesUploaded(false);
+    }
+
+    //Final
+    public function FinalApprove()
+    {
+        $this->workflow->final_approve();
+    }
+
+    public function FinalReturn()
+    {
+        $this->workflow->final_return();
+    }
+
+    public function FinalDeny()
+    {
+        $this->workflow->final_deny();
     }
 }

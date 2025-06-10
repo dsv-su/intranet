@@ -38,4 +38,65 @@ class ProjectProposal extends Model
         // && $dashboard->state == 'fo_approved' //alternative for only approved proposals
         return in_array($user->id, $allowed_roles);
     }
+
+    public function allowComplete(): bool
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        if (!$dashboard || (string) $dashboard->state !== 'submitted') {
+            return false;
+        }
+
+        return $user->id === $dashboard->user_id;
+    }
+
+    public function allowUpload(): bool
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        if (!$dashboard || !in_array((string)$dashboard->state, ['submitted'])) {
+            return false;
+        }
+
+        return $user->id === $dashboard->user_id;
+    }
+
+    public function allowSend(): bool
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        if (!$dashboard || (string) $dashboard->state !== 'final_approved') {
+            return false;
+        }
+
+        return $user->id === $dashboard->user_id;
+    }
+
+    public function allowGrant(): bool
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        if (!$dashboard || (string) $dashboard->state !== 'sent') {
+            return false;
+        }
+
+        return $user->id === $dashboard->user_id;
+    }
+
+    public function allowReject(): bool
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        if (!$dashboard || (string) $dashboard->state !== 'sent') {
+            return false;
+        }
+
+        return $user->id === $dashboard->user_id;
+    }
+
 }

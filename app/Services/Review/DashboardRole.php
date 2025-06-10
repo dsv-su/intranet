@@ -8,7 +8,7 @@ use App\Models\User;
 class DashboardRole
 {
     private $dashboard;
-    private $reviewer;
+    //private $reviewer;
 
     public function __construct(Dashboard $dashboard, User $reviewer)
     {
@@ -20,18 +20,18 @@ class DashboardRole
     {
         // Map states to role fields
         $roles = [
-            'submitted' => 'head_id',
-            'head_approved' => 'vice_id',
-            'vice_approved' => 'fo_id',
+            'complete' => 'vice_id',
+            'vice_approved' => 'head_id',
+            'head_approved' => 'fo_id',
+            'fo_approved' => 'vice_id',
         ];
 
         // Get the state as a string
         $currentState = (string) $this->dashboard->state;
-
-        if (array_key_exists($currentState, $roles) && in_array($this->reviewer->id, $this->dashboard->unit_heads, true)) {
+        // && in_array($this->reviewer->id, $this->dashboard->unit_heads, true
+        if (array_key_exists($currentState, $roles)) {
             return $this->getRoleFromState($currentState);
         }
-
 
         return false;
     }
@@ -39,9 +39,10 @@ class DashboardRole
     private function getRoleFromState($state)
     {
         $roleMapping = [
-            'submitted' => 'head',
-            'head_approved' => 'vice',
-            'vice_approved' => 'fo',
+            'complete' => 'vice',
+            'vice_approved' => 'head',
+            'head_approved' => 'fo',
+            'fo_approved' => 'vice_final',
         ];
 
         return $roleMapping[$state] ?? false; // Return the role or false if not found

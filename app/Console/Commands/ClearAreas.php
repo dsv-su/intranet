@@ -28,10 +28,15 @@ class ClearAreas extends Command
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('research_areas')->truncate();
+        DB::table('dsv_budgets')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         // Run a specific seeder
         $this->call('db:seed', [
             '--class' => 'ResearchAreaSeeder',
+            '--force' => true,
+        ]);
+        $this->call('db:seed', [
+            '--class' => 'DsvBudgetsSeeder',
             '--force' => true,
         ]);
 

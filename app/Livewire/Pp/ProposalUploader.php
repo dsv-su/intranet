@@ -5,6 +5,7 @@ namespace App\Livewire\Pp;
 use App\Models\Dashboard;
 use App\Models\ProjectProposal;
 use App\Services\Review\WorkflowHandler;
+use App\Services\Settings\ProposalsDirectory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -17,6 +18,8 @@ class ProposalUploader extends Component
     use WithFileUploads;
 
     const PREAPPROVED = 'vice_approved';
+    const SUBMITTED = 'submitted';
+    const APPROVED = 'final_approved';
 
     public $proposal;
     public $dashboard;
@@ -25,29 +28,38 @@ class ProposalUploader extends Component
     public $stored = false;
     public $directory;
     public $allow;
+    public $type;
 
     protected $listeners = [
         'upload_refresh' => '$refresh'
     ];
 
-    public function mount($proposal)
+    public function mount($proposal, $type)
     {
         $this->proposal = $proposal;
-        $this->directory = '/proposals/' . $this->proposal->id;
-        $this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
-        $this->allowUpload();
+        $this->type = $type;
+        $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT;
+        //$this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
+        //$this->allowUpload();
+        if($this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first()) {
+            $this->allowUpload();
+        } else {
+            $this->allow = true;
+        }
     }
 
     public function checkFileStatus()
     {
         $files = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
+        //$workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
 
         if (count($files) >= 2) {
             //Signal workflow
-            $workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
-            $workflowhandler->UploadedFiles();
-
+            //$workflowhandler->UploadedFiles();
             return $this->reportStageStatus('uploaded');
+        } else {
+            //Signal workflow
+            //$workflowhandler->RemovedFile();
         }
 
         return $this->reportStageStatus('waiting');
@@ -63,11 +75,10 @@ class ProposalUploader extends Component
     public function allowUpload()
     {
         $user = Auth::user();
-        //$dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
 
         $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
-        if (in_array($user->id, $allowed_roles) && $this->dashboard->state == self::PREAPPROVED) {
+        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::SUBMITTED or $this->dashboard->state == self::APPROVED) ) {
             $this->allow = true;
         } else {
             $this->allow = false;
@@ -92,10 +103,11 @@ class ProposalUploader extends Component
     {
         foreach($this->files as $file) {
             $this->savedfiles[$file->getClientOriginalName()] = [
-                'path' => basename($file->store(path: 'proposals/'. $this->proposal->id)),
+                'path' => $file->store(path: $this->directory),
                 'tmp' => basename($file->getRealPath()),
                 'size' => round($file->getSize()/1000),
                 'date' => now()->format('d/m/Y'),
+                'type' => 'draft',
                 'uploader' => Auth::user()->name
                 ];
         }
@@ -114,6 +126,7 @@ class ProposalUploader extends Component
         $this->proposal->files = array_merge($this->proposal->files, $this->savedfiles);
         $this->proposal->save();
         $this->savedfiles = [];
+        //$this->dispatch('upload_refresh');
     }
 
     public function checkToggle()
@@ -132,7 +145,7 @@ class ProposalUploader extends Component
     {
         // Get the current files array
         $files = $this->proposal->files;
-        $remove = $this->directory .'/'. $files[$id]['path'];
+        $remove = $files[$id]['path'];
 
         //For debugging
         //$livewireID = $files[$id]['path'];
@@ -158,7 +171,9 @@ class ProposalUploader extends Component
     public function removefolder()
     {
         $this->proposal->files = [];
-        Storage::deleteDirectory($this->directory);
+        Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT);
+        Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET);
+        Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::FINAL);
         $this->proposal->save();
         $this->files = [];
         $this->reportStageStatus('pending');
@@ -168,14 +183,18 @@ class ProposalUploader extends Component
     {
         // Get the current files array
         $files = $this->proposal->files;
-        $downloadfile = $this->directory .'/'. $files[$id]['path'];
+        $downloadfile = $files[$id]['path'];
 
         return Storage::download($downloadfile, $id);
     }
 
     public function downloadfolder()
     {
-        $files = Storage::files($this->directory);
+        $draft = Storage::files(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT);
+        $budget = Storage::files(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET);
+        $final = Storage::files(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::FINAL);
+        $files = array_merge($draft, $budget, $final);
+
         $originalfiles = $this->proposal->files;
         $zip = new ZipArchive;
         $zipFileName = "download/" . 'ProjectProposal-' . $this->proposal->name . '.zip';
@@ -192,7 +211,7 @@ class ProposalUploader extends Component
                 $filePath = Storage::path($file); // Get absolute path
                 // Match name from model
                 foreach ($originalfiles as $key => $orignal) {
-                    if($orignal['path'] == basename($file)) {
+                    if(basename($orignal['path']) == basename($file)) {
                         $set_zipname = $key;
                     }
                 }

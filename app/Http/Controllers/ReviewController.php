@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dashboard;
-use App\Models\HeadGroup;
+use App\Models\DsvBudget;
 use App\Models\ProjectProposal;
 use App\Models\ResearchArea;
 use App\Models\SettingsFo;
@@ -28,9 +28,8 @@ class ReviewController extends Controller
         $viewData = $this->prepareProjectProposalData();
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-
         $viewData['type'] = 'view';
-        //dd($viewData);
+
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
@@ -39,11 +38,18 @@ class ReviewController extends Controller
         $viewData = $this->prepareProjectProposalData();
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-
+        $viewData['budget'] = DsvBudget::find(1);
+        $viewData['reviewer'] =  auth()->user();
         $viewData['type'] = 'review';
-        //dd($viewData);
+
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
+
+    /***
+     * @return array
+     *
+     * New Review flow
+     */
 
     private function prepareProjectProposalData()
     {

@@ -4,6 +4,7 @@ namespace App\Livewire\Pp;
 
 use App\Models\Dashboard;
 use App\Models\ProjectProposal;
+use App\Services\Awaiting\AwaitingDashboard;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -16,22 +17,12 @@ class AwaitingProjectProposal extends Component
     {
         //Awaiting proposals
         $user = Auth::user();
-        $awaitingDashboard = Dashboard::where('type', 'projectproposal')
-            ->where(function ($query) use ($user) {
-                $query->where('state', 'submitted')
-                    ->whereJsonContains('unit_head_approved', [$user->id => 0])
-                    ->orWhere(function ($query) use ($user) {
-                        $query->where('state', 'head_approved')
-                            ->where('vice_id', $user->id);
-                    })->orWhere(function ($query) use ($user) {
-                        $query->where('state', 'vice_approved')
-                            ->where('fo_id', $user->id);
-                    });
-            })
-            ->pluck('request_id');
+        $awiting = new AwaitingDashboard($user);
+        $awaitingDashboard = $awiting->proposals();
 
         $proposals = ProjectProposal::with('dashboard')
             ->whereIn('id', $awaitingDashboard)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $this->review = true;
