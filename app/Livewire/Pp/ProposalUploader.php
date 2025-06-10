@@ -18,7 +18,7 @@ class ProposalUploader extends Component
     use WithFileUploads;
 
     const PREAPPROVED = 'vice_approved';
-    const COMPLETE = 'complete';
+    const SUBMITTED = 'submitted';
     const APPROVED = 'final_approved';
 
     public $proposal;
@@ -39,22 +39,27 @@ class ProposalUploader extends Component
         $this->proposal = $proposal;
         $this->type = $type;
         $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT;
-        $this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
-        $this->allowUpload();
+        //$this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
+        //$this->allowUpload();
+        if($this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first()) {
+            $this->allowUpload();
+        } else {
+            $this->allow = true;
+        }
     }
 
     public function checkFileStatus()
     {
         $files = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
-        $workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
+        //$workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
 
         if (count($files) >= 2) {
             //Signal workflow
-            $workflowhandler->UploadedFiles();
+            //$workflowhandler->UploadedFiles();
             return $this->reportStageStatus('uploaded');
         } else {
             //Signal workflow
-            $workflowhandler->RemovedFile();
+            //$workflowhandler->RemovedFile();
         }
 
         return $this->reportStageStatus('waiting');
@@ -73,7 +78,7 @@ class ProposalUploader extends Component
 
         $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
-        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::COMPLETE or $this->dashboard->state == self::APPROVED) ) {
+        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::SUBMITTED or $this->dashboard->state == self::APPROVED) ) {
             $this->allow = true;
         } else {
             $this->allow = false;
@@ -121,6 +126,7 @@ class ProposalUploader extends Component
         $this->proposal->files = array_merge($this->proposal->files, $this->savedfiles);
         $this->proposal->save();
         $this->savedfiles = [];
+        //$this->dispatch('upload_refresh');
     }
 
     public function checkToggle()

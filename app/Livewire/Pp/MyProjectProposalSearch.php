@@ -24,6 +24,7 @@ class MyProjectProposalSearch extends Component
         //My proposals
         $proposals = ProjectProposal::with('dashboard')
             ->where('user_id', $user->id)
+            ->where('status_stage3', '!=', 'pending')
             ->where(function($query) {
                 $query->where('name', 'like', '%'. $this->searchProposal .'%')
                     ->orWhere('id', 'like', '%'. $this->searchProposal .'%')

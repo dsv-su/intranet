@@ -16,7 +16,7 @@ class ProposalBudgetUploader extends Component
     use WithFileUploads;
 
     const PREAPPROVED = 'vice_approved';
-    const COMPLETE = 'complete';
+    const SUBMITTED = 'submitted';
     const APPROVED = 'final_approved';
 
     public $proposal;
@@ -37,22 +37,27 @@ class ProposalBudgetUploader extends Component
         $this->proposal = $proposal;
         $this->type = $type;
         $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET;
-        $this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
-        $this->allowUpload();
+        //$this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
+        //$this->allowUpload();
+        if($this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first()) {
+            $this->allowUpload();
+        } else {
+            $this->allow = true;
+        }
     }
 
     public function checkFileStatus()
     {
         $budgetfiles = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
-        $workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
+        //$workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
 
         if (count($budgetfiles) >= 2) {
             //Signal workflow
-            $workflowhandler->UploadedFiles();
+            //$workflowhandler->UploadedFiles();
             return $this->reportStageStatus('uploaded');
         } else {
             //Signal workflow
-            $workflowhandler->RemovedFile();
+            //$workflowhandler->RemovedFile();
         }
 
         return $this->reportStageStatus('waiting');
@@ -71,7 +76,7 @@ class ProposalBudgetUploader extends Component
 
         $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
-        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::COMPLETE or $this->dashboard->state == self::APPROVED) ) {
+        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::SUBMITTED or $this->dashboard->state == self::APPROVED) ) {
             $this->allow = true;
         } else {
             $this->allow = false;

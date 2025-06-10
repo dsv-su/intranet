@@ -17,7 +17,7 @@ class AdminController extends Controller
 
     public function pp()
     {
-        $viewData['proposals'] = ProjectProposal::paginate(5);
+        $viewData['proposals'] = ProjectProposal::where('status_stage3', '!=', 'pending')->paginate(5);
         $viewData['breadcrumb'] = 'Admin';
         return (new \Statamic\View\View)
             ->template('pp.admin.index')

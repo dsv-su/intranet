@@ -44,7 +44,7 @@ class ProjectProposal extends Model
         $user = Auth::user();
         $dashboard = Dashboard::where('request_id', $this->id)->first();
 
-        if (!$dashboard || (string) $dashboard->state !== 'vice_approved') {
+        if (!$dashboard || (string) $dashboard->state !== 'submitted') {
             return false;
         }
 
@@ -56,7 +56,7 @@ class ProjectProposal extends Model
         $user = Auth::user();
         $dashboard = Dashboard::where('request_id', $this->id)->first();
 
-        if (!$dashboard || !in_array((string)$dashboard->state, ['vice_approved', 'complete'])) {
+        if (!$dashboard || !in_array((string)$dashboard->state, ['submitted'])) {
             return false;
         }
 

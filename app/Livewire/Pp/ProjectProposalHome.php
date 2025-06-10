@@ -6,8 +6,10 @@ use App\Models\Dashboard;
 use App\Models\FundingOrganization;
 use App\Models\ProjectProposal;
 use App\Services\Awaiting\AwaitingDashboard;
+use App\Services\Settings\ProposalsDirectory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 
 class ProjectProposalHome extends Component
@@ -17,13 +19,13 @@ class ProjectProposalHome extends Component
     public $awaiting;
     public $funding_organizations;
 
-    public function mount(ProjectProposal $proposals)
+    public function mount()
     {
-        $this->proposals = $proposals;
+        $this->proposals = ProjectProposal::where('status_stage3', '!=', 'pending')->get();
         $user = Auth::user();
         $this->my($user);
         $this->awaiting($user);
-        $this->funding_organizations = FundingOrganization::all()->count();
+        $this->funding_organizations = FundingOrganization::count();
     }
 
     public function hydrate()
@@ -34,7 +36,8 @@ class ProjectProposalHome extends Component
 
     public function my($user)
     {
-        $this->myproposals = $this->proposals::where('user_id', $user->id)->get();
+        $this->myproposals = ProjectProposal::where('user_id', $user->id)
+            ->where('status_stage3', '!=', 'pending')->get();
     }
 
     public function awaiting($user)

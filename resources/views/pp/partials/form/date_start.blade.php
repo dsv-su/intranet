@@ -7,7 +7,7 @@
             </svg>
         </button>
     </label>
-    @if($type == 'complete' or $type == 'edit' or $type == 'resume')
+    @if($type == 'preapproval' or $type == 'edit' or $type == 'resume')
         <div class="flex flex-col sm:flex-row items-center w-full">
             <div class="relative w-full">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -20,7 +20,7 @@
                 @enderror
                 <input id="datepicker-autohide" datepicker datepicker-autohide datepicker-format="dd/mm/yyyy"
                        name="start_date"
-                       @if($type == 'complete' or $type == 'edit' or $type == 'resume')
+                       @if($type == 'preapproval' or $type == 'edit' or $type == 'resume')
                        value="{{ $proposal['pp']['start_date'] ?? ''}}"
                        @endif id="endInput" type="text"
                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5

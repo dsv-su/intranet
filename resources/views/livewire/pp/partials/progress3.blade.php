@@ -1,63 +1,66 @@
 {{--}}
 10% → Submitted
-25% → Preapproval
-40% → Complete
-50% → UHApproval
-60% → Submission
-80% → Budget Review
-98% → Final Approval
+15% → Complete
+20% → Vice Approval
+40% → UHApproval
+60% → Budget Review
+80% → Final Approval
 100% → Sent
 {{--}}
 @switch((string) $proposal->dashboard?->state ?? '')
     @case('submitted')
         @php
             $progress = 10;
+            $message = 'Upload files';
             $color = 'bg-yellow-400';
-        @endphp
-        @break
-    @case('vice_approved')
-        @php
-            $progress = 25;
-            $color = 'bg-purple-600';
         @endphp
         @break
     @case('complete')
     @php
-        $progress = 40;
-        $color = 'bg-blue-600';
+        $progress = 15;
+        $message = 'Processing';
+        $color = 'bg-purple-600';
     @endphp
     @break
+    @case('vice_approved')
+        @php
+            $progress = 25;
+            $message = 'Processing';
+            $color = 'bg-purple-600';
+        @endphp
+        @break
     @case('head_approved')
         @php
-            $progress = 50;
+            $progress = 55;
+            $message = 'Processing';
             $color = 'bg-blue-600';
         @endphp
         @break
     @case('fo_approved')
         @php
-            $progress = 75;
-            //$color = 'bg-green-600';
+            $progress = 65;
+            $message = 'Processing';
             $color = 'bg-blue-600';
         @endphp
         @break
     @case('final_approved')
         @php
-            $progress = 98;
-            //$color = 'bg-green-600';
+            $progress = 85;
+            $message = 'Ready to send';
             $color = 'bg-blue-600';
         @endphp
         @break
     @case('sent')
     @php
         $progress = 100;
-        //$color = 'bg-green-600';
+        $message = '';
         $color = 'bg-blue-600';
     @endphp
     @break
     @case('granted')
     @php
         $progress = 100;
-        //$color = 'bg-green-600';
+        $message = '';
         $color = 'bg-blue-600';
     @endphp
     @break
@@ -66,43 +69,50 @@
     @case('fo_denied')
         @php
             $progress = 0;
+            $message = '';
             $color = 'bg-red-600';
         @endphp
         @break
     @case('head_returned')
     @php
-        $progress = 40;
+        $progress = 50;
+        $message = '';
         $color = 'bg-yellow-200';
     @endphp
     @break
     @case('vice_returned')
     @php
         $progress = 0;
+        $message = '';
         $color = 'bg-yellow-200';
     @endphp
     @break
     @case('fo_returned')
         @php
-            $progress = 50;
+            $progress = 75;
+            $message = '';
             $color = 'bg-yellow-200';
         @endphp
         @break
     @case('final_returned')
     @php
-        $progress = 75;
+        $progress = 80;
+        $message = '';
         $color = 'bg-yellow-200';
     @endphp
     @break
     @case('denied')
     @php
         $progress = 100;
+        $message = '';
         $color = 'bg-red-600';
     @endphp
     @break
     @default
         @php
             $progress = 0;
-            $color = 'bg-red-600';
+            $message = 'Pending';
+            $color = 'bg-yellow-200';
         @endphp
         @break
 @endswitch
@@ -120,7 +130,7 @@
                 <!-- Progress Percentage -->
                 <div class="absolute -top-4 text-xs font-semibold text-blue-500 transition-all duration-500"
                      style="left: calc({{ $progress }}% - 10px);">
-                    {{ $progress }}%
+                    {{$message}}
                 </div>
                 <!-- Step 1: Submitted -->
                 <div class="relative z-10 grid h-3 w-3 cursor-pointer place-items-center rounded-full
@@ -133,23 +143,23 @@
                     </div>
                 </div>
 
-                <!-- Step 2: PreApproval -->
+                <!-- Step 2: Vice Approval -->
                 <div class="relative z-10 grid h-3 w-3 cursor-pointer place-items-center rounded-full
-                    {{ $progress >= 25 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
+                    {{ $progress >= 20 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
                     <div class="absolute -bottom-[1.8rem] w-max text-center text-xs">
                         <h6 class="hidden md:block uppercase font-sans text-[0.65rem] antialiased font-semibold leading-relaxed tracking-normal
-                            {{ $progress >= 25 ? 'text-blue-500' : 'text-gray-500' }}">
-                            PreApproval
+                            {{ $progress >= 20 ? 'text-blue-500' : 'text-gray-500' }}">
+                            Vice Approval
                         </h6>
                     </div>
                 </div>
 
                 <!-- Step 3: UH Approval -->
                 <div class="relative z-10 grid h-3 w-3 cursor-pointer place-items-center rounded-full
-                    {{ $progress >= 50 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
+                    {{ $progress >= 40 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
                     <div class="absolute -bottom-[1.8rem] w-max text-center text-xs">
                         <h6 class="hidden md:block uppercase font-sans text-[0.65rem] antialiased font-semibold leading-relaxed tracking-normal
-                            {{ $progress >= 50 ? 'text-blue-500' : 'text-gray-500' }}">
+                            {{ $progress >= 40 ? 'text-blue-500' : 'text-gray-500' }}">
                             UH Approval
                         </h6>
                     </div>
@@ -157,10 +167,10 @@
 
                 <!-- Step 4: Budget Review -->
                 <div class="relative z-10 grid h-3 w-3 cursor-pointer place-items-center rounded-full
-                    {{ $progress >= 75 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
+                    {{ $progress >= 60 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
                     <div class="absolute -bottom-[1.8rem] w-max text-center text-xs">
                         <h6 class="hidden md:block uppercase font-sans text-[0.65rem] antialiased font-semibold leading-relaxed tracking-normal
-                            {{ $progress >= 75 ? 'text-blue-500' : 'text-gray-500' }}">
+                            {{ $progress >= 60 ? 'text-blue-500' : 'text-gray-500' }}">
                             Budget Review
                         </h6>
                     </div>
@@ -168,15 +178,22 @@
 
                 <!-- Step 5: Final Approval -->
                 <div class="relative z-10 grid h-3 w-3 cursor-pointer place-items-center rounded-full
-                    {{ $progress >= 98 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
+                    {{ $progress >= 80 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
                     <div class="absolute -bottom-[1.8rem] w-max text-center text-xs">
                         <h6 class="hidden md:block uppercase font-sans text-[0.65rem] antialiased font-semibold leading-relaxed tracking-normal
-                            {{ $progress >= 98 ? 'text-blue-500' : 'text-gray-500' }}">
-                            @if($proposal->dashboard?->state == 'sent')
-                                Sent
-                            @else
-                                Final Approval
-                            @endif
+                            {{ $progress >= 80 ? 'text-blue-500' : 'text-gray-500' }}">
+                            Final Approval
+                        </h6>
+                    </div>
+                </div>
+
+                <!-- Step 6: Sent -->
+                <div class="relative z-10 grid h-3 w-3 cursor-pointer place-items-center rounded-full
+                    {{ $progress >= 75 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
+                    <div class="absolute -bottom-[1.8rem] w-max text-center text-xs">
+                        <h6 class="hidden md:block uppercase font-sans text-[0.65rem] antialiased font-semibold leading-relaxed tracking-normal
+                            {{ $progress >= 75 ? 'text-blue-500' : 'text-gray-500' }}">
+                            Sent
                         </h6>
                     </div>
                 </div>

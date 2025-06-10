@@ -4,10 +4,13 @@ namespace App\Workflows;
 
 use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
+use App\Workflows\Notifications\CompletProjectProposalNotification;
+use App\Workflows\Notifications\NewFinalApprovalNotification;
 use App\Workflows\Notifications\NewProjectProposalNotification;
 use App\Workflows\Notifications\RequestFilesUploadNotification;
 use App\Workflows\Notifications\StateUpdateNotification;
 use App\Workflows\Partials\RequestStates;
+use App\Workflows\Transitions\Stage2UpdateTransition;
 use App\Workflows\Transitions\StateUpdateTransition;
 use Workflow\ActivityStub;
 use Workflow\Models\StoredWorkflow;
@@ -20,6 +23,12 @@ class DSVProjectPWorkflow extends Workflow
     protected $heads;
 
     use ProjectProSignals;
+
+    //Submit
+    public function isSubmitted()
+    {
+        return $this->stateMachine->state->status() === 'submitted';
+    }
 
     //Head
     public function HeadApproved()
@@ -35,6 +44,12 @@ class DSVProjectPWorkflow extends Workflow
     public function HeadDenied()
     {
         return $this->stateMachine->state->status() === 'head_denied';
+    }
+
+    //Complete
+    public function isComplete()
+    {
+        return $this->stateMachine->state->status() === 'complete';
     }
 
     //Vice
@@ -75,10 +90,20 @@ class DSVProjectPWorkflow extends Workflow
         return $this->stateMachine->state->status() === 'fo_denied';
     }
 
-    //Wait for statechange
-    public function isSubmitted()
+    //Final approval
+    public function FinalApproved()
     {
-        return $this->stateMachine->state->status() === 'submitted';
+        return $this->stateMachine->state->status() === 'final_approved';
+    }
+
+    public function FinalReturned()
+    {
+        return $this->stateMachine->state->status() === 'final_returned';
+    }
+
+    public function FinalDenied()
+    {
+        return $this->stateMachine->state->status() === 'final_denied';
     }
 
     public function __construct(
@@ -100,13 +125,49 @@ class DSVProjectPWorkflow extends Workflow
         $commonActivities = $this->getCommonActivities($userRequest);
         yield $commonActivities[0];
 
-        //Email to Head
-        yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::UNIT_HEAD, $userRequest);
-        //yield ActivityStub::make(PPStatusUpdateUsersStage1::class, RequestStates::UNIT_HEAD, 'review', $userRequest);
+        //Check for files
+        if(!$this->UploadedFiles()) {
+            //Notify user request files upload
+            yield ActivityStub::make(RequestFilesUploadNotification::class, $userRequest);
+        } else {
+            $this->complete();
+        }
+
+        //Wait for user to upload files
+        yield WorkflowStub::await(fn () => ($this->isComplete()));
 
         //Email to Vice
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::VICE, $userRequest);
         //yield ActivityStub::make(PPStatusUpdateUsersStage1::class, RequestStates::VICE, 'review', $userRequest);
+
+        //Wait for vice decision
+        yield WorkflowStub::await(fn () => ($this->ViceApproved() || $this->ViceDenied() || $this->ViceReturned()));
+        //Handle vice decision
+        $newState = $this->getState();
+        $commonActivities = $this->getCommonActivities($userRequest);
+
+        // Await stateupdate
+        yield $commonActivities[0];
+
+        switch ($newState) {
+            case RequestStates::VICE_APPROVED:
+                //Request has been approved by head
+
+                break;
+            case RequestStates::VICE_RETURNED:
+            case RequestStates::VICE_DENIED:
+                //Request has been returned or denied by vice
+                foreach ($commonActivities as $activity) {
+                    yield $activity;
+                }
+
+                //End workflow
+                return $this->stateMachine->state->status();
+        }
+
+        //Email to Head
+        yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::UNIT_HEAD, $userRequest);
+        //yield ActivityStub::make(PPStatusUpdateUsersStage1::class, RequestStates::UNIT_HEAD, 'review', $userRequest);
 
         //Wait for head decision
         yield WorkflowStub::await(fn () => ($this->HeadApproved() || $this->HeadDenied() || $this->HeadReturned()));
@@ -136,38 +197,6 @@ class DSVProjectPWorkflow extends Workflow
                 return $this->stateMachine->state->status();
         }
 
-        //Wait for vice decision
-        yield WorkflowStub::await(fn () => ($this->ViceApproved() || $this->ViceDenied() || $this->ViceReturned()));
-
-        //Handle vice decision
-        $newState = $this->getState();
-        $commonActivities = $this->getCommonActivities($userRequest);
-
-        // Await stateupdate
-        yield $commonActivities[0];
-
-        switch ($newState) {
-            case RequestStates::VICE_APPROVED:
-                //Request has been approved by head
-
-                //Notify user request files upload
-                yield ActivityStub::make(RequestFilesUploadNotification::class, $userRequest);
-
-                break;
-            case RequestStates::VICE_RETURNED:
-            case RequestStates::VICE_DENIED:
-            //Request has been returned or denied by vice
-            foreach ($commonActivities as $activity) {
-                yield $activity;
-            }
-
-                //End workflow
-                return $this->stateMachine->state->status();
-        }
-
-        //Wait for user to upload files
-        yield WorkflowStub::await(fn () => ($this->UploadedFiles()));
-
         //Email to FO for review
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::FINACIAL_OFFICER, $userRequest);
 
@@ -184,9 +213,12 @@ class DSVProjectPWorkflow extends Workflow
         switch ($newState) {
             case RequestStates::FO_APPROVED:
                 //Request has been approved by fo
-                foreach ($commonActivities as $activity) {
-                    yield $activity;
-                }
+                //Update stage2
+                yield ActivityStub::make(Stage2UpdateTransition::class, $userRequest);
+
+                //Final approval request Email to Vice
+                yield ActivityStub::make(NewFinalApprovalNotification::class, RequestStates::VICE, $userRequest);
+
 
                 break;
             case RequestStates::FO_RETURNED:
@@ -199,6 +231,17 @@ class DSVProjectPWorkflow extends Workflow
                 return $this->stateMachine->state->status();
         }
 
+        //Wait for Final decision
+        yield WorkflowStub::await(fn () => ($this->FinalApproved() || $this->FinalDenied() || $this->FinalReturned()));
+
+        //Notify user
+        $commonActivities = $this->getCommonActivities($userRequest);
+        foreach ($commonActivities as $activity) {
+            yield $activity;
+        }
+
+        //Update stage2
+        yield ActivityStub::make(Stage2UpdateTransition::class, $userRequest);
         //End workflow
         return $this->stateMachine->state->status();
     }

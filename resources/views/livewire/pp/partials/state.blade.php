@@ -8,32 +8,31 @@
         @break
     @case('submitted')
         @php
-            $state = 'SUBMITTED';
+            $state = 'AWAITING';
             $bgcolor = 'bg-yellow-100';
             $textcolor = 'text-yellow-800';
         @endphp
         @break
-    {{--}}
-    @case('head_approved')
-        @php
-            $state = 'REVIEW VH';
-            $bgcolor = 'bg-blue-100';
-            $textcolor = 'text-blue-800';
-        @endphp
-        @break
-    {{--}}
+    @case('complete')
+    @php
+        $state = 'SUBMITTED';
+        $bgcolor = 'bg-yellow-100';
+        $textcolor = 'text-yellow-800';
+    @endphp
+    @break
+    @case('complete')
     @case('vice_approved')
     @case('head_approved')
     @case('fo_approved')
         @php
-            $state = 'PREAPPROVED';
+            $state = 'PROCESSING';
             $bgcolor = 'bg-blue-100';
             $textcolor = 'text-blue-800';
         @endphp
         @break
     @case('final_approved')
         @php
-            $state = 'APPROVED';
+            $state = 'AWAITING';
             $bgcolor = 'bg-green-100';
             $textcolor = 'text-green-800';
         @endphp
@@ -46,20 +45,12 @@
     @endphp
     @break
     @case('granted')
-    @php
-        $state = 'GRANTED';
-        $bgcolor = 'bg-purple-50';
-        $textcolor = 'text-purple-700';
-    @endphp
-    @break
-    @case('complete')
         @php
-            $state = 'AWAITING';
-            $bgcolor = 'bg-yellow-100';
-            $textcolor = 'text-yellow-800';
+            $state = 'GRANTED';
+            $bgcolor = 'bg-purple-50';
+            $textcolor = 'text-purple-700';
         @endphp
         @break
-
     @case('head_denied')
     @case('vice_denied')
     @case('fo_denied')

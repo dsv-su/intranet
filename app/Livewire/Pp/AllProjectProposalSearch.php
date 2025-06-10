@@ -30,14 +30,17 @@ class AllProjectProposalSearch extends Component
     {
         if ($this->hideDenied) {
             return ProjectProposal::with('dashboard')
+                ->where('status_stage3', '!=', 'pending')
                 ->where(function($query) {
                     $query->where('name', 'like', '%'. $this->searchProposal .'%')
                         ->orWhere('pp', 'like', '%'. $this->searchProposal .'%');
                 })
                 ->where('pp->status', '!=', 'denied') // Dont retrive denied proposals
+                ->orderBy('created_at', 'desc')
                 ->paginate(6);
         } else {
             return ProjectProposal::with('dashboard')
+                ->where('status_stage3', '!=', 'pending')
                 ->where(function($query) {
                     $query->where('name', 'like', '%'. $this->searchProposal .'%')
                         ->orWhere('pp', 'like', '%'. $this->searchProposal .'%');
