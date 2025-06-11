@@ -24,7 +24,7 @@
                        disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500
                        dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                        @if($proposal->pp['eu_wallenberg'] ?? false)
-                           @if($proposal->pp['eu_wallenberg'] == 'no')
+                           @if($proposal->pp['eu_wallenberg'] === 'no')
                             checked
                            @endif
                        @endif
@@ -42,7 +42,7 @@
                        disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500
                        dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                        @if($proposal->pp['eu_wallenberg'] ?? false or $wallenbergOrg)
-                           @if($proposal->pp['eu_wallenberg'] ?? null === 'yes' || $wallenbergOrg)
+                           @if($proposal->pp['eu_wallenberg'] === 'yes' || $wallenbergOrg)
                             checked
                            @endif
                        @endif

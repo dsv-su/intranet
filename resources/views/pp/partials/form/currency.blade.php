@@ -34,7 +34,7 @@
                    @elseif(!in_array($type, ['review', 'view', 'sent', 'granted']) || ($proposal['pp']['currency'] ?? '') != 'us')
                    disabled
                    @endif
-                   @if(in_array($type, ['review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'us')
+                   @if(in_array($type, ['complete', 'review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'us')
                    checked
                 @endif>
 
@@ -50,7 +50,7 @@
                    @elseif(!in_array($type, ['review', 'view', 'sent', 'granted']) || ($proposal['pp']['currency'] ?? '') != 'euro')
                    disabled
                    @endif
-                   @if(in_array($type, ['review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'euro')
+                   @if(in_array($type, ['complete', 'review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'euro')
                    checked
                 @endif>
 

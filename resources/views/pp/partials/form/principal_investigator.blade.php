@@ -7,7 +7,7 @@
         </button>
     </label>
     <input type="text" name="principal_investigator" id="principal_investigator" readonly
-           class="font-mono @if($type == 'complete') bg-blue-300 @else bg-gray-50 @endif
+           class="font-mono @if($type == 'complete') bg-blue-300 bg-opacity-60 @else bg-gray-50 @endif
                border border-blue-600 text-gray-900 text-sm font-semibold rounded-lg focus:ring-primary-600 focus:border-primary-600
                     block w-full p-2.5 @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
                dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -22,7 +22,7 @@
         </button>
     </label>
     <input type="text" name="principal_investigator_email" id="principal_investigator_email" readonly
-           class="font-mono @if($type == 'complete') bg-blue-300 @else bg-gray-50 @endif
+           class="font-mono @if($type == 'complete') bg-blue-300 bg-opacity-60 @else bg-gray-50 @endif
                border border-blue-600 text-gray-900 text-sm font-semibold rounded-lg focus:ring-primary-600 focus:border-primary-600
                     block w-full p-2.5 @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
                dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"

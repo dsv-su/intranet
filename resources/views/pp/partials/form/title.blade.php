@@ -8,10 +8,10 @@
         </button>
     </label>
     <input type="text" name="title" id="project"
-           class="font-mono @if($type == 'complete') bg-blue-300 @else bg-gray-50 @endif
+           class="font-mono @if($type == 'complete') bg-blue-300 bg-opacity-60 @else bg-gray-50 @endif
                border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                block w-full p-2.5
-@if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
+                @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
                dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
            value="{{ old('title') ? old('title'): $proposal['pp']['title'] ??  '' }}" placeholder="Title" @if($type == 'preapproval' or $type == 'edit' or $type == 'resume') required=""  @else readonly @endif>
     @error('name')

@@ -21,14 +21,6 @@
                         {{$reviewer->name}}
                     </span>
                 </div>
-                <div class="flex items-center gap-2 flex-wrap break-words">
-                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white">Role:</h2>
-                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
-                        bg-transparent text-blue-700 ring-1 ring-inset ring-blue-700/10
-                        dark:bg-transparent dark:text-blue-200 dark:ring-blue-300/20 break-words max-w-full">
-                        N/A
-                    </span>
-                </div>
 
                 <div class="flex items-center gap-2 flex-wrap break-words">
                     <h2 class="text-xs font-semibold text-gray-900 dark:text-white">State:</h2>
@@ -66,6 +58,14 @@
                             {{$dashboard->state}}
                             @break
                         @endswitch
+                    </span>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap break-words">
+                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white">Next:</h2>
+                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                        bg-transparent text-blue-700 ring-1 ring-inset ring-blue-700/10
+                        dark:bg-transparent dark:text-blue-200 dark:ring-blue-300/20 break-words max-w-full">
+                        {{$role}}
                     </span>
                 </div>
             </div>

@@ -28,7 +28,7 @@
             <form method="post" action="{{route('new-submit')}}">
                 @csrf
 
-                @if(in_array($type, ['preapproval', 'complete', 'edit', 'resume', 'sent', 'granted', 'rejected']))
+                @if(in_array($type, ['preapproval', 'complete', 'review', 'edit', 'resume', 'sent', 'granted', 'rejected']))
                     <input type="hidden" name="id" value="{{$proposal->id}}">
                 @endif
 
@@ -88,7 +88,7 @@
                     <!--DSV coordinating -->
                     @if($type == 'preapproval')
                         <livewire:pp.dsv-coordination proposal="" />
-                    @elseif ($type == 'edit' or $type == 'resume')
+                    @elseif ($type == 'complete' or $type == 'edit' or $type == 'resume')
                         <livewire:pp.dsv-coordination :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.dsvcoordination')
@@ -97,7 +97,7 @@
                     <!-- Eu project -->
                     @if($type == 'preapproval')
                         <livewire:pp.eu-project proposal="" />
-                    @elseif ($type == 'edit' or $type == 'resume')
+                    @elseif ($type == 'complete' or $type == 'edit' or $type == 'resume')
                         <livewire:pp.eu-project :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.eu')
@@ -106,7 +106,7 @@
                     <!-- Eu Wallengenberg project -->
                     @if($type == 'preapproval')
                         <livewire:pp.eu-wallenberg-project proposal="" />
-                    @elseif ($type == 'edit' or $type == 'resume')
+                    @elseif ($type == 'complete' or $type == 'edit' or $type == 'resume')
                         <livewire:pp.eu-wallenberg-project :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.eu_wallenberg')
@@ -141,7 +141,7 @@
 
                     <!-- Project budget -->
                     @if(in_array($type, ['preapproval', 'complete', 'review', 'edit', 'resume', 'view', 'sent', 'granted']))
-                        <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
+                        <div id="project_budget" class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
                                     before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
                                     dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
                             Project budget
@@ -152,6 +152,14 @@
                         @include('pp.partials.form.budget_project')
                         <!-- Budget for DSV -->
                         @include('pp.partials.form.budget_dsv')
+
+                        <!-- Flashmessage for review update -->
+                        <div class="w-full sm:col-span-2 flex items-center text-xs text-blue-500 uppercase
+                        before:flex-1 after:flex-1 after:ms-6
+                        dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
+                            @include('pp.partials.flashmessage')
+                        </div>
+
                         <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
                                 before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
                                 dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">

@@ -247,7 +247,7 @@ class ProposalController extends Controller
                 $budget->cost_increment($pp->pp['research_area']);
 
 
-                if($dashboard->state == 'submitted' && count($pp->files) > 0) {
+                if($dashboard->state == 'submitted' && count($pp->files) > 1) {
 
                     //Transition
                     $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
@@ -403,8 +403,33 @@ class ProposalController extends Controller
                 $user = User::find($dashboard->user_id);
                 $vice = $this->getViceHeadUser();
                 //Mail::to($vice->email)->send(new GrantNotificationVice($user, $vice, $dashboard));
-
                 return redirect()->route('pp', 'my')->with('success', 'Your project proposal has been registered as a denied project!');
+
+            case 'review':
+                //dd($request->all());
+                //Updates project budget values
+                $pp = ProjectProposal::find($request->id);
+                $existingPp = $pp->pp; // Get existing JSON attribute as an array
+                // Merge new values while keeping existing subattributes
+                $updatedPp = array_merge($existingPp, $request->only([
+                    'budget_project', 'budget_dsv', 'cofinancing_needed', 'budget_php'
+                ]), [
+                    'submitted' => now(),
+                    'status' => 'revised'
+                ]);
+                // Update the model without clearing existing 'files'
+                $pp->update([
+                    'pp' => $updatedPp,  // Merged JSON attributes
+                ]);
+                $pp->save();
+                //Add comment
+                $comment = 'The budget has been revised by the financial administrator.';
+                $this->comments_update($request->id, $comment, 'updated');
+
+                return redirect()->back()
+                    ->withFragment('project_budget')
+                    ->with('success', 'Budget has been updated')
+                    ->withInput();
                 break;
         }
         dd('Error');
@@ -577,6 +602,9 @@ class ProposalController extends Controller
                 break;
             case 'rejected':
                 $comments_tag = $tag . '  ' . 'Proposal has been REJECTED reported by ' . $user . '  ' . $timestamp . '  ' . $tag;
+                break;
+            case 'updated':
+                $comments_tag = $tag . '  ' . 'Proposal has been REVISED by ' . $user . '  ' . $timestamp . '  ' . $tag;
                 break;
             default:
                 $comments_tag = $tag . '  ' . $user . '  ' . $timestamp . '  ' . $tag;
