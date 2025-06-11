@@ -1,4 +1,4 @@
-@if(count($proposal->files) > 0)
+@if(isset($proposal) && isset($proposal->files) && count($proposal->files) > 0)
 
         <h3 class="mb-4 text-blue-600 font-semibold dark:font-medium dark:text-white">Uploaded files!</h3>
         <!-- File card -->

@@ -12,12 +12,12 @@
             <input type="radio" name="currency" value="sek"
                    class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                    id="currency"
-                   @if(in_array($type, ['complete', 'edit', 'resume']))
+                   @if(in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
                    checked required
                    @elseif(in_array($type, ['review', 'view', 'sent', 'granted']) && ($proposal['pp']['currency'] ?? '') == 'sek')
                    checked
                    @endif
-                   @unless(in_array($type, ['complete', 'edit', 'resume']))
+                   @unless(in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
                    disabled
                 @endunless
             >
@@ -29,12 +29,12 @@
             <input type="radio" name="currency" value="us"
                    class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                    id="currency"
-                   @if(in_array($type, ['complete', 'edit', 'resume']))
+                   @if(in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
                    required
                    @elseif(!in_array($type, ['review', 'view', 'sent', 'granted']) || ($proposal['pp']['currency'] ?? '') != 'us')
                    disabled
                    @endif
-                   @if(in_array($type, ['review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'us')
+                   @if(in_array($type, ['complete', 'review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'us')
                    checked
                 @endif>
 
@@ -45,12 +45,12 @@
             <input type="radio" name="currency" value="euro"
                    class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                    id="currency"
-                   @if(in_array($type, ['complete', 'edit', 'resume']))
+                   @if(in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
                    required
                    @elseif(!in_array($type, ['review', 'view', 'sent', 'granted']) || ($proposal['pp']['currency'] ?? '') != 'euro')
                    disabled
                    @endif
-                   @if(in_array($type, ['review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'euro')
+                   @if(in_array($type, ['complete', 'review', 'view']) && ($proposal['pp']['currency'] ?? '') == 'euro')
                    checked
                 @endif>
 

@@ -36,7 +36,7 @@ class EnsureUserForReview
         $state = (string) $dashboard->state;
 
         $reviewers = [
-            'submitted' => [
+            'complete' => [
                 'travelrequest' => $dashboard->manager_id,
                 'projectproposal' => $dashboard->vice_id,
             ],
@@ -45,7 +45,7 @@ class EnsureUserForReview
                 'travelrequest' => $dashboard->fo_id,
                 'projectproposal' => $dashboard->fo_id,
             ],
-            'complete' => is_array($dashboard->unit_heads) ? $dashboard->unit_heads : [$dashboard->unit_heads], // Ensure array
+            'vice_approved' => is_array($dashboard->unit_heads) ? $dashboard->unit_heads : [$dashboard->unit_heads], // Ensure array
             'fo_approved' => $dashboard->vice_id,
         ];
 

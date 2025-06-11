@@ -21,14 +21,6 @@
                         {{$reviewer->name}}
                     </span>
                 </div>
-                <div class="flex items-center gap-2 flex-wrap break-words">
-                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white">Role:</h2>
-                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
-                        bg-transparent text-blue-700 ring-1 ring-inset ring-blue-700/10
-                        dark:bg-transparent dark:text-blue-200 dark:ring-blue-300/20 break-words max-w-full">
-                        N/A
-                    </span>
-                </div>
 
                 <div class="flex items-center gap-2 flex-wrap break-words">
                     <h2 class="text-xs font-semibold text-gray-900 dark:text-white">State:</h2>
@@ -37,18 +29,43 @@
                         dark:bg-transparent dark:text-blue-200 dark:ring-blue-300/20 break-words max-w-full">
                         @switch($dashboard->state)
                             @case('complete')
-                            User has completed proposal
+                            <svg class="mr-1 shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" style="color: green;" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
+                            Complete proposal
                             @break
                             @case('head_approved')
+                            <svg class="mr-1 shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" style="color: green;" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
                             Approved by vice head and unit head
                             @break
                             @case('fo_approved')
+                            <svg class="mr-1 shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" style="color: green;" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
                             Approved by Economy
                             @break
                             @default
+                            <svg class="shrink-0 size-3" xmlns="http://www.w3.org/2000/svg" style="color: red;" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                                <path d="M12 9v4"></path>
+                                <path d="M12 17h.01"></path>
+                            </svg>
                             {{$dashboard->state}}
                             @break
                         @endswitch
+                    </span>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap break-words">
+                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white">Next:</h2>
+                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                        bg-transparent text-blue-700 ring-1 ring-inset ring-blue-700/10
+                        dark:bg-transparent dark:text-blue-200 dark:ring-blue-300/20 break-words max-w-full">
+                        {{$role}}
                     </span>
                 </div>
             </div>

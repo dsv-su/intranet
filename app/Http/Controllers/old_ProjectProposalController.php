@@ -24,8 +24,12 @@ use Illuminate\Support\Str;
 use Statamic\View\View;
 use Workflow\WorkflowStub;
 
-class ProjectProposalController extends Controller
+class oldProjectProposalController extends Controller
 {
+    /***
+     * PreApproval, 7 Phase Controller
+     */
+
     public function __construct()
     {
         $this->middleware(['web', 'auth', 'dsv']);
@@ -81,11 +85,6 @@ class ProjectProposalController extends Controller
 
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
-    /***
-     * @return View
-     *
-     * New Proposal
-     */
 
     public function create()
     {

@@ -19,7 +19,7 @@
                 {{ __("Please Review and Comment") }}
             </label>
             <!-- Lock overview for UnitHeads -->
-            @if(in_array($dashboard->state, ['submitted', 'head_approved', 'fo_approved']))
+            @if(in_array($dashboard->state, ['complete', 'head_approved', 'fo_approved']))
                 @include('pp.partials.review.review_overview')
             @endif
 

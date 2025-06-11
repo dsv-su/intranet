@@ -8,7 +8,7 @@
     </label>
     <textarea id="objective" rows="4" name="objective"
               class="@error('objective') border-red-500 @enderror font-mono block p-2.5 w-full text-sm text-gray-900
-                                  @if($type == 'complete') bg-blue-300 @else bg-gray-50 @endif rounded-lg border border-gray-300
+                                  @if($type == 'complete') bg-blue-300 bg-opacity-60 @else bg-gray-50 @endif rounded-lg border border-gray-300
                                   focus:ring-blue-500 focus:border-blue-500
                                   @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
                   dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

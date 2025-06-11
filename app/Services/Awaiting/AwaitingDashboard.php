@@ -21,11 +21,11 @@ class AwaitingDashboard
         return Dashboard::where('type', 'projectproposal')
             ->where(function ($query) use ($user) {
                 $query->where(function ($subQuery) use ($user) {
-                    $subQuery->where('state', 'submitted')
+                    $subQuery->where('state', 'complete')
                         ->where('vice_id', $user->id);
                 })
                     ->orWhere(function ($subQuery) use ($user) {
-                        $subQuery->where('state', 'complete')
+                        $subQuery->where('state', 'vice_approved')
                             ->whereJsonContains('unit_head_approved', [$this->user->id => 0])
                             ->whereHas('proposal', function ($projectQuery) {
                                 $projectQuery->whereJsonLength('files', '>=', 2);

@@ -48,29 +48,38 @@ abstract class DashboardState extends State
             ->allowTransition(FODenied::class,HeadApproved::class)
             ->allowTransition(FODenied::class,Submitted::class)
             //PP
-                //Vice
-            ->allowTransition(Submitted::class, ViceApproved::class)
-            ->allowTransition( ViceApproved::class, Submitted::class)
-            ->allowTransition(Submitted::class, ViceReturned::class)
-            ->allowTransition(ViceReturned::class, Submitted::class)
-            ->allowTransition(Submitted::class, ViceDenied::class)
-            ->allowTransition(ViceDenied::class, Submitted::class)
-                //Complete
-            ->allowTransition(ViceApproved::class, Complete::class)
+            //Complete
+            ->allowTransition(Submitted::class, Complete::class)
             ->allowTransition(Complete::class, Submitted::class)
-                //Head
-            ->allowTransition(Complete::class, HeadApproved::class)
-            ->allowTransition(HeadApproved::class,Complete::class)
+
+            //Vice
+            ->allowTransition(Complete::class, ViceApproved::class)
+            ->allowTransition(ViceApproved::class,Complete::class)
+            ->allowTransition(Complete::class, ViceReturned::class)
+            ->allowTransition(ViceReturned::class, Complete::class)
+            ->allowTransition(Complete::class, ViceDenied::class)
+            ->allowTransition(ViceDenied::class, Complete::class)
+            ->allowTransition(ViceApproved::class,Submitted::class)
+            ->allowTransition(Submitted::class,ViceApproved::class)
+            ->allowTransition(ViceReturned::class,Submitted::class)
+            ->allowTransition(Submitted::class,ViceReturned::class)
+            ->allowTransition(ViceDenied::class,Submitted::class)
+            ->allowTransition(Submitted::class,ViceDenied::class)
+            //Head
+            ->allowTransition(ViceApproved::class, HeadApproved::class)
+            ->allowTransition(HeadApproved::class,ViceApproved::class)
             ->allowTransition(HeadApproved::class, Submitted::class)
             ->allowTransition(HeadApproved::class, HeadApproved::class)
-            ->allowTransition(Complete::class, HeadReturned::class)
-            ->allowTransition(HeadReturned::class,Complete::class)
+            ->allowTransition(ViceApproved::class, HeadReturned::class)
+            ->allowTransition(HeadReturned::class,ViceApproved::class)
             ->allowTransition(HeadReturned::class,Submitted::class)
             ->allowTransition(HeadReturned::class,HeadReturned::class)
-            ->allowTransition(Complete::class, HeadDenied::class)
-            ->allowTransition(HeadDenied::class,Complete::class)
+
+            ->allowTransition(ViceApproved::class, HeadDenied::class)
+            ->allowTransition(HeadDenied::class,ViceApproved::class)
             ->allowTransition(HeadDenied::class,Submitted::class)
             ->allowTransition(HeadDenied::class,HeadDenied::class)
+
                 //FO
             ->allowTransition(HeadApproved::class, FOApproved::class)
             ->allowTransition(FOApproved::class,HeadApproved::class)

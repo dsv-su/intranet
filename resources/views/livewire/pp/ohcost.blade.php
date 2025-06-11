@@ -1,6 +1,6 @@
 <div class="w-full">
     <label for="oh_cost" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-        @if($proposal->pp['eu_wallenberg'] == 'yes')
+        @if(isset($proposal->pp['eu_wallenberg']) && $proposal->pp['eu_wallenberg'] == 'yes')
             {{ __("Percent OH cost covered EU/Wallenberg") }}
         @else
             {{ __("Percent OH cost covered") }}
@@ -132,7 +132,7 @@
                                         block w-[calc(100%-32px)] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
                {{--}}value="{{ old('oh_cost') ? old('oh_cost'): $proposal->pp['oh_cost'] ??  '' }}{{--}} "
                placeholder="OH cost"
-               @if($type == 'complete' or $type == 'edit' or $type == 'resume')
+               @if($type == 'preapproval' or $type == 'complete' or $type == 'edit' or $type == 'resume')
                required
                @else
                readonly

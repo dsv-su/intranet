@@ -6,18 +6,18 @@
         'vice_approved' => 2,
         'vice_returned' => 1,
         'vice_denied' => 0,
-        'complete' => 3,
-        'head_approved'  => 4,
-        'head_returned'  => 3,
+        //'complete' => 3,
+        'head_approved'  => 3,
+        'head_returned'  => 2,
         'head_denied'  => 0,
-        'fo_approved' => 5,
-        'fo_returned' => 4,
+        'fo_approved' => 4,
+        'fo_returned' => 3,
         'fo_denied' => 0,
-        'final_approved' => 6,
-        'final_returned' => 5,
-        'sent' => 7,
-        'granted' => 7,
-        'denied' => 7,
+        'final_approved' => 5,
+        'final_returned' => 4,
+        'sent' => 6,
+        'granted' => 6,
+        'denied' => 6,
 
     ];
     // Determine the current step based on the dashboard state (or 1 if not set)
@@ -27,7 +27,7 @@
 @endphp
 
 <ul class="relative flex flex-col md:flex-row gap-2">
-    @for($i = 1; $i <= 7; $i++)
+    @for($i = 1; $i <= 6; $i++)
         @php
             // For each step, if it's less than or equal to the current step, mark as "completed" (blue)
             $isCompleted = $i <= $currentStep;
@@ -50,15 +50,17 @@
                     @elseif($i == 2)
                         Vice Head Approval
                     @elseif($i == 3)
-                        Complete Project Proposal
-                    @elseif($i == 4)
                         Unit Head(s) Approval
-                    @elseif($i == 5)
+                    @elseif($i == 4)
                         Financial Officers Approval
-                    @elseif($i == 6)
+                    @elseif($i == 5)
                         Final Approval
-                    @elseif($i == 7)
-                        Ready for Submission
+                    @elseif($i == 6)
+                        @if($describeText == $isCompleted)
+                            Application sent
+                        @else
+                            Ready for Submission
+                        @endif
                     @endif
                 </span>
             </div>
