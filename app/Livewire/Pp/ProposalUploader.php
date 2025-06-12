@@ -29,6 +29,7 @@ class ProposalUploader extends Component
     public $directory;
     public $allow;
     public $type;
+    public $resumed = ['vice_returned', 'head_returned', 'fo_returned', 'final_returned'];
 
     protected $listeners = [
         'upload_refresh' => '$refresh'
@@ -39,8 +40,6 @@ class ProposalUploader extends Component
         $this->proposal = $proposal;
         $this->type = $type;
         $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT;
-        //$this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
-        //$this->allowUpload();
         if($this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first()) {
             $this->allowUpload();
         } else {
@@ -51,15 +50,22 @@ class ProposalUploader extends Component
     public function checkFileStatus()
     {
         $files = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
-        //$workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
+        if($this->dashboard) {
+            $workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
+        }
+
 
         if (count($files) >= 2) {
-            //Signal workflow
-            //$workflowhandler->UploadedFiles();
+            if($this->dashboard) {
+                //Signal workflow
+                $workflowhandler->UploadedFiles();
+            }
             return $this->reportStageStatus('uploaded');
         } else {
-            //Signal workflow
-            //$workflowhandler->RemovedFile();
+            if($this->dashboard) {
+                //Signal workflow
+                $workflowhandler->RemovedFile();
+            }
         }
 
         return $this->reportStageStatus('waiting');
@@ -78,7 +84,7 @@ class ProposalUploader extends Component
 
         $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
-        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::SUBMITTED or $this->dashboard->state == self::APPROVED) ) {
+        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::SUBMITTED or $this->dashboard->state == self::APPROVED or in_array($this->dashboard->state, $this->resumed)) ) {
             $this->allow = true;
         } else {
             $this->allow = false;
@@ -108,6 +114,7 @@ class ProposalUploader extends Component
                 'size' => round($file->getSize()/1000),
                 'date' => now()->format('d/m/Y'),
                 'type' => 'draft',
+                'review' => 'pending',
                 'uploader' => Auth::user()->name
                 ];
         }

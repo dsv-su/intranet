@@ -75,28 +75,28 @@
         @break
     @case('head_returned')
     @php
-        $progress = 50;
+        $progress = 20;
         $message = '';
         $color = 'bg-yellow-200';
     @endphp
     @break
     @case('vice_returned')
     @php
-        $progress = 0;
+        $progress = 15;
         $message = '';
         $color = 'bg-yellow-200';
     @endphp
     @break
     @case('fo_returned')
         @php
-            $progress = 75;
+            $progress = 40;
             $message = '';
             $color = 'bg-yellow-200';
         @endphp
         @break
     @case('final_returned')
     @php
-        $progress = 80;
+        $progress = 60;
         $message = '';
         $color = 'bg-yellow-200';
     @endphp

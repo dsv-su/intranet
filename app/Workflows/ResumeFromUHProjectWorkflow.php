@@ -6,6 +6,7 @@ use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
 use App\Workflows\Notifications\NewFinalApprovalNotification;
 use App\Workflows\Notifications\NewProjectProposalNotification;
+use App\Workflows\Notifications\RequestFilesUploadNotification;
 use App\Workflows\Notifications\ResumeProjectProposalNotification;
 use App\Workflows\Notifications\StateUpdateNotification;
 use App\Workflows\Partials\RequestStates;
@@ -46,7 +47,7 @@ class ResumeFromUHProjectWorkflow extends Workflow
     }
 
     //Completed
-    public function Completed()
+    public function isComplete()
     {
         return $this->stateMachine->state->status() === 'complete';
     }
@@ -71,6 +72,17 @@ class ResumeFromUHProjectWorkflow extends Workflow
     public function UploadedFiles()
     {
         return $this->files_uploaded;
+    }
+
+    //Changed files
+    public function DraftFilesChanged()
+    {
+        return $this->files_draft_changed;
+    }
+
+    public function BudgetFilesChanged()
+    {
+        return $this->files_budget_changed;
     }
 
     //Finacial officer
@@ -120,6 +132,44 @@ class ResumeFromUHProjectWorkflow extends Workflow
         //Update proposal state
         yield ActivityStub::make(StateUpdateTransition::class, $userRequest);
 
+        //Check for files
+        if(!$this->UploadedFiles()) {
+            //Notify user request files upload
+            yield ActivityStub::make(RequestFilesUploadNotification::class, $userRequest);
+        } else {
+            $this->complete();
+        }
+
+        //Wait for user to upload files
+        yield WorkflowStub::await(fn () => ($this->isComplete()));
+
+        if(!$this->DraftFilesChanged()) {
+            //Transition to previous state
+            $this->vice_approve();
+        } else {
+            //Email to Vice
+            yield ActivityStub::make(ResumeProjectProposalNotification::class, RequestStates::VICE, $userRequest);
+            //Wait for vice decision
+            yield WorkflowStub::await(fn () => ($this->ViceApproved() || $this->ViceDenied() || $this->ViceReturned()));
+            //Handle vice decision
+            $newState = $this->getState();
+            $commonActivities = $this->getCommonActivities($userRequest);
+
+            // Await stateupdate
+            yield $commonActivities[0];
+
+            switch ($newState) {
+                case RequestStates::VICE_RETURNED:
+                case RequestStates::VICE_DENIED:
+                    //Request has been returned or denied by vice
+                    foreach ($commonActivities as $activity) {
+                        yield $activity;
+                    }
+                    //End workflow
+                    return $this->stateMachine->state->status();
+            }
+        }
+
         //Email to Head
         yield ActivityStub::make(ResumeProjectProposalNotification::class, RequestStates::UNIT_HEAD, $userRequest);
 
@@ -166,7 +216,7 @@ class ResumeFromUHProjectWorkflow extends Workflow
                 //Request has been approved by fo
 
                 //Update stage2
-                yield ActivityStub::make(StageUpdateTransition::class, $userRequest);
+                yield ActivityStub::make(Stage2UpdateTransition::class, $userRequest);
 
                 //Final approval request Email to Vice
                 yield ActivityStub::make(NewFinalApprovalNotification::class, RequestStates::VICE, $userRequest);

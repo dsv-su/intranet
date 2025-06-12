@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Spatie\ModelStates\HasStates;
 
@@ -51,12 +52,12 @@ class ProjectProposal extends Model
         return $user->id === $dashboard->user_id;
     }
 
-    public function allowUpload(): bool
+    public function allowUpload():bool
     {
         $user = Auth::user();
         $dashboard = Dashboard::where('request_id', $this->id)->first();
 
-        if (!$dashboard || !in_array((string)$dashboard->state, ['submitted'])) {
+        if (!$dashboard || (string)$dashboard->state !== 'vice_approved' || count($this->files ?? []) > 1) {
             return false;
         }
 
@@ -98,5 +99,91 @@ class ProjectProposal extends Model
 
         return $user->id === $dashboard->user_id;
     }
+
+    public function hasAtLeastFiles(int $min = 2): bool
+    {
+        return count($this->files ?? []) >= $min;
+    }
+
+    public function hasAtLeastFilesOfType(string $type, int $min = 2): bool
+    {
+        $count = 0;
+
+        foreach ($this->files as $meta) {
+            if (Arr::get($meta, 'type') === $type) {
+                $count++;
+                if ($count >= $min) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get only the files of a given type.
+     */
+    public function filesByType(string $type): array
+    {
+        return array_filter(
+            $this->files,
+            fn(array $meta) => Arr::get($meta, 'type') === $type
+        );
+    }
+
+    /**
+     * Return an array of review statuses for that type.
+     *
+     * e.g. ['pending', 'approved', 'pending']
+     */
+    public function reviewStatusesByType(string $type): array
+    {
+        return array_map(
+            fn(array $meta) => Arr::get($meta, 'review'),
+            $this->filesByType($type)
+        );
+    }
+    /**
+     * Check if *all* files of this type are approved.
+     */
+    public function isTypeFullyApproved(string $type): bool
+    {
+        foreach ($this->filesByType($type) as $meta) {
+            if (Arr::get($meta, 'review') !== 'approved') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Check if *any* file of this type is still pending.
+     */
+    public function hasPendingOfType(string $type): bool
+    {
+        foreach ($this->filesByType($type) as $meta) {
+            if (Arr::get($meta, 'review') === 'pending') {
+                return true;
+            }
+        }
+        return false;
+    }
+/*
+$pp = ProjectProposal::findOrFail($id);
+
+// get raw statuses:
+$statuses = $pp->reviewStatusesByType('budget');
+// e.g. ['pending','approved','pending']
+
+// boolean checks:
+if ($pp->isTypeFullyApproved('budget')) {
+    // all budget files are approved
+}
+
+if ($pp->hasPendingOfType('budget')) {
+    // there are still some pending budget files
+}
+*/
 
 }

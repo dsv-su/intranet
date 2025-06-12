@@ -4,6 +4,7 @@ namespace App\Workflows;
 
 use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
+use App\Workflows\Checks\CheckFilesUploaded;
 use App\Workflows\Notifications\CompletProjectProposalNotification;
 use App\Workflows\Notifications\NewFinalApprovalNotification;
 use App\Workflows\Notifications\NewProjectProposalNotification;
@@ -72,6 +73,17 @@ class DSVProjectPWorkflow extends Workflow
     public function UploadedFiles()
     {
         return $this->files_uploaded;
+    }
+
+    //Changed files
+    public function DraftFilesChanged()
+    {
+        return $this->files_draft_changed;
+    }
+
+    public function BudgetFilesChanged()
+    {
+        return $this->files_budget_changed;
     }
 
     //Finacial officer

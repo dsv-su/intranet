@@ -20,6 +20,11 @@ use Workflow\WorkflowStub;
 
 class ProjectWorkflow extends Workflow
 {
+
+    /***
+     * Workflow for the PREAPPROVAL (not in use)
+     */
+
     private $stateMachine;
     protected $heads;
 

@@ -21,6 +21,8 @@ use Workflow\SignalMethod;
 trait ProjectProSignals
 {
     protected $files_uploaded = false;
+    protected  $files_draft_changed = false;
+    protected  $files_budget_changed = false;
 
     #[SignalMethod]
     public function submit()
@@ -74,6 +76,18 @@ trait ProjectProSignals
     public function setfilesUploaded($status)
     {
         $this->files_uploaded = $status;
+    }
+
+    #[SignalMethod]
+    public function setDraftFilesChanged($status)
+    {
+        $this->files_draft_changed = $status;
+    }
+
+    #[SignalMethod]
+    public function setBudgetFilesChanged($status)
+    {
+        $this->files_budget_changed = $status;
     }
 
     #[SignalMethod]
