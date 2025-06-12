@@ -12,6 +12,7 @@ use App\Models\SettingsOh;
 use App\Models\User;
 use App\Services\Budget\Budget;
 use App\Services\Review\DashboardRole;
+use App\Services\Review\ProposalFileReviewService;
 use App\Services\Review\WorkflowHandler;
 use App\Services\Role\RoleHandler;
 use App\Workflows\DSVProjectPWorkflow;
@@ -288,10 +289,11 @@ class ProposalController extends Controller
                     'created' => $timestamp,
                     'pp' => $request->only([
                         'title', 'objective', 'principal_investigator', 'principal_investigator_email',
-                        'co_investigator_name', 'co_investigator_email', 'research_area', 'unit_head',
+                        'co_investigator_name', 'co_investigator_email', 'research_area',
                         'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
-                        'program', 'decision_exp', 'start_date', 'submission_deadline', 'project_duration', 'budget_project',
-                        'budget_dsv', 'budget_phd', 'currency', 'cofinancing', 'other_cofinancing', 'oh_cost', 'user_comments'
+                        'cofinancing', 'other_cofinancing', 'project_duration', 'unit_head', 'program', 'decision_exp', 'funding_organization',
+                        'start_date', 'submission_deadline',
+                        'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'cofinancing_needed','user_comments'
                     ])]);
                 // Save Project Proposal
                 $pp->save();
@@ -310,8 +312,10 @@ class ProposalController extends Controller
 
                 // Resume workflow and store workflow ID
                 $this->resumeWorkflow($dashboard);
+                //Check files
+                $this->checkFileStatus($pp);
 
-                return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
+                return redirect()->route('pp', 'my')->with('success', 'Proposal successfully resumed!');
                 break;
             case 'sent':
                 $pp = ProjectProposal::find($request->id);
@@ -449,6 +453,9 @@ class ProposalController extends Controller
                 $this->comments_update($request->id, $request->comment, 'approved');
                 switch($role->check()) {
                     case 'vice':
+                        //Approve draft file
+                        (new ProposalFileReviewService($request->id))
+                            ->approvePendingByType('draft');
                         //Signal state change
                         $workflowhandler->ViceApprove();
                         //Update budget stats
@@ -479,6 +486,10 @@ class ProposalController extends Controller
                         break;
 
                     case 'fo':
+                        //Approve budgetfile
+                        (new ProposalFileReviewService($request->id))
+                            ->approvePendingByType('budget');
+                        //Signal state change
                         $workflowhandler->FOApprove();
                         break;
                     case 'vice_final':
@@ -639,20 +650,22 @@ class ProposalController extends Controller
     {
         switch($dashboard->state) {
             case(RequestStates::VICE_RETURNED):
-                dd('ViceReturned');
+                $dashboard->state = RequestStates::SUBMITTED;
+                $dashboard->save();
+                $workflow = WorkflowStub::make(DSVProjectPWorkflow::class);
                 break;
             case(RequestStates::HEAD_RETURNED):
-                $dashboard->state = RequestStates::COMPLETED;
+                $dashboard->state = RequestStates::SUBMITTED;
                 $dashboard->save();
                 $workflow = WorkflowStub::make(\App\Workflows\ResumeFromUHProjectWorkflow::class);
                 break;
             case(RequestStates::FO_RETURNED):
-                $dashboard->state = RequestStates::HEAD_APPROVED;
+                $dashboard->state = RequestStates::SUBMITTED;
                 $dashboard->save();
                 $workflow = WorkflowStub::make(\App\Workflows\ResumeFromFOProjectWorkflow::class);
                 break;
             case(RequestStates::FINAL_RETURNED):
-                $dashboard->state = RequestStates::FO_APPROVED;
+                $dashboard->state = RequestStates::SUBMITTED;
                 $dashboard->save();
                 $workflow = WorkflowStub::make(\App\Workflows\ResumeFromFinalProjectWorkflow::class);
                 break;
@@ -661,9 +674,11 @@ class ProposalController extends Controller
         $dashboard->workflow_id = $workflow->id();
         $dashboard->save();
         $workflow->start($dashboard);
-
+        $workflow->submit();
         return $workflow;
     }
+
+
     /***
      * Private functions
      */
@@ -676,6 +691,20 @@ class ProposalController extends Controller
         if (count($files) >= 2) {
             //Signal workflow
             $workflowhandler->UploadedFiles();
+
+            //Budgetfiles
+            if($proposal->isTypeFullyApproved('budget')) {
+                $workflowhandler->BudgetFileUnchanged();
+            } else {
+                $workflowhandler->BudgetFileChanged();
+            }
+
+            //Draftfiles
+            if($proposal->isTypeFullyApproved('draft')) {
+                $workflowhandler->DraftFileUnchanged();
+            } else {
+                $workflowhandler->DraftFileChanged();
+            }
             return true;
         } else {
             //Signal workflow

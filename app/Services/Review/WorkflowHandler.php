@@ -94,6 +94,26 @@ class WorkflowHandler
         $this->workflow->setfilesUploaded(false);
     }
 
+    public function DraftFileChanged()
+    {
+        $this->workflow->setDraftFilesChanged(true);
+    }
+
+    public function DraftFileUnchanged()
+    {
+        $this->workflow->setDraftFilesChanged(false);
+    }
+
+    public function BudgetFileChanged()
+    {
+        $this->workflow->setBudgetFilesChanged(true);
+    }
+
+    public function BudgetFileUnchanged()
+    {
+        $this->workflow->setBudgetFilesChanged(false);
+    }
+
     //Final
     public function FinalApprove()
     {

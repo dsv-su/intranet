@@ -4,8 +4,10 @@ namespace App\Workflows;
 
 use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
+use App\Workflows\Checks\CheckFilesUploaded;
 use App\Workflows\Notifications\NewFinalApprovalNotification;
 use App\Workflows\Notifications\NewProjectProposalNotification;
+use App\Workflows\Notifications\RequestFilesUploadNotification;
 use App\Workflows\Notifications\ResumeProjectProposalNotification;
 use App\Workflows\Notifications\StateUpdateNotification;
 use App\Workflows\Partials\RequestStates;
@@ -46,7 +48,7 @@ class ResumeFromFOProjectWorkflow extends Workflow
     }
 
     //Completed
-    public function Completed()
+    public function isComplete()
     {
         return $this->stateMachine->state->status() === 'complete';
     }
@@ -71,6 +73,17 @@ class ResumeFromFOProjectWorkflow extends Workflow
     public function UploadedFiles()
     {
         return $this->files_uploaded;
+    }
+
+    //Changed files
+    public function DraftFilesChanged()
+    {
+        return $this->files_draft_changed;
+    }
+
+    public function BudgetFilesChanged()
+    {
+        return $this->files_budget_changed;
     }
 
     //Finacial officer
@@ -119,6 +132,21 @@ class ResumeFromFOProjectWorkflow extends Workflow
 
         //Update proposal state
         yield ActivityStub::make(StateUpdateTransition::class, $userRequest);
+
+        //Check for files
+        if(!$this->UploadedFiles()) {
+            //Notify user request files upload
+            yield ActivityStub::make(RequestFilesUploadNotification::class, $userRequest);
+        } else {
+            $this->complete();
+        }
+
+        //Wait for user to upload files
+        yield WorkflowStub::await(fn () => ($this->isComplete()));
+
+        //Transition to previous state
+        $this->vice_approve();
+        $this->head_approve();
 
         //Email to FO for review
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::FINACIAL_OFFICER, $userRequest);

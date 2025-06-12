@@ -27,6 +27,7 @@ class ProposalBudgetUploader extends Component
     public $directory;
     public $allow;
     public $type;
+    public $resumed = ['vice_returned', 'head_returned', 'fo_returned', 'final_returned'];
 
     protected $listeners = [
         'upload_refresh' => '$refresh'
@@ -76,7 +77,7 @@ class ProposalBudgetUploader extends Component
 
         $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
-        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::SUBMITTED or $this->dashboard->state == self::APPROVED) ) {
+        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::SUBMITTED or $this->dashboard->state == self::APPROVED or in_array($this->dashboard->state, $this->resumed)) ) {
             $this->allow = true;
         } else {
             $this->allow = false;
@@ -106,6 +107,7 @@ class ProposalBudgetUploader extends Component
                 'size' => round($file->getSize()/1000),
                 'date' => now()->format('d/m/Y'),
                 'type' => 'budget',
+                'review' => 'pending',
                 'uploader' => Auth::user()->name
             ];
         }

@@ -102,6 +102,7 @@ class ProposalFinalUploader extends Component
                 'size' => round($file->getSize()/1000),
                 'date' => now()->format('d/m/Y'),
                 'type' => 'final',
+                'review' => 'pending',
                 'uploader' => Auth::user()->name
             ];
         }
