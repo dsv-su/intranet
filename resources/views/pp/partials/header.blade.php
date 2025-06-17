@@ -56,7 +56,9 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                     </svg>
                 </a>
+
                 <!-- Admin -->
+                {{--}}
                 <a type="button"
                    data-tooltip-target="admin-tooltip"
                    href="{{route('pp-admin')}}">
@@ -65,7 +67,7 @@
                     </svg>
 
                 </a>
-
+                {{--}}
                 <!-- New proposal -->
                 <a type="button"
                    data-tooltip-target="add-proposal-tooltip"
@@ -74,6 +76,7 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 8H4m8 3.5v5M9.5 14h5M4 6v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z"/>
                     </svg>
                 </a>
+
                 <!-- end new creation flow -->
             </div>
         </div>

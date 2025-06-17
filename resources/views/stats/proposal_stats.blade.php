@@ -14,7 +14,7 @@
         <div class="max-w-6xl px-4 py-8 mx-auto lg:py-16">
             <!-- Flex container to align button to the right -->
             <div class="flex justify-between items-center">
-                <h3 class="text-2xl dark:text-white">Pre-approved Proposals</h3>
+                <h3 class="text-2xl dark:text-white">Commited Proposals</h3>
                 <a type="button"
                    href="{{route('pp-recalc')}}"
                    class="inline-flex items-center px-2 py-2 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.65rem]
@@ -27,11 +27,11 @@
             <!-- First row -->
             <div class="lg:flex lg:gap-8 mt-6">
                 <div class="w-full lg:w-1/2">
-                    <h5 class="text-xl dark:text-white">Preapproved</h5>
+                    <h5 class="text-xl dark:text-white">Commited</h5>
                     <x-chartjs-component :chart="$chart['researchsubject_preapproved']" />
                 </div>
                 <div class="w-full lg:w-1/2">
-                    <h5 class="text-xl dark:text-white">Commited</h5>
+                    <h5 class="text-xl dark:text-white">Commited budget</h5>
                     <x-chartjs-component :chart="$chart['researchsubject_commited']" />
                 </div>
             </div>

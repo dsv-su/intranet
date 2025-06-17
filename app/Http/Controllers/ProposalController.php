@@ -12,6 +12,7 @@ use App\Models\SettingsFo;
 use App\Models\SettingsOh;
 use App\Models\User;
 use App\Services\Budget\Budget;
+use App\Services\Budget\ReCalcBudget;
 use App\Services\Review\DashboardRole;
 use App\Services\Review\ProposalFileReviewService;
 use App\Services\Review\WorkflowHandler;
@@ -187,10 +188,10 @@ class ProposalController extends Controller
                 }
 
                 //Budget
-                $budget = new Budget($pp);
+                /*$budget = new Budget($pp);
                 $budget->budget_increment($pp->pp['research_area']);
                 $budget->phd_increment($pp->pp['research_area']);
-                $budget->cost_increment($pp->pp['research_area']);
+                $budget->cost_increment($pp->pp['research_area']);*/
 
                 // Start workflow and store workflow ID
                 $workflow = $this->createAndStartWorkflow($pp->dashboard);
@@ -244,10 +245,10 @@ class ProposalController extends Controller
                     $uh_group->save();
                 }
                 //Budget
-                $budget = new Budget($pp);
+                /*$budget = new Budget($pp);
                 $budget->budget_increment($pp->pp['research_area']);
                 $budget->phd_increment($pp->pp['research_area']);
-                $budget->cost_increment($pp->pp['research_area']);
+                $budget->cost_increment($pp->pp['research_area']);*/
 
                 if($this->checkFiles($pp)) {
                     //Transition
@@ -472,8 +473,10 @@ class ProposalController extends Controller
                         $budget = new Budget($proposal);
                         //Preapproval count
                         $budget->preapproved_increment($proposal->pp['research_area']);
-                        //Budget (Disabled)
-                        //$budget->budget_increment($proposal->pp['research_area']);
+                        $budget->budget_increment($proposal->pp['research_area']);
+                        $budget->phd_increment($proposal->pp['research_area']);
+                        $budget->cost_increment($proposal->pp['research_area']);
+
                         break;
                     case 'head':
                         //Flag approved
@@ -512,12 +515,18 @@ class ProposalController extends Controller
                 switch($role->check()) {
                     case 'vice':
                         $workflowhandler->ViceDeny();
+                        $calc = new ReCalcBudget();
+                        $calc->scan();
                         break;
                     case 'head':
                         $workflowhandler->HeadDeny();
+                        $calc = new ReCalcBudget();
+                        $calc->scan();
                         break;
                     case 'fo':
                         $workflowhandler->FODeny();
+                        $calc = new ReCalcBudget();
+                        $calc->scan();
                         break;
                 }
                 break;
@@ -530,12 +539,18 @@ class ProposalController extends Controller
                         break;
                     case 'head':
                         $workflowhandler->HeadReturn();
+                        $calc = new ReCalcBudget();
+                        $calc->scan();
                         break;
                     case 'fo':
                         $workflowhandler->FOReturn();
+                        $calc = new ReCalcBudget();
+                        $calc->scan();
                         break;
                     case 'vice_final':
                         $workflowhandler->FinalReturn();
+                        $calc = new ReCalcBudget();
+                        $calc->scan();
                         break;
                 }
                 break;

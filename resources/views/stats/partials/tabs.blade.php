@@ -6,7 +6,7 @@
                    class="{{ request()->routeIs('pp-stats') ? 'text-blue-600 border-b-transparent' : 'text-gray-500 hover:text-gray-700 dark:text-neutral-400 dark:hover:text-neutral-300' }}
                        -mb-px py-3 px-4 inline-flex items-center gap-2 bg-white text-sm font-medium text-center
                        border border-gray-200 rounded-t-lg dark:bg-neutral-800 dark:border-neutral-700">
-                    PreApproved
+                    Commited
                 </a>
 
                 <a href="{{ route('pp-stats-approved') }}"

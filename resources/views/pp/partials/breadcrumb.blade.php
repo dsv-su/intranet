@@ -42,9 +42,9 @@
 
         <!-- Move Status to the right -->
         <span class="ms-auto text-xs font-semibold text-gray-800 dark:text-neutral-400">
-            <span class="inline-flex items-center gap-x-1 py-0 px-1 rounded-full text-[10px] font-medium border border-yellow-500 text-yellow-500">
+            <a type="button" href="{{route('proposal-seeder')}}" class="inline-flex items-center gap-x-1 py-0 px-1 rounded-full text-[10px] font-medium border border-yellow-500 text-yellow-500">
                 Testmode
-            </span>
+            </a>
             <div class="hidden md:block md:inline">
                 @if($roles ?? false)
                     @foreach($roles as $role)
