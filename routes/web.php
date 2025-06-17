@@ -82,6 +82,7 @@ Route::get('/pp/resume/{id}', [\App\Http\Controllers\ProposalController::class, 
 //Admin
 Route::get('/admin', [\App\Http\Controllers\AdminController::class, 'pp'])->name('pp-admin');
 Route::get('/admin/del/{id}', [\App\Http\Controllers\AdminController::class, 'pp_delete'])->name('pp-delete');
+
 //Test
 Route::get('/test', [TestController::class, 'test'])->name('test');
-
+Route::get('/seed', [\App\Http\Controllers\ViceController::class, 'seed'])->name('proposal-seeder');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SettingsOh;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
 class ViceController extends Controller
@@ -43,6 +44,12 @@ class ViceController extends Controller
         $oh->oh_eu = $request->oh_eu;
         $oh->save();
 
+        return redirect()->back();
+    }
+
+    public function seed()
+    {
+        Artisan::call('proposal-seed');
         return redirect()->back();
     }
 

@@ -16,7 +16,6 @@ class StatsController extends Controller
     {
         $available_states = [
             'vice_approved',
-            'complete',
             'head_approved',
             'fo_approved',
             'final_approved',

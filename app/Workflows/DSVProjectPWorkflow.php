@@ -151,8 +151,9 @@ class DSVProjectPWorkflow extends Workflow
         //Wait for vice decision
         yield WorkflowStub::await(fn () => ($this->ViceApproved() || $this->ViceDenied() || $this->ViceReturned()));
 
-        //Update dashboardstate
+        //Update Proposalstate
         $newState = $this->getState();
+        $commonActivities = $this->getCommonActivities($userRequest);
         yield $commonActivities[0];
 
         //Handle vice reject decision
@@ -176,6 +177,7 @@ class DSVProjectPWorkflow extends Workflow
 
         //Update dashboardstate
         $newState = $this->getState();
+        $commonActivities = $this->getCommonActivities($userRequest);
         yield $commonActivities[0];
 
         //Handle Head reject decision
@@ -198,6 +200,7 @@ class DSVProjectPWorkflow extends Workflow
 
         //Update dashboardstate
         $newState = $this->getState();
+        $commonActivities = $this->getCommonActivities($userRequest);
         yield $commonActivities[0];
 
         //Handle FO decision
@@ -223,6 +226,7 @@ class DSVProjectPWorkflow extends Workflow
         yield WorkflowStub::await(fn () => ($this->FinalApproved() || $this->FinalDenied() || $this->FinalReturned()));
 
         //Notify user
+        $commonActivities = $this->getCommonActivities($userRequest);
         foreach ($commonActivities as $activity) {
             yield $activity;
         }

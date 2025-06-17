@@ -36,7 +36,7 @@ class ProposalSeeder extends Seeder
             $pp->status_stage2 = 'pending';
             $pp->status_stage3 = 'submitted';
             $json = '{
-                      "Manual_internwebben.pdf": {
+                      "Proposal.pdf": {
                         "path":"proposals/9f25b0c4-4685-488d-90fa-5ed572f72770/draft//53bymbb7MAkyEO7HVRC8VbKjyqRYU5zCd7yT6T4A.pdf",
                         "tmp":"f32qNekWqmJCznUjC0z1iv9xcjs21w-metaTWFudWFsX2ludGVybndlYmJlbi5wZGY=-.pdf",
                         "size":488,
@@ -45,8 +45,8 @@ class ProposalSeeder extends Seeder
                         "review":"pending",
                         "uploader":"Admin User"
                       },
-                      "DSC01631.jpg": {
-                        "path":"proposals/9f25b0c4-4685-488d-90fa-5ed572f72770/budget//2JinNo2iaCG8mrSVwS3Iky5R1Cm4SV2kn99XBAtt.jpg",
+                      "budget.xlsx": {
+                        "path":"proposals/9f25b0c4-4685-488d-90fa-5ed572f72770/budget//2JinNo2iaCG8mrSVwS3Iky5R1Cm4SV2kn99XBAtt.xlsx",
                         "tmp":"p56yqLRR3G92DPFAonOeoMQ9XzO8za-metaRFNDMDE2MzEuanBn-.jpg",
                         "size":2224,
                         "date":"13/06/2025",
@@ -57,12 +57,13 @@ class ProposalSeeder extends Seeder
                     }';
             // Decode into an associative array
             $data = json_decode($json, true);
+            /*
             if ($i % 2 === 1) {
                 $pp->files = $data;
             } else{
                 $pp->files = [];
-            }
-
+            }*/
+            $pp->files = $data;
 
             $pp->pp = [
                 'title' => $name,
