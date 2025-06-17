@@ -14,12 +14,14 @@
                                     @if($pp_file['type'] == 'draft') text-yellow-600
                                     @elseif($pp_file['type'] == 'budget') text-purple-600
                                     @elseif($pp_file['type'] == 'final') text-blue-600
+                                    @elseif($pp_file['type'] == 'decision') text-green-600
                                     @else text-gray-500
                                     @endif
                                     border
                                     @if($pp_file['type'] == 'draft') border-yellow-600
                                     @elseif($pp_file['type'] == 'budget') border-purple-600
                                     @elseif($pp_file['type'] == 'final') border-blue-600
+                                    @elseif($pp_file['type'] == 'decision') border-green-600
                                     @else  border-gray-200
                                     @endif
 
@@ -34,7 +36,11 @@
                                 <div>
                                     <p class="text-sm font-medium text-gray-800 dark:text-white">{{$key}}</p>
                                     <p class="text-xs text-gray-500 dark:text-neutral-500">
-                                        {{$pp_file['size']}} KB | Date: {{$pp_file['date']}} | Uploaded by: {{$pp_file['uploader']}}
+                                        {{$pp_file['size']}} KB | Date: {{$pp_file['date']}} | Uploaded by: {{$pp_file['uploader']}} |
+                                        <span class="bg-blue-100 text-blue-800 text-[10px] font-medium me-1 px-1 py-0 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 leading-none">
+                                            {{strtoupper($pp_file['review'])}}
+                                        </span>
+
                                     </p>
                                 </div>
                             </div>

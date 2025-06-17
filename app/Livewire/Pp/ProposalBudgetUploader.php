@@ -3,10 +3,8 @@
 namespace App\Livewire\Pp;
 
 use App\Models\Dashboard;
-use App\Services\Review\WorkflowHandler;
 use App\Services\Settings\ProposalsDirectory;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
@@ -38,8 +36,6 @@ class ProposalBudgetUploader extends Component
         $this->proposal = $proposal;
         $this->type = $type;
         $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET;
-        //$this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
-        //$this->allowUpload();
         if($this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first()) {
             $this->allowUpload();
         } else {
@@ -50,15 +46,9 @@ class ProposalBudgetUploader extends Component
     public function checkFileStatus()
     {
         $budgetfiles = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
-        //$workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
 
         if (count($budgetfiles) >= 2) {
-            //Signal workflow
-            //$workflowhandler->UploadedFiles();
             return $this->reportStageStatus('uploaded');
-        } else {
-            //Signal workflow
-            //$workflowhandler->RemovedFile();
         }
 
         return $this->reportStageStatus('waiting');
@@ -73,8 +63,6 @@ class ProposalBudgetUploader extends Component
     public function allowUpload()
     {
         $user = Auth::user();
-        //$dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
-
         $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
         if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::SUBMITTED or $this->dashboard->state == self::APPROVED or in_array($this->dashboard->state, $this->resumed)) ) {
