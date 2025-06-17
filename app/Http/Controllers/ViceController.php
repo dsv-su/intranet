@@ -11,7 +11,7 @@ class ViceController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('vicehead');
+        //$this->middleware('vicehead');
     }
 
     public function settings()

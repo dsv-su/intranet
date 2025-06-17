@@ -8,4 +8,5 @@ class ProposalsDirectory
     const DRAFT = '/draft/';
     const BUDGET = '/budget/';
     const FINAL = '/final/';
+    const DECISION = '/decision/';
 }

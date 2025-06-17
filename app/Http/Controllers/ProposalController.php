@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendFinalToRegistrator;
 use App\Mail\GrantNotificationVice;
 use App\Models\Dashboard;
 use App\Models\DsvBudget;
@@ -15,6 +16,7 @@ use App\Services\Review\DashboardRole;
 use App\Services\Review\ProposalFileReviewService;
 use App\Services\Review\WorkflowHandler;
 use App\Services\Role\RoleHandler;
+use App\Services\Send\FilesForRegistrator;
 use App\Workflows\DSVProjectPWorkflow;
 use App\Workflows\Partials\RequestStates;
 use App\Workflows\ProjectWorkflow;
@@ -192,7 +194,7 @@ class ProposalController extends Controller
 
                 // Start workflow and store workflow ID
                 $workflow = $this->createAndStartWorkflow($pp->dashboard);
-                $this->workflowID = $workflow->id();
+                //$this->workflowID = $workflow->id();
 
                 //Check files
                 $this->checkFileStatus($pp);
@@ -247,9 +249,7 @@ class ProposalController extends Controller
                 $budget->phd_increment($pp->pp['research_area']);
                 $budget->cost_increment($pp->pp['research_area']);
 
-
-                if($dashboard->state == 'submitted' && count($pp->files) > 1) {
-
+                if($this->checkFiles($pp)) {
                     //Transition
                     $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
                     $workflowhandler->Completed();
@@ -261,7 +261,6 @@ class ProposalController extends Controller
 
                 break;
             case 'edit':
-                //
                 //dd($request->all());
                 $pp = ProjectProposal::find($request->id);
                 $pp->update([
@@ -345,6 +344,16 @@ class ProposalController extends Controller
                     $dashboard = Dashboard::where('request_id', $request->id)->first();
                     $dashboard->state = 'sent';
                     $dashboard->save();
+
+                    //Create attachment
+                    $reg = new FilesForRegistrator($pp);
+                    $reg->storeFiles();
+
+                    //Send to registrator
+                    $filePath = public_path('download/'  . $pp->id .'/'. 'ProjectProposal-' . $pp->name . '.zip');
+                    $user = User::find($pp->dashboard->user_id);
+                    SendFinalToRegistrator::dispatch($user, $pp->dashboard, $filePath);
+
 
                     return redirect()->route('pp', 'my')->with('success', 'Your proposal has been successfully registered as sent. Thank you!');
                 } else {
@@ -683,12 +692,17 @@ class ProposalController extends Controller
      * Private functions
      */
 
+    private function checkFiles($proposal): bool
+    {
+        return $proposal->hasAtLeastFilesOfType('draft', 1)
+            && $proposal->hasAtLeastFilesOfType('budget', 1);
+    }
+
     private function checkFileStatus($proposal)
     {
-        $files = is_array($proposal->files ?? null) ? $proposal->files : [];
         $workflowhandler = new WorkflowHandler($proposal->dashboard->workflow_id);
 
-        if (count($files) >= 2) {
+        if ($this->checkFiles($proposal)) {
             //Signal workflow
             $workflowhandler->UploadedFiles();
 
@@ -710,8 +724,7 @@ class ProposalController extends Controller
             //Signal workflow
             $workflowhandler->RemovedFile();
         }
-
-        return true;
+        return false;
     }
 
     private function getViceHeadUserId(): string

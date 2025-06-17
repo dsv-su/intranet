@@ -4,11 +4,9 @@ namespace App\Workflows;
 
 use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
-use App\Workflows\Checks\CheckFilesUploaded;
+use App\Workflows\Checks\CheckUploadedFiles;
 use App\Workflows\Notifications\NewFinalApprovalNotification;
 use App\Workflows\Notifications\NewProjectProposalNotification;
-use App\Workflows\Notifications\RequestFilesUploadNotification;
-use App\Workflows\Notifications\ResumeProjectProposalNotification;
 use App\Workflows\Notifications\StateUpdateNotification;
 use App\Workflows\Partials\RequestStates;
 use App\Workflows\Transitions\Stage2UpdateTransition;
@@ -133,13 +131,8 @@ class ResumeFromFOProjectWorkflow extends Workflow
         //Update proposal state
         yield ActivityStub::make(StateUpdateTransition::class, $userRequest);
 
-        //Check for files
-        if(!$this->UploadedFiles()) {
-            //Notify user request files upload
-            yield ActivityStub::make(RequestFilesUploadNotification::class, $userRequest);
-        } else {
-            $this->complete();
-        }
+        //Check for uploaded files
+        yield ActivityStub::make(CheckUploadedFiles::class, $userRequest);
 
         //Wait for user to upload files
         yield WorkflowStub::await(fn () => ($this->isComplete()));

@@ -9,17 +9,15 @@ use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 
-class ProposalFinalUploader extends Component
+class ProposalDecisionUploader extends Component
 {
     use WithFileUploads;
 
-    const PREAPPROVED = 'vice_approved';
-    const COMPLETE = 'complete';
-    const APPROVED = 'final_approved';
+    const SENT = 'sent';
 
     public $proposal;
     public $dashboard;
-    public $finalfiles = [];
+    public $decisionfiles = [];
     public $savedfiles = [];
     public $stored = false;
     public $directory;
@@ -34,7 +32,7 @@ class ProposalFinalUploader extends Component
     {
         $this->proposal = $proposal;
         $this->type = $type;
-        $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::FINAL;
+        $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DECISION;
         $this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
         $this->allowUpload();
     }
@@ -51,7 +49,7 @@ class ProposalFinalUploader extends Component
 
         $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
 
-        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::COMPLETE or $this->dashboard->state == self::APPROVED) ) {
+        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::SENT) ) {
             $this->allow = true;
         } else {
             $this->allow = false;
@@ -62,24 +60,24 @@ class ProposalFinalUploader extends Component
     {
         $this->toggleStored();
         $this->cleanupOldUploads();
-        $finalfiles = collect($tmpPath)->map(function ($i) {
+        $decisionfiles = collect($tmpPath)->map(function ($i) {
             return TemporaryUploadedFile::createFromLivewire($i);
         })->toArray();
-        $this->emitSelf('upload:finished', $name, collect($finalfiles)->map->getFilename()->toArray());
+        $this->emitSelf('upload:finished', $name, collect($decisionfiles)->map->getFilename()->toArray());
 
-        $finalfiles = array_merge($this->getPropertyValue($name), $finalfiles);
-        $this->syncInput($name, $finalfiles);
+        $decisionfiles = array_merge($this->getPropertyValue($name), $decisionfiles);
+        $this->syncInput($name, $decisionfiles);
     }
 
     public function storefiles()
     {
-        foreach($this->finalfiles as $file) {
+        foreach($this->decisionfiles as $file) {
             $this->savedfiles[$file->getClientOriginalName()] = [
                 'path' => $file->store(path: $this->directory),
                 'tmp' => basename($file->getRealPath()),
                 'size' => round($file->getSize()/1000),
                 'date' => now()->format('d/m/Y'),
-                'type' => 'final',
+                'type' => 'decision',
                 'review' => 'pending',
                 'uploader' => Auth::user()->name
             ];
@@ -90,7 +88,7 @@ class ProposalFinalUploader extends Component
 
         //Toggled buttons
         $this->toggleStored();
-        $this->finalfiles = [];
+        $this->decisionfiles = [];
         $this->dispatch('upload_refresh');
     }
 
@@ -115,6 +113,6 @@ class ProposalFinalUploader extends Component
 
     public function render()
     {
-        return view('livewire.pp.proposal-final-uploader');
+        return view('livewire.pp.proposal-decision-uploader');
     }
 }

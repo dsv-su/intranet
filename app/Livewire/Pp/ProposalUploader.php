@@ -3,7 +3,6 @@
 namespace App\Livewire\Pp;
 
 use App\Models\Dashboard;
-use App\Models\ProjectProposal;
 use App\Services\Review\WorkflowHandler;
 use App\Services\Settings\ProposalsDirectory;
 use Illuminate\Support\Facades\Auth;
