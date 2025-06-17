@@ -20,9 +20,9 @@ class ProposalSeeder extends Seeder
         $faker = \Faker\Factory::create();
 
         // Generate
-        $userId = '9e25a704-50e2-41b9-9133-742dc24b3cef';
-        $foUserId = '9e25a704-50e2-41b9-9133-742dc24b3cef';
-        $viceId = '9e25a704-50e2-41b9-9133-742dc24b3cef';
+        $userId = '9e4d9745-5809-4cbc-803f-8768221f1297';
+        $foUserId = '9e4d9745-5809-4cbc-803f-8768221f1297';
+        $viceId = '9e4d9745-5809-4cbc-803f-8768221f1297';
 
         for ($i = 0; $i < 4; $i++) {
             $timestamp = now()->startOfDay()->timestamp;
