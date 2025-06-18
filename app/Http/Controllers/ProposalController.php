@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendFinalToRegistrator;
 use App\Mail\GrantNotificationVice;
+use App\Models\BudgetTemplate;
 use App\Models\Dashboard;
 use App\Models\DsvBudget;
 use App\Models\ProjectProposal;
@@ -25,6 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Statamic\View\View;
 use Workflow\WorkflowStub;
@@ -84,6 +86,18 @@ class ProposalController extends Controller
 
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
+
+    public function budget()
+    {
+        $template     = BudgetTemplate::first();
+        $files        = $template->files;
+        $firstFile    = reset($files);
+        $downloadPath = $firstFile['path'];
+
+        return Storage::download($downloadPath);
+
+    }
+
     public function create()
     {
         $viewData = $this->prepareProjectProposalData();

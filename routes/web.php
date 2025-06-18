@@ -74,9 +74,8 @@ Route::get('/pp/stats/recalc', [\App\Http\Controllers\StatsController::class, 'r
 Route::get('/pp/sent/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_sent'])->name('pp-sent');
 Route::get('/pp/granted/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_granted'])->name('pp-granted');
 Route::get('/pp/rejected/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_rejected'])->name('pp-rejected');
-
+Route::get('/budget', [\App\Http\Controllers\ProposalController::class, 'budget'])->name('budget-template');
 //Resume
-//Route::get('/pp/resume/{id}', [\App\Http\Controllers\ProjectProposalController::class, 'pp_resume'])->name('pp-resume');
 Route::get('/pp/resume/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_resume'])->name('pp-resume');
 
 //Admin
