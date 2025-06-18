@@ -92,7 +92,7 @@
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
                                         dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
-                                        {{ $budget->research_area[$proposal->pp['research_area']]['granted'] }}
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['granted'] ?? 'N/A' }}
                                     </span>
                                 </div>
 
