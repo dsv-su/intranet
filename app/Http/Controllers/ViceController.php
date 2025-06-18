@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BudgetTemplate;
 use App\Models\SettingsOh;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,6 +26,9 @@ class ViceController extends Controller
         $roleId = DB::table('role_user')->where('role_id', 'vice_head')->pluck('user_id');
         $viewData['vicehead'] = User::find($roleId);
         $viewData['oh'] = SettingsOh::first();
+        $viewData['template'] = BudgetTemplate::firstOrCreate(
+            ['name' => 'DSVBudgetTemplate'],
+            ['files' => []]);
 
         return (new \Statamic\View\View)
             ->template('requests.vice.settings')

@@ -80,7 +80,7 @@ class ProposalSeeder extends Seeder
                 'cofinancing' => $faker->boolean(),
                 'other_cofinancing' => $faker->word(),
                 'project_duration' => $faker->numberBetween(1, 5),
-                'unit_head' => ['9e25a704-50e2-41b9-9133-742dc24b3cef'],
+                'unit_head' => ['9e4d9745-5809-4cbc-803f-8768221f1297'],
                 'program' => $faker->word(),
                 'decision_exp' => '15/06/2025',
                 'start_date' => '16/06/2025',

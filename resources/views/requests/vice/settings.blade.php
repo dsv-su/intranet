@@ -41,6 +41,8 @@
                                 @include('requests.vice.partials.oh')
                                 <!-- FO -->
                                 <br>
+                                <livewire:pp.budget-template-uploader :template="$template" />
+                                <br>
                                 <p class="mt-1 text-gray-600 dark:text-gray-400">Other settings</p>
                                 <p class="mt-1 text-gray-600 font-semibold dark:text-gray-400">Financial Officer</p>
                                 @include('requests.vice.partials.fo')

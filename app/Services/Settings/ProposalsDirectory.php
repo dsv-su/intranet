@@ -9,4 +9,5 @@ class ProposalsDirectory
     const BUDGET = '/budget/';
     const FINAL = '/final/';
     const DECISION = '/decision/';
+    const BUDGET_TEMPLATE = '/budget_template/';
 }
