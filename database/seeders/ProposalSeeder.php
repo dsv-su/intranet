@@ -20,9 +20,9 @@ class ProposalSeeder extends Seeder
         $faker = \Faker\Factory::create();
 
         // Generate
-        $userId = '9e25a704-50e2-41b9-9133-742dc24b3cef';
-        $foUserId = '9e25a704-50e2-41b9-9133-742dc24b3cef';
-        $viceId = '9e25a704-50e2-41b9-9133-742dc24b3cef';
+        $userId = '9e4d9745-5809-4cbc-803f-8768221f1297';
+        $foUserId = '9e4d9745-5809-4cbc-803f-8768221f1297';
+        $viceId = '9e4d9745-5809-4cbc-803f-8768221f1297';
 
         for ($i = 0; $i < 4; $i++) {
             $timestamp = now()->startOfDay()->timestamp;
@@ -30,7 +30,7 @@ class ProposalSeeder extends Seeder
             // Create a new proposal directly
             $pp = new ProjectProposal();
             $pp->user_id = $userId;
-            $pp->name = $name = $i . '' .$faker->sentence(4);
+            $pp->name = $name = $i . ' ' .$faker->sentence(4);
             $pp->created = $timestamp;
             $pp->status_stage1 = 'pending';
             $pp->status_stage2 = 'pending';
@@ -57,13 +57,12 @@ class ProposalSeeder extends Seeder
                     }';
             // Decode into an associative array
             $data = json_decode($json, true);
-            /*
+
             if ($i % 2 === 1) {
                 $pp->files = $data;
             } else{
                 $pp->files = [];
-            }*/
-            $pp->files = $data;
+            }
 
             $pp->pp = [
                 'title' => $name,

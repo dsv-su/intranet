@@ -53,4 +53,10 @@ class ViceController extends Controller
         return redirect()->back();
     }
 
+    public function reset()
+    {
+        Artisan::call('clear-test');
+        return redirect()->back();
+    }
+
 }
