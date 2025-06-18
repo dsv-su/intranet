@@ -30,7 +30,7 @@ class ProposalSeeder extends Seeder
             // Create a new proposal directly
             $pp = new ProjectProposal();
             $pp->user_id = $userId;
-            $pp->name = $name = $i . '' .$faker->sentence(4);
+            $pp->name = $name = $i . ' ' .$faker->sentence(4);
             $pp->created = $timestamp;
             $pp->status_stage1 = 'pending';
             $pp->status_stage2 = 'pending';
@@ -57,13 +57,12 @@ class ProposalSeeder extends Seeder
                     }';
             // Decode into an associative array
             $data = json_decode($json, true);
-            /*
+
             if ($i % 2 === 1) {
                 $pp->files = $data;
             } else{
                 $pp->files = [];
-            }*/
-            $pp->files = $data;
+            }
 
             $pp->pp = [
                 'title' => $name,

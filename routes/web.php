@@ -86,3 +86,4 @@ Route::get('/admin/del/{id}', [\App\Http\Controllers\AdminController::class, 'pp
 //Test
 Route::get('/test', [TestController::class, 'test'])->name('test');
 Route::get('/seed', [\App\Http\Controllers\ViceController::class, 'seed'])->name('proposal-seeder');
+Route::get('/reset', [\App\Http\Controllers\ViceController::class, 'reset'])->name('proposal-reset');
