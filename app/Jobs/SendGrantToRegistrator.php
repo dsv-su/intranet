@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\RegistratorFinalApproval;
+use App\Mail\RegistratorGrantLetter;
 use App\Models\SettingsVice;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 
-class SendFinalToRegistrator implements ShouldQueue
+class SendGrantToRegistrator implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -35,7 +35,7 @@ class SendFinalToRegistrator implements ShouldQueue
     public function handle(): void
     {
         //Registrator
-        Mail::to($this->dsv->registrator)->send(new RegistratorFinalApproval($this->user,  $this->dashboard, $this->filePath));
+        Mail::to($this->dsv->registrator)->send(new RegistratorGrantLetter($this->user,  $this->dashboard, $this->filePath));
         File::delete(public_path('download/' . $this->dashboard->request_id . '/'. 'ProjectProposal-' . $this->dashboard->name . '.zip'));
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendFinalToRegistrator;
+use App\Jobs\SendGrantToRegistrator;
 use App\Mail\GrantNotificationVice;
+use App\Mail\SentNotificationVice;
 use App\Models\BudgetTemplate;
 use App\Models\Dashboard;
 use App\Models\DsvBudget;
@@ -368,6 +370,10 @@ class ProposalController extends Controller
                     $user = User::find($pp->dashboard->user_id);
                     SendFinalToRegistrator::dispatch($user, $pp->dashboard, $filePath);
 
+                    //Send notification to vice
+                    $user = User::find($dashboard->user_id);
+                    $vice = $this->getViceHeadUser();
+                    Mail::to($vice->email)->send(new SentNotificationVice($user, $vice, $dashboard));
 
                     return redirect()->route('pp', 'my')->with('success', 'Your proposal has been successfully registered as sent. Thank you!');
                 } else {
@@ -398,7 +404,17 @@ class ProposalController extends Controller
 
                 //Comments stamp
                 $this->comments_update($request->id, $request->edit_comments, 'granted');
-                //Send email to vice and fo
+
+                //Create attachment
+                $reg = new FilesForRegistrator($pp);
+                $reg->storeDecisionLetter();
+
+                //Send to registrator
+                $filePath = public_path('download/'  . $pp->id .'/'. 'ProjectProposal-' . $pp->name . '.zip');
+                $user = User::find($pp->dashboard->user_id);
+                SendGrantToRegistrator::dispatch($user, $pp->dashboard, $filePath);
+
+                //Send notification to vice
                 $user = User::find($dashboard->user_id);
                 $vice = $this->getViceHeadUser();
                 Mail::to($vice->email)->send(new GrantNotificationVice($user, $vice, $dashboard));
@@ -426,10 +442,15 @@ class ProposalController extends Controller
                 //Comments stamp
                 $this->comments_update($request->id, $request->edit_comments, 'rejected');
 
-                //Send email to vice and fo
-                $user = User::find($dashboard->user_id);
-                $vice = $this->getViceHeadUser();
-                //Mail::to($vice->email)->send(new GrantNotificationVice($user, $vice, $dashboard));
+                //Create attachment
+                $reg = new FilesForRegistrator($pp);
+                $reg->storeDecisionLetter();
+
+                //Send to registrator
+                $filePath = public_path('download/'  . $pp->id .'/'. 'ProjectProposal-' . $pp->name . '.zip');
+                $user = User::find($pp->dashboard->user_id);
+                SendGrantToRegistrator::dispatch($user, $pp->dashboard, $filePath);
+                
                 return redirect()->route('pp', 'my')->with('success', 'Your project proposal has been registered as a denied project!');
 
             case 'review':

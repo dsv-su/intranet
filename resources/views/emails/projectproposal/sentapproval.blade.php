@@ -8,9 +8,9 @@ To vicehead
 <br>
 ---
 <br><br>
-Granted Proposal
+Sent Proposal
 <br><br>
-This is an automated notification to inform you that application, <strong>{{$dashboard->name}}</strong>, has been granted.
+This is an automated notification to inform you that application, <strong>{{$dashboard->name}}</strong>, has been sent. A copy of the application and the project budget has also been sent to the DSV registrator.
 Please find the relevant details through the following link:
 
 <br><br>
