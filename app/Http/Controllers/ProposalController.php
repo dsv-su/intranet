@@ -450,7 +450,7 @@ class ProposalController extends Controller
                 $filePath = public_path('download/'  . $pp->id .'/'. 'ProjectProposal-' . $pp->name . '.zip');
                 $user = User::find($pp->dashboard->user_id);
                 SendGrantToRegistrator::dispatch($user, $pp->dashboard, $filePath);
-                
+
                 return redirect()->route('pp', 'my')->with('success', 'Your project proposal has been registered as a denied project!');
 
             case 'review':
