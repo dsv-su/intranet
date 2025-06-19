@@ -4,6 +4,7 @@
 /public/storage
 /public/assets
 /public/vendor/statamic
+/public/download
 /storage/*.key
 /vendor
 .env
@@ -22,5 +23,5 @@ yarn-error.log
 /systemconfig/internt.ini
 composer.lock
 /resources/users
-resources/users/groups.yaml
-resources/users/roles.yaml
+/resources/users/groups.yaml
+/resources/users/roles.yaml

@@ -1,7 +1,7 @@
 <div>
     <p class="mt-1 text-gray-600 dark:text-gray-400">Project proposals</p>
     <div class="mt-5 space-y-4">
-        <form action="{{ route('form_settings') }}" method="POST">
+        <form action="{{ route('vice_settings.form') }}" method="POST">
             @csrf
             <div class="mt-3">
                 <div class="border rounded-xl shadow-sm p-6 dark:bg-slate-800 dark:border-gray-700">

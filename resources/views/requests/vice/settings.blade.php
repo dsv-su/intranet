@@ -37,11 +37,17 @@
                                 </div>
                                 <livewire:pp.research-area />
                                 <br>
+                                @include('pp.partials.flashmessage')
                                 <p class="mt-1 text-gray-600 font-semibold dark:text-gray-400">Overhead settings</p>
                                 @include('requests.vice.partials.oh')
-                                <!-- FO -->
                                 <br>
+                                <p class="mt-1 text-gray-600 font-semibold dark:text-gray-400">DSV Registrator</p>
+                                @include('requests.vice.partials.registrator')
+                                <!-- Budget template upload -->
+                                <br>
+                                <p class="mt-1 text-gray-600 font-semibold dark:text-gray-400">Budget template</p>
                                 <livewire:pp.budget-template-uploader :template="$template" />
+                                <!-- FO -->
                                 <br>
                                 <p class="mt-1 text-gray-600 dark:text-gray-400">Other settings</p>
                                 <p class="mt-1 text-gray-600 font-semibold dark:text-gray-400">Financial Officer</p>

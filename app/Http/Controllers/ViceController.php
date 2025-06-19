@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BudgetTemplate;
 use App\Models\SettingsOh;
+use App\Models\SettingsVice;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -19,7 +20,6 @@ class ViceController extends Controller
     public function settings()
     {
         //Financial officers
-        //$roleIds = DB::table('role_user')->where('role_id', 'financial_officer')->pluck('user_id');
         $roleIds = DB::table('group_user')->where('group_id', 'ekonomi')->pluck('user_id');
         $viewData['fos'] = User::whereIn('id', $roleIds)->get();
 
@@ -27,13 +27,15 @@ class ViceController extends Controller
         $viewData['vicehead'] = User::find($roleId);
         $viewData['oh'] = SettingsOh::first();
         $viewData['template'] = BudgetTemplate::firstOrCreate(
-            ['name' => 'DSVBudgetTemplate'],
-            ['files' => []]);
+                                        ['name' => 'DSVBudgetTemplate'],
+                                        ['files' => []]);
+
+        $viewData['dsv'] = SettingsVice::firstOrCreate();
+
 
         return (new \Statamic\View\View)
             ->template('requests.vice.settings')
             ->layout('mylayout')
-            //->with(['vice' => $vicehead, 'fos' => $financialofficer]);
             ->with($viewData);
     }
 
@@ -48,7 +50,25 @@ class ViceController extends Controller
         $oh->oh_eu = $request->oh_eu;
         $oh->save();
 
-        return redirect()->back();
+        return redirect()
+            ->back()
+            ->with('success', 'Overhead settings updated.');
+    }
+
+    public function registrator(Request $request)
+    {
+
+        $validated = $request->validate([
+            'dsv_registrator' => 'required|string'
+        ]);
+
+        $dsv = SettingsVice::first();
+        $dsv->registrator = $request->dsv_registrator;
+        $dsv->save();
+
+        return redirect()
+            ->back()
+            ->with('success', 'Registrator email updated.');
     }
 
     public function seed()
@@ -61,6 +81,11 @@ class ViceController extends Controller
     {
         Artisan::call('clear-test');
         return redirect()->back();
+    }
+
+    private function prepareViewData()
+    {
+
     }
 
 }

@@ -55,9 +55,19 @@ Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListControlle
 Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'swelist'])->name('swelist');
 
 //Vice settings
-Route::get('/vice_settings', [\App\Http\Controllers\ViceController::class, 'settings'])->name('vice_settings');
-Route::post('/settings/oh', [\App\Http\Controllers\ViceController::class, 'oh'])->name('oh_settings');
-Route::post('/settings/form', [\App\Http\Controllers\ViceController::class, 'form'])->name('form_settings');
+Route::prefix('vice-settings')
+    ->name('vice_settings.')
+    ->controller(\App\Http\Controllers\ViceController::class)
+    ->group(function () {
+        // Show the settings page
+        Route::get('/', 'settings')->name('index');
+        // Handle "oh" submission
+        Route::post('oh', 'oh')->name('oh');
+        // Handle "form" submission
+        Route::post('form', 'form')->name('form');
+        // Handle "registrator" submission
+        Route::post('registrator', 'registrator')->name('registrator');
+    });
 
 //Project Proposals
 Route::get('/pp/{slug}', [\App\Http\Controllers\ProposalController::class, 'pp'])->name('pp');

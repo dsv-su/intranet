@@ -20,9 +20,11 @@ class ProposalSeeder extends Seeder
         $faker = \Faker\Factory::create();
 
         // Generate
-        $userId = '9e4d9745-5809-4cbc-803f-8768221f1297';
-        $foUserId = '9e4d9745-5809-4cbc-803f-8768221f1297';
-        $viceId = '9e4d9745-5809-4cbc-803f-8768221f1297';
+        // '9e4d9745-5809-4cbc-803f-8768221f1297' - dev
+        // '9e25a704-50e2-41b9-9133-742dc24b3cef' - test
+
+        $userId = $foUserId =  $viceId = '9e4d9745-5809-4cbc-803f-8768221f1297';
+        $unit_head = ['9e4d9745-5809-4cbc-803f-8768221f1297'];
 
         for ($i = 0; $i < 4; $i++) {
             $timestamp = now()->startOfDay()->timestamp;
@@ -80,7 +82,7 @@ class ProposalSeeder extends Seeder
                 'cofinancing' => $faker->boolean(),
                 'other_cofinancing' => $faker->word(),
                 'project_duration' => $faker->numberBetween(1, 5),
-                'unit_head' => ['9e4d9745-5809-4cbc-803f-8768221f1297'],
+                'unit_head' => $unit_head,
                 'program' => $faker->word(),
                 'decision_exp' => '15/06/2025',
                 'start_date' => '16/06/2025',
@@ -112,7 +114,6 @@ class ProposalSeeder extends Seeder
 
             $dashboard = Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
             // Create unit head approved array
-            $unit_head = ['9e4d9745-5809-4cbc-803f-8768221f1297'];
 
             $dashboard->unit_heads = $unit_head;
             $unit_head_approved = [];
