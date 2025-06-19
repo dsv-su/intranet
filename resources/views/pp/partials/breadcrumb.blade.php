@@ -45,12 +45,14 @@
             <span class="inline-flex items-center gap-x-1 py-0 px-1 rounded-full text-[10px] font-medium border border-yellow-500 text-yellow-500">
                 Testmode
             </span>
+            @if(auth()->user()->isVice())
             <a type="button" href="{{route('proposal-seeder')}}" class="inline-flex items-center gap-x-1 py-0 px-1 rounded-full text-[10px] font-medium border border-green-500 text-green-500">
                 Seed
             </a>
             <a type="button" href="{{route('proposal-reset')}}" class="inline-flex items-center gap-x-1 py-0 px-1 rounded-full text-[10px] font-medium border border-red-500 text-red-500">
                 Reset
             </a>
+            @endif
             <div class="hidden md:block md:inline">
                 @if($roles ?? false)
                     @foreach($roles as $role)

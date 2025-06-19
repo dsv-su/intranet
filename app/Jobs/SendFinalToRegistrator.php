@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Mail\RegistratorFinalApproval;
 use App\Models\Dashboard;
+use App\Models\SettingsVice;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,13 +20,14 @@ class SendFinalToRegistrator implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    protected $user, $dashboard, $filePath;
+    protected $dsv, $user, $dashboard, $filePath;
 
     public function __construct($user, $dashboard, $filePath)
     {
         $this->user = $user;
         $this->dashboard = $dashboard;
         $this->filePath = $filePath;
+        $this->dsv = SettingsVice::first();
     }
 
     /**
@@ -34,9 +36,9 @@ class SendFinalToRegistrator implements ShouldQueue
     public function handle(): void
     {
         //Registrator
-        Mail::to('registrator@dsv.su.se')->send(new RegistratorFinalApproval($this->user,  $this->dashboard, $this->filePath));
+        Mail::to($this->dsv->registrator)->send(new RegistratorFinalApproval($this->user,  $this->dashboard, $this->filePath));
 
         //Vice
-        Mail::to('panagiotis@dsv.su.se')->send(new RegistratorFinalApproval($this->user,  $this->dashboard, $this->filePath));
+        //Mail::to('panagiotis@dsv.su.se')->send(new RegistratorFinalApproval($this->user,  $this->dashboard, $this->filePath));
     }
 }

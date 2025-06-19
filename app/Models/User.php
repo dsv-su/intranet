@@ -4,9 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use \Illuminate\Database\Eloquent\Concerns\HasUuids;
 
@@ -52,4 +54,18 @@ class User extends Authenticatable
     {
         return $this->hasOne(Dashboard::class);
     }
+
+    public function isVice(): bool
+    {
+        return in_array('vice_head', $this->getRoles());
+    }
+
+    private function getRoles(): array
+    {
+        return DB::table('role_user')
+            ->where('user_id', $this->id)
+            ->pluck('role_id')
+            ->toArray();
+    }
+
 }
