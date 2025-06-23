@@ -1,7 +1,6 @@
 {{--}}
 10% → Submitted
-15% → Complete
-20% → Vice Approval
+20% → Complete
 40% → UHApproval
 60% → Budget Review
 80% → Final Approval
@@ -17,18 +16,11 @@
         @break
     @case('complete')
     @php
-        $progress = 15;
+        $progress = 30;
         $message = 'Processing';
         $color = 'bg-purple-600';
     @endphp
     @break
-    @case('vice_approved')
-        @php
-            $progress = 25;
-            $message = 'Processing';
-            $color = 'bg-purple-600';
-        @endphp
-        @break
     @case('head_approved')
         @php
             $progress = 55;
@@ -143,13 +135,13 @@
                     </div>
                 </div>
 
-                <!-- Step 2: Vice Approval -->
+                <!-- Step 2: Complete -->
                 <div class="relative z-10 grid h-3 w-3 cursor-pointer place-items-center rounded-full
                     {{ $progress >= 20 ? $color : 'bg-gray-500' }} font-bold transition-all duration-300">
                     <div class="absolute -bottom-[1.8rem] w-max text-center text-xs">
                         <h6 class="hidden md:block uppercase font-sans text-[0.65rem] antialiased font-semibold leading-relaxed tracking-normal
                             {{ $progress >= 20 ? 'text-blue-500' : 'text-gray-500' }}">
-                            Vice Approval
+                            Complete
                         </h6>
                     </div>
                 </div>

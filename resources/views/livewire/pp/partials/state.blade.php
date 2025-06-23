@@ -21,7 +21,6 @@
     @endphp
     @break
     @case('complete')
-    @case('vice_approved')
     @case('head_approved')
     @case('fo_approved')
         @php
@@ -52,7 +51,6 @@
         @endphp
         @break
     @case('head_denied')
-    @case('vice_denied')
     @case('fo_denied')
         @php
             $state = 'DENIED';
@@ -61,7 +59,6 @@
         @endphp
         @break
     @case('head_returned')
-    @case('vice_returned')
     @case('fo_returned')
         @php
             $state = 'RETURNED';

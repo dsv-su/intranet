@@ -496,12 +496,25 @@ class ProposalController extends Controller
                 //Update comments
                 $this->comments_update($request->id, $request->comment, 'approved');
                 switch($role->check()) {
-                    case 'vice':
+                    case 'head':
                         //Approve draft file
                         (new ProposalFileReviewService($request->id))
                             ->approvePendingByType('draft');
-                        //Signal state change
-                        $workflowhandler->ViceApprove();
+                        //Flag approved
+                        $headGroup = $dashboard;
+                        $unitHeadApproved = json_decode($headGroup->unit_head_approved, true);
+                        $keyToUpdate = $user->id;
+
+                        if (isset($unitHeadApproved[$keyToUpdate]) && $unitHeadApproved[$keyToUpdate] === 0) {
+                            $unitHeadApproved[$keyToUpdate] = 1;
+                        }
+                        $headGroup->unit_head_approved = json_encode($unitHeadApproved);
+                        $headGroup->save();
+
+                        if (!in_array(0, json_decode($dashboard->unit_head_approved, true))) {
+                            $workflowhandler->HeadApprove();
+                        }
+
                         //Update budget stats
                         $proposal = ProjectProposal::find($dashboard->request_id);
                         $budget = new Budget($proposal);
@@ -511,24 +524,6 @@ class ProposalController extends Controller
                         $budget->phd_increment($proposal->pp['research_area']);
                         $budget->cost_increment($proposal->pp['research_area']);
 
-                        break;
-                    case 'head':
-                        //Flag approved
-                        $headGroup = $dashboard;
-                        $unitHeadApproved = json_decode($headGroup->unit_head_approved, true);
-                        $keyToUpdate = $user->id;
-
-                        if (isset($unitHeadApproved[$keyToUpdate]) && $unitHeadApproved[$keyToUpdate] === 0) {
-                            $unitHeadApproved[$keyToUpdate] = 1;
-                        }
-
-                        $headGroup->unit_head_approved = json_encode($unitHeadApproved);
-                        $headGroup->save();
-
-
-                        if (!in_array(0, json_decode($dashboard->unit_head_approved, true))) {
-                            $workflowhandler->HeadApprove();
-                        }
                         break;
 
                     case 'fo':
@@ -547,11 +542,6 @@ class ProposalController extends Controller
                 //Update comments
                 $this->comments_update($request->id, $request->comment, 'denied');
                 switch($role->check()) {
-                    case 'vice':
-                        $workflowhandler->ViceDeny();
-                        $calc = new ReCalcBudget();
-                        $calc->scan();
-                        break;
                     case 'head':
                         $workflowhandler->HeadDeny();
                         $calc = new ReCalcBudget();
@@ -568,9 +558,6 @@ class ProposalController extends Controller
                 //Update comments
                 $this->comments_update($request->id, $request->comment, 'returned');
                 switch($role->check()) {
-                    case 'vice':
-                        $workflowhandler->ViceReturn();
-                        break;
                     case 'head':
                         $workflowhandler->HeadReturn();
                         $calc = new ReCalcBudget();
@@ -707,11 +694,6 @@ class ProposalController extends Controller
     protected function resumeWorkflow($dashboard)
     {
         switch($dashboard->state) {
-            case(RequestStates::VICE_RETURNED):
-                $dashboard->state = RequestStates::SUBMITTED;
-                $dashboard->save();
-                $workflow = WorkflowStub::make(DSVProjectPWorkflow::class);
-                break;
             case(RequestStates::HEAD_RETURNED):
                 $dashboard->state = RequestStates::SUBMITTED;
                 $dashboard->save();

@@ -20,8 +20,7 @@ class DashboardRole
     {
         // Map states to role fields
         $roles = [
-            'complete' => 'vice_id',
-            'vice_approved' => 'head_id',
+            'complete' => 'head_id',
             'head_approved' => 'fo_id',
             'fo_approved' => 'vice_id',
         ];
@@ -39,8 +38,7 @@ class DashboardRole
     private function getRoleFromState($state)
     {
         $roleMapping = [
-            'complete' => 'vice',
-            'vice_approved' => 'head',
+            'complete' => 'head',
             'head_approved' => 'fo',
             'fo_approved' => 'vice_final',
         ];

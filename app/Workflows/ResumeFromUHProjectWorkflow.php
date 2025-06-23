@@ -138,7 +138,7 @@ class ResumeFromUHProjectWorkflow extends Workflow
         //Wait for user to upload files
         yield WorkflowStub::await(fn () => ($this->isComplete()));
 
-        if(!$this->DraftFilesChanged()) {
+        /*if(!$this->DraftFilesChanged()) {
             //Transition to previous state
             $this->vice_approve();
         } else {
@@ -163,7 +163,7 @@ class ResumeFromUHProjectWorkflow extends Workflow
                     //End workflow
                     return $this->stateMachine->state->status();
             }
-        }
+        }*/
 
         //Email to Head
         yield ActivityStub::make(ResumeProjectProposalNotification::class, RequestStates::UNIT_HEAD, $userRequest);

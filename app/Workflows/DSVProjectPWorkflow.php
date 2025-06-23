@@ -144,9 +144,10 @@ class DSVProjectPWorkflow extends Workflow
         //Wait for complete signal
         yield WorkflowStub::await(fn () => ($this->isComplete()));
 
+        /*
         //Notify Vice
-        yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::VICE, $userRequest);
-        //yield ActivityStub::make(PPStatusUpdateUsersStage1::class, RequestStates::VICE, 'review', $userRequest);
+        //yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::VICE, $userRequest);
+        yield ActivityStub::make(PPStatusUpdateUsersStage1::class, RequestStates::VICE, 'review', $userRequest);
 
         //Wait for vice decision
         yield WorkflowStub::await(fn () => ($this->ViceApproved() || $this->ViceDenied() || $this->ViceReturned()));
@@ -166,7 +167,7 @@ class DSVProjectPWorkflow extends Workflow
                 }
                 //End workflow
                 return $this->stateMachine->state->status();
-        }
+        }*/
 
         //Notify Head
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::UNIT_HEAD, $userRequest);

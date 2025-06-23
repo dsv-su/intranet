@@ -11,7 +11,7 @@ We are pleased to inform you that your
 
 has been approved
 @if($dashboard->type == 'projectproposal')
-    for submission.
+    for submission. You may now submit your application.
 @else
     .
 @endif

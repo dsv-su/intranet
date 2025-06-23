@@ -4,7 +4,7 @@
 <br><br>
 ---
 <br>
-To User(Project proposer)
+To Project proposer
 <br>
 ---
 <br>
@@ -32,8 +32,6 @@ Here's a quick overview of the request:
 @endforeach
 <br><br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}}
-<br><br>
-<b>Preapproved by vice head:</b> {{Carbon\Carbon::parse($dashboard->updated_at)->format('Y-m-d')}}
 <br><br>
 <b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>

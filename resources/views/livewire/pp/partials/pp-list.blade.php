@@ -121,15 +121,13 @@
                                             Review
                                         </a>
                                     @endif
-                                    @if($resume ?? false)
+                                    <!-- Resume -->
+                                    @if($proposal->allowResume() ?? false)
                                         <a type="button"
                                             href="{{route('pp-resume', $proposal->id)}}"
                                             class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150">
-                                            <svg class="w-3 h-3 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12.25V1m0 11.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M4 19v-2.25m6-13.5V1m0 2.25a2.25 2.25 0 0 0 0 4.5m0-4.5a2.25 2.25 0 0 1 0 4.5M10 19V7.75m6 4.5V1m0 11.25a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM16 19v-2"/>
-                                            </svg>
                                             Resume
                                         </a>
                                     @endif
@@ -200,18 +198,6 @@
                                             Rejected
                                         </a>
                                     @endif
-
-                                    <!-- Resume -->
-                                    @if($proposal->allowEdit() and in_array((string) $proposal->status_stage1, ['head_returned', 'vice_returned', 'fo_returned', 'final_returned']))
-                                        <a type="button"
-                                           href="{{route('pp-resume', $proposal->id)}}"
-                                           class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
-                                            uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
-                                            disabled:opacity-25 transition ease-in-out duration-150">
-                                            Resume
-                                        </a>
-                                    @endif
-
                                 </div>
                                 <!-- End button group -->
 
@@ -220,27 +206,12 @@
                             <div class="flex flex-col items-end mt-4 md:mt-0 w-full md:w-1/4">
 
                                 <!-- Uncomplete proposal -->
-                                @if(in_array((string) $proposal->dashboard?->state, ['submitted', 'vice_approved', 'head_approved', 'fo_approved']) && (count($proposal->files ?? []) <= 1))
+                                @if(in_array((string) $proposal->dashboard?->state, ['submitted', 'head_approved', 'fo_approved', 'final_approved']) && (count($proposal->files ?? []) <= 1))
                                     <p class="text-xs text-gray-600 dark:text-neutral-400 text-right">
                                         <span class="font-semibold">Upload files:</span>
                                         <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Waiting</span>
                                     </p>
                                 @endif
-                                <!-- vice head -->
-                                <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
-                                    <span class="font-semibold">Vice head:</span>
-                                    @if(in_array((string) $proposal->dashboard?->state, ['vice_approved', 'head_returned', 'head_approved', 'fo_returned', 'fo_approved', 'final_returned', 'final_approved','sent', 'granted']))
-                                        <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['vice_denied', 'head_denied', 'fo_denied', 'denied']))
-                                        <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['vice_returned']))
-                                        <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Returned</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['complete']))
-                                        <span class="bg-blue-100 text-blue-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400 border border-blue-500">Processing</span>
-                                    @else
-                                        <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Waiting</span>
-                                    @endif
-                                </p>
                                 <!-- UH -->
                                 <p class="mt-2 text-xs text-gray-600 dark:text-neutral-400 text-right">
 
@@ -253,13 +224,11 @@
 
                                 @if(in_array((string) $proposal->dashboard?->state, ['head_approved', 'fo_returned', 'fo_approved', 'final_returned', 'final_approved', 'sent', 'granted']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['head_denied', 'vice_denied', 'fo_denied', 'denied']))
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['head_denied', 'fo_denied', 'final_denied', 'denied']))
                                         <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['head_returned']))
                                         <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Returned</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['vice_returned']))
-                                        <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Pending</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['vice_approved']) && (count($proposal->files ?? []) > 1))
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['complete']) && (count($proposal->files ?? []) > 1))
                                         <span class="bg-blue-100 text-blue-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400 border border-blue-500">Processing</span>
                                     @else
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Waiting</span>
@@ -271,15 +240,15 @@
                                     <span class="font-semibold">Economy:</span>
                                     @if(in_array((string) $proposal->dashboard?->state, ['fo_approved', 'final_returned', 'final_approved','sent', 'granted']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['head_denied', 'vice_denied', 'fo_denied', 'denied']))
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['head_denied', 'fo_denied', 'final_denied', 'denied']))
                                         <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['fo_returned']))
                                         <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Returned</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['head_returned', 'vice_returned']))
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['head_returned']))
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Pending</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['head_approved']))
                                         <span class="bg-blue-100 text-blue-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400 border border-blue-500">Processing</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['submitted', 'complete', 'vice_approved']))
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['submitted', 'complete']))
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Waiting</span>
                                     @else
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Waiting</span>
@@ -290,15 +259,15 @@
                                     <span class="font-semibold">Final approval:</span>
                                     @if(in_array((string) $proposal->dashboard?->state, ['final_approved','sent', 'granted']))
                                         <span class="bg-green-100 text-green-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">Approved</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['vice_denied', 'fo_denied', 'denied']))
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['head_denied', 'fo_denied', 'final_denied', 'denied']))
                                         <span class="bg-red-100 text-red-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-red-700 dark:text-red-400 border border-red-400">Denied</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['final_returned']))
                                         <span class="bg-yellow-100 text-yellow-800 text-[0.65rem] font-medium me-1.5 px-2 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-400 border border-yellow-400">Returned</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['head_returned', 'vice_returned']))
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['head_returned']))
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Pending</span>
                                     @elseif(in_array((string) $proposal->dashboard?->state, ['fo_approved']))
                                         <span class="bg-blue-100 text-blue-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400 border border-blue-500">Processing</span>
-                                    @elseif(in_array((string) $proposal->dashboard?->state, ['submitted', 'complete', 'vice_approved', 'head_approved']))
+                                    @elseif(in_array((string) $proposal->dashboard?->state, ['submitted', 'complete', 'head_approved']))
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Waiting</span>
                                     @else
                                         <span class="bg-gray-100 text-gray-800 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">Waiting</span>
