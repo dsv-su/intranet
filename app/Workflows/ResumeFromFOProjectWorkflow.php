@@ -138,7 +138,6 @@ class ResumeFromFOProjectWorkflow extends Workflow
         yield WorkflowStub::await(fn () => ($this->isComplete()));
 
         //Transition to previous state
-        $this->vice_approve();
         $this->head_approve();
 
         //Email to FO for review

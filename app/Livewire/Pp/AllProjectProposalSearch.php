@@ -43,7 +43,10 @@ class AllProjectProposalSearch extends Component
                 ->where('status_stage3', '!=', 'pending')
                 ->where(function($query) {
                     $query->where('name', 'like', '%'. $this->searchProposal .'%')
-                        ->orWhere('pp', 'like', '%'. $this->searchProposal .'%');
+                        ->orWhereRaw(
+                            "JSON_UNQUOTE(JSON_EXTRACT(pp, '$.*')) LIKE ?",
+                            ["%{$this->searchProposal}%"]
+                        );
                 })
                 ->orderBy('created_at', 'desc')
                 ->paginate(6);
@@ -53,17 +56,6 @@ class AllProjectProposalSearch extends Component
     public function render()
     {
         $user = Auth::user();
-        /*
-        $proposals = ProjectProposal::with('dashboard')
-            ->where(function($query) {
-                $query->where('name', 'like', '%'. $this->searchProposal .'%')
-                    ->orWhere('pp', 'like', '%'. $this->searchProposal .'%');
-            })
-            //->where('pp->status', '!=', 'denied') // Dont retrive denied proposals
-            ->paginate(6);
-        */
-
-
         $proposals = $this->fetchProposals();
         return view('livewire.pp.all-project-proposal-search',
             ['proposals' => $proposals]);

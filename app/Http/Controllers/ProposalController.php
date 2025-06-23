@@ -496,24 +496,6 @@ class ProposalController extends Controller
                 //Update comments
                 $this->comments_update($request->id, $request->comment, 'approved');
                 switch($role->check()) {
-                    case 'vice':
-                        /*
-                        //Approve draft file
-                        (new ProposalFileReviewService($request->id))
-                            ->approvePendingByType('draft');
-                        //Signal state change
-                        $workflowhandler->ViceApprove();
-                        //Update budget stats
-                        $proposal = ProjectProposal::find($dashboard->request_id);
-                        $budget = new Budget($proposal);
-                        //Preapproval count
-                        $budget->preapproved_increment($proposal->pp['research_area']);
-                        $budget->budget_increment($proposal->pp['research_area']);
-                        $budget->phd_increment($proposal->pp['research_area']);
-                        $budget->cost_increment($proposal->pp['research_area']);
-
-                        break;
-                        */
                     case 'head':
                         //Approve draft file
                         (new ProposalFileReviewService($request->id))
@@ -560,13 +542,6 @@ class ProposalController extends Controller
                 //Update comments
                 $this->comments_update($request->id, $request->comment, 'denied');
                 switch($role->check()) {
-                    case 'vice':
-                        /*
-                        $workflowhandler->ViceDeny();
-                        $calc = new ReCalcBudget();
-                        $calc->scan();
-                        break;
-                        */
                     case 'head':
                         $workflowhandler->HeadDeny();
                         $calc = new ReCalcBudget();
@@ -583,11 +558,6 @@ class ProposalController extends Controller
                 //Update comments
                 $this->comments_update($request->id, $request->comment, 'returned');
                 switch($role->check()) {
-                    case 'vice':
-                        /*
-                        $workflowhandler->ViceReturn();
-                        break;
-                        */
                     case 'head':
                         $workflowhandler->HeadReturn();
                         $calc = new ReCalcBudget();
@@ -724,11 +694,6 @@ class ProposalController extends Controller
     protected function resumeWorkflow($dashboard)
     {
         switch($dashboard->state) {
-            case(RequestStates::VICE_RETURNED):
-                $dashboard->state = RequestStates::SUBMITTED;
-                $dashboard->save();
-                $workflow = WorkflowStub::make(DSVProjectPWorkflow::class);
-                break;
             case(RequestStates::HEAD_RETURNED):
                 $dashboard->state = RequestStates::SUBMITTED;
                 $dashboard->save();

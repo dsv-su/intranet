@@ -139,13 +139,11 @@ class ResumeFromFinalProjectWorkflow extends Workflow
 
         if(!$this->DraftFilesChanged() && !$this->BudgetFilesChanged()) {
             //Transition to previous state
-            $this->vice_approve();
             $this->head_approve();
             $this->fo_approve();
         }
         elseif ($this->BudgetFilesChanged()) {
             //Transition to FO
-            $this->vice_approve();
             $this->head_approve();
 
             //Email to FO

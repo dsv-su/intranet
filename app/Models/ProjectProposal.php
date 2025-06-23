@@ -52,6 +52,27 @@ class ProjectProposal extends Model
         return $user->id === $dashboard->user_id;
     }
 
+    public function allowResume(): bool
+    {
+        $user      = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+
+        // no Dashboard → can’t resume
+        if (! $dashboard) {
+            return false;
+        }
+
+        // state must be one of these three
+        $allowed = ['head_returned', 'fo_returned', 'final_returned'];
+        if (! in_array((string) $dashboard->state, $allowed, true)) {
+            return false;
+        }
+
+        // only the owner may resume
+        return $user->id === $dashboard->user_id;
+    }
+
+
     public function allowUpload():bool
     {
         $user = Auth::user();
