@@ -23,9 +23,9 @@ class ProposalSeeder extends Seeder
         // '9e4d9745-5809-4cbc-803f-8768221f1297' - dev
         // '9e25a704-50e2-41b9-9133-742dc24b3cef' - test
         // '9b618981-74c2-45b0-9819-49f5d9bc206e' - prod
-        
-        $userId = $foUserId =  $viceId = '9e25a704-50e2-41b9-9133-742dc24b3cef';
-        $unit_head = ['9e25a704-50e2-41b9-9133-742dc24b3cef'];
+
+        $userId = $foUserId =  $viceId = '9b618981-74c2-45b0-9819-49f5d9bc206e';
+        $unit_head = ['9b618981-74c2-45b0-9819-49f5d9bc206e'];
 
 
         for ($i = 0; $i < 4; $i++) {
