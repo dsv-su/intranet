@@ -40,7 +40,7 @@
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/20
                                         dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-500/30 break-words max-w-full">
-                                        {{ $budget->research_area[$proposal->pp['research_area']]['budget'] }}
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['budget_sek'] }}
                                     </span>
                                 </div>
                                 <div class="break-words">
@@ -48,7 +48,7 @@
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/20
                                         dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-500/30 break-words max-w-full">
-                                        N/A
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['budget_eur'] }}
                                     </span>
                                 </div>
                                 <div class="break-words">
@@ -56,7 +56,7 @@
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/20
                                         dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-500/30 break-words max-w-full">
-                                        N/A
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['budget_usd'] }}
                                     </span>
                                 </div>
 
@@ -65,7 +65,7 @@
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
                                         dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
-                                        {{ $budget->research_area[$proposal->pp['research_area']]['cost'] }}
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['cost_sek'] }}
                                     </span>
                                 </div>
 
@@ -79,20 +79,28 @@
                                 </div>
 
                                 <div class="break-words">
-                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Sent</h2>
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Granted(SEK)</h2>
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
                                         dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
-                                        {{ $budget->research_area[$proposal->pp['research_area']]['final'] }}
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['granted_sek'] ?? 'N/A' }}
                                     </span>
                                 </div>
 
                                 <div class="break-words">
-                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Granted</h2>
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Granted(EUR)</h2>
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
                                         dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
-                                        {{ $budget->research_area[$proposal->pp['research_area']]['granted'] ?? 'N/A' }}
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['granted_eur'] ?? 'N/A' }}
+                                    </span>
+                                </div>
+                                <div class="break-words">
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Granted(USD)</h2>
+                                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                                        bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
+                                        dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['granted_usd'] ?? 'N/A' }}
                                     </span>
                                 </div>
 
@@ -154,29 +162,77 @@
                                 </div>
 
                                 <div class="break-words">
-                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Budget</h2>
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Budget(SEK)</h2>
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
                                         dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
-                                        {{ $budget->budget_dsv_total }}
+                                        {{ $budget->budget_dsv_total_sek }}
+                                    </span>
+                                </div>
+                                <div class="break-words">
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Budget(EUR)</h2>
+                                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                                        bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
+                                        dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
+                                        {{ $budget->budget_dsv_total_eur }}
+                                    </span>
+                                </div>
+                                <div class="break-words">
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Budget(USD)</h2>
+                                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                                        bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
+                                        dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
+                                        {{ $budget->budget_dsv_total_usd }}
                                     </span>
                                 </div>
 
                                 <div class="break-words">
-                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Project Budget</h2>
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Project Budget(SEK)</h2>
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
                                         dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
-                                        {{ $budget->budget_project_total }}
+                                        {{ $budget->budget_project_total_sek }}
+                                    </span>
+                                </div>
+                                <div class="break-words">
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Project Budget(EUR)</h2>
+                                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                                        bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
+                                        dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
+                                        {{ $budget->budget_project_total_eur }}
+                                    </span>
+                                </div>
+                                <div class="break-words">
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Project Budget(USD)</h2>
+                                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                                        bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
+                                        dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
+                                        {{ $budget->budget_project_total_usd }}
                                     </span>
                                 </div>
 
                                 <div class="break-words">
-                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Cofinancing needed</h2>
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Cofinancing needed(SEK)</h2>
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                     bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
                                     dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
-                                    {{ $budget->cost_total }}
+                                    {{ $budget->cost_total_sek }}
+                                    </span>
+                                </div>
+                                <div class="break-words">
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Cofinancing needed(EUR)</h2>
+                                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                                    bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
+                                    dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
+                                    {{ $budget->cost_total_eur }}
+                                    </span>
+                                </div>
+                                <div class="break-words">
+                                    <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Cofinancing needed(USD)</h2>
+                                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
+                                    bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
+                                    dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
+                                    {{ $budget->cost_total_usd }}
                                     </span>
                                 </div>
 
