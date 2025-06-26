@@ -10,13 +10,15 @@
 </div>
 
 <div class="w-full">
-    <label for="granted" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Granted amount") }}<span class="text-red-600"> *</span></label>
+    <label for="granted" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Granted amount") }}<span class="text-red-600"> *</span>
+    {{__("in ")}} {{strtoupper($proposal->pp['currency'])}}</label>
     <input type="number" name="granted"
            class="mb-2 font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                                 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
            value="{{ old('granted') ? old('granted'): $proposal->pp['granted'] ??  '' }}"
            placeholder="Granted amount" @if($type == 'granted' or $type == 'edit' or $type == 'resume') required @else readonly @endif>
-    <label for="cofinanced_promised" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Cofinanced promised") }}<span class="text-red-600"> *</span></label>
+    <label for="cofinanced_promised" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Cofinanced promised") }}<span class="text-red-600"> *</span>
+        {{__("in ")}} {{strtoupper($proposal->pp['currency'])}}</label>
     <input type="number" name="cofinanced_promised"
            class="mb-2 font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                                 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"

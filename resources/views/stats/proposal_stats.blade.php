@@ -27,16 +27,24 @@
             <!-- First row -->
             <div class="lg:flex lg:gap-8 mt-6">
                 <div class="w-full lg:w-1/2">
-                    <h5 class="text-xl dark:text-white">Commited</h5>
                     <x-chartjs-component :chart="$chart['researchsubject_preapproved']" />
                 </div>
+
+            </div>
+            <!-- Second row -->
+            <div class="lg:flex lg:gap-6 mt-6">
                 <div class="w-full lg:w-1/2">
-                    <h5 class="text-xl dark:text-white">Commited budget</h5>
-                    <x-chartjs-component :chart="$chart['researchsubject_commited']" />
+                    <x-chartjs-component :chart="$chart['researchsubject_commited_sek']" />
+                </div>
+                <div class="w-full lg:w-1/2">
+                    <x-chartjs-component :chart="$chart['researchsubject_commited_eur']" />
+                </div>
+                <div class="w-full lg:w-1/2">
+                    <x-chartjs-component :chart="$chart['researchsubject_commited_usd']" />
                 </div>
             </div>
 
-            <!-- Second row -->
+            <!-- Third row -->
             <div class="lg:flex lg:gap-8 mt-6">
                 <div class="w-full lg:w-1/2">
                     <h5 class="text-xl dark:text-white">Funding Agency</h5>

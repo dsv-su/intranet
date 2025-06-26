@@ -20,11 +20,19 @@
                 </p>
             </a>
             <div class="text-center transition-transform duration-200 hover:scale-105 hover:text-blue-500 dark:hover:text-blue-300">
+                <h6 class="text-sm font-bold lg:text-base dark:text-gray-200">{{$sent ?? 0}}</h6>
+                <p class="text-xs font-medium tracking-wide text-gray-800 dark:text-gray-200 uppercase lg:text-xs">
+                    Sent applications
+                </p>
+            </div>
+            {{--}}
+            <div class="text-center transition-transform duration-200 hover:scale-105 hover:text-blue-500 dark:hover:text-blue-300">
                 <h6 class="text-sm font-bold lg:text-base dark:text-gray-200">{{$funding_organizations}}</h6>
                 <p class="text-xs font-medium tracking-wide text-gray-800 dark:text-gray-200 uppercase lg:text-xs">
                     Funding organizations
                 </p>
             </div>
+            {{--}}
         </div>
     </div>
 </div>

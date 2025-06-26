@@ -17,6 +17,7 @@ class ProjectProposalHome extends Component
     public $proposals;
     public $myproposals;
     public $awaiting;
+    public $sent;
     public $funding_organizations;
 
     public function mount()
@@ -25,7 +26,8 @@ class ProjectProposalHome extends Component
         $user = Auth::user();
         $this->my($user);
         $this->awaiting($user);
-        $this->funding_organizations = FundingOrganization::count();
+        //$this->funding_organizations = FundingOrganization::count();
+        $this->sentproposals();
     }
 
     public function hydrate()
@@ -49,6 +51,17 @@ class ProjectProposalHome extends Component
     public function allproposals()
     {
         $this->dispatch('allproposals');
+    }
+
+    public function sentproposals()
+    {
+        //Dashboard sent states
+        $sent_states = [
+            'sent', 'granted'
+        ];
+
+        //Fetch and count sent proposals
+        $this->sent = Dashboard::whereIn('state', $sent_states)->count();
     }
 
     public function render()
