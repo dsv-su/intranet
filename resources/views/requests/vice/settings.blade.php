@@ -37,6 +37,7 @@
                                 </div>
                                 <livewire:pp.research-area />
                                 <br>
+                                <p class="mt-1 text-gray-600 dark:text-gray-400">Funding organizations</p>
                                 <livewire:pp.funding-org-edit />
                                 <br>
                                 @include('pp.partials.flashmessage')
