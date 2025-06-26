@@ -37,6 +37,8 @@
                                 </div>
                                 <livewire:pp.research-area />
                                 <br>
+                                <livewire:pp.funding-org-edit />
+                                <br>
                                 @include('pp.partials.flashmessage')
                                 <p class="mt-1 text-gray-600 font-semibold dark:text-gray-400">Overhead settings</p>
                                 @include('requests.vice.partials.oh')
