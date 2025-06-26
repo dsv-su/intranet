@@ -202,12 +202,6 @@ class ProposalController extends Controller
                     $uh_group->save();
                 }
 
-                //Budget
-                /*$budget = new Budget($pp);
-                $budget->budget_increment($pp->pp['research_area']);
-                $budget->phd_increment($pp->pp['research_area']);
-                $budget->cost_increment($pp->pp['research_area']);*/
-
                 // Start workflow and store workflow ID
                 $workflow = $this->createAndStartWorkflow($pp->dashboard);
                 //$this->workflowID = $workflow->id();
@@ -259,11 +253,6 @@ class ProposalController extends Controller
                     $uh_group->multiple_heads = true;
                     $uh_group->save();
                 }
-                //Budget
-                /*$budget = new Budget($pp);
-                $budget->budget_increment($pp->pp['research_area']);
-                $budget->phd_increment($pp->pp['research_area']);
-                $budget->cost_increment($pp->pp['research_area']);*/
 
                 if($this->checkFiles($pp)) {
                     //Transition

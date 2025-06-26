@@ -41,7 +41,7 @@ class ProposalSeeder extends Seeder
             $pp->status_stage3 = 'submitted';
             $json = '{
                       "Proposal.pdf": {
-                        "path":"proposals/9f25b0c4-4685-488d-90fa-5ed572f72770/draft//53bymbb7MAkyEO7HVRC8VbKjyqRYU5zCd7yT6T4A.pdf",
+                        "path":"proposals/9f25b0c4-4685-488d-90fa-5ed572f72770/draft/53bymbb7MAkyEO7HVRC8VbKjyqRYU5zCd7yT6T4A.pdf",
                         "tmp":"f32qNekWqmJCznUjC0z1iv9xcjs21w-metaTWFudWFsX2ludGVybndlYmJlbi5wZGY=-.pdf",
                         "size":488,
                         "date":"13/06/2025",
@@ -50,7 +50,7 @@ class ProposalSeeder extends Seeder
                         "uploader":"Admin User"
                       },
                       "budget.xlsx": {
-                        "path":"proposals/9f25b0c4-4685-488d-90fa-5ed572f72770/budget//2JinNo2iaCG8mrSVwS3Iky5R1Cm4SV2kn99XBAtt.xlsx",
+                        "path":"proposals/9f25b0c4-4685-488d-90fa-5ed572f72770/budget/2JinNo2iaCG8mrSVwS3Iky5R1Cm4SV2kn99XBAtt.xlsx",
                         "tmp":"p56yqLRR3G92DPFAonOeoMQ9XzO8za-metaRFNDMDE2MzEuanBn-.jpg",
                         "size":2224,
                         "date":"13/06/2025",
@@ -62,12 +62,12 @@ class ProposalSeeder extends Seeder
             // Decode into an associative array
             $data = json_decode($json, true);
 
-            if ($i % 2 === 1) {
+            /*if ($i % 2 === 1) {
                 $pp->files = $data;
             } else{
                 $pp->files = [];
-            }
-
+            }*/
+            $pp->files = [];
             $pp->pp = [
                 'title' => $name,
                 'objective' => $faker->paragraph(),
@@ -75,7 +75,8 @@ class ProposalSeeder extends Seeder
                 'principal_investigator_email' => $faker->safeEmail(),
                 'co_investigator_name' => [$faker->name()],
                 'co_investigator_email' => [$faker->safeEmail()],
-                'research_area' => 'Business Process Management and Enterprise Modeling',
+                //'research_area' => 'Business Process Management and Enterprise Modeling',
+                'research_area' => 'Cyber Security',
                 'dsvcoordinating' => 'yes',
                 'other_coordination' => $faker->word(),
                 'eu' => 'no',
@@ -89,12 +90,14 @@ class ProposalSeeder extends Seeder
                 'decision_exp' => '15/06/2025',
                 'start_date' => '16/06/2025',
                 'submission_deadline' => '30/06/2025',
-                'budget_project' => $faker->randomFloat(0, 10000, 500000),
-                'budget_dsv' => $faker->randomFloat(0, 5000, 100000),
+                //'budget_project' => $faker->randomFloat(0, 10000, 500000),
+                'budget_project' => 1000,
+                //'budget_dsv' => $faker->randomFloat(0, 5000, 100000),
+                'budget_dsv' => 100,
                 'budget_phd' => 1,
-                'currency' => 'SEK',
+                'currency' => 'usd',
                 'oh_cost' => 10,
-                'cofinancing_needed' => 100,
+                'cofinancing_needed' => 500,
                 'user_comments' => $faker->sentence(),
                 'submitted' => $timestamp,
                 'status' => 'pending',

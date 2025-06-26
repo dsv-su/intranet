@@ -27,36 +27,38 @@
             <!-- First row -->
             <div class="lg:flex lg:gap-8 mt-6">
                 <div class="w-full lg:w-1/2">
-                    <h5 class="text-xl dark:text-white">Granted Amount</h5>
-                    <x-chartjs-component :chart="$chart['researchsubject_approved']" />
+                    <h5 class="text-xl dark:text-white">Granted Amount(SEK)</h5>
+                    <x-chartjs-component :chart="$chart['researchsubject_granted_sek']" />
                 </div>
-                {{--}}
+
                 <div class="w-full lg:w-1/2">
-                    <h5 class="text-xl dark:text-white">Co finacing needed</h5>
-                    <x-chartjs-component :chart="$chart['researchsubject_cost']" />
+                    <h5 class="text-xl dark:text-white">Co finacing promised(SEK)</h5>
+                    <x-chartjs-component :chart="$chart['researchsubject_promised_sek']" />
                 </div>
-                {{--}}
-                {{--}}
-                <div class="w-full lg:w-1/2">
-                    <h5 class="text-xl dark:text-white">Granted total</h5>
-                    <x-chartjs-component :chart="$chart['researchsubject_final']" />
-                </div>
-                {{--}}
+
             </div>
 
             <!-- Second row -->
-            {{--}}
             <div class="lg:flex lg:gap-8 mt-6">
                 <div class="w-full lg:w-1/2">
-                    <h5 class="text-xl dark:text-white">Funding Agency</h5>
-                    <x-chartjs-component :chart="$chart['agency']" />
+                    <x-chartjs-component :chart="$chart['researchsubject_granted_eur']" />
                 </div>
+
                 <div class="w-full lg:w-1/2">
-                    <h5 class="text-xl dark:text-white">PhD years</h5>
-                    <x-chartjs-component :chart="$chart['researchsubject_phd']" />
+                    <x-chartjs-component :chart="$chart['researchsubject_promised_eur']" />
                 </div>
             </div>
-            {{--}}
+            <!-- Third row -->
+            <div class="lg:flex lg:gap-8 mt-6">
+                <div class="w-full lg:w-1/2">
+                    <x-chartjs-component :chart="$chart['researchsubject_granted_usd']" />
+                </div>
+
+                <div class="w-full lg:w-1/2">
+                    <x-chartjs-component :chart="$chart['researchsubject_promised_usd']" />
+                </div>
+            </div>
+
         </div>
     </section>
 
