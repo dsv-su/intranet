@@ -35,7 +35,7 @@ class ReCalcBudget
         $dashboardSentRequests = Dashboard::whereIn('state', $sent_states)->count();
 
         //Fetch and count granted proposals
-        $dashboardGrantedRequests = Dashboard::whereIn('state', 'granted')->count();
+        $dashboardGrantedRequests = Dashboard::whereIn('state', ['granted'])->count();
 
         // Initialize per-area accumulators
         $counts             = [];
