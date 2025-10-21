@@ -32,7 +32,7 @@ class Skatteverket
     public function getCountry()
     {
         //Retrive allowances
-        $year = 2024;
+        $year = 2025;
         $this->array_resource = json_decode($this->getResource('/dataset/70ccea31-b64c-4bf5-84c7-673f04f32505?%C3%A5r=' . $year . '&_limit=500&_offset=0')->getBody()->getContents(), TRUE);
 
         foreach ($this->array_resource['results'] as $result_country) {
