@@ -38,14 +38,15 @@ class EnsureUserForReview
         $reviewers = [
             'complete' => [
                 'travelrequest' => $dashboard->manager_id,
-                'projectproposal' => $dashboard->vice_id,
+                //'projectproposal' => $dashboard->vice_id,
+                'projectproposal' => is_array($dashboard->unit_heads) ? $dashboard->unit_heads : [$dashboard->unit_heads], // Ensure array
             ],
             'manager_approved' => $dashboard->head_id,
             'head_approved' => [
                 'travelrequest' => $dashboard->fo_id,
                 'projectproposal' => $dashboard->fo_id,
             ],
-            'vice_approved' => is_array($dashboard->unit_heads) ? $dashboard->unit_heads : [$dashboard->unit_heads], // Ensure array
+            //'vice_approved' => is_array($dashboard->unit_heads) ? $dashboard->unit_heads : [$dashboard->unit_heads], // Ensure array
             'fo_approved' => $dashboard->vice_id,
         ];
 
@@ -53,7 +54,7 @@ class EnsureUserForReview
 
         if (is_array($allowedReviewers) && !isset($allowedReviewers['travelrequest'])) {
             // Check if the user is in an array (for cases like 'vice_approved')
-            if (in_array($user->id, $allowedReviewers)) {
+            if (in_array($user->id, $allowedReviewers['projectproposal'])) {
                 return $next($request);
             }
         } else {

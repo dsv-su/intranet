@@ -138,33 +138,6 @@ class ResumeFromUHProjectWorkflow extends Workflow
         //Wait for user to upload files
         yield WorkflowStub::await(fn () => ($this->isComplete()));
 
-        /*if(!$this->DraftFilesChanged()) {
-            //Transition to previous state
-            $this->vice_approve();
-        } else {
-            //Email to Vice
-            yield ActivityStub::make(ResumeProjectProposalNotification::class, RequestStates::VICE, $userRequest);
-            //Wait for vice decision
-            yield WorkflowStub::await(fn () => ($this->ViceApproved() || $this->ViceDenied() || $this->ViceReturned()));
-            //Handle vice decision
-            $newState = $this->getState();
-            $commonActivities = $this->getCommonActivities($userRequest);
-
-            // Await stateupdate
-            yield $commonActivities[0];
-
-            switch ($newState) {
-                case RequestStates::VICE_RETURNED:
-                case RequestStates::VICE_DENIED:
-                    //Request has been returned or denied by vice
-                    foreach ($commonActivities as $activity) {
-                        yield $activity;
-                    }
-                    //End workflow
-                    return $this->stateMachine->state->status();
-            }
-        }*/
-
         //Email to Head
         yield ActivityStub::make(ResumeProjectProposalNotification::class, RequestStates::UNIT_HEAD, $userRequest);
 

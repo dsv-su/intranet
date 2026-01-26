@@ -18,7 +18,8 @@ class ProjectProposalHome extends Component
     public $myproposals;
     public $awaiting;
     public $sent;
-    public $funding_organizations;
+    public int $myCount;
+    public int $allCount;
 
     public function mount()
     {
@@ -26,8 +27,9 @@ class ProjectProposalHome extends Component
         $user = Auth::user();
         $this->my($user);
         $this->awaiting($user);
-        //$this->funding_organizations = FundingOrganization::count();
         $this->sentproposals();
+        $this->myCount = $this->myproposals->count();
+        $this->allCount = $this->proposals->count();
     }
 
     public function hydrate()

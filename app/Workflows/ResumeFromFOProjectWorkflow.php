@@ -11,6 +11,7 @@ use App\Workflows\Notifications\StateUpdateNotification;
 use App\Workflows\Partials\RequestStates;
 use App\Workflows\Transitions\Stage2UpdateTransition;
 use App\Workflows\Transitions\StateUpdateTransition;
+use App\Workflows\Transitions\UnitHeadApprovedTransition;
 use Workflow\ActivityStub;
 use Workflow\Models\StoredWorkflow;
 use Workflow\Workflow;
@@ -138,7 +139,7 @@ class ResumeFromFOProjectWorkflow extends Workflow
         yield WorkflowStub::await(fn () => ($this->isComplete()));
 
         //Transition to previous state
-        $this->head_approve();
+        yield ActivityStub::make(UnitHeadApprovedTransition::class, $userRequest);
 
         //Email to FO for review
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::FINACIAL_OFFICER, $userRequest);
