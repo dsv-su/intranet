@@ -51,6 +51,7 @@ abstract class DashboardState extends State
             //Complete
             ->allowTransition(Submitted::class, Complete::class)
             ->allowTransition(Complete::class, Submitted::class)
+            ->allowTransition(Complete::class, Complete::class)
 
             //Head
             ->allowTransition(Complete::class, HeadApproved::class)
@@ -70,25 +71,30 @@ abstract class DashboardState extends State
             ->allowTransition(HeadApproved::class, FOApproved::class)
             ->allowTransition(FOApproved::class,HeadApproved::class)
             ->allowTransition(FOApproved::class,Submitted::class)
+            ->allowTransition(FOApproved::class,Complete::class)
             ->allowTransition(FOApproved::class,FOApproved::class)
             ->allowTransition(HeadApproved::class, FOReturned::class)
 
             ->allowTransition(FOReturned::class,HeadApproved::class)
             ->allowTransition(FOReturned::class,Submitted::class)
             ->allowTransition(FOReturned::class,FOReturned::class)
+            ->allowTransition(FOReturned::class,Complete::class)
             ->allowTransition(HeadApproved::class, FODenied::class)
             ->allowTransition(FODenied::class,HeadApproved::class)
             ->allowTransition(FODenied::class,Submitted::class)
             ->allowTransition(FODenied::class,FODenied::class)
                 //Final
+            ->allowTransition(Complete::class, FinalApproved::class)
             ->allowTransition(FOApproved::class, FinalApproved::class)
             ->allowTransition(FinalApproved::class,FOApproved::class)
             ->allowTransition(FinalApproved::class,Submitted::class)
             ->allowTransition(FinalApproved::class,FinalApproved::class)
+            ->allowTransition(FinalApproved::class,Complete::class)
             ->allowTransition(FOApproved::class, FinalReturned::class)
             ->allowTransition(FinalReturned::class,FOApproved::class)
             ->allowTransition(FinalReturned::class,Submitted::class)
             ->allowTransition(FinalReturned::class,FinalReturned::class)
+            ->allowTransition(FinalReturned::class,Complete::class)
             ->allowTransition(FOApproved::class, FinalDenied::class)
             ->allowTransition(FinalDenied::class,FOApproved::class)
             ->allowTransition(FinalDenied::class,Submitted::class)

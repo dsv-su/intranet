@@ -69,7 +69,7 @@ class ProposalController extends Controller
     }
     public function pp_edit($id)
     {
-        $viewData = $this->prepareProjectProposalData();
+        $viewData = $this->prepareProjectProposalData($id);
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['type'] = 'edit';
@@ -79,7 +79,7 @@ class ProposalController extends Controller
 
     public function pp_resume($id)
     {
-        $viewData = $this->prepareProjectProposalData();
+        $viewData = $this->prepareProjectProposalData($id);
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['budget'] = DsvBudget::find(1);
@@ -96,7 +96,6 @@ class ProposalController extends Controller
         $downloadPath = $firstFile['path'];
 
         return Storage::download($downloadPath);
-
     }
 
     public function create()
@@ -109,7 +108,7 @@ class ProposalController extends Controller
 
     public function pp_complete($id)
     {
-        $viewData = $this->prepareProjectProposalData();
+        $viewData = $this->prepareProjectProposalData($id);
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['type'] = 'complete';
@@ -119,12 +118,12 @@ class ProposalController extends Controller
 
     public function upload($id)
     {
-        $viewData = $this->prepareProjectProposalData();
+        $viewData = $this->prepareProjectProposalData($id);
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['type'] = 'complete';
         $viewData['upload'] = true;
-        //dd($viewData);
+
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
@@ -204,7 +203,6 @@ class ProposalController extends Controller
 
                 // Start workflow and store workflow ID
                 $workflow = $this->createAndStartWorkflow($pp->dashboard);
-                //$this->workflowID = $workflow->id();
 
                 //Check files
                 $this->checkFileStatus($pp);
@@ -263,10 +261,8 @@ class ProposalController extends Controller
                 } else {
                     return redirect()->route('pp', 'my')->with('success', 'Your Project proposal has been updated!');
                 }
-
                 break;
             case 'edit':
-                //dd($request->all());
                 $pp = ProjectProposal::find($request->id);
                 $pp->update([
                     'user_id' => $userId,
@@ -305,13 +301,8 @@ class ProposalController extends Controller
                 // Dashboard instance creation or update
                 $dashboardData = [
                     'request_id' => $pp->id,
-                    'name' => $request->title,
-                    'created' => $timestamp,
-                    'user_id' => $userId,
-                    'fo_id' => $foUserId,
-                    'vice_id' => $this->getViceHeadUserId()
+                    'name' => $request->title
                 ];
-
                 $dashboard = Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
 
                 // Resume workflow and store workflow ID
@@ -470,7 +461,6 @@ class ProposalController extends Controller
                 break;
         }
         dd('Error');
-
     }
 
     public function decision(Request $request)
@@ -512,9 +502,7 @@ class ProposalController extends Controller
                         $budget->budget_increment($proposal->pp['research_area']);
                         $budget->phd_increment($proposal->pp['research_area']);
                         $budget->cost_increment($proposal->pp['research_area']);
-
                         break;
-
                     case 'fo':
                         //Approve budgetfile
                         (new ProposalFileReviewService($request->id))
@@ -570,7 +558,7 @@ class ProposalController extends Controller
 
     public function pp_sent($id)
     {
-        $viewData = $this->prepareProjectProposalData();
+        $viewData = $this->prepareProjectProposalData($id);
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['type'] = 'sent';
@@ -580,7 +568,7 @@ class ProposalController extends Controller
 
     public function pp_granted($id)
     {
-        $viewData = $this->prepareProjectProposalData();
+        $viewData = $this->prepareProjectProposalData($id);
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['type'] = 'granted';
@@ -590,7 +578,7 @@ class ProposalController extends Controller
 
     public function pp_rejected($id)
     {
-        $viewData = $this->prepareProjectProposalData();
+        $viewData = $this->prepareProjectProposalData($id);
         $viewData['proposal'] = ProjectProposal::find($id);
         $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
         $viewData['type'] = 'rejected';
@@ -607,7 +595,6 @@ class ProposalController extends Controller
             //'project_duration' => 'required|numeric|integer',
             //'oh_cost' => 'required|numeric|max:56'
         ];
-
 
         return $this->validate($request, $rules);
     }
@@ -670,7 +657,6 @@ class ProposalController extends Controller
 
     protected function createAndStartWorkflow($dashboard)
     {
-        //$workflow = WorkflowStub::make(ProjectWorkflow::class);
         $workflow = WorkflowStub::make(DSVProjectPWorkflow::class);
         $dashboard->workflow_id = $workflow->id();
         $dashboard->save();
@@ -678,7 +664,6 @@ class ProposalController extends Controller
         $workflow->submit();
         return $workflow;
     }
-
 
     protected function resumeWorkflow($dashboard)
     {
@@ -699,14 +684,13 @@ class ProposalController extends Controller
                 $workflow = WorkflowStub::make(\App\Workflows\ResumeFromFinalProjectWorkflow::class);
                 break;
         }
-
         $dashboard->workflow_id = $workflow->id();
         $dashboard->save();
         $workflow->start($dashboard);
         $workflow->submit();
+
         return $workflow;
     }
-
 
     /***
      * Private functions
@@ -762,28 +746,35 @@ class ProposalController extends Controller
         return User::find($viceUserID);
     }
 
-    private function prepareProjectProposalData()
+    private function prepareProjectProposalData(?string $id = null)
     {
         $roleIdsUnitHead = $this->getUserIdsByGroup('enhetschef');
         $unitheads = User::whereIn('id', $roleIdsUnitHead)->get();
         $research_areas = ResearchArea::all();
 
-        $proposal = new \App\Models\ProjectProposal();
+        if ($id) {
+            // Edit existing, or create if not found
+            $proposal = \App\Models\ProjectProposal::firstOrNew(['id' => $id]);
+        } else {
+            // Create new
+            $proposal = new \App\Models\ProjectProposal();
+        }
+
         //User
         $userId = Auth::user()->id;
-        //Timestamp
-        $timestamp = now()->startOfDay()->timestamp;
-        $proposal->fill([
-            'user_id' => $userId,
-            'name' => '',
-            'created' => $timestamp,
-            'status_stage1' => 'pending',
-            'status_stage2' => 'pending',
-            'status_stage3' => 'pending',
-            'files' => []
-        ]);
-        // Save Project Proposal
-        $proposal->save();
+
+        if (! $proposal->exists) {
+            $proposal->fill([
+                'user_id' => $userId,
+                'name' => '',
+                'created' => now()->startOfDay()->timestamp,
+                'status_stage1' => 'pending',
+                'status_stage2' => 'pending',
+                'status_stage3' => 'pending',
+                'files' => [],
+            ]);
+            $proposal->save();
+        }
 
         return [
             'unitheads' => $unitheads,

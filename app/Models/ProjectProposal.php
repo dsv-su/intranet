@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Spatie\ModelStates\HasStates;
@@ -26,6 +27,18 @@ class ProjectProposal extends Model
     public function dashboard(): HasOne
     {
         return $this->hasOne(Dashboard::class, 'request_id');
+    }
+
+    public function foUser(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            User::class,        // final model
+            Dashboard::class,  // intermediate model
+            'request_id',      // dashboards.request_id -> project_proposals.id
+            'id',           // users.id -> dashboards.fo_id
+            'id',            // project_proposals.id
+            'fo_id'      // dashboards.fo_id
+        );
     }
 
     public function allowEdit()

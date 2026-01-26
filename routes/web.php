@@ -49,6 +49,7 @@ Route::get('/viewpdf/{id}', [\App\Http\Controllers\FOController::class, 'pdfview
 Route::get('/travel/pdf/{id}', [\App\Http\Controllers\FOController::class, 'download'])->name('travel-request-pdf');
 Route::get('/settings', [\App\Http\Controllers\FOController::class, 'settings'])->name('settings');
 Route::post('/fo', [\App\Http\Controllers\FOController::class, 'settings_fo'])->name('fo');
+Route::get('/assign_fo', [\App\Http\Controllers\AssignFOController::class, 'index'])->name('assign.fo');
 
 //News list entries
 Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'list'])->name('list');

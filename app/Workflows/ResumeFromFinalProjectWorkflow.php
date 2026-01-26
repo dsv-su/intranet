@@ -9,8 +9,11 @@ use App\Workflows\Notifications\NewFinalApprovalNotification;
 use App\Workflows\Notifications\ResumeProjectProposalNotification;
 use App\Workflows\Notifications\StateUpdateNotification;
 use App\Workflows\Partials\RequestStates;
+use App\Workflows\Transitions\FOfficerApprovedTransition;
 use App\Workflows\Transitions\Stage2UpdateTransition;
 use App\Workflows\Transitions\StateUpdateTransition;
+use App\Workflows\Transitions\UnitHeadApprovedTransition;
+use App\Workflows\Transitions\ViceHeadApprovedTransition;
 use Workflow\ActivityStub;
 use Workflow\Models\StoredWorkflow;
 use Workflow\Workflow;
@@ -139,12 +142,12 @@ class ResumeFromFinalProjectWorkflow extends Workflow
 
         if(!$this->DraftFilesChanged() && !$this->BudgetFilesChanged()) {
             //Transition to previous state
-            $this->head_approve();
-            $this->fo_approve();
+            yield ActivityStub::make(UnitHeadApprovedTransition::class, $userRequest);
+            yield ActivityStub::make(FOfficerApprovedTransition::class, $userRequest);
         }
         elseif ($this->BudgetFilesChanged()) {
             //Transition to FO
-            $this->head_approve();
+            yield ActivityStub::make(UnitHeadApprovedTransition::class, $userRequest);
 
             //Email to FO
             yield ActivityStub::make(ResumeProjectProposalNotification::class, RequestStates::FINACIAL_OFFICER, $userRequest);
@@ -176,8 +179,8 @@ class ResumeFromFinalProjectWorkflow extends Workflow
             }
         }
         else {
-            //Draft has been changed
-            $this->vice_approve();
+            //Draft has been changed ? Should be UH + FO ?
+            yield ActivityStub::make(ViceHeadApprovedTransition::class, $userRequest);
             //TODO
         }
 

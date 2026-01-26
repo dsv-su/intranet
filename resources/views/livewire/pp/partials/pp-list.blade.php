@@ -15,7 +15,7 @@
                             <!-- Title of the Proposal -->
                             <p class="text-xs md:text-base font-normal text-gray-900 dark:text-white leading-tight">
                                 <strong>
-                                    {{ $proposal->pp['title'] }}
+                                    {{ $proposal->pp['title'] }} | <small>{{$proposal->id}}</small> | <small>{{$proposal->dashboard->id}}</small>
                                 </strong>
                                 {{--}}
                                 {{ \Illuminate\Support\Carbon::parse($proposal->created)->format('Y-m-d') }}
@@ -27,10 +27,18 @@
                             <!-- End Progress -->
                             <!-- Main Researcher and other details -->
                             <h4 class="text-xs font-medium text-gray-800 dark:text-neutral-200 tracking-wide">
-                                <span class="font-medium">Main researcher:</span> {{ $proposal->pp['principal_investigator'] }} &nbsp; | &nbsp;
-                                <span class="font-medium">Submission deadline:</span> {{ $proposal->pp['submission_deadline'] ?? '' }} &nbsp; | &nbsp;
+                                <span class="font-medium">Main researcher:</span>
+                                <span class="bg-blue-100 text-blue-800 border border-blue-500 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400">
+                                  {{ $proposal->pp['principal_investigator'] }}
+                                </span>
+                                | &nbsp;
+                                <span class="font-medium">Submission deadline:</span> <span class="font-semibold">
+                                    {{ $proposal->pp['submission_deadline'] ?? '' }}
+                                </span>
+                                &nbsp; | &nbsp;
                                 <span class="font-medium">Project duration:</span> {{ $proposal->pp['project_duration'] ?? '' }} (months) &nbsp; | &nbsp;
-                                <span class="font-medium">Economy owner:</span> [N/A]
+                                <span class="font-medium">Economy:</span>
+                                <livewire:pp.fo.assign :proposal="$proposal" :wire:key="$proposal->id"/>
                             </h4>
                         </div>
                         <!-- Right side (State label) -->
