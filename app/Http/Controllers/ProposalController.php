@@ -529,6 +529,9 @@ class ProposalController extends Controller
                         $calc = new ReCalcBudget();
                         $calc->scan();
                         break;
+                    case 'vice_final':
+                        $workflowhandler->FinalDeny();
+                        break;
                 }
                 break;
             case 'return':
