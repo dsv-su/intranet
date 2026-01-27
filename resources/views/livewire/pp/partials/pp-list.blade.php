@@ -15,7 +15,7 @@
                             <!-- Title of the Proposal -->
                             <p class="text-xs md:text-base font-normal text-gray-900 dark:text-white leading-tight">
                                 <strong>
-                                    {{ $proposal->pp['title'] }} | <small>{{$proposal->id}}</small> | <small>{{$proposal->dashboard->id}}</small>
+                                    {{ $proposal->pp['title'] }}
                                 </strong>
                                 {{--}}
                                 {{ \Illuminate\Support\Carbon::parse($proposal->created)->format('Y-m-d') }}
