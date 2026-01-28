@@ -62,12 +62,12 @@ class ProposalSeeder extends Seeder
             // Decode into an associative array
             $data = json_decode($json, true);
 
-            /*if ($i % 2 === 1) {
+            if ($i % 2 === 1) {
                 $pp->files = $data;
             } else{
                 $pp->files = [];
-            }*/
-            $pp->files = [];
+            }
+            //$pp->files = [];
             $pp->pp = [
                 'title' => $name,
                 'objective' => $faker->paragraph(),
@@ -76,7 +76,7 @@ class ProposalSeeder extends Seeder
                 'co_investigator_name' => [$faker->name()],
                 'co_investigator_email' => [$faker->safeEmail()],
                 //'research_area' => 'Business Process Management and Enterprise Modeling',
-                'research_area' => 'Cyber Security',
+                'research_area' => 'Cybersecurity',
                 'dsvcoordinating' => 'yes',
                 'other_coordination' => $faker->word(),
                 'eu' => 'no',

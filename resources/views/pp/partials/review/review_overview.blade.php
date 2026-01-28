@@ -40,7 +40,7 @@
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/20
                                         dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-500/30 break-words max-w-full">
-                                        {{ $budget->research_area[$proposal->pp['research_area']]['budget_sek'] }}
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['budget_sek'] ?? 0 }}
                                     </span>
                                 </div>
                                 <div class="break-words">
@@ -48,7 +48,7 @@
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/20
                                         dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-500/30 break-words max-w-full">
-                                        {{ $budget->research_area[$proposal->pp['research_area']]['budget_eur'] }}
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['budget_eur'] ?? 0 }}
                                     </span>
                                 </div>
                                 <div class="break-words">
@@ -56,7 +56,7 @@
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-gray-50 text-gray-700 ring-1 ring-inset ring-gray-600/20
                                         dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-500/30 break-words max-w-full">
-                                        {{ $budget->research_area[$proposal->pp['research_area']]['budget_usd'] }}
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['budget_usd'] ?? 0 }}
                                     </span>
                                 </div>
 
@@ -65,7 +65,7 @@
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
                                         dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
-                                        {{ $budget->research_area[$proposal->pp['research_area']]['cost_sek'] }}
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['cost_sek'] ?? 0 }}
                                     </span>
                                 </div>
 
@@ -74,7 +74,7 @@
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium
                                         bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20
                                         dark:bg-green-900 dark:text-green-200 dark:ring-green-400/30 break-words max-w-full">
-                                        {{ $budget->research_area[$proposal->pp['research_area']]['phd'] }}
+                                        {{ $budget->research_area[$proposal->pp['research_area']]['phd'] ?? 0 }}
                                     </span>
                                 </div>
 
