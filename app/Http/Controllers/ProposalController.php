@@ -88,6 +88,11 @@ class ProposalController extends Controller
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
+    public function usermanual()
+    {
+        $manual = 'PPManual.pdf';
+        return Storage::download($manual);
+    }
     public function budget()
     {
         $template     = BudgetTemplate::first();
