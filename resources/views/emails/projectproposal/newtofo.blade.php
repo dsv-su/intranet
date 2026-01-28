@@ -30,10 +30,12 @@ Here's a quick overview of the request:
 <br><br>
 <b>Approved by unit head(s):</b> {{Carbon\Carbon::parse($dashboard->updated_at)->format('Y-m-d')}}
 <br><br>
-You can review the details and take necessary action by accessing the proposal through the following link:
+<a href="{{ url('') }}/pp/all">Link to ProjectProposals</a>
 <br><br>
-<a href="{{ url('') }}/pp/review/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}}</a>
+<!--You can review the details and take necessary action by accessing the proposal through the following link:
 <br><br>
+<a href="{{-- url('') }}/pp/review/{{$dashboard->request_id}}">Direct link to {{$dashboard->name --}}</a>
+<br><br>-->
 ---
 <br>
 This is an automated email, please do not reply to this email.

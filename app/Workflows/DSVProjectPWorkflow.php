@@ -6,10 +6,9 @@ use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
 use App\Workflows\Checks\CheckFilesUploaded;
 use App\Workflows\Checks\CheckUploadedFiles;
-use App\Workflows\Notifications\CompletProjectProposalNotification;
 use App\Workflows\Notifications\NewFinalApprovalNotification;
+use App\Workflows\Notifications\NewPPtoFinance;
 use App\Workflows\Notifications\NewProjectProposalNotification;
-use App\Workflows\Notifications\RequestFilesUploadNotification;
 use App\Workflows\Notifications\StateUpdateNotification;
 use App\Workflows\Partials\RequestStates;
 use App\Workflows\Transitions\Stage2UpdateTransition;
@@ -144,31 +143,6 @@ class DSVProjectPWorkflow extends Workflow
         //(2)Wait for complete signal
         yield WorkflowStub::await(fn () => ($this->isComplete()));
 
-        /*
-        //Notify Vice
-        //yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::VICE, $userRequest);
-        yield ActivityStub::make(PPStatusUpdateUsersStage1::class, RequestStates::VICE, 'review', $userRequest);
-
-        //Wait for vice decision
-        yield WorkflowStub::await(fn () => ($this->ViceApproved() || $this->ViceDenied() || $this->ViceReturned()));
-
-        //Update Proposalstate
-        $newState = $this->getState();
-        $commonActivities = $this->getCommonActivities($userRequest);
-        yield $commonActivities[0];
-
-        //Handle vice reject decision
-        switch ($newState) {
-            case RequestStates::VICE_RETURNED:
-            case RequestStates::VICE_DENIED:
-                //Request has been returned or denied by vice
-                foreach ($commonActivities as $activity) {
-                    yield $activity;
-                }
-                //End workflow
-                return $this->stateMachine->state->status();
-        }*/
-
         //Notify Head
         yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::UNIT_HEAD, $userRequest);
         //yield ActivityStub::make(PPStatusUpdateUsersStage1::class, RequestStates::UNIT_HEAD, 'review', $userRequest);
@@ -194,7 +168,9 @@ class DSVProjectPWorkflow extends Workflow
         }
 
         //Notify FO (for review)
-        yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::FINACIAL_OFFICER, $userRequest);
+        //yield ActivityStub::make(NewProjectProposalNotification::class, RequestStates::FINACIAL_OFFICER, $userRequest);
+        //Notify entire FO group
+        yield ActivityStub::make(NewPPtoFinance::class, $userRequest);
 
         //(4)Wait for FO decision
         yield WorkflowStub::await(fn () => ($this->FOApproved() || $this->FODenied() || $this->FOReturned()));
