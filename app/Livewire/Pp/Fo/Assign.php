@@ -2,10 +2,13 @@
 
 namespace App\Livewire\Pp\Fo;
 
+use App\Mail\NotifyAssignedFO;
+use App\Mail\NotifyFONewProjectProposal;
 use App\Models\Dashboard;
 use App\Models\ProjectProposal;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class Assign extends Component
@@ -14,17 +17,29 @@ class Assign extends Component
     public $fos;
     public $fo_user_id;
     public $finaceOfficers;
+    public $dashboard;
 
     public function mount(ProjectProposal $proposal)
     {
         $this->proposal = $proposal;
         $this->fo_user_id = $proposal->foUser->id;
         $this->getFO();
+        $this->loadDashboard($proposal->dashboard->id);
     }
 
     public function updatedFoUserId($value)
     {
         Dashboard::where('request_id', $this->proposal->id)->update(['fo_id' => $value]);
+        $assignedFO = User::find($value);
+        //Send email
+        Mail::to($assignedFO->email)->send(
+            new NotifyAssignedFO($assignedFO, $this->dashboard)
+        );
+    }
+
+    private function loadDashboard(int $id): void
+    {
+        $this->dashboard = Dashboard::findOrFail($id);
     }
 
     public function getFO()
