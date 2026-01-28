@@ -33,6 +33,20 @@
                     </svg>
                     <span class="sr-only">Intranet</span>
                 </a>
+                <a type="button"
+                   data-tooltip-target="pp-manual-tooltip"
+                   href="{{route('usermanual')}}"
+                   class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium tracking-wide text-green-600 transition-colors duration-100
+                        bg-white border-2 border-green-600 rounded-md hover:text-white hover:bg-green-600">
+                    User Manual
+                    <svg class="size-3.5 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4"/>
+                    </svg>
+                    <span class="sr-only">Manual</span>
+                </a>
+
+
                 <!-- Stats -->
                 <a type="button"
                    data-tooltip-target="stats-tooltip"
@@ -92,6 +106,11 @@
 <div id="return-intranet-tooltip" role="tooltip"
      class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
      style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);" data-popper-placement="top">Return to Intranet
+    <div class="tooltip-arrow" data-popper-arrow></div>
+</div>
+<div id="pp-manual-tooltip" role="tooltip"
+     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+     style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);" data-popper-placement="top">Download Manual
     <div class="tooltip-arrow" data-popper-arrow></div>
 </div>
 <div id="vice-settings-tooltip" role="tooltip"
