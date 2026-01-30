@@ -12,6 +12,7 @@ use App\Models\DsvBudget;
 use App\Models\ProjectProposal;
 use App\Models\ResearchArea;
 use App\Models\SettingsFo;
+use App\Models\SettingsFoEu;
 use App\Models\SettingsOh;
 use App\Models\User;
 use App\Services\Budget\Budget;
@@ -144,6 +145,7 @@ class ProposalController extends Controller
 
         // Financial officer and authenticated user retrieval
         $foUserId = SettingsFo::find(1)?->user_id;
+        $foEuUserId = SettingsFoEu::find(1)?->user_id;
 
         //User
         $userId = Auth::user()->id;
@@ -154,7 +156,7 @@ class ProposalController extends Controller
         //Check submit type
         switch ($request->type) {
             case 'preapproval':
-                $pp = ProjectProposal::find($request->id);
+                $pp = ProjectProposal::findOrFail($request->id);
                 $pp->fill([
                     'user_id' => $userId,
                     'name' => $request->title,
@@ -166,7 +168,7 @@ class ProposalController extends Controller
                             'title', 'objective', 'principal_investigator', 'principal_investigator_email',
                             'co_investigator_name', 'co_investigator_email', 'research_area',
                             'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
-                            'cofinancing', 'other_cofinancing', 'project_duration', 'unit_head', 'program', 'decision_exp', 'funding_organization',
+                            'cofinancing', 'other_cofinancing', 'project_duration', 'unit_head', 'program', 'decision_exp',
                             'start_date', 'submission_deadline',
                             'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'cofinancing_needed','user_comments'
                         ]) + [
@@ -177,8 +179,12 @@ class ProposalController extends Controller
                 // Save Project Proposal
                 $pp->save();
 
+                $euYes = in_array(strtolower((string) data_get($pp->pp, 'eu')), ['yes','1','true'], true);
+                $foId = $euYes ? $foEuUserId : $foUserId;
+
+
                 // Dashboard instance creation or update
-                $dashboardData = [
+                /*$dashboardData = [
                     'request_id' => $pp->id,
                     'name' => $request->title,
                     'created' => $timestamp,
@@ -187,6 +193,16 @@ class ProposalController extends Controller
                     'user_id' => $userId,
                     'fo_id' => $foUserId,
                     'vice_id' => $this->getViceHeadUserId()
+                ];*/
+                $dashboardData = [
+                    'request_id' => $pp->id,
+                    'name' => $request->title,
+                    'created'    => $timestamp,
+                    'status'     => 'unread',
+                    'type'       => 'projectproposal',
+                    'user_id'    => $userId,
+                    'fo_id'      => $foId,
+                    'vice_id'    => $this->getViceHeadUserId(),
                 ];
 
                 $dashboard = Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
@@ -465,7 +481,7 @@ class ProposalController extends Controller
                     ->withInput();
                 break;
         }
-        dd('Error');
+        dd('Error: Something went wrong. Code S001');
     }
 
     public function decision(Request $request)
