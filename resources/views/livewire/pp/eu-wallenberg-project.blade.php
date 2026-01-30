@@ -4,7 +4,7 @@
         @if($wallenbergOrg)
             {{ "Wallenberg project" }}
         @else
-            {{ __("Is it an Wallenberg project?") }}
+            {{ __("Is it a Wallenberg project?") }}
         @endif
         <span class="text-red-600"> *</span>
 
@@ -22,6 +22,24 @@
 
         <!-- Radio Buttons -->
         <div class="flex gap-2 flex-1">
+
+            <!-- YES -->
+            <label for="eu_wallenberg_yes"
+                   class="flex items-center py-2 px-6 w-full bg-white border border-gray-300 rounded-lg text-sm
+                          focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
+                <input
+                    id="eu_wallenberg_yes"
+                    type="radio"
+                    wire:model.live="eu_wallenberg"
+                    name="eu_wallenberg"
+                    value="yes"
+                    class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50
+                           disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500
+                           dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                    @if($wallenbergOrg) disabled @else required @endif
+                />
+                <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Yes</span>
+            </label>
 
             <!-- NO -->
             <label for="eu_wallenberg_no"
@@ -41,23 +59,7 @@
                 <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">No</span>
             </label>
 
-            <!-- YES -->
-            <label for="eu_wallenberg_yes"
-                   class="flex items-center py-2 px-6 w-full bg-white border border-gray-300 rounded-lg text-sm
-                          focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
-                <input
-                    id="eu_wallenberg_yes"
-                    type="radio"
-                    wire:model.live="eu_wallenberg"
-                    name="eu_wallenberg"
-                    value="yes"
-                    class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50
-                           disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500
-                           dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                    @if($wallenbergOrg) disabled @else required @endif
-                />
-                <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">Yes</span>
-            </label>
+
 
         </div>
 
