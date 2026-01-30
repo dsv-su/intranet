@@ -53,7 +53,9 @@
                                 <!-- FO -->
                                 <br>
                                 <p class="mt-1 text-gray-600 dark:text-gray-400">Other settings</p>
-                                <p class="mt-1 text-gray-600 font-semibold dark:text-gray-400">Financial Officer</p>
+                                <p class="mt-1 text-gray-600 font-semibold dark:text-gray-400">Financial Officer EU projects</p>
+                                @include('requests.vice.partials.fo_eu')
+                                <p class="mt-1 text-gray-600 font-semibold dark:text-gray-400">Financial Officer Other projects</p>
                                 @include('requests.vice.partials.fo')
                                 <!-- end FO -->
 

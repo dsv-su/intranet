@@ -1,13 +1,13 @@
 <div class=" mt-5 border rounded-xl shadow-sm p-6 dark:bg-slate-800 dark:border-gray-700">
     <div class="w-1/2 border border-blue-500 text-sm text-blue-600 rounded-lg p-5 dark:bg-blue-600/[.15]">
-        {{\App\Models\SettingsFo::find(1)->name ?? 'Not set'}}
+        {{\App\Models\SettingsFoEu::find(1)->name ?? 'Not set'}}
     </div>
-    <form action="{{ route('fo') }}" method="POST">
+    <form action="{{ route('fo_eu') }}" method="POST">
         @csrf
         <div >
             <div class="mt-3">
-                <label for="fo_select" class="block text-sm font-medium text-gray-700">Change:</label>
-                <select id="fo_select" name="selected_fo" class="mt-1 block w-1/2 py-2 px-3 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+                <label for="fo_eu_select" class="block text-sm font-medium text-gray-700">Change:</label>
+                <select id="fo_eu_select" name="selected_fo_eu" class="mt-1 block w-1/2 py-2 px-3 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
                     @foreach($fos as $fo)
                         <option value="{{ $fo->id }}" @if($fo->active) selected @endif>{{ $fo->name }}</option>
                     @endforeach
