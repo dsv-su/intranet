@@ -22,7 +22,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Add a title for your Project proposal. This will be shown on your dashboard.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -63,7 +63,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Add a short name for your Travel Request. This will be shown on your dashboard.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact ekonomi@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact ekonomi@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -104,7 +104,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Write a short summary of the goals of the research..")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -145,7 +145,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("It is assumed that you are the lead investigator.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -186,7 +186,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("It is assumed that you are the lead investigator. Email for sending you notifications.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -227,7 +227,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Search and add your co-investigators. You can also manually add external collaborators from outside SU.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -268,7 +268,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Add the proposals research subject.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -309,7 +309,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Add the Unit head for the proposals research area to approve the proposal. ")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -350,7 +350,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Is DSV coordinating the research? If 'No' enter the other coordinator.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -391,7 +391,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Is this a proposal for an EU project? If so, a confirmation from SU Research Services will be required.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -432,7 +432,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Is this a proposal for a Wallenberg project? If so, a confirmation from SU Research Services will be required.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -473,7 +473,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Select the funding organization.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -514,7 +514,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the program call link.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -555,7 +555,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the excepted decision date.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -596,7 +596,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the start date.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -637,7 +637,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the submission date.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -678,7 +678,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the project duration. Project duration should be indicated in months.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -719,7 +719,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the budget for the entire project.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -760,7 +760,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the budget for DSV.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -799,9 +799,9 @@
             </div>
             <dl>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Please enter the requested years for the PhD student.")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Please enter the requested years for the PhD student, or 0 if none")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -842,7 +842,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the currency in SEK, Us dollars or Euro.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -883,7 +883,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("To support the Vice’s decision on how to proceed with this project, this note explains the reasoning behind the proposed co-financing arrangement.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -924,7 +924,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the percent OH cost covered.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -965,7 +965,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the budget for the cofinancing needed.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -1007,7 +1007,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Please provide your comments .")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 
@@ -1048,7 +1048,7 @@
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("All files that belong to the proposal should be added here. This is mandatory that you should upload the proposal's budget once you have it and a short description file of the proposal.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need moore help contact helpdesk@dsv.su.se")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
             <div class="flex justify-between items-center">
 

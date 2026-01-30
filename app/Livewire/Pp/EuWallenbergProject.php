@@ -23,6 +23,7 @@ class EuWallenbergProject extends Component
         'eu_show' => 'showCheckbox',
         'org_wallenberg' => 'wallenberg_org',
         'org_reset' => 'wallenberg_reset',
+        'eu_wallenberg_force_no' => 'forceNo',
     ];
 
     public function mount($proposal = null): void
@@ -51,6 +52,17 @@ class EuWallenbergProject extends Component
         }
 
         $this->syncVisibility();
+    }
+
+    public function forceNo(): void
+    {
+        // If org mode is on, don't fight it (org mode forces yes)
+        if ($this->wallenbergOrg) {
+            return;
+        }
+
+        $this->eu_wallenberg = 'no';
+        $this->syncVisibility(); // same helper you already have
     }
 
     private function syncVisibility(): void

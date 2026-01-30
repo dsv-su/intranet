@@ -129,7 +129,9 @@ class ProposalUploader extends Component
 
     public function updateProposal()
     {
-        $this->proposal->files = array_merge($this->proposal->files, $this->savedfiles);
+        //$this->proposal->files = array_merge($this->proposal->files, $this->savedfiles);
+        $existing = is_array($this->proposal->files) ? $this->proposal->files : [];
+        $this->proposal->files = array_merge($existing, $this->savedfiles);
         $this->proposal->save();
         $this->savedfiles = [];
         //$this->dispatch('upload_refresh');
@@ -191,7 +193,9 @@ class ProposalUploader extends Component
         $files = $this->proposal->files;
         $downloadfile = $files[$id]['path'];
 
-        return Storage::download($downloadfile, $id);
+        //return Storage::download($downloadfile, $id);
+        return Storage::download($downloadfile, $files[$id]['original'] ?? $id);
+
     }
 
     public function downloadfolder()

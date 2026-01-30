@@ -40,11 +40,23 @@ class EuProject extends Component
 
     private function syncStateFromEu(): void
     {
-        if ($this->eu === 'yes') {
+        /*if ($this->eu === 'yes') {
             $this->visibility = 'block';
             $this->dispatch('eu_hide');
         } else {
             // default to "no"/null behaviour
+            $this->visibility = 'hidden';
+            $this->dispatch('eu_show');
+        }*/
+        if ($this->eu === 'yes') {
+            $this->visibility = 'block';
+
+            // Hide the Wallenberg question UI (your existing behavior)
+            $this->dispatch('eu_hide');
+
+            // NEW: force the other component value to "no"
+            $this->dispatch('eu_wallenberg_force_no');
+        } else {
             $this->visibility = 'hidden';
             $this->dispatch('eu_show');
         }
