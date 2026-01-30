@@ -33,16 +33,25 @@
                     </svg>
                     <span class="sr-only">Intranet</span>
                 </a>
-                <a type="button"
-                   data-tooltip-target="pp-manual-tooltip"
-                   href="{{route('usermanual')}}"
-                   class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium tracking-wide text-green-600 transition-colors duration-100
-                        bg-white border-2 border-green-600 rounded-md hover:text-white hover:bg-green-600">
-                    User Manual
-                    <svg class="size-3.5 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                <a
+                    data-tooltip-target="pp-manual-tooltip"
+                    href="{{ route('usermanual') }}"
+                    class="relative inline-flex items-center justify-center gap-1.5
+                         h-[28px] sm:h-[38px]
+                         px-2 sm:px-3
+                         text-[11px] sm:text-xs
+                         font-medium tracking-wide
+                         text-green-600 bg-white border-2 border-green-600 rounded-md
+                         hover:text-white hover:bg-green-600 transition-colors duration-100
+                         whitespace-nowrap">
+                    <span class="hidden sm:inline">User Manual</span>
+
+                    <svg class="size-4 sm:size-3.5 shrink-0" aria-hidden="true"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4"/>
                     </svg>
+
                     <span class="sr-only">Manual</span>
                 </a>
 
