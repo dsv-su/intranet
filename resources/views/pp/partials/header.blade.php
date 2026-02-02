@@ -71,7 +71,7 @@
                     </svg>
                 </a>
                 <!-- ViceSettings -->
-                @if(auth()->user()->isVice())
+                @if(auth()->user()->isVice() || auth()->user()->isSuperAdmin())
                 <a type="button"
                     data-tooltip-target="vice-settings-tooltip"
                    href="{{route('vice_settings.index')}}">

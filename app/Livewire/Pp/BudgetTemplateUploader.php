@@ -42,11 +42,14 @@ class BudgetTemplateUploader extends Component
         $user = Auth::user();
         $allowed_roles = [$this->getViceHeadUserId()];
 
-        if (in_array($user->id, $allowed_roles) ) {
+        /*if (in_array($user->id, $allowed_roles) ) {
             $this->allow = true;
         } else {
             $this->allow = false;
-        }
+        }*/
+        $this->allow = $user && (
+                $user->isSuperAdmin() || in_array($user->id, $allowed_roles, true)
+            );
     }
 
     public function finishUpload($name, $tmpPath, $isMultiple)
@@ -144,7 +147,7 @@ class BudgetTemplateUploader extends Component
         return view('livewire.pp.budget-template-uploader');
     }
 
-    private function getViceHeadUserId(): string
+    private function getViceHeadUserId(): ?string
     {
         return DB::table('role_user')
             ->where('role_id', 'vice_head')
