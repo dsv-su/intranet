@@ -60,6 +60,11 @@ class User extends Authenticatable
         return in_array('vice_head', $this->getRoles());
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return (bool) $this->super;
+    }
+
     private function getRoles(): array
     {
         return DB::table('role_user')
