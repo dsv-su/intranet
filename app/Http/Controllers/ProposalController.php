@@ -166,7 +166,7 @@ class ProposalController extends Controller
                     'status_stage3' => 'submitted',
                     'pp' => $request->only([
                             'title', 'objective', 'principal_investigator', 'principal_investigator_email',
-                            'co_investigator_name', 'co_investigator_email', 'research_area',
+                            'co_investigator_name', 'co_investigator_email','co_investigator_type', 'co_investigator_role', 'research_area',
                             'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
                             'cofinancing', 'other_cofinancing', 'project_duration', 'unit_head', 'program', 'decision_exp',
                             'start_date', 'submission_deadline',
@@ -234,6 +234,8 @@ class ProposalController extends Controller
                 // Update only the 'co_investigator_name' and 'co_investigator_email' attributes
                 $updatedPp['co_investigator_name'] = $request->co_investigator_name;
                 $updatedPp['co_investigator_email'] = $request->co_investigator_email;
+                $updatedPp['co_investigator_type'] = $request->co_investigator_type;
+                $updatedPp['co_investigator_role'] = $request->co_investigator_role;
 
 
                 // Update the model without clearing existing 'files'
@@ -279,7 +281,7 @@ class ProposalController extends Controller
                     'created' => $timestamp,
                     'pp' => $request->only([
                         'title', 'objective', 'principal_investigator', 'principal_investigator_email',
-                        'co_investigator_name', 'co_investigator_email', 'research_area',
+                        'co_investigator_name', 'co_investigator_email', 'co_investigator_type', 'co_investigator_role', 'research_area',
                         'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
                         'cofinancing', 'other_cofinancing', 'project_duration', 'unit_head', 'program', 'decision_exp', 'funding_organization',
                         'start_date', 'submission_deadline',
@@ -298,7 +300,7 @@ class ProposalController extends Controller
                     'created' => $timestamp,
                     'pp' => $request->only([
                         'title', 'objective', 'principal_investigator', 'principal_investigator_email',
-                        'co_investigator_name', 'co_investigator_email', 'research_area',
+                        'co_investigator_name', 'co_investigator_email', 'co_investigator_type', 'co_investigator_role', 'research_area',
                         'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
                         'cofinancing', 'other_cofinancing', 'project_duration', 'unit_head', 'program', 'decision_exp', 'funding_organization',
                         'start_date', 'submission_deadline',

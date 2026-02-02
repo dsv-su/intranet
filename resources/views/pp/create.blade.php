@@ -62,14 +62,13 @@
 
                     <!-- Co Investigators -->
                     @if($type == 'preapproval')
-                        <livewire:select2.Coinvestigators-select2 proposal=""/>
+                        <livewire:pp.co-investigators />
                     @elseif( $type == 'complete' or $type == 'resume')
-                        <livewire:select2.Coinvestigators-select2 :proposal="$proposal" />
+                        <livewire:pp.co-investigators :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.co_investigators')
                     @endif
-
-
+                    
                     <!-- Project organization -->
                     <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
                                 before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
