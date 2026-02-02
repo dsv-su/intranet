@@ -101,7 +101,7 @@ class ProposalController extends Controller
         $firstFile    = reset($files);
         $downloadPath = $firstFile['path'];
 
-        return Storage::download($downloadPath);
+        return Storage::download($downloadPath,'dsv_budgettemplate.xlsx');
     }
 
     public function create()
@@ -182,18 +182,6 @@ class ProposalController extends Controller
                 $euYes = in_array(strtolower((string) data_get($pp->pp, 'eu')), ['yes','1','true'], true);
                 $foId = $euYes ? $foEuUserId : $foUserId;
 
-
-                // Dashboard instance creation or update
-                /*$dashboardData = [
-                    'request_id' => $pp->id,
-                    'name' => $request->title,
-                    'created' => $timestamp,
-                    'status' => 'unread',
-                    'type' => 'projectproposal',
-                    'user_id' => $userId,
-                    'fo_id' => $foUserId,
-                    'vice_id' => $this->getViceHeadUserId()
-                ];*/
                 $dashboardData = [
                     'request_id' => $pp->id,
                     'name' => $request->title,

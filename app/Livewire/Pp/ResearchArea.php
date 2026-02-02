@@ -70,8 +70,16 @@ class ResearchArea extends Component
 
     public function resetAreas()
     {
+        /*Artisan::call('clear-areas');
+        $this->reset();*/
         Artisan::call('clear-areas');
-        $this->reset();
+
+        $this->areas = \App\Models\ResearchArea::query()
+            ->orderBy('name')
+            ->get(['id','name'])
+            ->toArray();
+
+        $this->add_area = '';
     }
 
     public function render()
