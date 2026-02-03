@@ -266,31 +266,42 @@
 
         /* Add unit head */
         const addButton = document.getElementById('add-unithead-button');
+
         if (addButton) {
-            document.getElementById('add-unithead-button').addEventListener('click', function () {
-                // Get the container where the new selects will be added
+            addButton.addEventListener('click', function () {
                 const container = document.getElementById('unithead-container');
 
-                // Find the existing select dropdown to clone
-                const existingSelect = document.querySelector('#unithead-container select');
+                // Clone the first row (select + remove button)
+                const existingRow = container.querySelector('.unithead-row');
+                const newRow = existingRow.cloneNode(true);
 
-                // Clone the select element
-                const newSelect = existingSelect.cloneNode(true);
-
-                // Clear selection in the new dropdown
+                // Clear selection in the cloned select
+                const newSelect = newRow.querySelector('select');
                 newSelect.selectedIndex = -1;
 
-                // Create a wrapper div with spacing
-                const wrapperDiv = document.createElement('div');
-                wrapperDiv.className = 'mt-4'; // Add margin-top
+                // If the select had an id, remove it to avoid duplicate ids
+                newSelect.removeAttribute('id');
 
-                // Append the new select to the wrapper div
-                wrapperDiv.appendChild(newSelect);
+                // Add spacing between rows if you want
+                newRow.classList.add('mt-2');
 
-                // Append the wrapper div to the container
-                container.appendChild(wrapperDiv);
+                container.appendChild(newRow);
             });
         }
+        /* Remove unit head  */
+        document.addEventListener('click', function (e) {
+            if (!e.target.classList.contains('remove-unithead-button')) return;
+
+            const container = document.getElementById('unithead-container');
+            const rows = container.querySelectorAll('.unithead-row');
+
+            // Optional: prevent removing the last one if it's required
+            if (rows.length <= 1) return;
+
+            e.target.closest('.unithead-row').remove();
+        });
+
+
     </script>
 
     <!-- Modals -->
