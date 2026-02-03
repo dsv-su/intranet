@@ -34,6 +34,14 @@ class ProposalUploader extends Component
         'upload_refresh' => '$refresh'
     ];
 
+    protected function rules(): array
+    {
+        return [
+            'files'   => 'array',
+            'files.*' => 'file|max:20480|mimes:txt,pdf,doc,docx,ppt,pptx,odt,pages,zip,rar,rtf',
+        ];
+    }
+
     public function mount($proposal, $type)
     {
         $this->proposal = $proposal;
@@ -106,6 +114,7 @@ class ProposalUploader extends Component
 
     public function storefiles()
     {
+        $this->validate();
         foreach($this->files as $file) {
             $this->savedfiles[$file->getClientOriginalName()] = [
                 'path' => $file->store(path: $this->directory),

@@ -31,6 +31,14 @@ class ProposalBudgetUploader extends Component
         'upload_refresh' => '$refresh'
     ];
 
+    protected function rules(): array
+    {
+        return [
+            'budgetfiles'   => 'array',
+            'budgetfiles.*' => 'file|max:20480|mimes:odt,pages,xls,xlsx,zip,rar,tex,rtf',
+        ];
+    }
+
     public function mount($proposal, $type)
     {
         $this->proposal = $proposal;
@@ -88,6 +96,7 @@ class ProposalBudgetUploader extends Component
 
     public function storefiles()
     {
+        $this->validate();
         foreach($this->budgetfiles as $file) {
             $this->savedfiles[$file->getClientOriginalName()] = [
                 'path' => $file->store(path: $this->directory),
