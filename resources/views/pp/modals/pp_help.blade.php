@@ -225,7 +225,9 @@
             </div>
             <dl>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Search and add your co-investigators. You can also manually add external collaborators from outside SU.")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
+                    {{__("Search for and add your co-investigators. This search allows you to find colleagues within Stockholm University (SUKAT), and you can also search using an email address. If your co-investigators are outside SU, you can add them manually by clicking Add+ and entering their name and email address.")}}
+                </dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>

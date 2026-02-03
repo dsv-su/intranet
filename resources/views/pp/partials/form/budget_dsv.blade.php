@@ -28,9 +28,10 @@
 
     <div class="flex rounded-lg">
         <input
-            type="number"
-            name="budget_dsv"
-            id="budget_dsv"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            id="budget_dsv_display"
             value="{{ old('budget_dsv', $proposal->pp['budget_dsv'] ?? '') }}"
             placeholder="DSV budget"
             @class([
@@ -44,6 +45,13 @@
             ])
             @required($isRequired)
             @readonly(!$isRequired)
+        >
+        <!-- Hidden clean value to submit -->
+        <input
+            type="hidden"
+            name="budget_dsv"
+            id="budget_dsv"
+            value="{{ old('budget_dsv', $proposal->pp['budget_dsv'] ?? '') }}"
         >
         @if($isReviewFOApproval)
             <button type="submit"
@@ -59,3 +67,35 @@
     </div>
 
 </div>
+{{--}}@push('scripts'){{--}}
+    <script>
+        (function () {
+            const display = document.getElementById('budget_dsv_display');
+            const hidden  = document.getElementById('budget_dsv');
+            if (!display || !hidden) return;
+
+            const toDigits = (v) => (v ?? '').toString().replace(/[^\d]/g, '');
+
+            const format = (digits) => {
+                if (!digits) return '';
+                return new Intl.NumberFormat('sv-SE', { maximumFractionDigits: 0 })
+                    .format(Number(digits));
+            };
+
+            // init
+            const initDigits = toDigits(display.value);
+            hidden.value = initDigits;
+            display.value = format(initDigits);
+
+            display.addEventListener('input', () => {
+                const digits = toDigits(display.value);
+                hidden.value = digits;
+                display.value = format(digits);
+            });
+
+            display.closest('form')?.addEventListener('submit', () => {
+                hidden.value = toDigits(display.value);
+            });
+        })();
+    </script>
+{{--}}@endpush{{--}}

@@ -44,6 +44,9 @@
                         <!-- Right side (State label) -->
                         <div class="w-full md:w-auto flex-shrink-0 ml-auto">
 
+                            <!-- Complete/View buttons -->
+                            @nocache('livewire.pp.partials.pp-buttons-complete-view')
+
                             <!-- Stage 1-->
                             @nocache('livewire.pp.partials.state')
 
@@ -52,7 +55,6 @@
 
                             <!-- Stage 3 -->
                             {{--}}@nocache('livewire.pp.partials.stage3_state'){{--}}
-
 
                         </div>
                     </div>

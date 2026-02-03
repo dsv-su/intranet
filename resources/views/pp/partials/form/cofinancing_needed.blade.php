@@ -29,9 +29,10 @@
 
     <div class="flex rounded-lg">
         <input
-            type="number"
-            name="cofinancing_needed"
-            id="cofinancing_needed"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            id="cofinancing_needed_display"
             value="{{ old('cofinancing_needed', $proposal->pp['cofinancing_needed'] ?? '') }}"
             placeholder="CO financing needed"
             @class([
@@ -45,6 +46,13 @@
             ])
             @required($isRequired)
             @readonly(!$isRequired)
+        >
+        <!-- What gets submitted -->
+        <input
+            type="hidden"
+            name="cofinancing_needed"
+            id="cofinancing_needed"
+            value="{{ old('cofinancing_needed', $proposal->pp['cofinancing_needed'] ?? '') }}"
         >
         @if($isReviewFOApproval)
             <button type="submit"
@@ -60,3 +68,43 @@
     </div>
 
 </div>
+<script>
+    (function () {
+        const display = document.getElementById('cofinancing_needed_display');
+        const hidden  = document.getElementById('cofinancing_needed');
+
+        if (!display || !hidden) return;
+
+        const toDigits = (v) => (v ?? '').toString().replace(/[^\d]/g, ''); // keep digits only
+
+        const format = (digits) => {
+            if (!digits) return '';
+            return new Intl.NumberFormat('sv-SE', { maximumFractionDigits: 0 }).format(Number(digits));
+        };
+
+        // Initialize (format whatever is in the value)
+        const initDigits = toDigits(display.value);
+        hidden.value = initDigits;
+        display.value = format(initDigits);
+
+        display.addEventListener('input', () => {
+            const start = display.selectionStart;
+
+            const digits = toDigits(display.value);
+            hidden.value = digits;
+
+            const formatted = format(digits);
+            display.value = formatted;
+
+            // Try to keep cursor position reasonably stable
+            const diff = formatted.length - (display.value.length);
+            const newPos = Math.max(0, (start ?? formatted.length) + diff);
+            display.setSelectionRange(newPos, newPos);
+        });
+
+        // Safety: strip formatting on form submit (hidden already clean, but keeps things consistent)
+        display.closest('form')?.addEventListener('submit', () => {
+            hidden.value = toDigits(display.value);
+        });
+    })();
+</script>
