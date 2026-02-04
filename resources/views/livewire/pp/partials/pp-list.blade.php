@@ -28,7 +28,8 @@
                             <!-- Main Researcher and other details -->
                             <h4 class="text-xs font-medium text-gray-800 dark:text-neutral-200 tracking-wide">
                                 <span class="font-medium">Main researcher:</span>
-                                <span class="bg-blue-100 text-blue-800 border border-blue-500 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400">
+                                {{--}}<span class="bg-blue-100 text-blue-800 border border-blue-500 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400">{{--}}
+                                <span class="font-medium">
                                   {{ $proposal->pp['principal_investigator'] }}
                                 </span>
                                 | &nbsp;
@@ -36,7 +37,9 @@
                                     {{ $proposal->pp['submission_deadline'] ?? '' }}
                                 </span>
                                 &nbsp; | &nbsp;
-                                <span class="font-medium">Project duration:</span> {{ $proposal->pp['project_duration'] ?? '' }} (months) &nbsp; | &nbsp;
+                                {{--}}<span class="font-medium">Project duration:</span> {{ $proposal->pp['project_duration'] ?? '' }} (months) &nbsp; | &nbsp;{{--}}
+                                <span class="font-medium">Funding organization:</span> <span class="font-semibold">
+                                    {{ $proposal->pp['funding_organization'] ?? '' }}</span> &nbsp; | &nbsp;
                                 <span class="font-medium">Economy:</span>
                                 <livewire:pp.fo.assign :proposal="$proposal" :wire:key="$proposal->id"/>
                             </h4>

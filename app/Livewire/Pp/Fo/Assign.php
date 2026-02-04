@@ -31,15 +31,13 @@ class Assign extends Component
     public function updatedFoUserId($value)
     {
         Dashboard::where('request_id', $this->proposal->id)->update(['fo_id' => $value]);
-        $dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
         $assignedFO = User::find($value);
         //Send email only if proposal is in review state
-        if((string)$dashboard->state === RequestStates::HEAD_APPROVED){
+        if((string)$this->dashboard->state === RequestStates::HEAD_APPROVED){
             Mail::to($assignedFO->email)->send(
                 new NotifyAssignedFO($assignedFO, $this->dashboard)
             );
         }
-
     }
 
     private function loadDashboard(int $id): void
