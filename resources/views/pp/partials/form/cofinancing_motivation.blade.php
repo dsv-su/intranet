@@ -11,8 +11,8 @@
               class="@error('other_cofinancing') border-red-500 @enderror font-mono block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300
                                   focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="{{__("Estimated your budget requirements and provide a brief justification.")}}">{{ old('other_cofinancing') ? old('other_cofinancing'): $proposal->pp['other_cofinancing'] ??  '' }}</textarea>
-    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300">
-        <span id="other-cofinancing-count">0</span>/500
+    <p class="mt-1 text-xs">
+        <span id="other-cofinancing-count" class="text-gray-500 dark:text-gray-300">0</span>/500
     </p>
     @error('other_cofinancing')
     <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.scrollIntoView({behavior:'smooth', block:'center'})">
@@ -26,8 +26,20 @@
         const c  = document.getElementById('other-cofinancing-count');
         if (!ta || !c) return;
 
-        const update = () => { c.textContent = ta.value.length; };
+        const max = 500;
+
+        function update() {
+            const len = ta.value.length;
+            c.textContent = len;
+
+            c.classList.toggle('text-red-600', len > max);
+            c.classList.toggle('text-gray-500', len <= max);
+            c.classList.toggle('dark:text-red-400', len > max);
+            c.classList.toggle('dark:text-gray-300', len <= max);
+        }
+
         ta.addEventListener('input', update);
         update();
     })();
 </script>
+

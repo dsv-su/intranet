@@ -16,16 +16,27 @@
     @error('objective')
     <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}}</p>
     @enderror
-    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300">
-        <span id="objective-count">0</span>/500
+    <p class="mt-1 text-xs">
+        <span id="objective-count" class="text-gray-500 dark:text-gray-300">0</span>/500
     </p>
-
     <script>
         const ta = document.getElementById('objective');
         const c  = document.getElementById('objective-count');
+        const max = 500;
 
-        function updateCount() { c.textContent = ta.value.length; }
+        function updateCount() {
+            const len = ta.value.length;
+            c.textContent = len;
+
+            // make the number red if it exceeds the limit
+            c.classList.toggle('text-red-600', len > max);
+            c.classList.toggle('text-gray-500', len <= max);
+            c.classList.toggle('dark:text-red-400', len > max);
+            c.classList.toggle('dark:text-gray-300', len <= max);
+        }
+
         ta.addEventListener('input', updateCount);
         updateCount();
     </script>
+
 </div>
