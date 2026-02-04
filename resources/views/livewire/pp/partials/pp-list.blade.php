@@ -39,7 +39,7 @@
                                 &nbsp; | &nbsp;
                                 {{--}}<span class="font-medium">Project duration:</span> {{ $proposal->pp['project_duration'] ?? '' }} (months) &nbsp; | &nbsp;{{--}}
                                 <span class="font-medium">Funding organization:</span> <span class="font-semibold">
-                                    {{ $proposal->pp['funding_organization'] ?? '' }}</span> &nbsp; | &nbsp;
+                                    {{ $proposal->pp['funding_organization'] ?? 'N/A' }}</span> &nbsp; | &nbsp;
                                 <span class="font-medium">Economy:</span>
                                 <livewire:pp.fo.assign :proposal="$proposal" :wire:key="$proposal->id"/>
                             </h4>

@@ -10,10 +10,11 @@
             @endforeach
         </select>
     @else
-        <span
+        {{--}}<span
             class="bg-yellow-50 text-yellow-700 border border-yellow-400 text-[0.65rem] font-medium
                    me-1.5 px-1 py-0.5 rounded hover:text-yellow-800
-                   dark:bg-yellow-800 dark:text-yellow-300 appearance-none leading-none">
+                   dark:bg-yellow-800 dark:text-yellow-300 appearance-none leading-none">{{--}}
+        <span class="font-medium">
             {{$proposal->foUser->name}}
         </span>
     @endif
