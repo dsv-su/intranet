@@ -18,12 +18,16 @@
                 @error('decision_exp')
                 <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                 @enderror
-                <input id="datepicker-autohide" datepicker datepicker-autohide datepicker-format="dd/mm/yyyy"
+                <input id="decision_exp"
                        name="decision_exp"
+                       datepicker
+                       datepicker-autohide
+                       datepicker-format="yyyy-mm-dd"
                        @if($type == 'preapproval' or $type == 'edit' or $type == 'resume')
                        value="{{ $proposal['pp']['decision_exp'] ?? '' }}"
                        @endif
-                       id="startInput" type="text"
+                       {{--}}id="startInput"{{--}}
+                       type="text"
                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
                                                   dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        placeholder="{{__("Select date")}}">

@@ -39,14 +39,14 @@ class ProposalController extends Controller
     {
         $this->middleware(['web', 'auth', 'dsv']);
     }
-    public function pp($slug)
+    public function pp($slug = 'my')
     {
         // Check if form is enabled
         if (!SettingsOh::first()->form_enable) {
             return (new \Statamic\View\View)
                 ->template('pp.disabled')
-                ->with(['breadcrumb' => 'Disabled'])
-                ->layout('mylayout');
+                ->with(['breadcrumb' => 'Disabled']);
+                //->layout('mylayout');
         }
 
         // User roles handling (testmode)
@@ -65,8 +65,8 @@ class ProposalController extends Controller
                 'page' => $slug,
                 'breadcrumb' => $breadcrumbs[$slug] ?? 'Unknown',
                 'roles' => $roles
-            ])
-            ->layout('mylayout');
+            ]);
+            //->layout('mylayout');
     }
     public function pp_edit($id)
     {

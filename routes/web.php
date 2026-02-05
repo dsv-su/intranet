@@ -72,6 +72,8 @@ Route::prefix('vice-settings')
     });
 
 //Project Proposals
+Route::get('/', [\App\Http\Controllers\ProposalController::class, 'pp'])->name('pp.home');
+
 Route::get('/pp/{slug}', [\App\Http\Controllers\ProposalController::class, 'pp'])->name('pp');
 Route::get('/pp/view/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_view'])->name('pp-view');
 Route::get('/new_pp', [\App\Http\Controllers\ProposalController::class, 'create'])->name('new-project');
