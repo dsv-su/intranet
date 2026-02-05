@@ -7,7 +7,7 @@
             </svg>
         </button>
     </label>
-    @if($type == 'preapproval' or $type == 'edit' or $type == 'resume')
+    @if(in_array($type, ['preapproval', 'edit', 'complete', 'resume']))
         <div class="flex flex-col sm:flex-row items-center w-full">
             <div class="relative w-full">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -22,13 +22,14 @@
                        datepicker-autohide
                        {{--}}datepicker-format="dd/mm/yyyy"{{--}}
                        datepicker-format="yyyy-mm-dd"
-                       @if($type == 'preapproval' or $type == 'edit' or $type == 'resume')
+                       @if(in_array($type, ['preapproval', 'edit', 'complete', 'resume']))
                        value="{{ $proposal['pp']['start_date'] ?? ''}}"
                        @endif
                        {{--}}id="endInput"{{--}}
                        type="text"
-                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
-                                                  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       class="@if($type == 'complete') bg-blue-300 bg-opacity-60 @else bg-gray-50 @endif border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
+                                                  @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
+                                                   dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        placeholder="{{__("Select date")}}"
                        required>
                 <p id="start_date_warning" class="mt-2 text-sm text-red-600 hidden">

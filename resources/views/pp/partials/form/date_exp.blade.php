@@ -7,7 +7,7 @@
             </svg>
         </button>
     </label>
-    @if( $type == 'preapproval' or $type == 'edit' or $type == 'resume')
+    @if(in_array($type, ['preapproval', 'edit', 'complete', 'resume']))
         <div class="flex flex-col sm:flex-row items-center w-full">
             <div class="relative w-full">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -23,13 +23,13 @@
                        datepicker
                        datepicker-autohide
                        datepicker-format="yyyy-mm-dd"
-                       @if($type == 'preapproval' or $type == 'edit' or $type == 'resume')
+                       @if(in_array($type, ['preapproval', 'edit', 'complete', 'resume']))
                        value="{{ $proposal['pp']['decision_exp'] ?? '' }}"
                        @endif
                        {{--}}id="startInput"{{--}}
                        type="text"
-                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
-                                                  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       class=" bg-gray-50  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
+                                                  dark:bg-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        placeholder="{{__("Select date")}}">
             </div>
         </div>

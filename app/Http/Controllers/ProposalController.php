@@ -280,16 +280,55 @@ class ProposalController extends Controller
                     'name' => $request->title,
                     'created' => $timestamp,
                     'pp' => $request->only([
-                        'title', 'objective', 'principal_investigator', 'principal_investigator_email',
-                        'co_investigator_name', 'co_investigator_email', 'co_investigator_type', 'co_investigator_role', 'research_area',
-                        'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
-                        'cofinancing', 'other_cofinancing', 'project_duration', 'unit_head', 'program', 'decision_exp', 'funding_organization',
-                        'start_date', 'submission_deadline',
-                        'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'cofinancing_needed','user_comments'
-                    ])]);
+                            'title', 'objective', 'principal_investigator', 'principal_investigator_email',
+                            'co_investigator_name', 'co_investigator_email','co_investigator_type', 'co_investigator_role', 'research_area',
+                            'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
+                            'cofinancing', 'other_cofinancing', 'project_duration', 'unit_head', 'program', 'decision_exp',
+                            'start_date', 'submission_deadline',
+                            'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'cofinancing_needed','user_comments'
+                        ]) + [
+                            'submitted' => $timestamp,
+                            'status' => 'edited'
+                        ]
+                ]);
                 // Save Project Proposal
                 $pp->save();
+
+                //Edit comments
                 $this->comments_update($request->id, $request->edit_comments, 'edit');
+
+                //Update dashboard
+                $euYes = in_array(strtolower((string) data_get($pp->pp, 'eu')), ['yes','1','true'], true);
+                $foId = $euYes ? $foEuUserId : $foUserId;
+
+                $dashboardData = [
+                    'request_id' => $pp->id,
+                    'name' => $request->title,
+                    'created'    => $timestamp,
+                    'status'     => 'edited',
+                    'type'       => 'projectproposal',
+                    'user_id'    => $userId,
+                    'fo_id'      => $foId,
+                    'vice_id'    => $this->getViceHeadUserId(),
+                ];
+
+                $dashboard = Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
+                // Create unit head approved array
+                $uh_group = $dashboard;
+                $uh_group->unit_heads = $request->unit_head;
+                $unit_head_approved = [];
+                foreach ($request->unit_head as $uh) {
+                    $unit_head_approved[$uh] = 0;
+                }
+                // Encode associative array to JSON
+                $uh_group->unit_head_approved = json_encode($unit_head_approved);
+                $uh_group->save();
+                if (count($request->unit_head) > 1) {
+                    //Flag multiple
+                    $uh_group->multiple_heads = true;
+                    $uh_group->save();
+                }
+
                 return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
                 break;
             case 'resume':

@@ -91,9 +91,10 @@ Route::get('/pp/rejected/{id}', [\App\Http\Controllers\ProposalController::class
 //Download
 Route::get('/budget', [\App\Http\Controllers\ProposalController::class, 'budget'])->name('budget-template');
 Route::get('/manual', [\App\Http\Controllers\ProposalController::class, 'usermanual'])->name('usermanual');
+//Edit
+Route::get('/pp/edit/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_edit'])->name('pp-edit');
 //Resume
 Route::get('/pp/resume/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_resume'])->name('pp-resume');
-
 //Admin
 Route::get('/admin', [\App\Http\Controllers\AdminController::class, 'pp'])->name('pp-admin');
 Route::get('/admin/del/{id}', [\App\Http\Controllers\AdminController::class, 'pp_delete'])->name('pp-delete');

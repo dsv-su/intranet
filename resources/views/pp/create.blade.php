@@ -63,8 +63,8 @@
                     <!-- Co Investigators -->
                     @if($type == 'preapproval')
                         <livewire:pp.co-investigators />
-                    @elseif( $type == 'complete' or $type == 'resume')
-                        <livewire:pp.co-investigators :proposal="$proposal" />
+                    @elseif(in_array($type, ['complete', 'edit', 'resume']))
+                    <livewire:pp.co-investigators :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.co_investigators')
                     @endif
@@ -78,7 +78,7 @@
                     <!-- Funding organization -->
                     @if($type == 'preapproval')
                         <livewire:select2.Org-select2 proposal="" />
-                    @elseif ( $type == 'complete' or $type == 'edit' or $type == 'resume')
+                    @elseif(in_array($type, ['complete', 'edit', 'resume']))
                         <livewire:select2.Org-select2 :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.funding_org')
@@ -87,7 +87,7 @@
                     <!--DSV coordinating -->
                     @if($type == 'preapproval')
                         <livewire:pp.dsv-coordination proposal="" />
-                    @elseif ($type == 'complete' or $type == 'edit' or $type == 'resume')
+                    @elseif(in_array($type, ['complete', 'edit', 'resume']))
                         <livewire:pp.dsv-coordination :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.dsvcoordination')
@@ -96,7 +96,7 @@
                     <!-- Eu project -->
                     @if($type == 'preapproval')
                         <livewire:pp.eu-project proposal="" />
-                    @elseif ($type == 'complete' or $type == 'edit' or $type == 'resume')
+                    @elseif(in_array($type, ['complete', 'edit', 'resume']))
                         <livewire:pp.eu-project :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.eu')
@@ -105,14 +105,14 @@
                     <!-- Eu Wallengenberg project -->
                     @if($type == 'preapproval')
                         <livewire:pp.eu-wallenberg-project proposal="" />
-                    @elseif ($type == 'complete' or $type == 'edit' or $type == 'resume')
+                    @elseif(in_array($type, ['complete', 'edit', 'resume']))
                         <livewire:pp.eu-wallenberg-project :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.eu_wallenberg')
                     @endif
 
                     <!-- Unit Head -->
-                    @if(in_array($type, ['preapproval', 'complete', 'review', 'view', 'resume', 'sent', 'granted']))
+                    @if(in_array($type, ['preapproval', 'complete', 'edit', 'review', 'view', 'resume', 'sent', 'granted']))
                         <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
                                 before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
                                 dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">

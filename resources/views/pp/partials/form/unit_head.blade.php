@@ -46,7 +46,7 @@
         </div>{{--}}
         <div id="unithead-container">
             @php
-                $selectedUnitHeads = ($type == 'complete' && empty($proposal['pp']['unit_head']))
+                $selectedUnitHeads = (in_array($type, ['edit', 'complete']) && empty($proposal['pp']['unit_head']))
                     ? []
                     : ($proposal['pp']['unit_head'] ?? []);
             @endphp

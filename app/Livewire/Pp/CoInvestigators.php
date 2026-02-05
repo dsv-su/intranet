@@ -61,13 +61,20 @@ class CoInvestigators extends Component
         $this->sukatUsers = $this->searchService->execute($this->searchPresenter);
     }
 
-    public function getCoInvestigators()
+    public function getCoInvestigators(): void
     {
-        foreach ($this->proposal->pp['co_investigator_name'] as $key => $value) {
-            $this->investigators['name'] = $value;
-            $this->investigators['email'] = $this->proposal->pp['co_investigator_email'][$key];
-            $this->investigators['type'] = $this->proposal->pp['co_investigator_type'][$key];
-            $this->investigators['role'] = $this->proposal->pp['co_investigator_role'][$key];
+        $names  = $this->proposal->pp['co_investigator_name']  ?? [];
+        $emails = $this->proposal->pp['co_investigator_email'] ?? [];
+        $types  = $this->proposal->pp['co_investigator_type']  ?? [];
+        $roles  = $this->proposal->pp['co_investigator_role']  ?? [];
+
+        foreach ($names as $key => $name) {
+            $this->investigators[] = [
+                'name'  => $name,
+                'email' => $emails[$key] ?? null,
+                'type'  => $types[$key]  ?? null,
+                'role'  => $roles[$key]  ?? null,
+            ];
         }
     }
 

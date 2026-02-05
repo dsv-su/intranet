@@ -24,8 +24,8 @@ class ProposalSeeder extends Seeder
         // '9e25a704-50e2-41b9-9133-742dc24b3cef' - test
         // '9b618981-74c2-45b0-9819-49f5d9bc206e' - prod
 
-        $userId = $foUserId =  $viceId = '9b618981-74c2-45b0-9819-49f5d9bc206e';
-        $unit_head = ['9b618981-74c2-45b0-9819-49f5d9bc206e'];
+        $userId = $foUserId =  $viceId = '9e25a704-50e2-41b9-9133-742dc24b3cef';
+        $unit_head = ['9e25a704-50e2-41b9-9133-742dc24b3cef'];
 
 
 
@@ -88,9 +88,9 @@ class ProposalSeeder extends Seeder
                 'project_duration' => $faker->numberBetween(1, 5),
                 'unit_head' => $unit_head,
                 'program' => $faker->word(),
-                'decision_exp' => '15/06/2025',
-                'start_date' => '16/06/2025',
-                'submission_deadline' => '30/06/2025',
+                'decision_exp' => '2025-06-25',
+                'start_date' => '2025-07-01',
+                'submission_deadline' => '2025-05-01',
                 //'budget_project' => $faker->randomFloat(0, 10000, 500000),
                 'budget_project' => 1000,
                 //'budget_dsv' => $faker->randomFloat(0, 5000, 100000),
