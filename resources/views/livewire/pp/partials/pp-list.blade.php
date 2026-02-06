@@ -95,7 +95,7 @@
                                 <!-- Program/Call/Target -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
                                     <span class="font-semibold">Program/Call/Target:</span><br>
-                                    {{$proposal->pp['program'] ?? ''}}
+                                    {{$proposal->pp['program'] ?? 'N/A'}}
                                 </p>
                                 <!-- Co-financing -->
                                 <p class="uppercase text-xs text-gray-600 dark:text-neutral-400">
