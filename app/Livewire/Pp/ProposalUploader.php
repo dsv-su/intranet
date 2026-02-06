@@ -99,7 +99,6 @@ class ProposalUploader extends Component
     }
 
     public function finishUpload($name, $tmpPath, $isMultiple)
-
     {
         $this->toggleStored();
         $this->cleanupOldUploads();
@@ -158,8 +157,17 @@ class ProposalUploader extends Component
         $this->stored = !$this->stored;
     }
 
+    public function clearUploadErrors(): void
+    {
+        $this->resetValidation(['files', 'files.*']);
+        $this->resetErrorBag(['files', 'files.*']); // optional but safe
+    }
     public function removefile($id)
     {
+        // Clear validation errors related to uploads
+        $this->resetValidation(['files', 'files.*']);     // Livewire v2+
+        $this->resetErrorBag(['files', 'files.*']);       // extra-safe
+
         // Get the current files array
         $files = $this->proposal->files;
         $remove = $files[$id]['path'];
@@ -187,6 +195,9 @@ class ProposalUploader extends Component
 
     public function removefolder()
     {
+        $this->resetValidation(['files', 'files.*']);
+        $this->resetErrorBag(['files', 'files.*']);
+
         $this->proposal->files = [];
         Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT);
         Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET);

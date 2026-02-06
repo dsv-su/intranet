@@ -67,15 +67,21 @@
                         },
                         uploadFiles(files) {
                             const $this = this;
+                            // Clear previous validation errors before starting a new upload
+                            @this.clearUploadErrors();
                             this.isUploading = true
                         @this.uploadMultiple('files', files,
                             function (success) {
                                 $this.isUploading = false
                                 $this.progress = 0
+                                // (Optional) clear errors again after success
+                                @this.clearUploadErrors();
                                 $this.files = []
                             },
                             function(error) {
-                                console.log('error', error)
+                                $this.isUploading = false;
+                                $this.progress = 0;
+                                console.log('error', error);
                             },
                             function (event) {
                                 $this.progress = event.detail.progress
@@ -84,7 +90,13 @@
                         @this.checkToggle();
                         },
                         removeUpload(filename) {
+                        // Remove the temp upload
                         @this.removeUpload('files', filename);
+                        // Clear stuck validation messages for files.*
+                        @this.clearUploadErrors();
+                        // Optional: reset progress UI
+                        this.progress = 0;
+                        this.isUploading = false;
                         },
                     }
                 }

@@ -108,8 +108,40 @@
                                     <h2 class="text-xs font-semibold text-gray-900 dark:text-white mb-1">Days until submission</h2>
                                     @if($proposal->pp['submission_deadline'] ?? false)
                                         @php
-                                            $deadline = \Carbon\Carbon::createFromFormat('d/m/Y', $proposal->pp['submission_deadline']);
-                                            $daysLeft = now()->diffInDays($deadline, false);
+                                            $raw = $proposal->pp['submission_deadline'] ?? null;
+                                            $deadline = null;
+
+                                            if (!empty($raw)) {
+                                                // Add formats you want to accept here:
+                                                $formats = [
+                                                    'Y-m-d',        // 2026-02-06
+                                                    'Y/m/d',        // 2026/02/06
+                                                    'd-m-Y',        // 06-02-2026
+                                                    'd/m/Y',        // 06/02/2026
+                                                    'Y-m-d H:i:s',  // 2026-02-06 13:45:00
+                                                    'c',            // ISO8601 / RFC3339, e.g. 2026-02-06T13:45:00+01:00
+                                                ];
+
+                                                foreach ($formats as $fmt) {
+                                                    try {
+                                                        $deadline = \Carbon\Carbon::createFromFormat($fmt, $raw);
+                                                        break;
+                                                    } catch (\Throwable $e) {
+                                                        // try next format
+                                                    }
+                                                }
+
+                                                // Fallback: let Carbon try to parse common strings like "2026-02-06", "Feb 6, 2026", etc.
+                                                if (!$deadline) {
+                                                    try {
+                                                        $deadline = \Carbon\Carbon::parse($raw);
+                                                    } catch (\Throwable $e) {
+                                                        $deadline = null;
+                                                    }
+                                                }
+                                            }
+
+                                            $daysLeft = $deadline ? now()->diffInDays($deadline, false) : null;
                                         @endphp
 
                                         @if ($daysLeft > 0)

@@ -15,6 +15,12 @@ use App\Models\SettingsFo;
 use App\Models\SettingsFoEu;
 use App\Models\SettingsOh;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Services\Budget\Budget;
 use App\Services\Budget\ReCalcBudget;
 use App\Services\Review\DashboardRole;
@@ -24,10 +30,6 @@ use App\Services\Role\RoleHandler;
 use App\Services\Send\FilesForRegistrator;
 use App\Workflows\DSVProjectPWorkflow;
 use App\Workflows\Partials\RequestStates;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Statamic\View\View;
@@ -138,379 +140,409 @@ class ProposalController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
 
+    /**
+     * Submit
+     */
     public function submit(Request $request)
     {
-        // Validate and retrieve request data
         $this->validateRequest($request);
 
-        // Financial officer and authenticated user retrieval
-        $foUserId = SettingsFo::find(1)?->user_id;
-        $foEuUserId = SettingsFoEu::find(1)?->user_id;
+        $userId = $request->user()->id;
+        $submittedAt = now();
+        $createdTs = $submittedAt->copy()->startOfDay()->timestamp;
 
-        //User
-        $userId = Auth::user()->id;
+        return match ($request->type) {
+            'preapproval' => $this->handlePreapproval($request, $userId, $submittedAt, $createdTs),
+            'complete'    => $this->handleComplete($request, $userId, $submittedAt),
+            'edit'        => $this->handleEdit($request, $userId, $submittedAt, $createdTs),
+            'resume'      => $this->handleResume($request, $userId, $submittedAt, $createdTs),
+            'sent'        => $this->handleSent($request, $submittedAt),
+            'granted'     => $this->handleGranted($request, $submittedAt),
+            'rejected'    => $this->handleRejected($request, $submittedAt),
+            'review'      => $this->handleReview($request, $submittedAt),
+            default       => abort(422, 'Invalid submit type'),
+        };
+    }
 
-        //Timestamp
-        $timestamp = now()->startOfDay()->timestamp;
+    /* -------------------------------------------------------------------------
+     | Handlers
+     * ---------------------------------------------------------------------- */
 
-        //Check submit type
-        switch ($request->type) {
-            case 'preapproval':
-                $pp = ProjectProposal::findOrFail($request->id);
-                $pp->fill([
-                    'user_id' => $userId,
-                    'name' => $request->title,
-                    'created' => $timestamp,
-                    'status_stage1' => 'pending',
-                    'status_stage2' => 'pending',
-                    'status_stage3' => 'submitted',
-                    'pp' => $request->only([
-                            'title', 'objective', 'principal_investigator', 'principal_investigator_email',
-                            'co_investigator_name', 'co_investigator_email','co_investigator_type', 'co_investigator_role', 'research_area',
-                            'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
-                            'cofinancing', 'other_cofinancing', 'project_duration', 'unit_head', 'program', 'decision_exp',
-                            'start_date', 'submission_deadline',
-                            'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'cofinancing_needed','user_comments'
-                        ]) + [
-                            'submitted' => $timestamp,
-                            'status' => 'pending'
-                        ]
-                ]);
-                // Save Project Proposal
-                $pp->save();
+    private function handlePreapproval(Request $request, string $userId, Carbon $submittedAt, int $createdTs)
+    {
+        return DB::transaction(function () use ($request, $userId, $submittedAt, $createdTs) {
 
-                $euYes = in_array(strtolower((string) data_get($pp->pp, 'eu')), ['yes','1','true'], true);
-                $foId = $euYes ? $foEuUserId : $foUserId;
+            $pp = ProjectProposal::findOrFail($request->id);
 
-                $dashboardData = [
-                    'request_id' => $pp->id,
-                    'name' => $request->title,
-                    'created'    => $timestamp,
-                    'status'     => 'unread',
-                    'type'       => 'projectproposal',
-                    'user_id'    => $userId,
-                    'fo_id'      => $foId,
-                    'vice_id'    => $this->getViceHeadUserId(),
-                ];
+            $pp->fill([
+                'user_id' => $userId,
+                'name' => $request->title,
+                'created' => $createdTs,
+                'status_stage1' => 'pending',
+                'status_stage2' => 'pending',
+                'status_stage3' => 'submitted',
+                'pp' => $this->buildPpPayload($request, [
+                    'submitted' => $submittedAt->toISOString(),
+                    'status' => 'pending',
+                ]),
+            ])->save();
 
-                $dashboard = Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
-                // Create unit head approved array
-                $uh_group = $dashboard;
-                $uh_group->unit_heads = $request->unit_head;
-                $unit_head_approved = [];
-                foreach ($request->unit_head as $uh) {
-                    $unit_head_approved[$uh] = 0;
-                }
-                // Encode associative array to JSON
-                $uh_group->unit_head_approved = json_encode($unit_head_approved);
-                $uh_group->save();
-                if (count($request->unit_head) > 1) {
-                    //Flag multiple
-                    $uh_group->multiple_heads = true;
-                    $uh_group->save();
-                }
+            $dashboard = $this->upsertDashboardWithUnitHeads(
+                $pp,
+                $request,
+                $this->dashboardBaseData($pp, $request, $userId, $createdTs, 'unread')
+            );
 
-                // Start workflow and store workflow ID
-                $workflow = $this->createAndStartWorkflow($pp->dashboard);
+            // Start workflow and store workflow ID
+            $this->createAndStartWorkflow($dashboard);
 
-                //Check files
-                $this->checkFileStatus($pp);
+            // Check files
+            $this->checkFileStatus($pp);
 
-                return redirect()->route('pp', 'my')->with('success', 'Your Project proposal draft has successfully been submitted!');
-                break;
-            case 'complete':
-                $pp = ProjectProposal::find($request->id);
-                $existingPp = $pp->pp; // Get existing JSON attribute as an array
-                // Merge new values while keeping existing subattributes
-                $updatedPp = array_merge($existingPp, $request->only([
+            return redirect()->route('pp', 'my')
+                ->with('success', 'Your Project proposal draft has successfully been submitted!');
+        });
+    }
+
+    private function handleComplete(Request $request, string $userId, Carbon $submittedAt)
+    {
+        return DB::transaction(function () use ($request, $userId, $submittedAt) {
+
+            $pp = ProjectProposal::findOrFail($request->id);
+
+            // Merge JSON safely (recursive) and preserve existing keys such as 'files'
+            $updatedPp = $this->mergePp($pp->pp ?? [], [
+                ...$request->only([
                     'unit_head', 'program', 'decision_exp', 'funding_organization',
                     'start_date', 'submission_deadline',
-                    'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'cofinancing_needed', 'user_comments'
-                ]), [
-                    'submitted' => now(),
-                    'status' => 'completed'
-                ]);
+                    'budget_project', 'budget_dsv', 'budget_phd', 'currency',
+                    'oh_cost', 'cofinancing_needed', 'user_comments'
+                ]),
+                'submitted' => $submittedAt->toISOString(),
+                'status' => 'completed',
+                // Explicitly keep these (as you did)
+                'co_investigator_name' => $request->co_investigator_name,
+                'co_investigator_email' => $request->co_investigator_email,
+                'co_investigator_type' => $request->co_investigator_type,
+                'co_investigator_role' => $request->co_investigator_role,
+            ]);
 
-                // Update only the 'co_investigator_name' and 'co_investigator_email' attributes
-                $updatedPp['co_investigator_name'] = $request->co_investigator_name;
-                $updatedPp['co_investigator_email'] = $request->co_investigator_email;
-                $updatedPp['co_investigator_type'] = $request->co_investigator_type;
-                $updatedPp['co_investigator_role'] = $request->co_investigator_role;
+            $pp->update(['pp' => $updatedPp]);
 
+            $this->comments_update($pp->id, $request->edit_comments, 'completed');
 
-                // Update the model without clearing existing 'files'
-                $pp->update([
-                    'pp' => $updatedPp,  // Merged JSON attributes
-                ]);
-                $pp->save();
+            $dashboard = Dashboard::query()
+                ->where('request_id', $pp->id)
+                ->firstOrFail();
 
-                $this->comments_update($request->id, $request->edit_comments, 'completed');
+            $this->setUnitHeadsOnDashboard($dashboard, (array) $request->unit_head);
 
-                $dashboard = Dashboard::where('request_id',  $pp->id)->first();
-                // Create unit head approved array
-                $uh_group = $dashboard;
-                $uh_group->unit_heads = $request->unit_head;
-                $unit_head_approved = [];
-                foreach ($request->unit_head as $uh) {
-                    $unit_head_approved[$uh] = 0;
-                }
-                // Encode associative array to JSON
-                $uh_group->unit_head_approved = json_encode($unit_head_approved);
-                $uh_group->save();
-                if (count($request->unit_head) > 1) {
-                    //Flag multiple
-                    $uh_group->multiple_heads = true;
-                    $uh_group->save();
-                }
+            if ($this->checkFiles($pp)) {
+                $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
+                $workflowhandler->Completed();
 
-                if($this->checkFiles($pp)) {
-                    //Transition
-                    $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
-                    $workflowhandler->Completed();
+                return redirect()->route('pp', 'my')
+                    ->with('success', 'Your Project proposal files have successfully been uploaded!');
+            }
 
-                    return redirect()->route('pp', 'my')->with('success', 'Your Project proposal files have successfully been uploaded!');
-                } else {
-                    return redirect()->route('pp', 'my')->with('success', 'Your Project proposal has been updated!');
-                }
-                break;
-            case 'edit':
-                $pp = ProjectProposal::find($request->id);
-                $pp->update([
-                    'user_id' => $userId,
-                    'name' => $request->title,
-                    'created' => $timestamp,
-                    'pp' => $request->only([
-                            'title', 'objective', 'principal_investigator', 'principal_investigator_email',
-                            'co_investigator_name', 'co_investigator_email','co_investigator_type', 'co_investigator_role', 'research_area',
-                            'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
-                            'cofinancing', 'other_cofinancing', 'project_duration', 'unit_head', 'program', 'decision_exp',
-                            'start_date', 'submission_deadline',
-                            'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'cofinancing_needed','user_comments'
-                        ]) + [
-                            'submitted' => $timestamp,
-                            'status' => 'edited'
-                        ]
-                ]);
-                // Save Project Proposal
-                $pp->save();
+            return redirect()->route('pp', 'my')
+                ->with('success', 'Your Project proposal has been updated!');
+        });
+    }
 
-                //Edit comments
-                $this->comments_update($request->id, $request->edit_comments, 'edit');
+    private function handleEdit(Request $request, string $userId, Carbon $submittedAt, int $createdTs)
+    {
+        return DB::transaction(function () use ($request, $userId, $submittedAt, $createdTs) {
 
-                //Update dashboard
-                $euYes = in_array(strtolower((string) data_get($pp->pp, 'eu')), ['yes','1','true'], true);
-                $foId = $euYes ? $foEuUserId : $foUserId;
+            $pp = ProjectProposal::findOrFail($request->id);
 
-                $dashboardData = [
-                    'request_id' => $pp->id,
-                    'name' => $request->title,
-                    'created'    => $timestamp,
-                    'status'     => 'edited',
-                    'type'       => 'projectproposal',
-                    'user_id'    => $userId,
-                    'fo_id'      => $foId,
-                    'vice_id'    => $this->getViceHeadUserId(),
-                ];
+            $pp->fill([
+                'user_id' => $userId,
+                'name' => $request->title,
+                'created' => $createdTs,
+                'pp' => $this->buildPpPayload($request, [
+                    'submitted' => $submittedAt->toISOString(),
+                    'status' => 'edited',
+                ]),
+            ])->save();
 
-                $dashboard = Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
-                // Create unit head approved array
-                $uh_group = $dashboard;
-                $uh_group->unit_heads = $request->unit_head;
-                $unit_head_approved = [];
-                foreach ($request->unit_head as $uh) {
-                    $unit_head_approved[$uh] = 0;
-                }
-                // Encode associative array to JSON
-                $uh_group->unit_head_approved = json_encode($unit_head_approved);
-                $uh_group->save();
-                if (count($request->unit_head) > 1) {
-                    //Flag multiple
-                    $uh_group->multiple_heads = true;
-                    $uh_group->save();
-                }
+            $this->comments_update($pp->id, $request->edit_comments, 'edit');
 
-                return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
-                break;
-            case 'resume':
-                $pp = ProjectProposal::find($request->id);
-                $pp->update([
-                    'user_id' => $userId,
-                    'name' => $request->title,
-                    'created' => $timestamp,
-                    'pp' => $request->only([
-                        'title', 'objective', 'principal_investigator', 'principal_investigator_email',
-                        'co_investigator_name', 'co_investigator_email', 'co_investigator_type', 'co_investigator_role', 'research_area',
-                        'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg', 'funding_organization',
-                        'cofinancing', 'other_cofinancing', 'project_duration', 'unit_head', 'program', 'decision_exp', 'funding_organization',
-                        'start_date', 'submission_deadline',
-                        'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost', 'cofinancing_needed','user_comments'
-                    ])]);
-                // Save Project Proposal
-                $pp->save();
-                $this->comments_update($request->id, $request->edit_comments, 'resumed');
-                // Dashboard instance creation or update
-                $dashboardData = [
-                    'request_id' => $pp->id,
-                    'name' => $request->title
-                ];
-                $dashboard = Dashboard::updateOrCreate(['request_id' => $pp->id], $dashboardData);
+            $dashboard = $this->upsertDashboardWithUnitHeads(
+                $pp,
+                $request,
+                $this->dashboardBaseData($pp, $request, $userId, $createdTs, 'edited')
+            );
 
-                // Resume workflow and store workflow ID
-                $this->resumeWorkflow($dashboard);
-                //Check files
-                $this->checkFileStatus($pp);
+            return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
+        });
+    }
 
-                return redirect()->route('pp', 'my')->with('success', 'Proposal successfully resumed!');
-                break;
-            case 'sent':
-                $pp = ProjectProposal::find($request->id);
-                // Check if final application has been uploaded
-                $files = is_array($pp->files ?? null) ? $pp->files : [];
+    private function handleResume(Request $request, string $userId, Carbon $submittedAt, int $createdTs)
+    {
+        return DB::transaction(function () use ($request, $userId, $submittedAt, $createdTs) {
 
-                // Search for a file with type == 'final'
-                $finalFile = collect($files)->first(function ($file) {
-                    return isset($file['type']) && $file['type'] === 'final';
-                });
+            $pp = ProjectProposal::findOrFail($request->id);
 
-                if ($finalFile) {
-                    // A final file exists
-                    $existingPp = $pp->pp; // Get existing JSON attribute as an array
-                    // Merge new values while keeping existing subattributes
-                    $updatedPp = array_merge($existingPp, [
-                        'submitted' => now(),
-                        'status' => 'sent'
-                    ]);
-                    // Update the model without clearing existing 'files'
-                    $pp->update([
-                        'pp' => $updatedPp,  // Merged JSON attributes
-                    ]);
-                    //Set status sent
-                    $pp->status_stage1 = 'sent';
-                    $pp->save();
-                    $dashboard = Dashboard::where('request_id', $request->id)->first();
-                    $dashboard->state = 'sent';
-                    $dashboard->save();
+            // TODO Resume doesn't set status/submitted
+            $pp->fill([
+                'user_id' => $userId,
+                'name' => $request->title,
+                'created' => $createdTs,
+                'pp' => $this->buildPpPayload($request, []), // no forced status
+            ])->save();
 
-                    //Create attachment
-                    $reg = new FilesForRegistrator($pp);
-                    $reg->storeFiles();
+            $this->comments_update($pp->id, $request->edit_comments, 'resumed');
 
-                    //Send to registrator
-                    $filePath = public_path('download/'  . $pp->id .'/'. 'ProjectProposal-' . $pp->name . '.zip');
-                    $user = User::find($pp->dashboard->user_id);
-                    SendFinalToRegistrator::dispatch($user, $pp->dashboard, $filePath);
+            $dashboard = Dashboard::updateOrCreate(
+                ['request_id' => $pp->id],
+                ['request_id' => $pp->id, 'name' => $request->title]
+            );
 
-                    //Send notification to vice
-                    $user = User::find($dashboard->user_id);
-                    $vice = $this->getViceHeadUser();
-                    Mail::to($vice->email)->send(new SentNotificationVice($user, $vice, $dashboard));
+            $this->resumeWorkflow($dashboard);
+            $this->checkFileStatus($pp);
 
-                    return redirect()->route('pp', 'my')->with('success', 'Your proposal has been successfully registered as sent. Thank you!');
-                } else {
-                    // No final file found
-                    return redirect()->route('pp', 'my')->with('error', 'Please make sure to upload your final application before the reporting');
-                }
-                break;
-            case 'granted':
-                $pp = ProjectProposal::find($request->id);
-                $existingPp = $pp->pp; // Get existing JSON attribute as an array
-                // Merge new values while keeping existing subattributes
-                $updatedPp = array_merge($existingPp, $request->only([
-                    'granted', 'cofinanced_promised', 'phd_promised', 'granted_comments'
-                ]), [
-                    'submitted' => now(),
-                    'status' => 'granted'
-                ]);
-                // Update the model without clearing existing 'files'
-                $pp->update([
-                    'pp' => $updatedPp,  // Merged JSON attributes
-                ]);
-                //Set status sent
-                $pp->status_stage1 = 'granted';
-                $pp->save();
-                $dashboard = Dashboard::where('request_id', $request->id)->first();
-                $dashboard->state = 'granted';
-                $dashboard->save();
+            return redirect()->route('pp', 'my')->with('success', 'Proposal successfully resumed!');
+        });
+    }
 
-                //Comments stamp
-                $this->comments_update($request->id, $request->edit_comments, 'granted');
+    private function handleSent(Request $request, Carbon $submittedAt)
+    {
+        return DB::transaction(function () use ($request, $submittedAt) {
 
-                //Create attachment
-                $reg = new FilesForRegistrator($pp);
-                $reg->storeDecisionLetter();
+            $pp = ProjectProposal::findOrFail($request->id);
 
-                //Send to registrator
-                $filePath = public_path('download/'  . $pp->id .'/'. 'ProjectProposal-' . $pp->name . '.zip');
+            $files = is_array($pp->files ?? null) ? $pp->files : [];
+            $finalFile = collect($files)->first(fn ($file) => isset($file['type']) && $file['type'] === 'final');
+
+            if (!$finalFile) {
+                return redirect()->route('pp', 'my')
+                    ->with('error', 'Please make sure to upload your final application before the reporting');
+            }
+
+            $pp->update([
+                'pp' => $this->mergePp($pp->pp ?? [], [
+                    'submitted' => $submittedAt->toISOString(),
+                    'status' => 'sent',
+                ]),
+                'status_stage1' => 'sent',
+            ]);
+
+            $dashboard = Dashboard::query()->where('request_id', $pp->id)->firstOrFail();
+            $dashboard->state = 'sent';
+            $dashboard->save();
+
+            // Create attachment zip
+            $reg = new FilesForRegistrator($pp);
+            $reg->storeFiles();
+
+            // Dispatch + mail after commit so we don't notify if DB fails
+            DB::afterCommit(function () use ($pp, $dashboard) {
+                $filePath = public_path('download/' . $pp->id . '/' . 'ProjectProposal-' . $pp->name . '.zip');
+
                 $user = User::find($pp->dashboard->user_id);
-                SendGrantToRegistrator::dispatch($user, $pp->dashboard, $filePath);
+                SendFinalToRegistrator::dispatch($user, $pp->dashboard, $filePath);
 
-                //Send notification to vice
-                $user = User::find($dashboard->user_id);
+                $submitter = User::find($dashboard->user_id);
                 $vice = $this->getViceHeadUser();
-                Mail::to($vice->email)->send(new GrantNotificationVice($user, $vice, $dashboard));
+                Mail::to($vice->email)->send(new SentNotificationVice($submitter, $vice, $dashboard));
+            });
 
-                return redirect()->route('pp', 'my')->with('success', 'Your project proposal has been successfully registered as a granted project!');
-                break;
-            case 'rejected':
-                $pp = ProjectProposal::find($request->id);
-                $existingPp = $pp->pp; // Get existing JSON attribute as an array
-                // Merge new values while keeping existing subattributes
-                $updatedPp = array_merge($existingPp, $request->only([
-                    'rejected', 'rejected_comments'
-                ]), [
-                    'submitted' => now(),
-                    'status' => 'denied'
-                ]);
-                // Update the model without clearing existing 'files'
-                $pp->update([
-                    'pp' => $updatedPp,  // Merged JSON attributes
-                ]);
-                $pp->save();
-                $dashboard = Dashboard::where('request_id', $request->id)->first();
-                $dashboard->state = 'denied';
-                $dashboard->save();
-                //Comments stamp
-                $this->comments_update($request->id, $request->edit_comments, 'rejected');
+            return redirect()->route('pp', 'my')
+                ->with('success', 'Your proposal has been successfully registered as sent. Thank you!');
+        });
+    }
 
-                //Create attachment
-                $reg = new FilesForRegistrator($pp);
-                $reg->storeDecisionLetter();
+    private function handleGranted(Request $request, Carbon $submittedAt)
+    {
+        return DB::transaction(function () use ($request, $submittedAt) {
 
-                //Send to registrator
-                $filePath = public_path('download/'  . $pp->id .'/'. 'ProjectProposal-' . $pp->name . '.zip');
+            $pp = ProjectProposal::findOrFail($request->id);
+
+            $pp->update([
+                'pp' => $this->mergePp($pp->pp ?? [], [
+                    ...$request->only(['granted', 'cofinanced_promised', 'phd_promised', 'granted_comments']),
+                    'submitted' => $submittedAt->toISOString(),
+                    'status' => 'granted',
+                ]),
+                'status_stage1' => 'granted',
+            ]);
+
+            $dashboard = Dashboard::query()->where('request_id', $pp->id)->firstOrFail();
+            $dashboard->state = 'granted';
+            $dashboard->save();
+
+            $this->comments_update($pp->id, $request->edit_comments, 'granted');
+
+            $reg = new FilesForRegistrator($pp);
+            $reg->storeDecisionLetter();
+
+            DB::afterCommit(function () use ($pp, $dashboard) {
+                $filePath = public_path('download/' . $pp->id . '/' . 'ProjectProposal-' . $pp->name . '.zip');
+
                 $user = User::find($pp->dashboard->user_id);
                 SendGrantToRegistrator::dispatch($user, $pp->dashboard, $filePath);
 
-                return redirect()->route('pp', 'my')->with('success', 'Your project proposal has been registered as a denied project!');
+                $submitter = User::find($dashboard->user_id);
+                $vice = $this->getViceHeadUser();
+                Mail::to($vice->email)->send(new GrantNotificationVice($submitter, $vice, $dashboard));
+            });
 
-            case 'review':
-                //dd($request->all());
-                //Updates project budget values
-                $pp = ProjectProposal::find($request->id);
-                $existingPp = $pp->pp; // Get existing JSON attribute as an array
-                // Merge new values while keeping existing subattributes
-                $updatedPp = array_merge($existingPp, $request->only([
-                    'budget_project', 'budget_dsv', 'cofinancing_needed', 'budget_php'
-                ]), [
-                    'submitted' => now(),
-                    'status' => 'revised'
-                ]);
-                // Update the model without clearing existing 'files'
-                $pp->update([
-                    'pp' => $updatedPp,  // Merged JSON attributes
-                ]);
-                $pp->save();
-                //Add comment
-                $comment = 'The budget has been revised by the financial administrator.';
-                $this->comments_update($request->id, $comment, 'updated');
+            return redirect()->route('pp', 'my')
+                ->with('success', 'Your project proposal has been successfully registered as a granted project!');
+        });
+    }
 
-                return redirect()->back()
-                    ->withFragment('project_budget')
-                    ->with('success', 'Budget has been updated')
-                    ->withInput();
-                break;
+    private function handleRejected(Request $request, Carbon $submittedAt)
+    {
+        return DB::transaction(function () use ($request, $submittedAt) {
+
+            $pp = ProjectProposal::findOrFail($request->id);
+
+            $pp->update([
+                'pp' => $this->mergePp($pp->pp ?? [], [
+                    ...$request->only(['rejected', 'rejected_comments']),
+                    'submitted' => $submittedAt->toISOString(),
+                    'status' => 'denied',
+                ]),
+            ]);
+
+            $dashboard = Dashboard::query()->where('request_id', $pp->id)->firstOrFail();
+            $dashboard->state = 'denied';
+            $dashboard->save();
+
+            $this->comments_update($pp->id, $request->edit_comments, 'rejected');
+
+            $reg = new FilesForRegistrator($pp);
+            $reg->storeDecisionLetter();
+
+            DB::afterCommit(function () use ($pp) {
+                $filePath = public_path('download/' . $pp->id . '/' . 'ProjectProposal-' . $pp->name . '.zip');
+
+                $user = User::find($pp->dashboard->user_id);
+
+                // NOTE: Your original code dispatches SendGrantToRegistrator here too.
+                // If you have a separate "SendRejectedToRegistrator", swap it in.
+                SendGrantToRegistrator::dispatch($user, $pp->dashboard, $filePath);
+            });
+
+            return redirect()->route('pp', 'my')
+                ->with('success', 'Your project proposal has been registered as a denied project!');
+        });
+    }
+
+    private function handleReview(Request $request, Carbon $submittedAt)
+    {
+        return DB::transaction(function () use ($request, $submittedAt) {
+
+            $pp = ProjectProposal::findOrFail($request->id);
+
+            $pp->update([
+                'pp' => $this->mergePp($pp->pp ?? [], [
+                    ...$request->only(['budget_project', 'budget_dsv', 'cofinancing_needed', 'budget_php']),
+                    'submitted' => $submittedAt->toISOString(),
+                    'status' => 'revised',
+                ]),
+            ]);
+
+            $this->comments_update($pp->id, 'The budget has been revised by the financial administrator.', 'updated');
+
+            return redirect()->back()
+                ->withFragment('project_budget')
+                ->with('success', 'Budget has been updated')
+                ->withInput();
+        });
+    }
+
+    /* -------------------------------------------------------------------------
+     | Shared helpers (reduce duplication)
+     * ---------------------------------------------------------------------- */
+
+    private function buildPpPayload(Request $request, array $overrides = []): array
+    {
+        // Keep your original list as the base
+        $base = $request->only([
+            'title', 'objective', 'principal_investigator', 'principal_investigator_email',
+            'co_investigator_name', 'co_investigator_email', 'co_investigator_type', 'co_investigator_role',
+            'research_area', 'dsvcoordinating', 'other_coordination', 'eu', 'eu_wallenberg',
+            'funding_organization', 'cofinancing', 'other_cofinancing', 'project_duration',
+            'unit_head', 'program', 'decision_exp', 'start_date', 'submission_deadline',
+            'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost',
+            'cofinancing_needed', 'user_comments'
+        ]);
+
+        return $base + $overrides;
+    }
+
+    private function mergePp(array $existing, array $incoming): array
+    {
+        // Recursive safe merge so nested structures aren't blown away
+        return array_replace_recursive($existing, $incoming);
+    }
+
+    private function dashboardBaseData(ProjectProposal $pp, Request $request, string $userId, int $createdTs, string $status): array
+    {
+        ['fo' => $foUserId, 'fo_eu' => $foEuUserId] = $this->getFoIds();
+
+        $euYes = $this->truthy(data_get($pp->pp, 'eu'));
+        $foId = $euYes ? $foEuUserId : $foUserId;
+
+        return [
+            'request_id' => $pp->id,
+            'name'       => $request->title,
+            'created'    => $createdTs,
+            'status'     => $status,
+            'type'       => 'projectproposal',
+            'user_id'    => $userId,
+            'fo_id'      => $foId,
+            'vice_id'    => $this->getViceHeadUserId(),
+        ];
+    }
+
+    private function upsertDashboardWithUnitHeads(ProjectProposal $pp, Request $request, array $dashboardData): Dashboard
+    {
+        $dashboard = Dashboard::updateOrCreate(
+            ['request_id' => $pp->id],
+            $dashboardData
+        );
+
+        $this->setUnitHeadsOnDashboard($dashboard, (array) $request->unit_head);
+
+        return $dashboard;
+    }
+
+    private function setUnitHeadsOnDashboard(Dashboard $dashboard, array $unitHeads): void
+    {
+        $unitHeads = array_values(array_filter($unitHeads, fn ($v) => $v !== null && $v !== ''));
+
+        $dashboard->unit_heads = $unitHeads;
+        $dashboard->unit_head_approved = collect($unitHeads)
+            ->mapWithKeys(fn ($uh) => [$uh => 0])
+            ->toJson();
+
+        $dashboard->multiple_heads = count($unitHeads) > 1;
+        $dashboard->save();
+    }
+
+    private function getFoIds(): array
+    {
+        return Cache::remember('fo_ids', 600, function () {
+            return [
+                'fo'    => SettingsFo::query()->whereKey(1)->value('user_id'),
+                'fo_eu' => SettingsFoEu::query()->whereKey(1)->value('user_id'),
+            ];
+        });
+    }
+
+    private function truthy($value): bool
+    {
+        // Handles 'yes', '1', 1, true, 'true', etc.
+        if (is_string($value)) {
+            $value = strtolower(trim($value));
+            if (in_array($value, ['yes', 'y'], true)) return true;
+            if (in_array($value, ['no', 'n'], true)) return false;
         }
-        dd('Error: Something went wrong. Code S001');
+        return filter_var($value, FILTER_VALIDATE_BOOL);
     }
 
     public function decision(Request $request)
