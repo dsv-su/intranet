@@ -83,7 +83,7 @@
             <!-- end language switcher -->
             <!-- Dashbord -->
             @can('access cp')
-                @if(auth()->user()->isSuperAdmin())
+                {{--}}@if(auth()->user()->isSuperAdmin()){{--}}
                     <a data-tooltip-target="navbar-dashboard-tooltip" href='/cp' aria-label="Control panel"
                        class="block px-2 py-0.5 mr-2 text-sm outline outline-offset-2 outline-1 rounded text-gray-200 hover:bg-slate-100 hover:text-black dark:border-gray-600" role="menuitem">
                         <svg class="w-5 h-5 text-white hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-900"
@@ -91,7 +91,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"/>
                         </svg>
                     </a>
-                @endif
+                {{--}}@endif{{--}}
             @endif
 
         <!-- Tooltips -->

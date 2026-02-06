@@ -24,7 +24,7 @@
             </div>
 
             <div class="flex flex-row items-center justify-end gap-1">
-                {{--}}<a type="button"
+                <a type="button"
                    data-tooltip-target="return-intranet-tooltip"
                    href="/"
                    class="size-[18px] sm:size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
@@ -32,7 +32,7 @@
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"/>
                     </svg>
                     <span class="sr-only">Intranet</span>
-                </a>{{--}}
+                </a>
                 <a
                     data-tooltip-target="pp-manual-tooltip"
                     href="{{ route('usermanual') }}"
