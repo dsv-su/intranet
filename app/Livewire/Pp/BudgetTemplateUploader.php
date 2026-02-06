@@ -41,12 +41,6 @@ class BudgetTemplateUploader extends Component
     {
         $user = Auth::user();
         $allowed_roles = [$this->getViceHeadUserId()];
-
-        /*if (in_array($user->id, $allowed_roles) ) {
-            $this->allow = true;
-        } else {
-            $this->allow = false;
-        }*/
         $this->allow = $user && (
                 $user->isSuperAdmin() || in_array($user->id, $allowed_roles, true)
             );

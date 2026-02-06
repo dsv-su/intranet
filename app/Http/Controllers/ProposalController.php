@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Statamic\View\View;
 use Workflow\WorkflowStub;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProposalController extends Controller
 {
@@ -41,69 +42,57 @@ class ProposalController extends Controller
     {
         $this->middleware(['web', 'auth', 'dsv']);
     }
-    public function pp($slug = 'my')
+    public function pp(string $slug = 'my')
     {
-        // Check if form is enabled
-        if (!SettingsOh::first()->form_enable) {
+        // lighter query + safe if no record exists
+        $enabled = SettingsOh::query()->value('form_enable') ?? false;
+
+        // $enabled = Cache::remember('settings.form_enable', 60, fn () => SettingsOh::query()->value('form_enable') ?? false);
+
+        if (!$enabled) {
             return (new \Statamic\View\View)
                 ->template('pp.disabled')
                 ->with(['breadcrumb' => 'Disabled']);
-                //->layout('mylayout');
         }
 
-        // User roles handling (testmode)
         $roles = (new RoleHandler(auth()->user()))->show();
 
-        // Slug mapping
         $breadcrumbs = [
-            'my' => 'My proposals',
+            'my'       => 'My proposals',
             'awaiting' => 'Awaiting review',
-            'all' => 'Proposals',
+            'all'      => 'Proposals',
         ];
 
         return (new \Statamic\View\View)
             ->template('pp.index')
             ->with([
-                'page' => $slug,
+                'page'       => $slug,
                 'breadcrumb' => $breadcrumbs[$slug] ?? 'Unknown',
-                'roles' => $roles
+                'roles'      => $roles,
             ]);
-            //->layout('mylayout');
     }
-    public function pp_edit($id)
+    public function pp_edit(string $id)
     {
-        $viewData = $this->prepareProjectProposalData($id);
-        $viewData['proposal'] = ProjectProposal::find($id);
-        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-        $viewData['type'] = 'edit';
-
-        return $this->createView('pp.create', 'mylayout', $viewData);
+        return $this->renderProposalForm($id, 'edit');
     }
 
-    public function pp_resume($id)
+    public function pp_resume(string $id)
     {
-        $viewData = $this->prepareProjectProposalData($id);
-        $viewData['proposal'] = ProjectProposal::find($id);
-        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-        $viewData['budget'] = DsvBudget::find(1);
-        $viewData['type'] = 'resume';
-
-        return $this->createView('pp.create', 'mylayout', $viewData);
+        return $this->renderProposalForm($id, 'resume', function (&$viewData) {
+            $viewData['budget'] = DsvBudget::find(1); // consider ->first() or config id
+        });
     }
 
-    public function usermanual()
+    public function pp_complete(string $id)
     {
-        $manual = 'PPManual.pdf';
-        return Storage::download($manual);
+        return $this->renderProposalForm($id, 'complete');
     }
-    public function budget()
-    {
-        $template     = BudgetTemplate::first();
-        $files        = $template->files;
-        $firstFile    = reset($files);
-        $downloadPath = $firstFile['path'];
 
-        return Storage::download($downloadPath,'dsv_budgettemplate.xlsx');
+    public function upload(string $id)
+    {
+        return $this->renderProposalForm($id, 'complete', function (&$viewData) {
+            $viewData['upload'] = true;
+        });
     }
 
     public function create()
@@ -114,23 +103,45 @@ class ProposalController extends Controller
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
-    public function pp_complete($id)
+    public function usermanual(): StreamedResponse
     {
-        $viewData = $this->prepareProjectProposalData($id);
-        $viewData['proposal'] = ProjectProposal::find($id);
-        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-        $viewData['type'] = 'complete';
-
-        return $this->createView('pp.create', 'mylayout', $viewData);
+        return Storage::download('PPManual.pdf');
     }
 
-    public function upload($id)
+    public function budget(): StreamedResponse
+    {
+        $template = BudgetTemplate::query()->first();
+
+        $files = $template?->files ?? [];
+        $firstFile = $files[0] ?? null;
+
+        abort_unless($firstFile && !empty($firstFile['path']), 404, 'Budget template file not found.');
+
+        return Storage::download($firstFile['path'], 'dsv_budgettemplate.xlsx');
+
+        /*$template     = BudgetTemplate::first();
+        $files        = $template->files;
+        $firstFile    = reset($files);
+        $downloadPath = $firstFile['path'];
+
+        return Storage::download($downloadPath,'dsv_budgettemplate.xlsx');*/
+    }
+
+    /**
+     * Shared renderer for proposal form screens.
+     */
+    private function renderProposalForm(string $id, string $type, ?callable $mutate = null)
     {
         $viewData = $this->prepareProjectProposalData($id);
-        $viewData['proposal'] = ProjectProposal::find($id);
-        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-        $viewData['type'] = 'complete';
-        $viewData['upload'] = true;
+
+        // Prefer findOrFail to avoid passing null to the view
+        $viewData['proposal']  = ProjectProposal::query()->findOrFail($id);
+        $viewData['dashboard'] = Dashboard::query()->where('request_id', $id)->first();
+        $viewData['type']      = $type;
+
+        if ($mutate) {
+            $mutate($viewData);
+        }
 
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
@@ -284,12 +295,11 @@ class ProposalController extends Controller
 
             $pp = ProjectProposal::findOrFail($request->id);
 
-            // TODO Resume doesn't set status/submitted
             $pp->fill([
                 'user_id' => $userId,
                 'name' => $request->title,
                 'created' => $createdTs,
-                'pp' => $this->buildPpPayload($request, []), // no forced status
+                'pp' => $this->buildPpPayload($request, []), // no forced status ->TODO
             ])->save();
 
             $this->comments_update($pp->id, $request->edit_comments, 'resumed');
@@ -455,7 +465,7 @@ class ProposalController extends Controller
     }
 
     /* -------------------------------------------------------------------------
-     | Shared helpers (reduce duplication)
+     | Shared helpers
      * ---------------------------------------------------------------------- */
 
     private function buildPpPayload(Request $request, array $overrides = []): array
@@ -545,6 +555,7 @@ class ProposalController extends Controller
         return filter_var($value, FILTER_VALIDATE_BOOL);
     }
 
+    //TODO
     public function decision(Request $request)
     {
         //Trigger signal
