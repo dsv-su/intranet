@@ -217,104 +217,122 @@ class ProposalController extends Controller
 
     private function handleComplete(Request $request, string $userId, Carbon $submittedAt)
     {
-        return DB::transaction(function () use ($request, $userId, $submittedAt) {
+        $pp = ProjectProposal::query()->findOrFail($request->id);
 
-            $pp = ProjectProposal::findOrFail($request->id);
+        $updatedPp = $this->mergePp($pp->pp ?? [], [
+            ...$request->only([
+                'unit_head', 'program', 'decision_exp', 'funding_organization',
+                'start_date', 'submission_deadline',
+                'budget_project', 'budget_dsv', 'budget_phd', 'currency',
+                'oh_cost', 'cofinancing_needed',
+            ]),
+            'submitted' => $submittedAt->toISOString(),
+            'status' => 'completed',
+            'co_investigator_name' => $request->co_investigator_name,
+            'co_investigator_email' => $request->co_investigator_email,
+            'co_investigator_type' => $request->co_investigator_type,
+            'co_investigator_role' => $request->co_investigator_role,
+        ]);
 
-            // Merge JSON safely (recursive) and preserve existing keys such as 'files'
-            $updatedPp = $this->mergePp($pp->pp ?? [], [
-                ...$request->only([
-                    'unit_head', 'program', 'decision_exp', 'funding_organization',
-                    'start_date', 'submission_deadline',
-                    'budget_project', 'budget_dsv', 'budget_phd', 'currency',
-                    'oh_cost', 'cofinancing_needed', 'user_comments'
-                ]),
-                'submitted' => $submittedAt->toISOString(),
-                'status' => 'completed',
-                // Explicitly keep these (as you did)
-                'co_investigator_name' => $request->co_investigator_name,
-                'co_investigator_email' => $request->co_investigator_email,
-                'co_investigator_type' => $request->co_investigator_type,
-                'co_investigator_role' => $request->co_investigator_role,
-            ]);
+        $pp->update(['pp' => $updatedPp]);
 
-            $pp->update(['pp' => $updatedPp]);
+        // Append-only comment input normalization
+        $newComment = $request->input('comment') ?? $request->input('edit_comments');
+        if ($newComment !== null && trim($newComment) !== '') {
+            $this->comments_update($pp->id, $newComment, 'completed');
+        }
 
-            $this->comments_update($pp->id, $request->edit_comments, 'completed');
+        $dashboard = Dashboard::query()
+            ->where('request_id', $pp->id)
+            ->firstOrFail();
 
-            $dashboard = Dashboard::query()
-                ->where('request_id', $pp->id)
-                ->firstOrFail();
+        $this->setUnitHeadsOnDashboard($dashboard, (array) $request->unit_head);
 
-            $this->setUnitHeadsOnDashboard($dashboard, (array) $request->unit_head);
-
-            if ($this->checkFiles($pp)) {
-                $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
-                $workflowhandler->Completed();
-
-                return redirect()->route('pp', 'my')
-                    ->with('success', 'Your Project proposal files have successfully been uploaded!');
-            }
+        if ($this->checkFiles($pp)) {
+            (new WorkflowHandler($dashboard->workflow_id))->Completed();
 
             return redirect()->route('pp', 'my')
-                ->with('success', 'Your Project proposal has been updated!');
-        });
+                ->with('success', 'Your Project proposal files have successfully been uploaded!');
+        }
+
+        return redirect()->route('pp', 'my')
+            ->with('success', 'Your Project proposal has been updated!');
     }
+
 
     private function handleEdit(Request $request, string $userId, Carbon $submittedAt, int $createdTs)
     {
-        return DB::transaction(function () use ($request, $userId, $submittedAt, $createdTs) {
+        $pp = ProjectProposal::query()->findOrFail($request->id);
 
-            $pp = ProjectProposal::findOrFail($request->id);
+        $existing = $pp->pp ?? [];
+        $incoming = $this->buildPpPayload($request, [
+            'submitted' => $submittedAt->toISOString(),
+            'status'    => 'edited',
+        ]);
 
-            $pp->fill([
-                'user_id' => $userId,
-                'name' => $request->title,
-                'created' => $createdTs,
-                'pp' => $this->buildPpPayload($request, [
-                    'submitted' => $submittedAt->toISOString(),
-                    'status' => 'edited',
-                ]),
-            ])->save();
+        $pp->fill([
+            'user_id' => $userId,
+            'name'    => $request->title,
+            'created' => $createdTs,
+            'pp'      => $this->mergePp($existing, $incoming),
+        ])->save();
 
-            $this->comments_update($pp->id, $request->edit_comments, 'edit');
+        // append-only comment (safe)
+        if ($request->filled('comment')) {
+            $this->comments_update($pp->id, $request->comment, 'edit');
+        }
 
-            $dashboard = $this->upsertDashboardWithUnitHeads(
-                $pp,
-                $request,
-                $this->dashboardBaseData($pp, $request, $userId, $createdTs, 'edited')
-            );
+        $dashboard = $this->upsertDashboardWithUnitHeads(
+            $pp,
+            $request,
+            $this->dashboardBaseData($pp, $request, $userId, $createdTs, 'edited')
+        );
 
-            return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
-        });
+        return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
     }
+
 
     private function handleResume(Request $request, string $userId, Carbon $submittedAt, int $createdTs)
     {
-        return DB::transaction(function () use ($request, $userId, $submittedAt, $createdTs) {
+        $pp = ProjectProposal::query()->findOrFail($request->id);
 
-            $pp = ProjectProposal::findOrFail($request->id);
+        $existing = $pp->pp ?? [];
+        $incoming = $this->buildPpPayload($request, [
+            // decide what resume should do
+            'status'    => 'resumed',
+            'submitted' => $submittedAt->toISOString(),
+        ]);
 
-            $pp->fill([
-                'user_id' => $userId,
-                'name' => $request->title,
-                'created' => $createdTs,
-                'pp' => $this->buildPpPayload($request, []), // no forced status ->TODO
-            ])->save();
+        // Prevent overwriting comment history on resume (important)
+        unset($incoming['user_comments']);
 
-            $this->comments_update($pp->id, $request->edit_comments, 'resumed');
+        $pp->fill([
+            'user_id' => $userId,
+            'name'    => $request->title,
+            'created' => $createdTs,
+            'pp'      => $this->mergePp($existing, $incoming),
+        ])->save();
 
-            $dashboard = Dashboard::updateOrCreate(
-                ['request_id' => $pp->id],
-                ['request_id' => $pp->id, 'name' => $request->title, 'status'=> 'resumed']
-            );
+        // Append-only new comment
+        if ($request->filled('comment')) {
+            $this->comments_update($pp->id, $request->comment, 'resumed');
+        }
 
-            $this->resumeWorkflow($dashboard);
-            $this->checkFileStatus($pp);
+        $dashboard = Dashboard::query()->updateOrCreate(
+            ['request_id' => $pp->id],
+            [
+                'name'   => $request->title,
+                'status' => 'resumed',
+            ]
+        );
 
-            return redirect()->route('pp', 'my')->with('success', 'Proposal successfully resumed!');
-        });
+        // async side effects (fine outside tx)
+        $this->resumeWorkflow($dashboard);
+        $this->checkFileStatus($pp);
+
+        return redirect()->route('pp', 'my')->with('success', 'Proposal successfully resumed!');
     }
+
 
     private function handleSent(Request $request, Carbon $submittedAt)
     {
@@ -470,7 +488,6 @@ class ProposalController extends Controller
 
     private function buildPpPayload(Request $request, array $overrides = []): array
     {
-        // Keep your original list as the base
         $base = $request->only([
             'title', 'objective', 'principal_investigator', 'principal_investigator_email',
             'co_investigator_name', 'co_investigator_email', 'co_investigator_type', 'co_investigator_role',
@@ -478,11 +495,24 @@ class ProposalController extends Controller
             'funding_organization', 'cofinancing', 'other_cofinancing', 'project_duration',
             'unit_head', 'program', 'decision_exp', 'start_date', 'submission_deadline',
             'budget_project', 'budget_dsv', 'budget_phd', 'currency', 'oh_cost',
-            'cofinancing_needed', 'user_comments'
+            'cofinancing_needed',
         ]);
+
+        // Normalize comment inputs:
+        // - first-time forms post 'user_comments'
+        // - edit/resume forms post 'comment'
+        $initialUserComments = $request->input('user_comments');
+        $newComment = $request->input('comment') ?? $request->input('edit_comments');
+
+        // Only set pp.user_comments IF this is the first time / initial value.
+        // If user_comments is present and comment is not, treat it as initial.
+        if ($initialUserComments !== null && $newComment === null) {
+            $base['user_comments'] = (string) $initialUserComments;
+        }
 
         return $base + $overrides;
     }
+
 
     private function mergePp(array $existing, array $incoming): array
     {
@@ -554,104 +584,119 @@ class ProposalController extends Controller
         }
         return filter_var($value, FILTER_VALIDATE_BOOL);
     }
-
-    //TODO
     public function decision(Request $request)
     {
-        //Trigger signal
-        $dashboard = Dashboard::where('request_id', $request->id)->first();
-        $role = new DashboardRole($dashboard, $user = auth()->user());
-        $workflowhandler = new WorkflowHandler($dashboard->workflow_id);
-        //dd($request->decision, $user, $role->check());
-        switch($request->decision) {
-            case 'approve':
-                //Update comments
-                $this->comments_update($request->id, $request->comment, 'approved');
-                switch($role->check()) {
-                    case 'head':
-                        //Approve draft file
-                        (new ProposalFileReviewService($request->id))
-                            ->approvePendingByType('draft');
-                        //Flag approved
-                        $headGroup = $dashboard;
-                        $unitHeadApproved = json_decode($headGroup->unit_head_approved, true);
-                        $keyToUpdate = $user->id;
+        $data = $request->validate([
+            'id'       => ['required', 'string'],
+            'decision' => ['required', 'in:approve,deny,return'],
+            'comment'  => ['nullable', 'string', 'max:5000'],
+        ]);
 
-                        if (isset($unitHeadApproved[$keyToUpdate]) && $unitHeadApproved[$keyToUpdate] === 0) {
-                            $unitHeadApproved[$keyToUpdate] = 1;
-                        }
-                        $headGroup->unit_head_approved = json_encode($unitHeadApproved);
-                        $headGroup->save();
+        $user = auth()->user();
 
-                        if (!in_array(0, json_decode($dashboard->unit_head_approved, true))) {
-                            $workflowhandler->HeadApprove();
-                        }
+        $dashboard = Dashboard::query()
+            ->where('request_id', $data['id'])
+            ->firstOrFail();
 
-                        //Update budget stats
-                        $proposal = ProjectProposal::find($dashboard->request_id);
-                        $budget = new Budget($proposal);
-                        //Preapproval count
-                        $budget->preapproved_increment($proposal->pp['research_area']);
-                        $budget->budget_increment($proposal->pp['research_area']);
-                        $budget->phd_increment($proposal->pp['research_area']);
-                        $budget->cost_increment($proposal->pp['research_area']);
-                        break;
-                    case 'fo':
-                        //Approve budgetfile
-                        (new ProposalFileReviewService($request->id))
-                            ->approvePendingByType('budget');
-                        //Signal state change
-                        $workflowhandler->FOApprove();
-                        break;
-                    case 'vice_final':
-                        $workflowhandler->FinalApprove();
-                        break;
-                }
-                break;
-            case 'deny':
-                //Update comments
-                $this->comments_update($request->id, $request->comment, 'denied');
-                switch($role->check()) {
-                    case 'head':
-                        $workflowhandler->HeadDeny();
-                        $calc = new ReCalcBudget();
-                        $calc->scan();
-                        break;
-                    case 'fo':
-                        $workflowhandler->FODeny();
-                        $calc = new ReCalcBudget();
-                        $calc->scan();
-                        break;
-                    case 'vice_final':
-                        $workflowhandler->FinalDeny();
-                        break;
-                }
-                break;
-            case 'return':
-                //Update comments
-                $this->comments_update($request->id, $request->comment, 'returned');
-                switch($role->check()) {
-                    case 'head':
-                        $workflowhandler->HeadReturn();
-                        $calc = new ReCalcBudget();
-                        $calc->scan();
-                        break;
-                    case 'fo':
-                        $workflowhandler->FOReturn();
-                        $calc = new ReCalcBudget();
-                        $calc->scan();
-                        break;
-                    case 'vice_final':
-                        $workflowhandler->FinalReturn();
-                        $calc = new ReCalcBudget();
-                        $calc->scan();
-                        break;
-                }
-                break;
-        }
-        return redirect()->route('pp', ['slug' =>'awaiting']);
+        $workflow = new WorkflowHandler($dashboard->workflow_id);
+        $roleObj  = new DashboardRole($dashboard, $user);
+        $actorRole = $roleObj->check(); // compute once
+
+        // 1) Update comments (synchronous DB write)
+        $statusMap = [
+            'approve' => 'approved',
+            'deny'    => 'denied',
+            'return'  => 'returned',
+        ];
+        $this->comments_update($data['id'], $data['comment'] ?? null, $statusMap[$data['decision']]);
+
+        // 2) Route by decision (no transaction)
+        match ($data['decision']) {
+            'approve' => $this->handleApprove($dashboard, $data['id'], $actorRole, $user, $workflow),
+            'deny', 'return' => $this->handleDenyReturn($data['decision'], $actorRole, $workflow),
+        };
+
+        return redirect()->route('pp', ['slug' => 'awaiting']);
     }
 
+    private function handleApprove(Dashboard $dashboard, string $requestId, string $actorRole, $user,
+        WorkflowHandler $workflow
+    ): void {
+        switch ($actorRole) {
+            case 'head':
+                // Approve draft file
+                (new ProposalFileReviewService($requestId))->approvePendingByType('draft');
+
+                // Update unit_head_approved safely
+                $unitHeadApproved = json_decode($dashboard->unit_head_approved, true);
+                if (!is_array($unitHeadApproved)) {
+                    $unitHeadApproved = [];
+                }
+
+                $alreadyApproved = (($unitHeadApproved[$user->id] ?? 0) === 1);
+
+                if (!$alreadyApproved) {
+                    $unitHeadApproved[$user->id] = 1;
+                    $dashboard->unit_head_approved = json_encode($unitHeadApproved);
+                    $dashboard->save();
+                }
+
+                if (!in_array(0, $unitHeadApproved, true)) {
+                    $workflow->HeadApprove();
+                }
+
+                // Budget increments should be guarded to avoid double count
+                if (!$alreadyApproved) {
+                    $proposal = ProjectProposal::query()->findOrFail($dashboard->request_id);
+                    $researchArea = $proposal->pp['research_area'] ?? null;
+
+                    if ($researchArea) {
+                        $budget = new Budget($proposal);
+                        $budget->preapproved_increment($researchArea);
+                        $budget->budget_increment($researchArea);
+                        $budget->phd_increment($researchArea);
+                        $budget->cost_increment($researchArea);
+                    }
+                }
+
+                break;
+
+            case 'fo':
+                (new ProposalFileReviewService($requestId))->approvePendingByType('budget');
+                $workflow->FOApprove();
+                break;
+
+            case 'vice_final':
+                $workflow->FinalApprove();
+                break;
+        }
+    }
+    private function handleDenyReturn(string $decision, string $actorRole, WorkflowHandler $workflow): void
+    {
+        $map = [
+            'deny' => [
+                'head'       => 'HeadDeny',
+                'fo'         => 'FODeny',
+                'vice_final' => 'FinalDeny',
+            ],
+            'return' => [
+                'head'       => 'HeadReturn',
+                'fo'         => 'FOReturn',
+                'vice_final' => 'FinalReturn',
+            ],
+        ];
+
+        $method = $map[$decision][$actorRole] ?? null;
+        if ($method) {
+            $workflow->{$method}();
+        }
+
+        if (in_array($actorRole, ['head', 'fo'], true)) {
+            (new ReCalcBudget())->scan();
+        }
+    }
+
+    //TODO
     public function pp_sent($id)
     {
         $viewData = $this->prepareProjectProposalData($id);
@@ -688,6 +733,9 @@ class ProposalController extends Controller
             'title' => 'required',
             'objective' => 'required',
             'principal_investigator' => 'required',
+            'user_comments' => ['nullable', 'string', 'max:5000'],
+            'comment' => ['nullable', 'string', 'max:5000'],
+            'edit_comments' => ['nullable', 'string', 'max:5000'],
             //'project_duration' => 'required|numeric|integer',
             //'oh_cost' => 'required|numeric|max:56'
         ];
@@ -695,60 +743,53 @@ class ProposalController extends Controller
         return $this->validate($request, $rules);
     }
 
-    protected function comments_update($id, $comment, $type = null)
+    protected function comments_update(string $id, ?string $comment, ?string $type = null): int
     {
-        //Proposal user comments
-        $proposal = ProjectProposal::find($id);
-        $user_comments = $proposal->pp['user_comments'] ?? '';
-
-        //Timestamp
-        $timestamp = now()->format('d/m/Y');
-        $user = auth()->user()->name;
-        $tag = '**';
-
-        switch ($type) {
-            case 'edit':
-                $comments_tag = $tag . '  ' . 'Proposal has been EDITED by ' . $user . '  ' . $timestamp . '  ' . $tag;
-                break;
-            case 'completed':
-                $comments_tag = $tag . '  ' . 'Proposal has been COMPLETED by ' . $user . '  ' . $timestamp . '  ' . $tag;
-                break;
-            case 'approved':
-                $comments_tag = $tag . '  ' . 'Proposal has been APPROVED by ' . $user . '  ' . $timestamp . '  ' . $tag;
-                break;
-            case 'returned':
-                $comments_tag = $tag . '  ' . 'Proposal has been RETURNED by ' . $user . '  ' . $timestamp . '  ' . $tag;
-                break;
-            case 'denied':
-                $comments_tag = $tag . '  ' . 'Proposal has been DENIED by ' . $user . '  ' . $timestamp . '  ' . $tag;
-                break;
-            case 'resumed':
-                $comments_tag = $tag . '  ' . 'Proposal has been RESUMED by ' . $user . '  ' . $timestamp . '  ' . $tag;
-                break;
-            case 'granted':
-                $comments_tag = $tag . '  ' . 'Proposal has been GRANTED reported by ' . $user . '  ' . $timestamp . '  ' . $tag;
-                break;
-            case 'rejected':
-                $comments_tag = $tag . '  ' . 'Proposal has been REJECTED reported by ' . $user . '  ' . $timestamp . '  ' . $tag;
-                break;
-            case 'updated':
-                $comments_tag = $tag . '  ' . 'Proposal has been REVISED by ' . $user . '  ' . $timestamp . '  ' . $tag;
-                break;
-            default:
-                $comments_tag = $tag . '  ' . $user . '  ' . $timestamp . '  ' . $tag;
-                break;
+        if ($comment === null || trim($comment) === '') {
+            return 0; // nothing to append
         }
 
-        //Merge with reviewer comments
-        return ProjectProposal::where('id', $id)
-            ->update(['pp->user_comments' =>
-                Str::of($user_comments)->newLine()
-                    ->append($comments_tag)
-                    ->newLine()
-                    ->append($comment)
-                    ->newLine()
-                    ->newLine()
-            ]);
+        $proposal = ProjectProposal::query()->findOrFail($id);
+
+        $pp = $proposal->pp ?? [];
+        $existing = $pp['user_comments'] ?? '';
+
+        $timestamp = now()->format('Y-m-d');
+        $userName  = auth()->user()->name;
+        $tag       = '**';
+
+        $labels = [
+            'edit'      => 'EDITED',
+            'completed' => 'COMPLETED',
+            'approved'  => 'APPROVED',
+            'returned'  => 'RETURNED',
+            'denied'    => 'DENIED',
+            'resumed'   => 'RESUMED',
+            'granted'   => 'GRANTED reported',
+            'rejected'  => 'REJECTED reported',
+            'updated'   => 'REVISED',
+        ];
+
+        $label = $labels[$type] ?? null;
+
+        $commentsTag = $label
+            ? "{$tag}  Proposal has been {$label} by {$userName}  {$timestamp}  {$tag}"
+            : "{$tag}  {$userName}  {$timestamp}  {$tag}";
+
+        $appendBlock = (string) \Illuminate\Support\Str::of('')
+            ->newLine()
+            ->append($commentsTag)
+            ->newLine()
+            ->append(trim($comment))
+            ->newLine()
+            ->newLine();
+
+        // append-only
+        $pp['user_comments'] = $existing . $appendBlock;
+        $proposal->pp = $pp;
+        $proposal->save();
+
+        return 1;
     }
 
     protected function createAndStartWorkflow($dashboard)
