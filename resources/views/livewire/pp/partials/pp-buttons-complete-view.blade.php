@@ -1,4 +1,4 @@
-@if($proposal->allowComplete())
+@if($proposal->allowComplete() && $proposal->dashboard->status != 'resumed')
     <a type="button"
        href="{{ route('pp-complete', $proposal->id) }}"
        class="mr-6 inline-flex items-center px-1.5 py-1.5 rounded-md font-semibold text-[0.5rem] uppercase tracking-widest

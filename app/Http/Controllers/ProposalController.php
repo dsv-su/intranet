@@ -296,7 +296,7 @@ class ProposalController extends Controller
 
             $dashboard = Dashboard::updateOrCreate(
                 ['request_id' => $pp->id],
-                ['request_id' => $pp->id, 'name' => $request->title]
+                ['request_id' => $pp->id, 'name' => $request->title, 'status'=> 'resumed']
             );
 
             $this->resumeWorkflow($dashboard);
