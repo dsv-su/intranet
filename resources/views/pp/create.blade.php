@@ -245,7 +245,7 @@
     <script>
         /* Textarea autosize */
         document.addEventListener('DOMContentLoaded', function() {
-            const textarea = document.getElementById('user_comments');
+            const textarea = document.getElementById('user_comments_history');
 
             const autoResize = () => {
                 textarea.style.height = 'auto'; // Reset the height to auto to calculate the new height
