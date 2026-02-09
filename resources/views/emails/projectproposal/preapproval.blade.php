@@ -2,15 +2,17 @@
 <br>
 <b>ProjectProposal is currently in test mode, and all created proposals are fictitious and intended for testing purposes only.</b>
 <br><br>
----
+------------------------------------------------------------
 <br>
-To vicehead
+TO: ViceHead
 <br>
----
+SUBJECT: New <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> submitted for review.
+<br>
+------------------------------------------------------------
 <br><br>
-A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been submitted and awaits your Review.
+
 <br><br>
-Here's a quick overview of the proposal:
+OVERVIEW:
 <br><br>
 <b>Proposal:</b> {{$dashboard->name}}
 <br><br>
@@ -20,10 +22,12 @@ Here's a quick overview of the proposal:
 <br><br>
 <b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>
-You can review the details and take necessary action by accessing the proposal through the following link:
+ACTION
+<br>
+Review the request using this link:
 <br><br>
 <a href="{{ url('') }}/pp/review/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}}</a>
 <br><br>
----
+------------------------------------------------------------
 <br>
 This is an automated email, please do not reply to this email.

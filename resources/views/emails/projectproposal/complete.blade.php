@@ -2,16 +2,16 @@
 <br>
 <b>ProjectProposal is currently in test mode, and all created proposals are fictitious and intended for testing purposes only.</b>
 <br><br>
----
+------------------------------------------------------------
 <br>
-To User
+To: User {{$user->name}}
 <br>
----
+SUBJECT: Your project proposal, <i><strong>{{$dashboard->name}}</strong></i>, is now pending completion.
+------------------------------------------------------------
 <br><br>
 Dear {{$user->name}},
 <br><br>
-Your project proposal, <i><strong>{{$dashboard->name}}</strong></i>, has been preapproved by the Vice Head and is now pending completion.
-<br>
+
 To proceed with renewed approval from the Unit Head(s) and Financial Officer,
 please update your proposal to include the required dates and budget details.
 <br><br>
@@ -43,6 +43,6 @@ You can review the details and take necessary action by accessing the proposal t
 <br><br>
 <a href="{{ url('') }}/pp/complete/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}} for updating.</a>
 <br><br>
----
+------------------------------------------------------------
 <br>
 This is an automated email, please do not reply to this email.

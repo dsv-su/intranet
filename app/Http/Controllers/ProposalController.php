@@ -15,6 +15,9 @@ use App\Models\SettingsFo;
 use App\Models\SettingsFoEu;
 use App\Models\SettingsOh;
 use App\Models\User;
+use App\Workflows\States\HeadReturned;
+use App\Workflows\States\FoReturned;
+use App\Workflows\States\FinalReturned;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +34,6 @@ use App\Services\Send\FilesForRegistrator;
 use App\Workflows\DSVProjectPWorkflow;
 use App\Workflows\Partials\RequestStates;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Statamic\View\View;
 use Workflow\WorkflowStub;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -79,7 +81,7 @@ class ProposalController extends Controller
     public function pp_resume(string $id)
     {
         return $this->renderProposalForm($id, 'resume', function (&$viewData) {
-            $viewData['budget'] = DsvBudget::find(1); // consider ->first() or config id
+            $viewData['budget'] = DsvBudget::find(1); // ->first() or config id
         });
     }
 
@@ -313,10 +315,8 @@ class ProposalController extends Controller
             'pp'      => $this->mergePp($existing, $incoming),
         ])->save();
 
-        // Append-only new comment
-        if ($request->filled('comment')) {
-            $this->comments_update($pp->id, $request->comment, 'resumed');
-        }
+        //Log resumed
+        $this->comments_update($pp->id, $request->comment, 'resumed');
 
         $dashboard = Dashboard::query()->updateOrCreate(
             ['request_id' => $pp->id],
@@ -696,36 +696,10 @@ class ProposalController extends Controller
         }
     }
 
-    //TODO
-    public function pp_sent($id)
-    {
-        $viewData = $this->prepareProjectProposalData($id);
-        $viewData['proposal'] = ProjectProposal::find($id);
-        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-        $viewData['type'] = 'sent';
+    public function pp_sent(string $id)     { return $this->renderProposalForm($id, 'sent'); }
+    public function pp_granted(string $id)  { return $this->renderProposalForm($id, 'granted'); }
+    public function pp_rejected(string $id) { return $this->renderProposalForm($id, 'rejected'); }
 
-        return $this->createView('pp.create', 'mylayout', $viewData);
-    }
-
-    public function pp_granted($id)
-    {
-        $viewData = $this->prepareProjectProposalData($id);
-        $viewData['proposal'] = ProjectProposal::find($id);
-        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-        $viewData['type'] = 'granted';
-
-        return $this->createView('pp.create', 'mylayout', $viewData);
-    }
-
-    public function pp_rejected($id)
-    {
-        $viewData = $this->prepareProjectProposalData($id);
-        $viewData['proposal'] = ProjectProposal::find($id);
-        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-        $viewData['type'] = 'rejected';
-
-        return $this->createView('pp.create', 'mylayout', $viewData);
-    }
 
     protected function validateRequest(Request $request)
     {
@@ -745,9 +719,9 @@ class ProposalController extends Controller
 
     protected function comments_update(string $id, ?string $comment, ?string $type = null): int
     {
-        if ($comment === null || trim($comment) === '') {
+        /*if ($comment === null || trim($comment) === '') {
             return 0; // nothing to append
-        }
+        }*/
 
         $proposal = ProjectProposal::query()->findOrFail($id);
 
@@ -792,42 +766,52 @@ class ProposalController extends Controller
         return 1;
     }
 
-    protected function createAndStartWorkflow($dashboard)
+    protected function createAndStartWorkflow(Dashboard $dashboard)
     {
         $workflow = WorkflowStub::make(DSVProjectPWorkflow::class);
-        $dashboard->workflow_id = $workflow->id();
-        $dashboard->save();
-        $workflow->start($dashboard);
-        $workflow->submit();
+
+        $dashboard->forceFill([
+            'workflow_id' => $workflow->id(),
+        ])->save();
+
+        $this->startAndSubmitWorkflow($workflow, $dashboard);
+
         return $workflow;
     }
 
-    protected function resumeWorkflow($dashboard)
+    protected function startAndSubmitWorkflow($workflow, Dashboard $dashboard): void
     {
-        switch($dashboard->state) {
-            case(RequestStates::HEAD_RETURNED):
-                $dashboard->state = RequestStates::SUBMITTED;
-                $dashboard->save();
-                $workflow = WorkflowStub::make(\App\Workflows\ResumeFromUHProjectWorkflow::class);
-                break;
-            case(RequestStates::FO_RETURNED):
-                $dashboard->state = RequestStates::SUBMITTED;
-                $dashboard->save();
-                $workflow = WorkflowStub::make(\App\Workflows\ResumeFromFOProjectWorkflow::class);
-                break;
-            case(RequestStates::FINAL_RETURNED):
-                $dashboard->state = RequestStates::SUBMITTED;
-                $dashboard->save();
-                $workflow = WorkflowStub::make(\App\Workflows\ResumeFromFinalProjectWorkflow::class);
-                break;
-        }
+        $workflow->start($dashboard);
+        $workflow->submit();
+    }
+
+
+    protected function resumeWorkflow(Dashboard $dashboard)
+    {
+        $state = $dashboard->state; // object
+
+        $workflowClass = match (true) {
+            $state instanceof HeadReturned  => \App\Workflows\ResumeFromUHProjectWorkflow::class,
+            $state instanceof FoReturned    => \App\Workflows\ResumeFromFOProjectWorkflow::class,
+            $state instanceof FinalReturned => \App\Workflows\ResumeFromFinalProjectWorkflow::class,
+            default => null,
+        };
+
+        abort_unless($workflowClass, 400, 'Cannot resume workflow from current state.');
+
+        $dashboard->state = RequestStates::SUBMITTED;
+
+        $workflow = WorkflowStub::make($workflowClass);
+
         $dashboard->workflow_id = $workflow->id();
         $dashboard->save();
+
         $workflow->start($dashboard);
         $workflow->submit();
 
         return $workflow;
     }
+
 
     /***
      * Private functions
