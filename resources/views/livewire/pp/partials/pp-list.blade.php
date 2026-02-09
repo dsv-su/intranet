@@ -17,32 +17,41 @@
                                 <strong>
                                     {{ $proposal->pp['title'] }}
                                 </strong>
-                                {{--}}
-                                {{ \Illuminate\Support\Carbon::parse($proposal->created)->format('Y-m-d') }}
-                                {{--}}
                             </p>
                             <!-- Progress -->
-                            {{--}}@nocache('livewire.pp.partials.progress'){{--}}
                             @nocache('livewire.pp.partials.progress3')
                             <!-- End Progress -->
                             <!-- Main Researcher and other details -->
-                            <h4 class="text-xs font-medium text-gray-800 dark:text-neutral-200 tracking-wide">
-                                <span class="font-medium">Main researcher:</span>
-                                {{--}}<span class="bg-blue-100 text-blue-800 border border-blue-500 text-[0.65rem] font-medium me-1.5 px-1 py-0.5 rounded dark:bg-blue-700 dark:text-blue-400">{{--}}
+                            <h4 class="text-xs font-medium text-gray-800 dark:text-neutral-200 tracking-wide
+                                           flex flex-col sm:flex-row sm:flex-wrap sm:items-center
+                                           gap-y-1 sm:gap-y-0 sm:gap-x-2">
+                                  <span class="font-medium">
+                                    <span class="font-medium">Main researcher:</span>
+                                    <span class="font-medium">{{ $proposal->pp['principal_investigator'] }}</span>
+                                  </span>
+
+                                <span class="hidden sm:inline text-gray-400">|</span>
+
                                 <span class="font-medium">
-                                  {{ $proposal->pp['principal_investigator'] }}
+                                    <span class="font-medium">Submission deadline:</span>
+                                    <span class="font-semibold">{{ $proposal->pp['submission_deadline'] ?? '' }}</span>
                                 </span>
-                                | &nbsp;
-                                <span class="font-medium">Submission deadline:</span> <span class="font-semibold">
-                                    {{ $proposal->pp['submission_deadline'] ?? '' }}
+
+                                <span class="hidden sm:inline text-gray-400">|</span>
+
+                                <span class="font-medium">
+                                    <span class="font-medium">Funding organization:</span>
+                                    <span class="font-semibold">{{ Str::limit($proposal->pp['funding_organization'], 30) ?? 'N/A' }}</span>
                                 </span>
-                                &nbsp; | &nbsp;
-                                {{--}}<span class="font-medium">Project duration:</span> {{ $proposal->pp['project_duration'] ?? '' }} (months) &nbsp; | &nbsp;{{--}}
-                                <span class="font-medium">Funding organization:</span> <span class="font-semibold">
-                                    {{ Str::limit($proposal->pp['funding_organization'], 30) ?? 'N/A' }}</span> &nbsp; | &nbsp;
+
+                                <span class="hidden sm:inline text-gray-400">|</span>
+
+                                <span class="font-medium flex items-center gap-x-1">
                                 <span class="font-medium">Economy:</span>
-                                <livewire:pp.fo.assign :proposal="$proposal" :wire:key="$proposal->id"/>
+                                    <livewire:pp.fo.assign :proposal="$proposal" :wire:key="$proposal->id"/>
+                                </span>
                             </h4>
+
                         </div>
                         <!-- Right side (State label) -->
                         <div class="w-full md:w-auto flex-shrink-0 ml-auto">
@@ -107,10 +116,10 @@
                                     <span class="font-semibold">OH cost covered:</span><br>
                                     {{$proposal->pp['oh_cost'] ?? 'N/A'}} %
                                 </p>
-                                <!-- Funding organization -->
+                                <!-- Project duration -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
-                                    <span class="font-semibold">Funding organization:</span><br>
-                                    {{$proposal->pp['funding_organization'] ?? 'N/A'}}
+                                    <span class="font-semibold">Project duration:</span><br>
+                                    {{ $proposal->pp['project_duration'] ?? '' }} (months)
                                 </p>
                                 <!-- Budget -->
                                 <p class="text-xs text-gray-600 dark:text-neutral-400">
