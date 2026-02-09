@@ -9,8 +9,7 @@ TO: ViceHead
 SUBJECT: New <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> submitted for review.
 <br>
 ------------------------------------------------------------
-<br><br>
-
+<br>
 <br><br>
 OVERVIEW:
 <br><br>

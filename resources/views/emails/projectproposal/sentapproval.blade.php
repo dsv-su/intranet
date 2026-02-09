@@ -7,6 +7,7 @@
 TO: ViceHead
 <br>
 SUBJECT: Sent proposal
+<br>
 ------------------------------------------------------------
 <br>
 <br><br>
@@ -17,7 +18,7 @@ Please find the relevant details through the following link:
 <br><br>
 <br><br>
 OVERVIEW:
-<br><br>
+<br>
 <b>Proposal:</b> {{$dashboard->name}}
 <br>
 <b>Requester:</b> {{$user->name}}

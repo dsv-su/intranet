@@ -6,9 +6,10 @@
 <br>
 TO: ViceHead
 <br>
+SUBJECT: Granted Proposal
+<br>
 ------------------------------------------------------------
-<br><br>
-Granted Proposal
+<br>
 <br><br>
 This is an automated notification to inform you that application, <strong>{{$dashboard->name}}</strong>, has been granted.
 Please find the relevant details through the following link:

@@ -7,6 +7,7 @@
 TO: Financial officer, {{$fo->name}}
 <br>
 SUBJECT: You have been assigned a new Project Proposal for Review
+<br>
 ------------------------------------------------------------
 <br>
 <br><br>

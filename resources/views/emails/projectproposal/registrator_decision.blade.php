@@ -7,6 +7,7 @@
 TO: Registrator DSV
 <br>
 SUBJECT: Decision letter application, {{$dashboard->name}}
+<br>
 ------------------------------------------------------------
 <br>
 <br><br>

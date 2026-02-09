@@ -7,6 +7,7 @@
 To: ViceHead
 <br>
 SUBJECT: FINAL APPROVAL
+<br>
 ------------------------------------------------------------
 <br><br>
 A new <strong>{{$dashboard->type}}</strong> awaits your Final Approval.

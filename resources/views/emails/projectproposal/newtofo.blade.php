@@ -4,7 +4,7 @@
 <br><br>
 ------------------------------------------------------------
 <br>
-To: Financial officer, {{$fo->name}}
+To: {{$fo->name}}
 <br>
 SUBJECT: New Project Proposal Submitted for Review
 <br>
@@ -14,8 +14,9 @@ SUBJECT: New Project Proposal Submitted for Review
 Dear Finacial Officer,
 <br><br>
 A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been submitted and is now available for your review.
-OVERVIEW:
 <br><br>
+OVERVIEW:
+<br>
 <b>Proposal:</b> {{$dashboard->name}}
 <br>
 <b>Requester:</b> {{$user->name}}

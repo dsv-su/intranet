@@ -15,7 +15,7 @@ Hereby is the application for the project titled <b>{{$dashboard->name}}</b> tog
 Both documents are attached to this email for registration and further processing.
 <br><br>
 OVERVIEW:
-<br><br>
+<br>
 <b>Application:</b> {{$dashboard->name}}
 <br>
 <b>Principal Investigator:</b> {{$user->name}}

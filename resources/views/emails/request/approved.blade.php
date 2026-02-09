@@ -1,4 +1,14 @@
-<strong>APPROVED {{Illuminate\Support\Str::upper($dashboard->type)}}</strong>
+<b>PLEASE NOTE! </b>
+<br>
+<b>ProjectProposal is currently in test mode, and all created proposals are fictitious and intended for testing purposes only.</b>
+<br><br>
+------------------------------------------------------------
+<br>
+To: {{$user->name}}
+<br>
+SUBJECT: APPROVED {{Illuminate\Support\Str::upper($dashboard->type)}}
+<br>
+------------------------------------------------------------
 <br><br>
 Dear {{$user->name}},
 <br><br>
@@ -16,24 +26,19 @@ has been approved
     .
 @endif
 
+OVERVIEW:
+<br><br>
+<b>Proposal:</b> {{$dashboard->name}}
 <br>
-Below, you will find the details pertaining to the approved request:
-<br><br>
-<b>RequestID:</b> {{$dashboard->request_id}}
-<br><br>
-<b>Request Type:</b> {{Illuminate\Support\Str::upper($dashboard->type)}}
-<br><br>
-<b>Name:</b> {{$dashboard->name}}
-<br><br>
+<b>Requester:</b> {{$user->name}}
+<br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}}
+<br>
+<b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>
-<b>Approval Date:</b> {{Carbon\Carbon::parse($dashboard->updated_at)->format('Y-m-d')}}
-<br><br>
-@if($dashboard->type == 'projectproposal')
-    With your proposal approved for submission, be sure to manually check its status upon acceptance and report once it has been officially granted.
-@else
-    With your request approved, this request workflow is now closed. Should you require any further assistance or clarification, please do not hesitate to reach out to: <b>ekonomi@dsv.su.se</b>
-@endif
+ACTION
+<br>
+Please manually report your submitted application by clicking the Sent button. Once you receive a grant decision or a rejection, update your progress by clicking the corresponding buttons.
 
 <br><br>
 @if($dashboard->type == 'travelrequest')

@@ -6,7 +6,7 @@
 <br>
 TO: Unithead
 <br>
-SUBJECT: A New Proposal has been Submitted for Review
+SUBJECT: New Proposal Submitted for Review
 <br>
 ------------------------------------------------------------
 <br>
@@ -16,7 +16,7 @@ Dear {{$head->name}},
 A new <strong>{{Illuminate\Support\Str::upper($dashboard->type)}}</strong> has been submitted and is now available for your review.
 <br><br>
 OVERVIEW:
-<br><br>
+<br>
 <b>Proposal:</b> {{$dashboard->name}}
 <br>
 <b>Requester:</b> {{$user->name}}
