@@ -12,7 +12,7 @@
         $isReviewFOApproval = ($type === 'review' && $role === 'FO Approval');
 
         //Editable
-        $isRequired = in_array($type, ['preapproval', 'complete', 'edit', 'resume'])
+        $isRequired = in_array($type, ['preapproval', 'saved', 'complete', 'edit', 'resume'])
                       || $isReviewFOApproval;
 
         //Border color based on context

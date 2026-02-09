@@ -28,7 +28,7 @@ class ProposalUploader extends Component
     public $directory;
     public $allow;
     public $type;
-    public $resumed = ['vice_returned', 'head_returned', 'fo_returned', 'final_returned'];
+    public $resumed = ['pending', 'vice_returned', 'head_returned', 'fo_returned', 'final_returned'];
 
     protected $listeners = [
         'upload_refresh' => '$refresh'

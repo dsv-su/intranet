@@ -12,7 +12,7 @@
                                   focus:ring-blue-500 focus:border-blue-500
                                   @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
                   dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="{{__("Outline of the Proposal")}}" @if(in_array($type, ['preapproval', 'edit', 'complete', 'resume'])) required="" @else readonly @endif>{{ old('objective') ? old('objective'): $proposal['pp']['objective'] ?? '' }}</textarea>
+              placeholder="{{__("Outline of the Proposal")}}" @if(in_array($type, ['preapproval', 'saved', 'edit', 'complete', 'resume'])) required="" @else readonly @endif>{{ old('objective') ? old('objective'): $proposal['pp']['objective'] ?? '' }}</textarea>
     @error('objective')
     <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}}</p>
     @enderror

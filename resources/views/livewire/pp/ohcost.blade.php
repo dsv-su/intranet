@@ -65,7 +65,7 @@
                       block w-[calc(100%-32px)] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
                       dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
                placeholder="OH cost"
-               @if(in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
+               @if(in_array($type, ['preapproval', 'saved', 'complete', 'edit', 'resume']))
                required
                @else
                readonly

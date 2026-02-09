@@ -4,7 +4,7 @@
         @include('livewire.pp.partials.proposal_files')
     </div>
 
-    @if($allow && in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
+    @if($allow && in_array($type, ['preapproval', 'saved', 'complete', 'edit', 'resume']))
     <div class="mb-4 mt-4 bg-yellow-50 border border-yellow-500 text-sm text-gray-500 rounded-lg p-5 dark:bg-yellow-600/[.15]">
         <h3 class="mb-4 text-blue-600 font-semibold dark:font-medium dark:text-white">Proposal draft!</h3>
         <div x-data="fileUpload()">

@@ -13,7 +13,7 @@
                block w-full p-2.5
                 @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
                dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-           value="{{ old('title') ? old('title'): $proposal['pp']['title'] ??  '' }}" placeholder="Title" @if(in_array($type, ['preapproval','edit', 'complete', 'resume'])) required @else readonly @endif>
+           value="{{ old('title') ? old('title'): $proposal['pp']['title'] ??  '' }}" placeholder="Title" @if(in_array($type, ['preapproval', 'saved', 'edit', 'complete', 'resume'])) required @else readonly @endif>
     @error('title')
     <p class="mt-3 text-sm leading-6 text-red-600" x-init="$el.closest('form').scrollIntoView()">{{__("This is a required input")}} </p>
     @enderror

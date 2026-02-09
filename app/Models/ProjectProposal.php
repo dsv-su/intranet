@@ -53,7 +53,16 @@ class ProjectProposal extends Model
         $allowed_roles = [$dashboard?->user_id];
 
         // && $dashboard->state == 'fo_approved' //alternative for only approved proposals
-        return (in_array($user->id, $allowed_roles) && in_array($dashboard->state, ['pending','submitted', 'complete']));
+        return (in_array($user->id, $allowed_roles) && in_array($dashboard->state, ['submitted', 'complete']));
+    }
+
+    public function allowContinue()
+    {
+        $user = Auth::user();
+        $dashboard = Dashboard::where('request_id', $this->id)->first();
+        $allowed_roles = [$dashboard?->user_id];
+
+        return (in_array($user->id, $allowed_roles) && in_array($dashboard->state, ['pending','saved']));
     }
 
     public function allowComplete(): bool

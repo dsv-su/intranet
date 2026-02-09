@@ -134,6 +134,7 @@
 
                                 <!-- Button group -->
                                 <div class="inline-flex space-x-1 rounded-md shadow-sm " role="group">
+                                    <!-- Review -->
                                     @if($review ?? false)
                                         <a type="button"
                                            href="{{route('pp-review', $proposal->id)}}"
@@ -149,27 +150,40 @@
                                             href="{{route('pp-resume', $proposal->id)}}"
                                             class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
-                                            disabled:opacity-25 transition ease-in-out duration-150">
+                                            disabled:opacity-25 transition ease-in-out duration-150"
+                                        >
                                             Resume
                                         </a>
                                     @endif
+                                    <!-- View -->
+                                    <a type="button"
+                                       href="{{route('pp-view', $proposal->id)}}"
+                                       class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
+                                        uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
+                                        disabled:opacity-25 transition ease-in-out duration-150">
+                                        View
+                                    </a>
+                                    <!-- Edit -->
+                                    @if($proposal->allowEdit())
+                                    <a type="button"
+                                       href="{{route('pp-edit', $proposal->id)}}"
+                                       class="inline-flex items-center px-2 py-2 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
+                                        focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
+                                        dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
+                                        Edit
+                                    </a>
+                                    @endif
+                                    <!-- Continue draft -->
+                                    @if($proposal->allowContinue())
                                         <a type="button"
-                                           href="{{route('pp-view', $proposal->id)}}"
+                                           href="{{route('pp-continue', $proposal->id)}}"
                                            class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
-                                            disabled:opacity-25 transition ease-in-out duration-150">
-                                            View
+                                            disabled:opacity-25 transition ease-in-out duration-150"
+                                        >
+                                            Continue
                                         </a>
-
-                                        @if($proposal->allowEdit())
-                                        <a type="button"
-                                           href="{{route('pp-edit', $proposal->id)}}"
-                                           class="inline-flex items-center px-2 py-2 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
-                                            focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
-                                            dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
-                                            Edit
-                                        </a>
-                                        @endif
+                                    @endif
 
                                     @if($proposal->allowComplete())
                                         <a type="button"

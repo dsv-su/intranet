@@ -85,6 +85,10 @@ class ProposalController extends Controller
         });
     }
 
+    public function pp_continue(string $id)
+    {
+        return $this->renderProposalForm($id, 'saved');
+    }
     public function pp_complete(string $id)
     {
         return $this->renderProposalForm($id, 'complete');
@@ -160,9 +164,11 @@ class ProposalController extends Controller
         $userId = $request->user()->id;
         $submittedAt = now();
         $createdTs = $submittedAt->copy()->startOfDay()->timestamp;
-
+        //dd($request->type);
         return match ($request->type) {
             'preapproval' => $this->handlePreapproval($request, $userId, $submittedAt, $createdTs),
+            'saved'       => $this->handlePreapproval($request, $userId, $submittedAt, $createdTs),
+            'save'        => $this->handleSave($request, $userId, $submittedAt, $createdTs),
             'complete'    => $this->handleComplete($request, $userId, $submittedAt),
             'edit'        => $this->handleEdit($request, $userId, $submittedAt, $createdTs),
             'resume'      => $this->handleResume($request, $userId, $submittedAt, $createdTs),
@@ -211,6 +217,36 @@ class ProposalController extends Controller
 
             return redirect()->route('pp', 'my')
                 ->with('success', 'Your Project proposal draft has successfully been submitted!');
+        });
+    }
+
+    private function handleSave(Request $request, string $userId, Carbon $submittedAt, int $createdTs)
+    {
+        return DB::transaction(function () use ($request, $userId, $submittedAt, $createdTs) {
+
+            $pp = ProjectProposal::findOrFail($request->id);
+
+            $pp->fill([
+                'user_id' => $userId,
+                'name' => $request->title,
+                'created' => $createdTs,
+                'status_stage1' => 'pending',
+                'status_stage2' => 'pending',
+                'status_stage3' => 'saved',
+                'pp' => $this->buildPpPayload($request, [
+                    'submitted' => $submittedAt->toISOString(),
+                    'status' => 'saved',
+                ]),
+            ])->save();
+
+            $dashboard = $this->upsertDashboardWithUnitHeads(
+                $pp,
+                $request,
+                $this->dashboardBaseData($pp, $request, $userId, $createdTs, 'unread')
+            );
+
+            return redirect()->route('pp', 'my')
+                ->with('success', 'Your Project proposal draft has successfully been saved!');
         });
     }
 

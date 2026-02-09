@@ -9,7 +9,7 @@
         </button>
     </label>
 
-    @if(in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
+    @if(in_array($type, ['preapproval', 'saved', 'complete', 'edit', 'resume']))
 
         {{--}}<div id="unithead-container">
         @php
@@ -46,7 +46,7 @@
         </div>{{--}}
         <div id="unithead-container">
             @php
-                $selectedUnitHeads = (in_array($type, ['edit', 'complete']) && empty($proposal['pp']['unit_head']))
+                $selectedUnitHeads = (in_array($type, ['edit', 'saved', 'complete']) && empty($proposal['pp']['unit_head']))
                     ? []
                     : ($proposal['pp']['unit_head'] ?? []);
             @endphp
@@ -99,7 +99,7 @@
         @include('pp.partials.review.unithead')
     @endif
 
-    @if(in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
+    @if(in_array($type, ['preapproval', 'saved', 'complete', 'edit', 'resume']))
     <!-- Add Unit Head-->
 
         <div class="mt-4">

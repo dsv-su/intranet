@@ -31,7 +31,7 @@
     @endif
 
     {{-- Existing comments (history) --}}
-    @if(in_array($type, ['view', 'edit', 'complete', 'resume', 'review'], true))
+    @if(in_array($type, ['view', 'edit', 'saved', 'complete', 'resume', 'review'], true))
         <div class="relative mt-2 mb-2">
             <textarea
                 id="user_comments_history"
@@ -55,7 +55,7 @@
     @endif
 
     {{-- Add new comment --}}
-    @if(in_array($type, ['edit', 'complete', 'resume'], true))
+    @if(in_array($type, ['edit', 'saved', 'complete', 'resume'], true))
         <span
             class="inline-block bg-blue-100 text-gray-800 text-sm font-medium px-1 py-0 rounded
                    dark:bg-gray-700 dark:text-blue-400 border border-blue-400 leading-none">

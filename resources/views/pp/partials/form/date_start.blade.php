@@ -7,7 +7,7 @@
             </svg>
         </button>
     </label>
-    @if(in_array($type, ['preapproval', 'edit', 'complete', 'resume']))
+    @if(in_array($type, ['preapproval', 'saved', 'edit', 'complete', 'resume']))
         <div class="flex flex-col sm:flex-row items-center w-full">
             <div class="relative w-full">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -22,7 +22,7 @@
                        datepicker-autohide
                        {{--}}datepicker-format="dd/mm/yyyy"{{--}}
                        datepicker-format="yyyy-mm-dd"
-                       @if(in_array($type, ['preapproval', 'edit', 'complete', 'resume']))
+                       @if(in_array($type, ['preapproval', 'saved', 'edit', 'complete', 'resume']))
                        value="{{ $proposal['pp']['start_date'] ?? ''}}"
                        @endif
                        {{--}}id="endInput"{{--}}
