@@ -924,7 +924,8 @@
             </div>
             <dl>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("Instructions")}}</dt>
-                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the percent OH cost covered.")}}</dd>
+                <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("Enter the percentage of the total project costs that corresponds to covered overhead (OH) costs, not the percentage of OH costs covered.
+For example, if the funding agency covers all overhead costs, and overhead corresponds to 46% of total costs, you should enter 46%, not 100%.")}}</dd>
                 <dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">{{__("More help?")}}</dt>
                 <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">{{__("If you need more help contact helpdesk@dsv.su.se")}}</dd>
             </dl>
