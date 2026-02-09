@@ -18,6 +18,8 @@ class BudgetTemplateUploader extends Component
 
     public $templatefiles = [];
     public $template;
+    public array $templateLang = [];
+    public array $langKeyMap = [];
     public $savedfiles = [];
     public $stored = false;
     public $allow;
@@ -31,12 +33,33 @@ class BudgetTemplateUploader extends Component
     {
         $this->template = $template;
 
+        foreach (($this->template->files ?? []) as $filename => $file) {
+            $safeKey = 'f_' . md5((string) $filename);
+            $this->langKeyMap[$safeKey] = $filename;
+            $this->templateLang[$safeKey] = $file['type'] ?? 'eng';
+        }
+
         $this->directory = ProposalsDirectory::BUDGET_TEMPLATE;
         //$this->template = Storage::files($this->directory);
 
         $this->allowUpload();
     }
 
+    public function updated($name, $value)
+    {
+        if (!str_starts_with($name, 'templateLang.')) return;
+
+        $safeKey = substr($name, strlen('templateLang.'));
+        $filename = $this->langKeyMap[$safeKey] ?? null;
+        if (!$filename) return;
+
+        $files = $this->template->files ?? [];
+        if (isset($files[$filename])) {
+            $files[$filename]['type'] = $value;
+            $this->template->files = $files;
+            $this->template->save();
+        }
+    }
     public function allowUpload()
     {
         $user = Auth::user();
@@ -63,15 +86,20 @@ class BudgetTemplateUploader extends Component
     public function storefiles()
     {
         foreach($this->templatefiles as $file) {
-            $this->savedfiles[$file->getClientOriginalName()] = [
+            $name = $file->getClientOriginalName();
+
+            $this->savedfiles[$name] = [
+                'name' => $name,
                 'path' => $file->store(path: $this->directory),
                 'tmp' => basename($file->getRealPath()),
                 'size' => round($file->getSize()/1000),
-                'date' => now()->format('d/m/Y'),
-                'type' => 'template',
+                'date' => now()->format('Y-m-d'),
+                'type' => 'eng',
                 'review' => 'Active',
-                'uploader' => Auth::user()->name
+                'uploader' => Auth::user()->name,
             ];
+
+            $this->templateLang[$name] = 'eng';
         }
 
         $this->updateFileArray();

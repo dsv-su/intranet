@@ -74,7 +74,7 @@
              dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400
              dark:border-slate-700 dark:focus:ring-blue-400"
                 wire:model.live.debounce.300ms="searchPresenter"
-                placeholder="{{__('Type a name or email address to add a SUKAT co-investigator')}}"
+                placeholder="{{__('Add a SUKAT co-investigator by name or email')}}"
                 autocomplete="off"
                 role="combobox"
                 aria-expanded="{{ filled($searchPresenter) ? 'true' : 'false' }}"

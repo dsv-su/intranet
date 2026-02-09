@@ -110,23 +110,20 @@ class ProposalController extends Controller
         return Storage::download('PPManual.pdf');
     }
 
-    public function budget(): StreamedResponse
+    public function budget(string $type): StreamedResponse
     {
         $template = BudgetTemplate::query()->first();
-
         $files = $template?->files ?? [];
-        $firstFile = $files[0] ?? null;
 
-        abort_unless($firstFile && !empty($firstFile['path']), 404, 'Budget template file not found.');
+        // Find the file matching the requested type
+        $file = collect($files)->firstWhere('type', $type);
 
-        return Storage::download($firstFile['path'], 'dsv_budgettemplate.xlsx');
+        abort_unless($file && !empty($file['path']), 404, 'Budget template file not found.');
 
-        /*$template     = BudgetTemplate::first();
-        $files        = $template->files;
-        $firstFile    = reset($files);
-        $downloadPath = $firstFile['path'];
+        // Optional: pick a filename (fallback to basename)
+        $filename = $file['name'] ?? basename($file['path']);
 
-        return Storage::download($downloadPath,'dsv_budgettemplate.xlsx');*/
+        return Storage::download($file['path'], $filename);
     }
 
     /**

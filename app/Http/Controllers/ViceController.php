@@ -35,7 +35,6 @@ class ViceController extends Controller
 
         return (new \Statamic\View\View)
             ->template('requests.vice.settings')
-            ->layout('mylayout')
             ->with($viewData);
     }
 

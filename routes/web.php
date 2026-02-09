@@ -89,7 +89,7 @@ Route::get('/pp/sent/{id}', [\App\Http\Controllers\ProposalController::class, 'p
 Route::get('/pp/granted/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_granted'])->name('pp-granted');
 Route::get('/pp/rejected/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_rejected'])->name('pp-rejected');
 //Download
-Route::get('/budget', [\App\Http\Controllers\ProposalController::class, 'budget'])->name('budget-template');
+Route::get('/budget/{type}', [\App\Http\Controllers\ProposalController::class, 'budget'])->name('budget-template');
 Route::get('/manual', [\App\Http\Controllers\ProposalController::class, 'usermanual'])->name('usermanual');
 //Edit
 Route::get('/pp/edit/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_edit'])->name('pp-edit');
