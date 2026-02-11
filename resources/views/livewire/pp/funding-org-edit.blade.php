@@ -2,7 +2,11 @@
     <div class="mt-5 space-y-4">
         <div class="mt-3">
             <div class="border rounded-xl shadow-sm p-6 dark:bg-slate-800 dark:border-gray-700">
-                @foreach($fundingChunks as $chunk)
+                <span class="mb-2 inline-flex items-center px-3 py-1.5 rounded-md border border-blue-200 bg-blue-50 text-blue-900 text-sm font-semibold
+                            dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100">
+                    Total: {{ $totalOrgs }}
+                </span>
+            @foreach($fundingChunks as $chunk)
                         @foreach($chunk as $index => $area)
                             <div class="flex-1 min-w-[200px] flex items-center gap-2 mb-2">
                                 <input
@@ -79,6 +83,10 @@
                         Next &rarr;
                     </button>
                 </div>
+                <span class="mb-2 inline-flex items-center px-3 py-1.5 rounded-md border border-blue-200 bg-blue-50 text-blue-900 text-sm font-semibold
+                            dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100">
+                    Total: {{ $totalOrgs }}
+                </span>
                 <div class="p-1 dark:bg-slate-800 dark:border-gray-700">
                     <button
                         type="button"
@@ -88,6 +96,18 @@
                            disabled:opacity-25 transition ease-in-out duration-150">
                         Save to file
                     </button>
+                    <button type="button" wire:click="downloadFile"
+                            class="inline-flex items-center px-1 py-0.5 bg-white border border-blue-600 text-blue-600 rounded-md font-semibold text-[0.5rem]
+                           uppercase tracking-widest hover:bg-blue-600 hover:text-white active:bg-blue-700 focus:outline-none focus:border-blue-800 focus:ring ring-red-300
+                           disabled:opacity-25 transition ease-in-out duration-150">
+                        Download
+                    </button>
+
+                    @error('download') <div>{{ $message }}</div> @enderror
+
+
+
+
                 </div>
             </div>
         </div>

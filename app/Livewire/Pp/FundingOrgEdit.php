@@ -3,6 +3,7 @@
 namespace App\Livewire\Pp;
 
 use App\Exports\FundingOrganizationExport;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -13,6 +14,7 @@ class FundingOrgEdit extends Component
     public int   $rowsPerPage  = 5;     // how many *rows* per page
     public int   $itemsPerRow  = 2;     // how many items per row
     public $add_fundingorg;
+    public $countorgs;
 
     protected $listeners = [
         'add_refresh' => '$refresh'
@@ -76,7 +78,25 @@ class FundingOrgEdit extends Component
 
     public function saveToFile()
     {
-        Excel::store(new FundingOrganizationExport(), 'funding_org.xlsx');
+        Excel::store(
+            new FundingOrganizationExport(),
+            'exports/funding_org.xlsx',
+            'public' // storage/app/public/exports/funding_org.xlsx
+        );
+    }
+
+    public function downloadFile()
+    {
+        $path = 'exports/funding_org.xlsx';
+        $disk = Storage::disk('public');
+
+        if (! $disk->exists($path)) {
+            $this->addError('download', 'File not found. Generate it first.');
+            return;
+        }
+
+        // Livewire can return a normal response
+        return $disk->download($path, 'funding_org.xlsx');
     }
 
     public function render()
@@ -86,6 +106,8 @@ class FundingOrgEdit extends Component
             ->map(fn($o) => ['id'=>$o->id,'name'=>$o->name])
             ->toArray();
 
+        // count
+        $this->countorgs = count($flat);
         // bind it so wire:model still works
         $this->fundingorg = $flat;
 
@@ -101,6 +123,7 @@ class FundingOrgEdit extends Component
         return view('livewire.pp.funding-org-edit', [
             'fundingChunks' => $fundingChunks,
             'totalPages'    => $this->totalPages,
+            'totalOrgs'     => $this->countorgs,
         ]);
     }
 }
