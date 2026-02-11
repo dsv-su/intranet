@@ -165,18 +165,20 @@ class ProposalController extends Controller
         $submittedAt = now();
         $createdTs = $submittedAt->copy()->startOfDay()->timestamp;
         //dd($request->type);
-        return match ($request->type) {
-            'preapproval' => $this->handlePreapproval($request, $userId, $submittedAt, $createdTs),
-            'saved'       => $this->handlePreapproval($request, $userId, $submittedAt, $createdTs),
-            'save'        => $this->handleSave($request, $userId, $submittedAt, $createdTs),
-            'complete'    => $this->handleComplete($request, $userId, $submittedAt),
-            'edit'        => $this->handleEdit($request, $userId, $submittedAt, $createdTs),
-            'resume'      => $this->handleResume($request, $userId, $submittedAt, $createdTs),
-            'sent'        => $this->handleSent($request, $submittedAt),
-            'granted'     => $this->handleGranted($request, $submittedAt),
-            'rejected'    => $this->handleRejected($request, $submittedAt),
-            'review'      => $this->handleReview($request, $submittedAt),
-            default       => abort(422, 'Invalid submit type'),
+        $type = strtolower(trim((string) $request->type));
+
+        return match ($type) {
+            'preapproval', 'saved' => $this->handlePreapproval($request, $userId, $submittedAt, $createdTs),
+            'save'                => $this->handleSave($request, $userId, $submittedAt, $createdTs),
+            'complete'            => $this->handleComplete($request, $userId, $submittedAt),
+            'edit'                => $this->handleEdit($request, $userId, $submittedAt, $createdTs),
+            'resume'              => $this->handleResume($request, $userId, $submittedAt, $createdTs),
+            'sent'                => $this->handleSent($request, $submittedAt),
+            'granted'             => $this->handleGranted($request, $submittedAt),
+            'rejected'            => $this->handleRejected($request, $submittedAt),
+            'review'              => $this->handleReview($request, $submittedAt),
+
+            default => abort(422, 'Invalid submit type'),
         };
     }
 
@@ -322,6 +324,15 @@ class ProposalController extends Controller
             $request,
             $this->dashboardBaseData($pp, $request, $userId, $createdTs, 'edited')
         );
+
+        // Check files and transition
+        switch ($dashboard->state) {
+            case 'complete':
+                if (! $this->checkFiles($pp)) {
+                    (new WorkflowHandler($dashboard->workflow_id))->submitted();
+                }
+                break;
+        }
 
         return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
     }
@@ -856,34 +867,28 @@ class ProposalController extends Controller
             && $proposal->hasAtLeastFilesOfType('budget', 1);
     }
 
-    private function checkFileStatus($proposal)
+    private function checkFileStatus($proposal): bool
     {
-        $workflowhandler = new WorkflowHandler($proposal->dashboard->workflow_id);
+        $workflowHandler = new WorkflowHandler($proposal->dashboard->workflow_id);
 
-        if ($this->checkFiles($proposal)) {
-            //Signal workflow
-            $workflowhandler->UploadedFiles();
-
-            //Budgetfiles
-            if($proposal->isTypeFullyApproved('budget')) {
-                $workflowhandler->BudgetFileUnchanged();
-            } else {
-                $workflowhandler->BudgetFileChanged();
-            }
-
-            //Draftfiles
-            if($proposal->isTypeFullyApproved('draft')) {
-                $workflowhandler->DraftFileUnchanged();
-            } else {
-                $workflowhandler->DraftFileChanged();
-            }
-            return true;
-        } else {
-            //Signal workflow
-            $workflowhandler->RemovedFile();
+        if (!$this->checkFiles($proposal)) {
+            $workflowHandler->RemovedFile();
+            return false;
         }
-        return false;
+
+        $workflowHandler->UploadedFiles();
+
+        $proposal->isTypeFullyApproved('budget')
+            ? $workflowHandler->BudgetFileUnchanged()
+            : $workflowHandler->BudgetFileChanged();
+
+        $proposal->isTypeFullyApproved('draft')
+            ? $workflowHandler->DraftFileUnchanged()
+            : $workflowHandler->DraftFileChanged();
+
+        return true;
     }
+
 
     private function getViceHeadUserId(): string
     {

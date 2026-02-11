@@ -1,4 +1,4 @@
-@if(in_array($type, ['preapproval', 'saved', 'complete', 'review', 'view', 'resume', 'sent', 'granted', 'rejected']))
+@if(in_array($type, ['preapproval', 'saved', 'complete', 'edit', 'review', 'view', 'resume', 'sent', 'granted', 'rejected']))
     <div id="proposal-attachments" class="sm:col-span-2">
         <label for="upload" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("Proposal attachments") }}
             <button id="upload-button" data-modal-toggle="upload-modal" class="inline" type="button">
@@ -8,7 +8,7 @@
             </button>
         </label>
     </div>
-    @if(in_array($type, ['preapproval', 'saved', 'complete']))
+    @if(in_array($type, ['preapproval', 'saved', 'edit', 'complete']))
     <div class="mb-2 mt-4 bg-blue-50 border border-blue-500 text-sm text-gray-500 rounded-lg p-5 dark:bg-blue-600/[.15]">
         <div class="flex">
             <svg class="flex-shrink-0 h-4 w-4 text-blue-600 mt-0.5 dark:text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

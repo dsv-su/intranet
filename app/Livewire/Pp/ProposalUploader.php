@@ -18,6 +18,7 @@ class ProposalUploader extends Component
 
     const PREAPPROVED = 'vice_approved';
     const SUBMITTED = 'submitted';
+    const COMPLETE = 'complete';
     const APPROVED = 'final_approved';
 
     public $proposal;
@@ -41,41 +42,57 @@ class ProposalUploader extends Component
             'files.*' => 'file|max:20480|mimes:txt,pdf,doc,docx,ppt,pptx,odt,pages,zip,rar,rtf',
         ];
     }
-
-    public function mount($proposal, $type)
+    public function mount($proposal, string $type): void
     {
-        $this->proposal = $proposal;
-        $this->type = $type;
-        $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT;
-        if($this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first()) {
+        $this->proposal  = $proposal;
+        $this->type      = $type;
+        $this->directory = sprintf(
+            '%s%d%s',
+            ProposalsDirectory::MAIN,
+            $proposal->id,
+            ProposalsDirectory::DRAFT
+        );
+
+        $this->dashboard = Dashboard::firstWhere('request_id', $proposal->id);
+
+        if ($this->dashboard) {
             $this->allowUpload();
-        } else {
-            $this->allow = true;
+            return;
         }
+
+        $this->allow = true;
     }
 
     public function checkFileStatus()
     {
-        $files = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
-        if($this->dashboard) {
-            $workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
+        // No dashboard
+        if (!$this->dashboard) {
+            return 0;
         }
 
+        // Pending dashboard
+        if ($this->dashboard->state === 'pending') {
+            return 0;
+        }
 
-        if (count($files) >= 2) {
-            if($this->dashboard) {
-                //Signal workflow
-                $workflowhandler->UploadedFiles();
-            }
-            return $this->reportStageStatus('uploaded');
-        } else {
-            if($this->dashboard) {
-                //Signal workflow
-                $workflowhandler->RemovedFile();
+        // Files: ensure array
+        $files = $this->proposal->files;
+        $files = is_array($files) ? $files : [];
+
+        $isUploaded = count($files) >= 2;
+
+        // Side-effect: notify workflow if workflow_id exists
+        if (!empty($this->dashboard->workflow_id)) {
+            $workflowHandler = new WorkflowHandler($this->dashboard->workflow_id);
+
+            if ($isUploaded) {
+                $workflowHandler->UploadedFiles();
+            } else {
+                $workflowHandler->RemovedFile();
             }
         }
 
-        return $this->reportStageStatus('waiting');
+        return $this->reportStageStatus($isUploaded ? 'uploaded' : 'waiting');
     }
 
 
@@ -85,17 +102,31 @@ class ProposalUploader extends Component
         $this->proposal->save();
     }
 
-    public function allowUpload()
+    public function allowUpload(): void
     {
-        $user = Auth::user();
+        $userId = Auth::id(); // avoids loading the full user model
 
-        $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
+        $allowedUserIds = array_values(array_filter([
+            $this->dashboard->user_id,
+            $this->dashboard->head_id,
+            $this->dashboard->vice_id,
+            $this->dashboard->fo_id,
+        ])); // removes null/empty values
 
-        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::SUBMITTED or $this->dashboard->state == self::APPROVED or in_array($this->dashboard->state, $this->resumed)) ) {
-            $this->allow = true;
-        } else {
+        if (! in_array($userId, $allowedUserIds, true)) {
             $this->allow = false;
+            return;
         }
+
+        $allowedStates = array_merge([
+            self::PREAPPROVED,
+            self::COMPLETE,
+            self::SUBMITTED,
+            self::APPROVED,
+        ], $this->resumed ?? []);
+
+        $this->allow = in_array($userId, $allowedUserIds)
+            && in_array($this->dashboard->state, $allowedStates);
     }
 
     public function finishUpload($name, $tmpPath, $isMultiple)
@@ -119,7 +150,7 @@ class ProposalUploader extends Component
                 'path' => $file->store(path: $this->directory),
                 'tmp' => basename($file->getRealPath()),
                 'size' => round($file->getSize()/1000),
-                'date' => now()->format('d/m/Y'),
+                'date' => now()->format('Y-m-d'),
                 'type' => 'draft',
                 'review' => 'pending',
                 'uploader' => Auth::user()->name
@@ -137,12 +168,10 @@ class ProposalUploader extends Component
 
     public function updateProposal()
     {
-        //$this->proposal->files = array_merge($this->proposal->files, $this->savedfiles);
         $existing = is_array($this->proposal->files) ? $this->proposal->files : [];
         $this->proposal->files = array_merge($existing, $this->savedfiles);
         $this->proposal->save();
         $this->savedfiles = [];
-        //$this->dispatch('upload_refresh');
     }
 
     public function checkToggle()

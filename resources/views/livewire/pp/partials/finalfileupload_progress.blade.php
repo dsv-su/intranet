@@ -73,6 +73,9 @@
             @else
                 {{count($finalfiles)}} to be saved
             @endif
+                @error('finalfiles.*')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
         </span>
                 </div>
                 <!-- End Col -->

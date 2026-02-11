@@ -77,6 +77,10 @@ class WorkflowHandler
         $this->workflow->vice_deny();
     }
 
+    public function Submitted()
+    {
+        $this->workflow->submit();
+    }
     public function Completed()
     {
         $this->workflow->complete();

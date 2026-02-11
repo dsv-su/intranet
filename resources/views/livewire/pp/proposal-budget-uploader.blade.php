@@ -78,6 +78,11 @@
                             },
                             removeUpload(filename) {
                             @this.removeUpload('budgetfiles', filename);
+                                // Clear stuck validation messages for files.*
+                                @this.clearUploadErrors();
+                                // Optional: reset progress UI
+                                this.progress = 0;
+                                this.isUploading = false;
                             },
                         }
                     }

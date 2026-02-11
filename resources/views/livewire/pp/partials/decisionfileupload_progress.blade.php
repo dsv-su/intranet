@@ -73,6 +73,9 @@
             @else
                 {{count($decisionfiles)}} to be saved
             @endif
+            @error('decisionfiles.*')
+            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
         </span>
                 </div>
                 <!-- End Col -->

@@ -29,7 +29,7 @@ class ProposalSeeder extends Seeder
 
 
 
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 1; $i < 3; $i++) {
             $timestamp = now()->startOfDay()->timestamp;
 
             // Create a new proposal directly
@@ -45,7 +45,7 @@ class ProposalSeeder extends Seeder
                         "path":"proposals/9f25b0c4-4685-488d-90fa-5ed572f72770/draft/53bymbb7MAkyEO7HVRC8VbKjyqRYU5zCd7yT6T4A.pdf",
                         "tmp":"f32qNekWqmJCznUjC0z1iv9xcjs21w-metaTWFudWFsX2ludGVybndlYmJlbi5wZGY=-.pdf",
                         "size":488,
-                        "date":"13/06/2025",
+                        "date":"2025-06-25",
                         "type":"draft",
                         "review":"pending",
                         "uploader":"Admin User"
@@ -54,7 +54,7 @@ class ProposalSeeder extends Seeder
                         "path":"proposals/9f25b0c4-4685-488d-90fa-5ed572f72770/budget/2JinNo2iaCG8mrSVwS3Iky5R1Cm4SV2kn99XBAtt.xlsx",
                         "tmp":"p56yqLRR3G92DPFAonOeoMQ9XzO8za-metaRFNDMDE2MzEuanBn-.jpg",
                         "size":2224,
-                        "date":"13/06/2025",
+                        "date":"2025-06-14",
                         "type":"budget",
                         "review":"pending",
                         "uploader":"Admin User"
