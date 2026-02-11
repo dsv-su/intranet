@@ -91,8 +91,8 @@
                     <button
                         type="button"
                         wire:click="saveToFile"
-                        class="inline-flex items-center px-1 py-0.5 bg-white border border-red-600 text-red-600 rounded-md font-semibold text-[0.5rem]
-                           uppercase tracking-widest hover:bg-red-600 hover:text-white active:bg-red-700 focus:outline-none focus:border-red-800 focus:ring ring-red-300
+                        class="inline-flex items-center px-1 py-0.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
+                           uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                            disabled:opacity-25 transition ease-in-out duration-150">
                         Save to file
                     </button>
@@ -102,13 +102,66 @@
                            disabled:opacity-25 transition ease-in-out duration-150">
                         Download
                     </button>
-
                     @error('download') <div>{{ $message }}</div> @enderror
+                    <button
+                        type="button"
+                        wire:click="clearFunding"
+                        class="inline-flex items-center px-1 py-0.5 bg-white border border-red-600 text-red-600 rounded-md font-semibold text-[0.5rem]
+                           uppercase tracking-widest hover:bg-red-600 hover:text-white active:bg-red-700 focus:outline-none focus:border-red-800 focus:ring ring-red-300
+                           disabled:opacity-25 transition ease-in-out duration-150">
+                        Reset from file
+                    </button>
 
-
-
-
+                    @if (session()->has('message'))
+                        <div class="mt-2 text-sm text-green-600">
+                            {{ session('message') }}
+                        </div>
+                    @endif
                 </div>
+
+                <div class="mt-2 text-xs text-gray-600 dark:text-gray-300">
+                    @if ($upload) Selected: {{ $upload->getClientOriginalName() }} @endif
+                </div>
+                <div class="flex items-center gap-3">
+                    <input
+                        type="file"
+                        wire:model="upload"
+                        accept=".xlsx,.xls,.csv"
+                        class="block w-full text-sm text-gray-700
+                               file:mr-3 file:py-2 file:px-3
+                               file:rounded-md file:border file:border-blue-200
+                               file:bg-blue-50 file:text-blue-900 file:font-semibold
+                               hover:file:bg-blue-100
+                               dark:text-gray-200
+                               dark:file:border-blue-800 dark:file:bg-blue-950 dark:file:text-blue-100
+                               dark:hover:file:bg-blue-900/30" />
+
+                    <button
+                        type="button"
+                        wire:click="uploadFundingFile"
+                        wire:loading.attr="disabled"
+                        wire:target="upload,uploadFundingFile"
+                        class="inline-flex items-center px-3 py-2 rounded-md border border-blue-200 bg-blue-50 text-blue-900 text-sm font-semibold
+                               hover:bg-blue-100
+                               disabled:opacity-60 disabled:cursor-not-allowed
+                               dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100
+                               dark:hover:bg-blue-900/30">
+                        <span wire:loading.remove wire:target="uploadFundingFile">Upload</span>
+                        <span wire:loading wire:target="uploadFundingFile">Uploading…</span>
+                    </button>
+                </div>
+
+                @error('upload')
+                <div class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</div>
+                @enderror
+
+                @if (session()->has('message'))
+                    <div class="mt-2 text-sm text-green-700 dark:text-green-400">
+                        {{ session('message') }}
+                    </div>
+                @endif
+
+
             </div>
         </div>
     </div>

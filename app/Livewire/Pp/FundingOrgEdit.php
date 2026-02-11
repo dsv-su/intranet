@@ -3,18 +3,22 @@
 namespace App\Livewire\Pp;
 
 use App\Exports\FundingOrganizationExport;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
+use Livewire\WithFileUploads;
 
 class FundingOrgEdit extends Component
 {
+    use WithFileUploads;
     public array $fundingorg   = [];    // flat data for wire:model
     public int   $page         = 1;     // 1-indexed current page
     public int   $rowsPerPage  = 5;     // how many *rows* per page
     public int   $itemsPerRow  = 2;     // how many items per row
     public $add_fundingorg;
     public $countorgs;
+    public $upload;
 
     protected $listeners = [
         'add_refresh' => '$refresh'
@@ -57,6 +61,20 @@ class FundingOrgEdit extends Component
         }
     }
 
+    public function uploadFundingFile()
+    {
+        $this->validate([
+            'upload' => 'required|file|mimes:xlsx,xls,csv|max:10240', // 10MB
+        ]);
+
+        // Store in storage/app/public/exports
+        $this->upload->storeAs('exports', 'funding_org.xlsx', 'public');
+
+        $this->reset('upload');
+
+        session()->flash('message', 'File uploaded to exports/funding_org.xlsx');
+    }
+
     public function removeFundingOrg($index)
     {
         // Ensure we access the correct key from the array
@@ -83,6 +101,15 @@ class FundingOrgEdit extends Component
             'exports/funding_org.xlsx',
             'public' // storage/app/public/exports/funding_org.xlsx
         );
+    }
+
+    public function clearFunding()
+    {
+        Artisan::call('clear-funding');
+
+        $output = Artisan::output();
+
+        session()->flash('message', $output);
     }
 
     public function downloadFile()
