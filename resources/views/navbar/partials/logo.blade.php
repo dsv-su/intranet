@@ -1,4 +1,4 @@
-<a {{--}}href="{{ config('app.url') }}"{{--}}href="{{ route('pp', 'my') }}" class="ml-5 flex items-center dark:text-white">
+<a {{--}}href="{{ config('app.url') }}"{{--}}href="{{ route('pp.show', 'my') }}" class="ml-5 flex items-center dark:text-white">
     <div class="flex items-center opacity-90 dark:text-white">
                 <span class="px-1 py-1 text-xl leading-none border-2 border-suprimary rounded-lg dark:border-gray-200">
                     DSV

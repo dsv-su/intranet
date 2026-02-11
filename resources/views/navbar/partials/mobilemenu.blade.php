@@ -9,19 +9,19 @@
                 </svg>
             </button>
             <div x-show="activeMobileMenu === 'getting-started'" class="pl-4 space-y-1" x-transition>
-                <a href="{{route('budget-template', 'eng')}}" @click="mobileMenuOpen = false; activeMobileMenu = ''" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:bg-neutral-100 dark:text-white">
+                <a href="{{route('budget.template', 'eng')}}" @click="mobileMenuOpen = false; activeMobileMenu = ''" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:bg-neutral-100 dark:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline-block mb-2 size-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                     </svg>
                     {{ __("DSV Standard Budget (English)") }}
                 </a>
-                <a href="{{route('budget-template', 'swe')}}" @click="mobileMenuOpen = false; activeMobileMenu = ''" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:bg-neutral-100 dark:text-white">
+                <a href="{{route('budget.template', 'swe')}}" @click="mobileMenuOpen = false; activeMobileMenu = ''" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:bg-neutral-100 dark:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline-block mb-2 size-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                     </svg>
                     {{ __("DSV Standard Budget (Swedish)") }}
                 </a>
-                <a href="{{route('budget-template', 'eu')}}" @click="mobileMenuOpen = false; activeMobileMenu = ''" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:bg-neutral-100 dark:text-white">
+                <a href="{{route('budget.template', 'eu')}}" @click="mobileMenuOpen = false; activeMobileMenu = ''" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:bg-neutral-100 dark:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline-block mb-2 size-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                     </svg>
@@ -67,12 +67,12 @@
             </li>
 
         <li>
-            <a href="{{route('pp-stats')}}" class="inline-flex items-center justify-center px-3 h-10 py-2 font-medium transition-colors rounded-md hover:text-neutral-900 dark:hover:text-gray-200">
+            <a href="{{route('pp.stats.committed')}}" class="inline-flex items-center justify-center px-3 h-10 py-2 font-medium transition-colors rounded-md hover:text-neutral-900 dark:hover:text-gray-200">
                 {{__("Stats")}}
             </a>
         </li>
         <li>
-            <a href="{{ route('new-project') }}"
+            <a href="{{ route('pp.create') }}"
                class="inline-flex items-center justify-center h-9 px-3 rounded-md font-medium text-sm
             bg-suprimary text-white shadow-sm
             hover:bg-blue-700
@@ -92,7 +92,7 @@
         @endif
         @if( auth()->user()->isSuperAdmin())
             <li>
-                <a href="{{route('pp-admin')}}" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:bg-neutral-100 dark:text-white">
+                <a href="{{route('admin.pp.index')}}" class="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:bg-neutral-100 dark:text-white">
                     {{__("Admin")}}
                 </a>
             </li>

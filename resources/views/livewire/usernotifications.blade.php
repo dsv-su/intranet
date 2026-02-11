@@ -2,7 +2,7 @@
     @foreach($user_requests as $user_request)
         @php
             $isTravelRequest = $user_request->type === 'travelrequest';
-            $route = $isTravelRequest ? route('travel-request-show', $user_request->id) : route('pp', 'my');
+            $route = $isTravelRequest ? route('travel-request-show', $user_request->id) : route('pp.show', 'my');
 
             // Map status colors and text
             $statusClassMap = [

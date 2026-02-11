@@ -22,7 +22,7 @@
             </div>{{--}}
 
             <div class="w-72">
-                <a  href="{{route('budget-template', 'eng')}}" @click="navigationMenuClose()"
+                <a  href="{{route('budget.template', 'eng')}}" @click="navigationMenuClose()"
                    class="block px-3.5 py-3 text-sm rounded
                           hover:bg-neutral-100 dark:hover:bg-white/10
                           transition-colors duration-150">
@@ -38,7 +38,7 @@
                     </span>
 
                 </a>
-                <a  href="{{route('budget-template', 'swe')}}" @click="navigationMenuClose()" class="block px-3.5 py-3 text-sm rounded hover:bg-neutral-100">
+                <a  href="{{route('budget.template', 'swe')}}" @click="navigationMenuClose()" class="block px-3.5 py-3 text-sm rounded hover:bg-neutral-100">
                     <span class="block mb-1 font-medium text-black">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline-block mb-2 size-4">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -49,7 +49,7 @@
                         {{__('Template for all project applications')}}
                     </span>
                 </a>
-                <a  href="{{route('budget-template', 'eu')}}" @click="navigationMenuClose()" class="block px-3.5 py-3 text-sm rounded hover:bg-neutral-100">
+                <a  href="{{route('budget.template', 'eu')}}" @click="navigationMenuClose()" class="block px-3.5 py-3 text-sm rounded hover:bg-neutral-100">
                     <span class="block mb-1 font-medium text-black">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="inline-block mb-2 size-4">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -62,7 +62,7 @@
                 </a>
             </div>
         </div>
-        <!-- Dropdown content for "Manage" -->
+        <!-- Dropdown content for "Help Guides" -->
         <div x-show="navigationMenu == 'learn-more'" class="flex items-stretch justify-center w-full p-6">
             <div class="w-72">
                 <a href="{{ route('usermanual') }}" @click="navigationMenuClose()" class="block px-3.5 py-3 text-sm rounded hover:bg-neutral-100">

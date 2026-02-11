@@ -25,7 +25,7 @@
             @endif
             {{--}}
 
-            <form method="post" action="{{route('new-submit')}}">
+            <form method="post" action="{{route('pp.submit')}}">
                 @csrf
 
                 @if(in_array($type, ['preapproval', 'saved', 'complete', 'review', 'edit', 'resume', 'sent', 'granted', 'rejected']))

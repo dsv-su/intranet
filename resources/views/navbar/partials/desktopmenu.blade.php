@@ -33,7 +33,7 @@
 
     <li>
 
-        <a href="{{route('pp-stats')}}" class="inline-flex items-center justify-center h-10 px-4 py-2 font-medium transition-colors rounded-md hover:text-neutral-900 dark:hover:text-gray-200">
+        <a href="{{route('pp.stats.committed')}}" class="inline-flex items-center justify-center h-10 px-4 py-2 font-medium transition-colors rounded-md hover:text-neutral-900 dark:hover:text-gray-200">
             <svg class="inline shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                  stroke-linecap="round" stroke-linejoin="round">
@@ -43,7 +43,7 @@
         </a>
     </li>
     <li>
-        <a href="{{ route('new-project') }}"
+        <a href="{{ route('pp.create') }}"
            class="inline-flex items-center justify-center h-9 px-3 rounded-md font-medium text-sm
             bg-suprimary text-white shadow-sm
             hover:bg-blue-700
@@ -67,7 +67,7 @@
     @endif
     @if( auth()->user()->isSuperAdmin())
         <li>
-            <a  href="{{route('pp-admin')}}" class="inline-flex items-center justify-center h-10 px-4 py-2 font-medium transition-colors rounded-md hover:text-neutral-900 dark:hover:text-gray-200">
+            <a  href="{{route('admin.pp.index')}}" class="inline-flex items-center justify-center h-10 px-4 py-2 font-medium transition-colors rounded-md hover:text-neutral-900 dark:hover:text-gray-200">
                 {{__("Admin")}}
             </a>
         </li>

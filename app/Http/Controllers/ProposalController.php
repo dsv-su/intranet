@@ -217,7 +217,7 @@ class ProposalController extends Controller
             // Check files
             $this->checkFileStatus($pp);
 
-            return redirect()->route('pp', 'my')
+            return redirect()->route('pp.show', 'my')
                 ->with('success', 'Your Project proposal draft has successfully been submitted!');
         });
     }
@@ -247,7 +247,7 @@ class ProposalController extends Controller
                 $this->dashboardBaseData($pp, $request, $userId, $createdTs, 'unread')
             );
 
-            return redirect()->route('pp', 'my')
+            return redirect()->route('pp.show', 'my')
                 ->with('success', 'Your Project proposal draft has successfully been saved!');
         });
     }
@@ -288,11 +288,11 @@ class ProposalController extends Controller
         if ($this->checkFiles($pp)) {
             (new WorkflowHandler($dashboard->workflow_id))->Completed();
 
-            return redirect()->route('pp', 'my')
+            return redirect()->route('pp.show', 'my')
                 ->with('success', 'Your Project proposal files have successfully been uploaded!');
         }
 
-        return redirect()->route('pp', 'my')
+        return redirect()->route('pp.show', 'my')
             ->with('success', 'Your Project proposal has been updated!');
     }
 
@@ -334,7 +334,7 @@ class ProposalController extends Controller
                 break;
         }
 
-        return redirect()->route('pp', 'my')->with('success', 'Proposal successfully updated!');
+        return redirect()->route('pp.show', 'my')->with('success', 'Proposal successfully updated!');
     }
 
 
@@ -374,7 +374,7 @@ class ProposalController extends Controller
         $this->resumeWorkflow($dashboard);
         $this->checkFileStatus($pp);
 
-        return redirect()->route('pp', 'my')->with('success', 'Proposal successfully resumed!');
+        return redirect()->route('pp.show', 'my')->with('success', 'Proposal successfully resumed!');
     }
 
 
@@ -388,7 +388,7 @@ class ProposalController extends Controller
             $finalFile = collect($files)->first(fn ($file) => isset($file['type']) && $file['type'] === 'final');
 
             if (!$finalFile) {
-                return redirect()->route('pp', 'my')
+                return redirect()->route('pp.show', 'my')
                     ->with('error', 'Please make sure to upload your final application before the reporting');
             }
 
@@ -420,7 +420,7 @@ class ProposalController extends Controller
                 Mail::to($vice->email)->send(new SentNotificationVice($submitter, $vice, $dashboard));
             });
 
-            return redirect()->route('pp', 'my')
+            return redirect()->route('pp.show', 'my')
                 ->with('success', 'Your proposal has been successfully registered as sent. Thank you!');
         });
     }
@@ -460,7 +460,7 @@ class ProposalController extends Controller
                 Mail::to($vice->email)->send(new GrantNotificationVice($submitter, $vice, $dashboard));
             });
 
-            return redirect()->route('pp', 'my')
+            return redirect()->route('pp.show', 'my')
                 ->with('success', 'Your project proposal has been successfully registered as a granted project!');
         });
     }
@@ -498,7 +498,7 @@ class ProposalController extends Controller
                 SendGrantToRegistrator::dispatch($user, $pp->dashboard, $filePath);
             });
 
-            return redirect()->route('pp', 'my')
+            return redirect()->route('pp.show', 'my')
                 ->with('success', 'Your project proposal has been registered as a denied project!');
         });
     }
@@ -660,7 +660,7 @@ class ProposalController extends Controller
             'deny', 'return' => $this->handleDenyReturn($data['decision'], $actorRole, $workflow),
         };
 
-        return redirect()->route('pp', ['slug' => 'awaiting']);
+        return redirect()->route('pp.show', ['slug' => 'awaiting']);
     }
 
     private function handleApprove(Dashboard $dashboard, string $requestId, string $actorRole, $user,

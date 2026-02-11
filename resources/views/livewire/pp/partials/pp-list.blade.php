@@ -137,7 +137,7 @@
                                     <!-- Review -->
                                     @if($review ?? false)
                                         <a type="button"
-                                           href="{{route('pp-review', $proposal->id)}}"
+                                           href="{{route('pp.review.show', $proposal->id)}}"
                                            class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150">
@@ -147,7 +147,7 @@
                                     <!-- Resume -->
                                     @if($proposal->allowResume() ?? false)
                                         <a type="button"
-                                            href="{{route('pp-resume', $proposal->id)}}"
+                                            href="{{route('pp.resume', $proposal->id)}}"
                                             class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150"
@@ -157,7 +157,7 @@
                                     @endif
                                     <!-- View -->
                                     <a type="button"
-                                       href="{{route('pp-view', $proposal->id)}}"
+                                       href="{{route('pp.review.view', $proposal->id)}}"
                                        class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                         uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                         disabled:opacity-25 transition ease-in-out duration-150">
@@ -166,7 +166,7 @@
                                     <!-- Edit -->
                                     @if($proposal->allowEdit())
                                     <a type="button"
-                                       href="{{route('pp-edit', $proposal->id)}}"
+                                       href="{{route('pp.edit', $proposal->id)}}"
                                        class="inline-flex items-center px-2 py-2 text-xs font-medium text-gray-900 bg-transparent border border-gray-900 hover:bg-gray-900 hover:text-white
                                         focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white dark:border-white dark:text-white dark:hover:text-white
                                         dark:hover:bg-gray-700 dark:focus:bg-gray-700 rounded-md">
@@ -176,7 +176,7 @@
                                     <!-- Continue draft -->
                                     @if($proposal->allowContinue())
                                         <a type="button"
-                                           href="{{route('pp-continue', $proposal->id)}}"
+                                           href="{{route('pp.continue', $proposal->id)}}"
                                            class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150"
@@ -187,7 +187,7 @@
 
                                     @if($proposal->allowComplete())
                                         <a type="button"
-                                           href="{{route('pp-complete', $proposal->id)}}#proposal-attachments"
+                                           href="{{route('pp.complete', $proposal->id)}}#proposal-attachments"
                                            class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150">
@@ -196,7 +196,7 @@
                                     @endif
                                     @if($proposal->allowUpload())
                                         <a type="button"
-                                           href="{{route('pp-upload', $proposal->id)}}#proposal-attachments"
+                                           href="{{route('pp.upload', $proposal->id)}}#proposal-attachments"
                                            class="inline-flex items-center px-1.5 py-1.5 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                             uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                             disabled:opacity-25 transition ease-in-out duration-150">
@@ -206,7 +206,7 @@
                                     <!-- Sent -->
                                         @if($proposal->allowSend())
                                             <a type="button"
-                                               href="{{route('pp-sent', $proposal->id)}}#sent"
+                                               href="{{route('pp.sent', $proposal->id)}}#sent"
                                                class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                                     uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                                     disabled:opacity-25 transition ease-in-out duration-150">
@@ -216,7 +216,7 @@
                                     <!-- Granted -->
                                     @if($proposal->allowGrant())
                                         <a type="button"
-                                           href="{{route('pp-granted', $proposal->id)}}#granted"
+                                           href="{{route('pp.granted', $proposal->id)}}#granted"
                                            class="inline-flex items-center px-1.5 py-1 bg-white border border-green-600 text-green-600 rounded-md font-semibold text-[0.5rem]
                                                     uppercase tracking-widest hover:bg-green-600 hover:text-white active:bg-green-700 focus:outline-none focus:border-green-800 focus:ring ring-green-300
                                                     disabled:opacity-25 transition ease-in-out duration-150">
@@ -227,7 +227,7 @@
                                     <!-- Rejected -->
                                     @if($proposal->allowReject())
                                         <a type="button"
-                                           href="{{route('pp-rejected', $proposal->id)}}#rejected"
+                                           href="{{route('pp.rejected', $proposal->id)}}#rejected"
                                            class="inline-flex items-center px-1.5 py-1 bg-white border border-red-600 text-red-600 rounded-md font-semibold text-[0.5rem]
                                                     uppercase tracking-widest hover:bg-red-600 hover:text-white active:bg-red-700 focus:outline-none focus:border-red-800 focus:ring ring-red-300
                                                     disabled:opacity-25 transition ease-in-out duration-150">

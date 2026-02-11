@@ -1,6 +1,6 @@
 @if($proposal->allowComplete() && $proposal->dashboard->status != 'resumed')
     <a
-        href="{{ route('pp-complete', $proposal->id) }}#proposal-attachments"
+        href="{{ route('pp.complete', $proposal->id) }}#proposal-attachments"
         class="sm:mr-6 inline-flex items-center justify-center
            w-full sm:w-auto
            px-2 py-1 sm:px-1.5 sm:py-1.5

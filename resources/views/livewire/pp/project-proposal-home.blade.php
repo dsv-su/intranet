@@ -6,7 +6,7 @@
             @endphp
 
             @if($awaiting )
-                <a href="{{ route('pp', 'awaiting') }}"
+                <a href="{{ route('pp.show', 'awaiting') }}"
                    class="group block text-center rounded-lg border bg-white px-3 py-3 shadow-sm
                           transition duration-200 ease-out
                           hover:-translate-y-0.5 hover:shadow-md hover:border-susecondary/70
@@ -25,7 +25,7 @@
                 </a>
             @endif
 
-            <a href="{{route('pp', 'my')}}"
+            <a href="{{route('pp.show', 'my')}}"
                    class="group block text-center rounded-lg border bg-white px-3 py-3 shadow-sm
                           transition duration-200 ease-out
                           hover:-translate-y-0.5 hover:shadow-md hover:border-susecondary/70
@@ -42,7 +42,7 @@
                     My Proposals
                 </p>
             </a>
-            <a href="{{route('pp', 'all')}}"
+            <a href="{{route('pp.show', 'all')}}"
                class="group block text-center rounded-lg border bg-white px-3 py-3 shadow-sm
                           transition duration-200 ease-out
                           hover:-translate-y-0.5 hover:shadow-md hover:border-susecondary/70

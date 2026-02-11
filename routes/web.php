@@ -74,34 +74,83 @@ Route::prefix('vice-settings')
 //Project Proposals
 //Route::get('/', [\App\Http\Controllers\ProposalController::class, 'pp'])->name('pp.home');
 
-Route::get('/pp/{slug}', [\App\Http\Controllers\ProposalController::class, 'pp'])->name('pp');
-Route::get('/pp/view/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_view'])->name('pp-view');
-Route::get('/new_pp', [\App\Http\Controllers\ProposalController::class, 'create'])->name('new-project');
-Route::post('/submit_preapproval', [\App\Http\Controllers\ProposalController::class, 'submit'])->name('new-submit');
-Route::get('/pp/review/{id}', [\App\Http\Controllers\ReviewController::class, 'pp_review'])->name('pp-review');
-Route::post('/pp/decision', [\App\Http\Controllers\ProposalController::class, 'decision'])->name('pp-decision');
-Route::get('/pp/complete/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_complete'])->name('pp-complete');
-Route::get('/pp/stage2_upload_pp/{id}', [\App\Http\Controllers\ProposalController::class, 'upload'])->name('pp-upload');
-Route::get('/pp/stats/commited', [\App\Http\Controllers\StatsController::class, 'preapproved'])->name('pp-stats');
-Route::get('/pp/stats/approved', [\App\Http\Controllers\StatsController::class, 'approved'])->name('pp-stats-approved');
-Route::get('/pp/stats/recalc', [\App\Http\Controllers\StatsController::class, 'recalcBudget'])->name('pp-recalc');
-Route::get('/pp/sent/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_sent'])->name('pp-sent');
-Route::get('/pp/granted/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_granted'])->name('pp-granted');
-Route::get('/pp/rejected/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_rejected'])->name('pp-rejected');
-//Download
-Route::get('/budget/{type}', [\App\Http\Controllers\ProposalController::class, 'budget'])->name('budget-template');
-Route::get('/manual', [\App\Http\Controllers\ProposalController::class, 'usermanual'])->name('usermanual');
-//Continue
-Route::get('/pp/continue/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_continue'])->name('pp-continue');
-//Edit
-Route::get('/pp/edit/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_edit'])->name('pp-edit');
-//Resume
-Route::get('/pp/resume/{id}', [\App\Http\Controllers\ProposalController::class, 'pp_resume'])->name('pp-resume');
-//Admin
-Route::get('/admin', [\App\Http\Controllers\AdminController::class, 'pp'])->name('pp-admin');
-Route::get('/admin/del/{id}', [\App\Http\Controllers\AdminController::class, 'pp_delete'])->name('pp-delete');
+/*
+|--------------------------------------------------------------------------
+| PP (Project Proposals)
+|--------------------------------------------------------------------------
+*/
 
-//Test
-Route::get('/test', [TestController::class, 'test'])->name('test');
-Route::get('/seed', [\App\Http\Controllers\ViceController::class, 'seed'])->name('proposal-seeder');
-Route::get('/reset', [\App\Http\Controllers\ViceController::class, 'reset'])->name('proposal-reset');
+Route::prefix('pp')->name('pp.')->group(function () {
+    // Create + submit
+    Route::get('new', [\App\Http\Controllers\ProposalController::class, 'create'])->name('create');
+    Route::post('submit', [\App\Http\Controllers\ProposalController::class, 'submit'])->name('submit');
+
+    // Public / direct access by slug
+    Route::get('{slug}', [\App\Http\Controllers\ProposalController::class, 'pp'])
+        ->where('slug', '[A-Za-z0-9\-]+')
+        ->name('show');
+
+    // Proposal lifecycle (prefer route model binding: {proposal})
+    Route::get('complete/{proposal}', [\App\Http\Controllers\ProposalController::class, 'pp_complete'])->name('complete');
+    Route::get('continue/{proposal}', [\App\Http\Controllers\ProposalController::class, 'pp_continue'])->name('continue');
+    Route::get('edit/{proposal}', [\App\Http\Controllers\ProposalController::class, 'pp_edit'])->name('edit');
+    Route::get('resume/{proposal}', [\App\Http\Controllers\ProposalController::class, 'pp_resume'])->name('resume');
+
+    // Upload area
+    Route::get('upload/{proposal}', [\App\Http\Controllers\ProposalController::class, 'upload'])->name('upload');
+
+    // Decision endpoint
+    Route::post('decision', [\App\Http\Controllers\ProposalController::class, 'decision'])->name('decision');
+
+    // Status pages
+    Route::get('sent/{proposal}', [\App\Http\Controllers\ProposalController::class, 'pp_sent'])->name('sent');
+    Route::get('granted/{proposal}', [\App\Http\Controllers\ProposalController::class, 'pp_granted'])->name('granted');
+    Route::get('rejected/{proposal}', [\App\Http\Controllers\ProposalController::class, 'pp_rejected'])->name('rejected');
+
+    // Reviews
+    Route::prefix('review')->name('review.')->group(function () {
+        Route::get('view/{proposal}', [\App\Http\Controllers\ReviewController::class, 'pp_view'])->name('view');
+        Route::get('{proposal}', [\App\Http\Controllers\ReviewController::class, 'pp_review'])->name('show');
+    });
+
+    // Stats
+    Route::prefix('stats')->name('stats.')->group(function () {
+        Route::get('committed', [\App\Http\Controllers\StatsController::class, 'preapproved'])->name('committed'); // fixed spelling
+        Route::get('approved', [\App\Http\Controllers\StatsController::class, 'approved'])->name('approved');
+        Route::get('recalc', [\App\Http\Controllers\StatsController::class, 'recalcBudget'])->name('recalc');
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Downloads / docs
+|--------------------------------------------------------------------------
+*/
+Route::get('budget/{type}', [\App\Http\Controllers\ProposalController::class, 'budget'])
+    ->whereIn('type', ['eng','swe','eu']) // allowed types
+    ->name('budget.template');
+
+Route::get('manual', [\App\Http\Controllers\ProposalController::class, 'usermanual'])->name('usermanual');
+
+/*
+|--------------------------------------------------------------------------
+| Admin
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\AdminController::class, 'pp'])->name('pp.index');
+
+    // TODO
+    Route::delete('pp/{proposal}', [\App\Http\Controllers\AdminController::class, 'pp_delete'])->name('pp.delete');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Maintenance / Test
+|--------------------------------------------------------------------------
+*/
+Route::get('test', [TestController::class, 'test'])->name('test');
+
+// These should be POST and protected by auth + authorization, and ideally only in local/staging.
+Route::post('seed', [\App\Http\Controllers\ViceController::class, 'seed'])->name('proposal.seed');
+Route::post('reset', [\App\Http\Controllers\ViceController::class, 'reset'])->name('proposal.reset');
