@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dashboard;
+use App\Models\ProjectProposal;
 use App\Models\SettingsFo;
 use App\Models\SettingsFoEu;
 use App\Models\TravelRequest;
@@ -40,7 +41,8 @@ class FOController extends Controller
                     ->with(['tr' => $tr, 'formtype' => $formtype]);
                 break;
             case 'projectproposal':
-                return redirect()->action([ReviewController::class, 'pp_view'], ['id' => $id]);
+                $proposal = ProjectProposal::find($id);
+                return redirect()->action([ReviewController::class, 'pp_view'], ['proposal' => $proposal]);
                 break;
         }
 

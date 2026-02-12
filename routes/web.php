@@ -1,12 +1,8 @@
 <?php
 
-use App\Http\Controllers\FOController;
-use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\SystemController;
-use App\Http\Controllers\TestController;
 use App\Services\Settings\AuthHandler;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TravelRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,57 +17,110 @@ if (class_exists(AuthHandler::class))
 Route::get('/sulogin', 'SystemController@SUlogin')->name('sulogin');
 Route::get($login, [SystemController::class, 'login'])->name('login');
 
-//Language
-Route::get('/lang/{lang}', [LocalizationController::class, 'index'])->name('language');
+// Locale constraint
+$langConstraint = 'en|sv|swe';
+
+// Language switcher (explicit)
+Route::get('/lang/{lang}', [\App\Http\Controllers\LocalizationController::class, 'index'])
+    ->where('lang', $langConstraint)
+    ->name('language');
+
+// Statamic route (keep near top-level content routes)
 Route::statamic('search', 'search')->name('search');
 
-//Travelrequest
-Route::get('/travel', [TravelRequestController::class, 'create'])->name('travel-request-create');
-Route::get('/{lang?}/travel', [TravelRequestController::class, 'create']);
+/*
+|--------------------------------------------------------------------------
+| Travel Request
+|--------------------------------------------------------------------------
+*/
 
-Route::get('/travel/show/{id}', [TravelRequestController::class, 'show'])->name('travel-request-show');
-Route::post('/travel', [TravelRequestController::class, 'submit'])->name('travel-submit');
+// Put the non-localized explicit route first
+Route::get('/travel', [\App\Http\Controllers\TravelRequestController::class, 'create'])
+    ->name('travel-request-create');
 
-Route::post('/travelresume/{tr}', [TravelRequestController::class, 'resume'])->name('travel-request-resume');
+// Localized version (MUST constrain lang)
+Route::get('/{lang}/travel', [\App\Http\Controllers\TravelRequestController::class, 'create'])
+    ->where('lang', $langConstraint);
 
-//ReviewHandler
-Route::get('/travel/review/{id}', [\App\Http\Controllers\ReviewController::class, 'show'])->name('travel-request-review');
-Route::post('/review/{id}', [\App\Http\Controllers\ReviewController::class, 'review'])->name('review');
-Route::post('/fo_review/{id}', [\App\Http\Controllers\ReviewController::class, 'fo_review'])->name('fo_review');
+// Show + submit
+Route::get('/travel/show/{travelRequest}', [\App\Http\Controllers\TravelRequestController::class, 'show'])
+    ->name('travel-request-show');
 
-//FO Handler
-Route::get('/list', [FOController::class, 'list'])->name('request-list')->middleware('checklang');
-Route::get('/{lang?}/list', [FOController::class, 'svlist'])->middleware('checklang');
+Route::post('/travel', [\App\Http\Controllers\TravelRequestController::class, 'submit'])
+    ->name('travel-submit');
 
-Route::get('/show/{id}', [\App\Http\Controllers\FOController::class, 'show'])->name('fo-request-show');
-Route::get('{lang?}/show/{id}', [\App\Http\Controllers\FOController::class, 'show']);
-Route::get('/viewpdf/{id}', [\App\Http\Controllers\FOController::class, 'pdfview'])->name('travel-request-pdfview');
-Route::get('/travel/pdf/{id}', [\App\Http\Controllers\FOController::class, 'download'])->name('travel-request-pdf');
-Route::get('/settings', [\App\Http\Controllers\FOController::class, 'settings'])->name('settings');
-Route::post('/fo', [\App\Http\Controllers\FOController::class, 'settings_fo'])->name('fo');
-Route::post('/fo_eu', [\App\Http\Controllers\FOController::class, 'settings_fo_eu'])->name('fo_eu');
-Route::get('/assign_fo', [\App\Http\Controllers\AssignFOController::class, 'index'])->name('assign.fo');
+Route::post('/travelresume/{tr}', [\App\Http\Controllers\TravelRequestController::class, 'resume'])
+    ->name('travel-request-resume');
 
-//News list entries
-Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'list'])->name('list');
-Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'swelist'])->name('swelist');
+/*
+|--------------------------------------------------------------------------
+| Review
+|--------------------------------------------------------------------------
+*/
+Route::get('/travel/review/{travelRequest}', [\App\Http\Controllers\ReviewController::class, 'show'])
+    ->name('travel-request-review');
 
-//Vice settings
-Route::prefix('vice-settings')
-    ->name('vice_settings.')
-    ->controller(\App\Http\Controllers\ViceController::class)
-    ->group(function () {
-        // Show the settings page
-        Route::get('/', 'settings')->name('index');
-        // Handle "oh" submission
-        Route::post('oh', 'oh')->name('oh');
-        // Handle "form" submission
-        Route::post('form', 'form')->name('form');
-        // Handle "registrator" submission
-        Route::post('registrator', 'registrator')->name('registrator');
-    });
+Route::post('/review/{travelRequest}', [\App\Http\Controllers\ReviewController::class, 'review'])
+    ->name('review');
 
-//Project Proposals
+Route::post('/fo_review/{travelRequest}', [\App\Http\Controllers\ReviewController::class, 'fo_review'])
+    ->name('fo_review');
+
+
+/*
+|--------------------------------------------------------------------------
+| FO Handler
+|--------------------------------------------------------------------------
+*/
+Route::get('/list', [\App\Http\Controllers\FOController::class, 'list'])
+    ->name('request-list')
+    ->middleware('checklang');
+
+// Localized list (constrained)
+Route::get('/{lang}/list', [\App\Http\Controllers\FOController::class, 'svlist'])
+    ->where('lang', $langConstraint)
+    ->middleware('checklang');
+
+Route::get('/show/{id}', [\App\Http\Controllers\FOController::class, 'show'])
+    ->name('fo-request-show');
+
+// Localized show (FIX leading slash + constrain)
+Route::get('/{lang}/show/{id}', [\App\Http\Controllers\FOController::class, 'show'])
+    ->where('lang', $langConstraint);
+
+Route::get('/viewpdf/{id}', [\App\Http\Controllers\FOController::class, 'pdfview'])
+    ->name('travel-request-pdfview');
+
+Route::get('/travel/pdf/{id}', [\App\Http\Controllers\FOController::class, 'download'])
+    ->name('travel-request-pdf');
+
+Route::get('/settings', [\App\Http\Controllers\FOController::class, 'settings'])
+    ->name('settings');
+
+Route::post('/fo', [\App\Http\Controllers\FOController::class, 'settings_fo'])
+    ->name('fo');
+
+Route::post('/fo_eu', [\App\Http\Controllers\FOController::class, 'settings_fo_eu'])
+    ->name('fo_eu');
+
+Route::get('/assign_fo', [\App\Http\Controllers\AssignFOController::class, 'index'])
+    ->name('assign.fo');
+
+
+/*
+|--------------------------------------------------------------------------
+| News list entries
+|--------------------------------------------------------------------------
+*/
+Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'list'])
+    ->name('newslist.en');
+
+Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'swelist'])
+    ->name('newslist.sv');
+
+
+
+//Project Proposals Home
 //Route::get('/', [\App\Http\Controllers\ProposalController::class, 'pp'])->name('pp.home');
 
 /*
@@ -134,6 +183,24 @@ Route::get('manual', [\App\Http\Controllers\ProposalController::class, 'usermanu
 
 /*
 |--------------------------------------------------------------------------
+| Vice settings
+|--------------------------------------------------------------------------
+*/
+Route::prefix('vice-settings')
+    ->name('vice_settings.')
+    ->controller(\App\Http\Controllers\ViceController::class)
+    ->group(function () {
+        // Show the settings page
+        Route::get('/', 'settings')->name('index');
+        // Handle "oh" submission
+        Route::post('oh', 'oh')->name('oh');
+        // Handle "form" submission
+        Route::post('form', 'form')->name('form');
+        // Handle "registrator" submission
+        Route::post('registrator', 'registrator')->name('registrator');
+    });
+/*
+|--------------------------------------------------------------------------
 | Admin
 |--------------------------------------------------------------------------
 */
@@ -149,8 +216,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 | Maintenance / Test
 |--------------------------------------------------------------------------
 */
-Route::get('test', [TestController::class, 'test'])->name('test');
+Route::get('test', [\App\Http\Controllers\TestController::class, 'test'])->name('test');
 
 // These should be POST and protected by auth + authorization, and ideally only in local/staging.
-Route::post('seed', [\App\Http\Controllers\ViceController::class, 'seed'])->name('proposal.seed');
-Route::post('reset', [\App\Http\Controllers\ViceController::class, 'reset'])->name('proposal.reset');
+Route::get('/dev/seed', [\App\Http\Controllers\ViceController::class, 'seed'])->name('proposal.seed');
+Route::get('/dev/reset', [\App\Http\Controllers\ViceController::class, 'reset'])->name('proposal.reset');
