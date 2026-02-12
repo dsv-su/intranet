@@ -16,7 +16,7 @@ class FundingOrganizationImport implements ToModel
     public function model(array $row)
     {
         return new FundingOrganization([
-            'name' => $row[1], // second column in the row
+            'name' => $row[0], // second column in the row
         ]);
     }
 }

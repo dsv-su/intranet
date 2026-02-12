@@ -7,8 +7,14 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 
 class FundingOrganizationExport implements FromCollection
 {
-    public function collection()
+    /*public function collection()
     {
         return FundingOrganization::all();
+    }*/
+    public function collection()
+    {
+        return FundingOrganization::query()
+            ->select('name')
+            ->get();
     }
 }

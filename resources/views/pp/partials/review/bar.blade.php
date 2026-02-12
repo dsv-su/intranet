@@ -6,7 +6,6 @@
 </button>
 
 <!-- Review Box -->
-
 <div id="reviewBox"
      class="sm:fixed sm:bottom-24 inset-x-0 px-4 z-40 sm:left-1/2 sm:transform sm:-translate-x-1/2 sm:max-w-2xl w-full bg-white
             dark:bg-gray-900 dark:border-gray-600 p-4 sm:rounded-lg shadow-lg overflow-x-hidden">
