@@ -20,18 +20,26 @@ class MyProjectProposalSearch extends Component
     public function render()
     {
         $user = Auth::user();
+        $search = $this->searchProposal;
 
-        //My proposals
         $proposals = ProjectProposal::with('dashboard')
+            //Filter to the authenticated user
             ->where('user_id', $user->id)
+            //Exclude pending
             ->where('status_stage3', '!=', 'pending')
-            ->where(function($query) {
-                $query->where('name', 'like', '%'. $this->searchProposal .'%')
-                    ->orWhere('id', 'like', '%'. $this->searchProposal .'%')
-                    ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(pp, '$.*')) LIKE ?", ['%' . $this->searchProposal . '%']);
-            })
-            ->orWhereHas('dashboard', function($query) {
-                $query->where('state', 'like', '%'. $this->searchProposal .'%');
+            //Wrap ALL search conditions together
+            ->when($search, function($q) use ($search) {
+                $q->where(function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('id',   'like', "%{$search}%")
+                        ->orWhereRaw(
+                            "JSON_UNQUOTE(JSON_EXTRACT(pp, '$.*')) LIKE ?",
+                            ["%{$search}%"]
+                        )
+                        ->orWhereHas('dashboard', function($q2) use ($search) {
+                            $q2->where('state', 'like', "%{$search}%");
+                        });
+                });
             })
             ->orderBy('created_at', 'desc')
             ->paginate(5);

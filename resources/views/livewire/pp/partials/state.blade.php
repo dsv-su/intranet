@@ -1,4 +1,4 @@
-@switch( (string) $proposal->dashboard?->state )
+@switch((string) $proposal->dashboard?->state ?? '')
     @case('pending')
         @php
             $state = 'PENDING';
@@ -6,6 +6,7 @@
             $textcolor = 'text-gray-800';
         @endphp
         @break
+
     @case('submitted')
         @php
             $state = 'AWAITING';
@@ -13,15 +14,15 @@
             $textcolor = 'text-yellow-800';
         @endphp
         @break
+
     @case('complete')
-    @php
-        $state = 'SUBMITTED';
-        $bgcolor = 'bg-yellow-100';
-        $textcolor = 'text-yellow-800';
-    @endphp
-    @break
-    @case('complete')
-    @case('vice_approved')
+        @php
+            $state = 'SUBMITTED';
+            $bgcolor = 'bg-yellow-100';
+            $textcolor = 'text-yellow-800';
+        @endphp
+        @break
+
     @case('head_approved')
     @case('fo_approved')
         @php
@@ -30,6 +31,7 @@
             $textcolor = 'text-blue-800';
         @endphp
         @break
+
     @case('final_approved')
         @php
             $state = 'AWAITING';
@@ -37,13 +39,15 @@
             $textcolor = 'text-green-800';
         @endphp
         @break
+
     @case('sent')
-    @php
-        $state = 'SENT';
-        $bgcolor = 'bg-green-100';
-        $textcolor = 'text-green-800';
-    @endphp
-    @break
+        @php
+            $state = 'SENT';
+            $bgcolor = 'bg-green-100';
+            $textcolor = 'text-green-800';
+        @endphp
+        @break
+
     @case('granted')
         @php
             $state = 'GRANTED';
@@ -51,38 +55,27 @@
             $textcolor = 'text-purple-700';
         @endphp
         @break
+
     @case('head_denied')
-    @case('vice_denied')
     @case('fo_denied')
+    @case('denied')
         @php
             $state = 'DENIED';
             $bgcolor = 'bg-red-100';
             $textcolor = 'text-red-800';
         @endphp
         @break
+
     @case('head_returned')
-    @case('vice_returned')
     @case('fo_returned')
+    @case('final_returned')
         @php
             $state = 'RETURNED';
             $bgcolor = 'bg-yellow-100';
             $textcolor = 'text-yellow-800';
         @endphp
         @break
-    @case('final_returned')
-    @php
-        $state = 'RETURNED';
-        $bgcolor = 'bg-yellow-100';
-        $textcolor = 'text-yellow-800';
-    @endphp
-    @break
-    @case('denied')
-    @php
-        $state = 'DENIED';
-        $bgcolor = 'bg-red-100';
-        $textcolor = 'text-red-800';
-    @endphp
-    @break
+
     @default
         @php
             $state = 'ERROR';
@@ -91,6 +84,14 @@
         @endphp
         @break
 @endswitch
-<span class="{{$bgcolor}} {{$textcolor}} text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-    {{ $state }}
+
+<span
+    class="{{ $bgcolor }} {{ $textcolor }}
+         inline-flex items-center
+         text-[0.65rem] sm:text-xs font-medium
+         px-2 py-0.5 sm:px-2.5 sm:py-0.5
+         rounded
+         border border-current
+         whitespace-nowrap">
+  {{ $state }}
 </span>

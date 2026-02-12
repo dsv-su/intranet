@@ -3,10 +3,8 @@
 namespace App\Livewire\Pp;
 
 use App\Models\Dashboard;
-use App\Services\Review\WorkflowHandler;
 use App\Services\Settings\ProposalsDirectory;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
@@ -32,32 +30,32 @@ class ProposalFinalUploader extends Component
         'upload_refresh' => '$refresh'
     ];
 
-    public function mount($proposal, $type)
+    protected function rules(): array
     {
-        $this->proposal = $proposal;
-        $this->type = $type;
-        $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::FINAL;
-        $this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
-        $this->allowUpload();
+        return [
+            'finalfiles'   => 'array',
+            'finalfiles.*' => 'file|max:20480|mimes:txt,pdf,doc,docx,ppt,pptx,odt,pages,zip,rar,rtf',
+        ];
     }
-
-    public function checkFileStatus()
+    public function mount($proposal, string $type): void
     {
-        /*
-        $finalfiles = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
-        $workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
+        $this->proposal  = $proposal;
+        $this->type      = $type;
+        $this->directory = sprintf(
+            '%s%d%s',
+            ProposalsDirectory::MAIN,
+            $proposal->id,
+            ProposalsDirectory::FINAL
+        );
 
-        if (count($finalfiles) >= 2) {
-            //Signal workflow
-            $workflowhandler->UploadedFiles();
-            return $this->reportStageStatus('uploaded');
-        } else {
-            //Signal workflow
-            $workflowhandler->RemovedFile();
+        $this->dashboard = Dashboard::firstWhere('request_id', $proposal->id);
+
+        if ($this->dashboard) {
+            $this->allowUpload();
+            return;
         }
 
-        return $this->reportStageStatus('waiting');
-        */
+        $this->allow = true;
     }
 
     public function reportStageStatus($status)
@@ -66,21 +64,33 @@ class ProposalFinalUploader extends Component
         $this->proposal->save();
     }
 
-    public function allowUpload()
+    public function allowUpload(): void
     {
-        $user = Auth::user();
+        $userId = Auth::id(); // avoids loading the full user model
 
-        $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
+        $allowedUserIds = array_values(array_filter([
+            $this->dashboard->user_id,
+            $this->dashboard->head_id,
+            $this->dashboard->vice_id,
+            $this->dashboard->fo_id,
+        ])); // removes null/empty values
 
-        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::COMPLETE or $this->dashboard->state == self::APPROVED) ) {
-            $this->allow = true;
-        } else {
+        if (! in_array($userId, $allowedUserIds, true)) {
             $this->allow = false;
+            return;
         }
+
+        $allowedStates = array_merge([
+            self::PREAPPROVED,
+            self::COMPLETE,
+            self::APPROVED,
+        ], []);
+
+        $this->allow = in_array($userId, $allowedUserIds)
+            && in_array($this->dashboard->state, $allowedStates);
     }
 
     public function finishUpload($name, $tmpPath, $isMultiple)
-
     {
         $this->toggleStored();
         $this->cleanupOldUploads();
@@ -95,6 +105,7 @@ class ProposalFinalUploader extends Component
 
     public function storefiles()
     {
+        $this->validate();
         foreach($this->finalfiles as $file) {
             $this->savedfiles[$file->getClientOriginalName()] = [
                 'path' => $file->store(path: $this->directory),
@@ -102,13 +113,13 @@ class ProposalFinalUploader extends Component
                 'size' => round($file->getSize()/1000),
                 'date' => now()->format('d/m/Y'),
                 'type' => 'final',
+                'review' => 'pending',
                 'uploader' => Auth::user()->name
             ];
         }
 
         //Update files to model
         $this->updateProposal();
-        //$this->checkFileStatus();
 
         //Toggled buttons
         $this->toggleStored();
@@ -118,7 +129,8 @@ class ProposalFinalUploader extends Component
 
     public function updateProposal()
     {
-        $this->proposal->files = array_merge($this->proposal->files, $this->savedfiles);
+        $existing = is_array($this->proposal->files) ? $this->proposal->files : [];
+        $this->proposal->files = array_merge($existing, $this->savedfiles);
         $this->proposal->save();
         $this->savedfiles = [];
     }
@@ -128,6 +140,12 @@ class ProposalFinalUploader extends Component
         if($this->stored) {
             $this->toggleStored();
         }
+    }
+
+    public function clearUploadErrors(): void
+    {
+        $this->resetValidation(['finalfiles', 'finalfiles.*']);
+        $this->resetErrorBag(['finalfiles', 'finalfiles.*']); // optional but safe
     }
 
     public function toggleStored()

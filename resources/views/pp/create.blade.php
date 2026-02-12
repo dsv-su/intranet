@@ -25,10 +25,10 @@
             @endif
             {{--}}
 
-            <form method="post" action="{{route('new-submit')}}">
+            <form method="post" action="{{route('pp.submit')}}">
                 @csrf
 
-                @if(in_array($type, ['preapproval', 'complete', 'edit', 'resume', 'sent', 'granted', 'rejected']))
+                @if(in_array($type, ['preapproval', 'saved', 'complete', 'review', 'edit', 'resume', 'sent', 'granted', 'rejected']))
                     <input type="hidden" name="id" value="{{$proposal->id}}">
                 @endif
 
@@ -62,13 +62,12 @@
 
                     <!-- Co Investigators -->
                     @if($type == 'preapproval')
-                        <livewire:select2.Coinvestigators-select2 proposal=""/>
-                    @elseif( $type == 'complete' or $type == 'resume')
-                        <livewire:select2.Coinvestigators-select2 :proposal="$proposal" />
+                        <livewire:pp.co-investigators />
+                    @elseif(in_array($type, ['complete', 'saved', 'edit', 'resume']))
+                    <livewire:pp.co-investigators :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.co_investigators')
                     @endif
-
 
                     <!-- Project organization -->
                     <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
@@ -79,16 +78,19 @@
                     <!-- Funding organization -->
                     @if($type == 'preapproval')
                         <livewire:select2.Org-select2 proposal="" />
-                    @elseif ( $type == 'complete' or $type == 'edit' or $type == 'resume')
+                    @elseif(in_array($type, ['complete', 'saved', 'edit', 'resume']))
                         <livewire:select2.Org-select2 :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.funding_org')
                     @endif
 
+                    <!-- Program call -->
+                    @include('pp.partials.form.program_call')
+
                     <!--DSV coordinating -->
                     @if($type == 'preapproval')
                         <livewire:pp.dsv-coordination proposal="" />
-                    @elseif ($type == 'edit' or $type == 'resume')
+                    @elseif(in_array($type, ['complete', 'saved', 'edit', 'resume']))
                         <livewire:pp.dsv-coordination :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.dsvcoordination')
@@ -97,7 +99,7 @@
                     <!-- Eu project -->
                     @if($type == 'preapproval')
                         <livewire:pp.eu-project proposal="" />
-                    @elseif ($type == 'edit' or $type == 'resume')
+                    @elseif(in_array($type, ['complete', 'saved', 'edit', 'resume']))
                         <livewire:pp.eu-project :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.eu')
@@ -106,14 +108,14 @@
                     <!-- Eu Wallengenberg project -->
                     @if($type == 'preapproval')
                         <livewire:pp.eu-wallenberg-project proposal="" />
-                    @elseif ($type == 'edit' or $type == 'resume')
+                    @elseif(in_array($type, ['complete', 'saved', 'edit', 'resume']))
                         <livewire:pp.eu-wallenberg-project :proposal="$proposal" />
                     @else
                         @include('pp.partials.review.eu_wallenberg')
                     @endif
 
                     <!-- Unit Head -->
-                    @if(in_array($type, ['preapproval', 'complete', 'review', 'view', 'resume', 'sent', 'granted']))
+                    @if(in_array($type, ['preapproval', 'complete', 'saved', 'edit', 'review', 'view', 'resume', 'sent', 'granted']))
                         <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
                                 before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
                                 dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
@@ -140,8 +142,8 @@
                     @endif
 
                     <!-- Project budget -->
-                    @if(in_array($type, ['preapproval', 'complete', 'review', 'edit', 'resume', 'view', 'sent', 'granted']))
-                        <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
+                    @if(in_array($type, ['preapproval', 'complete', 'saved', 'review', 'edit', 'resume', 'view', 'sent', 'granted']))
+                        <div id="project_budget" class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
                                     before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
                                     dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
                             Project budget
@@ -152,6 +154,14 @@
                         @include('pp.partials.form.budget_project')
                         <!-- Budget for DSV -->
                         @include('pp.partials.form.budget_dsv')
+
+                        <!-- Flashmessage for review update -->
+                        <div class="w-full sm:col-span-2 flex items-center text-xs text-blue-500 uppercase
+                        before:flex-1 after:flex-1 after:ms-6
+                        dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
+                            @include('pp.partials.flashmessage')
+                        </div>
+
                         <div class="w-full sm:col-span-2 py-3 flex items-center text-xs text-blue-500 uppercase
                                 before:flex-1 before:border-t before:border-gray-200 before:me-6 after:flex-1 after:border-t after:border-gray-200 after:ms-6
                                 dark:text-blue-400 dark:before:border-neutral-600 dark:after:border-neutral-600">
@@ -235,7 +245,7 @@
     <script>
         /* Textarea autosize */
         document.addEventListener('DOMContentLoaded', function() {
-            const textarea = document.getElementById('user_comments');
+            const textarea = document.getElementById('user_comments_history');
 
             const autoResize = () => {
                 textarea.style.height = 'auto'; // Reset the height to auto to calculate the new height
@@ -259,31 +269,42 @@
 
         /* Add unit head */
         const addButton = document.getElementById('add-unithead-button');
+
         if (addButton) {
-            document.getElementById('add-unithead-button').addEventListener('click', function () {
-                // Get the container where the new selects will be added
+            addButton.addEventListener('click', function () {
                 const container = document.getElementById('unithead-container');
 
-                // Find the existing select dropdown to clone
-                const existingSelect = document.querySelector('#unithead-container select');
+                // Clone the first row (select + remove button)
+                const existingRow = container.querySelector('.unithead-row');
+                const newRow = existingRow.cloneNode(true);
 
-                // Clone the select element
-                const newSelect = existingSelect.cloneNode(true);
-
-                // Clear selection in the new dropdown
+                // Clear selection in the cloned select
+                const newSelect = newRow.querySelector('select');
                 newSelect.selectedIndex = -1;
 
-                // Create a wrapper div with spacing
-                const wrapperDiv = document.createElement('div');
-                wrapperDiv.className = 'mt-4'; // Add margin-top
+                // If the select had an id, remove it to avoid duplicate ids
+                newSelect.removeAttribute('id');
 
-                // Append the new select to the wrapper div
-                wrapperDiv.appendChild(newSelect);
+                // Add spacing between rows if you want
+                newRow.classList.add('mt-2');
 
-                // Append the wrapper div to the container
-                container.appendChild(wrapperDiv);
+                container.appendChild(newRow);
             });
         }
+        /* Remove unit head  */
+        document.addEventListener('click', function (e) {
+            if (!e.target.classList.contains('remove-unithead-button')) return;
+
+            const container = document.getElementById('unithead-container');
+            const rows = container.querySelectorAll('.unithead-row');
+
+            // Optional: prevent removing the last one if it's required
+            if (rows.length <= 1) return;
+
+            e.target.closest('.unithead-row').remove();
+        });
+
+
     </script>
 
     <!-- Modals -->

@@ -2,34 +2,33 @@
 <br>
 <b>ProjectProposal is currently in test mode, and all created proposals are fictitious and intended for testing purposes only.</b>
 <br><br>
----
+------------------------------------------------------------
 <br>
-To vicehead
+TO: ViceHead
 <br>
----
+SUBJECT: Granted Proposal
+<br>
+------------------------------------------------------------
+<br>
 <br><br>
-Granted Proposal
-<br><br>
-This is an automated notification to inform you that application for <strong>{{$dashboard->name}}</strong> has been approved.
+This is an automated notification to inform you that application, <strong>{{$dashboard->name}}</strong>, has been granted.
 Please find the relevant details through the following link:
 
 <br><br>
 <a href="{{ url('') }}/pp/view/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}}</a>
 <br><br>
-
-
-<br><br>
-Here's a quick overview of the proposal:
+<br>
+OVERVIEW:
 <br><br>
 <b>Proposal:</b> {{$dashboard->name}}
-<br><br>
+<br>
 <b>Requester:</b> {{$user->name}}
-<br><br>
+<br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}}
-<br><br>
+<br>
 <b>ProposalID:</b> {{$dashboard->request_id}}
+<br>
 <br><br>
-<br><br>
----
+------------------------------------------------------------
 <br>
 This is an automated email, please do not reply to this email.

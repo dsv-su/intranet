@@ -3,10 +3,8 @@
 namespace App\Livewire\Pp;
 
 use App\Models\Dashboard;
-use App\Services\Review\WorkflowHandler;
 use App\Services\Settings\ProposalsDirectory;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
@@ -17,6 +15,7 @@ class ProposalBudgetUploader extends Component
 
     const PREAPPROVED = 'vice_approved';
     const SUBMITTED = 'submitted';
+    const COMPLETE = 'complete';
     const APPROVED = 'final_approved';
 
     public $proposal;
@@ -27,40 +26,39 @@ class ProposalBudgetUploader extends Component
     public $directory;
     public $allow;
     public $type;
+    public $resumed = ['pending', 'vice_returned', 'head_returned', 'fo_returned', 'final_returned'];
 
     protected $listeners = [
         'upload_refresh' => '$refresh'
     ];
+
+    protected function rules(): array
+    {
+        return [
+            'budgetfiles'   => 'array',
+            'budgetfiles.*' => 'file|max:20480|mimes:odt,pages,xls,xlsx,zip,rar,tex,rtf',
+        ];
+    }
 
     public function mount($proposal, $type)
     {
         $this->proposal = $proposal;
         $this->type = $type;
         $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET;
-        //$this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
-        //$this->allowUpload();
         if($this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first()) {
             $this->allowUpload();
         } else {
             $this->allow = true;
         }
     }
-
     public function checkFileStatus()
     {
-        $budgetfiles = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
-        //$workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
+        $budgetfiles = $this->proposal->files ?? [];
+        $budgetfiles = is_array($budgetfiles) ? $budgetfiles : [];
 
-        if (count($budgetfiles) >= 2) {
-            //Signal workflow
-            //$workflowhandler->UploadedFiles();
-            return $this->reportStageStatus('uploaded');
-        } else {
-            //Signal workflow
-            //$workflowhandler->RemovedFile();
-        }
+        $stage = count($budgetfiles) >= 2 ? 'uploaded' : 'waiting';
 
-        return $this->reportStageStatus('waiting');
+        return ($this->reportStageStatus($stage) ?? 0);
     }
 
     public function reportStageStatus($status)
@@ -69,19 +67,29 @@ class ProposalBudgetUploader extends Component
         $this->proposal->save();
     }
 
-    public function allowUpload()
+    public function allowUpload(): void
     {
-        $user = Auth::user();
-        //$dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
+        $userId = Auth::id();
 
-        $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
+        $allowedUserIds = array_filter([
+            $this->dashboard->user_id,
+            $this->dashboard->head_id,
+            $this->dashboard->vice_id,
+            $this->dashboard->fo_id,
+        ]);
 
-        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::SUBMITTED or $this->dashboard->state == self::APPROVED) ) {
-            $this->allow = true;
-        } else {
-            $this->allow = false;
-        }
+        $allowedStates = array_merge([
+            self::PREAPPROVED,
+            self::COMPLETE,
+            self::SUBMITTED,
+            self::APPROVED,
+        ], $this->resumed ?? []);
+
+        $this->allow =
+            in_array($userId, $allowedUserIds)
+            && in_array($this->dashboard->state, $allowedStates);
     }
+
 
     public function finishUpload($name, $tmpPath, $isMultiple)
 
@@ -99,13 +107,15 @@ class ProposalBudgetUploader extends Component
 
     public function storefiles()
     {
+        $this->validate();
         foreach($this->budgetfiles as $file) {
             $this->savedfiles[$file->getClientOriginalName()] = [
                 'path' => $file->store(path: $this->directory),
                 'tmp' => basename($file->getRealPath()),
                 'size' => round($file->getSize()/1000),
-                'date' => now()->format('d/m/Y'),
+                'date' => now()->format('Y-m-d'),
                 'type' => 'budget',
+                'review' => 'pending',
                 'uploader' => Auth::user()->name
             ];
         }
@@ -139,6 +149,11 @@ class ProposalBudgetUploader extends Component
         $this->stored = !$this->stored;
     }
 
+    public function clearUploadErrors(): void
+    {
+        $this->resetValidation(['budgetfiles', 'budgetfiles.*']);
+        $this->resetErrorBag(['budgetfiles', 'budgetfiles.*']); // optional but safe
+    }
     public function render()
     {
         return view('livewire.pp.proposal-budget-uploader');

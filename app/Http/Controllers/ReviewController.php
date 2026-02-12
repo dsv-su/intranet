@@ -9,6 +9,7 @@ use App\Models\ResearchArea;
 use App\Models\SettingsFo;
 use App\Models\TravelRequest;
 use App\Models\User;
+use App\Services\Review\DashboardRole;
 use App\Services\Review\RequestReviewHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,9 +38,10 @@ class ReviewController extends Controller
     {
         $viewData = $this->prepareProjectProposalData();
         $viewData['proposal'] = ProjectProposal::find($id);
-        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
+        $viewData['dashboard'] = $dashboard = Dashboard::where('request_id', $id)->first();
         $viewData['budget'] = DsvBudget::find(1);
         $viewData['reviewer'] =  auth()->user();
+        $viewData['role'] = $this->parseRole($dashboard);
         $viewData['type'] = 'review';
 
         return $this->createView('pp.create', 'mylayout', $viewData);
@@ -145,6 +147,29 @@ class ReviewController extends Controller
         $handler->review();
 
         return redirect('/')->with('status', 'Request updated');
+    }
+
+    public function parseRole($dashboard)
+    {
+        $dashboardrole = new DashboardRole($dashboard, $user = auth()->user());
+        $role = $dashboardrole->check();
+        switch($role) {
+            case 'vice_final':
+                return 'Final Approval';
+                break;
+            case 'vice':
+                return 'Vice Approval';
+                break;
+            case 'head':
+                return 'Head Approval';
+                break;
+            case 'fo':
+                return 'FO Approval';
+                break;
+            default:
+                return 'N/A';
+                break;
+        }
     }
 
 

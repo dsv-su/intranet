@@ -6,68 +6,96 @@ use Livewire\Component;
 
 class EuWallenbergProject extends Component
 {
-    public $visibility = 'hidden';
-    public $checkbox = 'block';
+    // Tailwind visibility classes
+    public string $visibility = 'hidden';
+    public string $checkbox = 'block';
+
     public $proposal;
-    public $wallenbergOrg = false;
+
+    // When true, we force "yes" selection and disable radios
+    public bool $wallenbergOrg = false;
+
+    // Bound to the radio group
+    public ?string $eu_wallenberg = null; // 'yes' | 'no' | null
 
     protected $listeners = [
         'eu_hide' => 'hideCheckbox',
         'eu_show' => 'showCheckbox',
         'org_wallenberg' => 'wallenberg_org',
-        'org_reset' => 'wallenberg_reset'
+        'org_reset' => 'wallenberg_reset',
+        'eu_wallenberg_force_no' => 'forceNo',
     ];
 
-    public function mount($proposal = null)
+    public function mount($proposal = null): void
     {
         $this->proposal = $proposal;
-        $this->check();
+
+        // Initialize from model safely (pp should be cast to array on the model ideally)
+        $this->eu_wallenberg = data_get($proposal, 'pp.eu_wallenberg');
+
+        $this->syncVisibility();
     }
 
-    public function check()
+    /**
+     * Called automatically whenever $eu_wallenberg changes due to wire:model.
+     */
+    public function updatedEuWallenberg($value): void
     {
-        if($this->proposal->pp['eu_wallenberg'] ?? false) {
-            if($this->proposal->pp['eu_wallenberg'] == 'no') {
-                $this->no();
-            }
-            elseif ($this->proposal->pp['eu_wallenberg'] == 'yes') {
-                $this->yes();
-            }
+        // Normalize unexpected values
+        if (!in_array($value, ['yes', 'no', null], true)) {
+            $this->eu_wallenberg = null;
         }
 
+        // If org mode is on, always force yes
+        if ($this->wallenbergOrg) {
+            $this->eu_wallenberg = 'yes';
+        }
+
+        $this->syncVisibility();
     }
 
-    public function yes()
+    public function forceNo(): void
     {
-        $this->visibility = 'block';
+        // If org mode is on, don't fight it (org mode forces yes)
+        if ($this->wallenbergOrg) {
+            return;
+        }
+
+        $this->eu_wallenberg = 'no';
+        $this->syncVisibility(); // same helper you already have
     }
 
-    public function no()
+    private function syncVisibility(): void
     {
-        $this->visibility = 'hidden';
+        $this->visibility = ($this->wallenbergOrg || $this->eu_wallenberg === 'yes')
+            ? 'block'
+            : 'hidden';
     }
 
-    public function hideCheckbox()
+    public function hideCheckbox(): void
     {
         $this->checkbox = 'hidden';
     }
 
-    public function showCheckbox()
+    public function showCheckbox(): void
     {
         $this->checkbox = 'block';
     }
 
-    public function wallenberg_org()
+    public function wallenberg_org(): void
     {
         $this->wallenbergOrg = true;
-        $this->yes();
+        $this->eu_wallenberg = 'yes';
+        $this->syncVisibility();
     }
 
-    public function wallenberg_reset()
+    public function wallenberg_reset(): void
     {
         $this->wallenbergOrg = false;
-        $this->no();
-        $this->check();
+
+        // Return to whatever is stored on the proposal (or null)
+        $this->eu_wallenberg = data_get($this->proposal, 'pp.eu_wallenberg');
+        $this->syncVisibility();
     }
 
     public function render()

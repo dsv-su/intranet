@@ -12,6 +12,9 @@ We're reaching out to inform you that your <strong>{{Illuminate\Support\Str::upp
     @case('manager_returned')
         RETURNED
         @break
+    @case('vice_returned')
+        RETURNED
+        @break
     @case('fo_returned')
         RETURNED
         @break
@@ -19,6 +22,9 @@ We're reaching out to inform you that your <strong>{{Illuminate\Support\Str::upp
         RETURNED
         @break
     @case('manager_denied')
+        DENIED
+        @break
+    @case('vice_denied')
         DENIED
         @break
     @case('fo_denied')

@@ -1,4 +1,4 @@
-<div>
+<div class="w-full sm:col-span-2">
     <label for="unit_head" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
         {{ __("Unit Head for approval") }}<span class="text-red-600"> *</span>
         <button id="unithead-button" data-modal-toggle="unithead-modal" type="button" class="inline">
@@ -9,45 +9,63 @@
         </button>
     </label>
 
-    @if(in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
+    @if(in_array($type, ['preapproval', 'saved', 'complete', 'edit', 'resume']))
         <div id="unithead-container">
-        @php
-            $selectedUnitHeads = ($type == 'complete' && empty($proposal['pp']['unit_head']))
-                ? []
-                : ($proposal['pp']['unit_head'] ?? []);
-        @endphp
+            @php
+                $selectedUnitHeads = (in_array($type, ['edit', 'saved', 'complete']) && empty($proposal['pp']['unit_head']))
+                    ? []
+                    : ($proposal['pp']['unit_head'] ?? []);
+            @endphp
 
-        @if(count($selectedUnitHeads) > 1)
-            <!-- Multiple Unit Heads -->
+            @if(count($selectedUnitHeads) > 1)
+                <!-- Multiple Unit Heads -->
                 @foreach($selectedUnitHeads as $selectedUnitHead)
-                    <select name="unit_head[]" class="mb-2 font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    <div class="unithead-row flex items-center gap-2 mb-2">
+                        <select name="unit_head[]" class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            @foreach($unitheads as $unithead)
+                                <option value="{{ $unithead->id }}" {{ $unithead->id == $selectedUnitHead ? 'selected' : '' }}>
+                                    {{ $unithead->name }}  ({{$unithead->unit ?? ''}})
+                                </option>
+                            @endforeach
+                        </select>
+                        {{count($selectedUnitHeads)}}
+                        <button type="button"
+                                class="remove-unithead-button py-1 px-2 text-xs font-medium rounded-lg border border-red-600 text-red-600
+                                hover:border-red-500 hover:text-red-500 dark:border-red-500 dark:text-red-500">
+                            Remove
+                        </button>
+
+                    </div>
+                @endforeach
+            @else
+                <!-- Single Unit Head -->
+                <div class="unithead-row flex items-center gap-2">
+                    <select id="unit_head" name="unit_head[]" class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
                         @foreach($unitheads as $unithead)
-                            <option value="{{ $unithead->id }}" {{ $unithead->id == $selectedUnitHead ? 'selected' : '' }}>
-                                {{ $unithead->name }}
+                            <option value="{{ $unithead->id }}" {{ $unithead->id == ($selectedUnitHeads[0] ?? null) ? 'selected' : '' }}>
+                                {{ $unithead->name }}  ({{$unithead->unit ?? ''}})
                             </option>
                         @endforeach
                     </select>
-                @endforeach
-            @else
-            <!-- Single Unit Head -->
-                <select id="unit_head" name="unit_head[]" class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                    @foreach($unitheads as $unithead)
-                        <option value="{{ $unithead->id }}" {{ $unithead->id == ($selectedUnitHeads[0] ?? null) ? 'selected' : '' }}>
-                            {{ $unithead->name }}
-                        </option>
-                    @endforeach
-                </select>
+
+                    <button type="button"
+                            class="remove-unithead-button py-1 px-2 text-xs font-medium rounded-lg border border-red-600 text-red-600 hover:border-red-500 hover:text-red-500 dark:border-red-500 dark:text-red-500">
+                        Remove
+                    </button>
+
+                </div>
             @endif
 
             @error('unit_head')
             <p class="mt-3 text-sm leading-6 text-red-600">{{ __("This is a required input") }}</p>
             @enderror
         </div>
+
     @else
         @include('pp.partials.review.unithead')
     @endif
 
-    @if(in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
+    @if(in_array($type, ['preapproval', 'saved', 'complete', 'edit', 'resume']))
     <!-- Add Unit Head-->
 
         <div class="mt-4">

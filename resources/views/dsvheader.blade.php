@@ -1,3 +1,7 @@
+<style>
+    /* Tooltips cause vertical scroll */
+    [role="tooltip"] { position: fixed !important; }
+</style>
 <div class="w-full sm:block sm:w-auto overflow-x-hidden">
     <!-- Small breakpoint -->
     <div class="md:hidden block grid grid-cols-4 border-b-4 border-susecondary">
@@ -79,34 +83,36 @@
             <!-- end language switcher -->
             <!-- Dashbord -->
             @can('access cp')
-                <a data-tooltip-target="navbar-dashboard-tooltip" href='/cp' aria-label="Control panel"
-                   class="block px-2 py-0.5 mr-2 text-sm outline outline-offset-2 outline-1 rounded text-gray-200 hover:bg-slate-100 hover:text-black dark:border-gray-600" role="menuitem">
-                    <svg class="w-5 h-5 text-white hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-900"
-                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"/>
-                    </svg>
-                </a>
+                {{--}}@if(auth()->user()->isSuperAdmin()){{--}}
+                    <a data-tooltip-target="navbar-dashboard-tooltip" href='/cp' aria-label="Control panel"
+                       class="block px-2 py-0.5 mr-2 text-sm outline outline-offset-2 outline-1 rounded text-gray-200 hover:bg-slate-100 hover:text-black dark:border-gray-600" role="menuitem">
+                        <svg class="w-5 h-5 text-white hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-900"
+                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"/>
+                        </svg>
+                    </a>
+                {{--}}@endif{{--}}
             @endif
 
         <!-- Tooltips -->
             <div id="displayName-tooltip" role="tooltip"
-                 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+                 class="absolute z-40 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
                  style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);"
                  data-popper-placement="top">Profile settings
                 <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
             <div id="navbar-dropdown-toggle-dark-mode-tooltip" role="tooltip"
-                 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+                 class="absolute z-40 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
                  style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);" data-popper-placement="top">Toggle dark mode
                 <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
             <div id="navbar-dropdown-languageswitch-tooltip" role="tooltip"
-                 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+                 class="absolute z-40 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
                  style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);" data-popper-placement="top">Change language
                 <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
             <div id="navbar-dashboard-tooltip" role="tooltip"
-                 class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+                 class="absolute z-40 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
                  style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(1443px, 692px);" data-popper-placement="top">Dashboard
                 <div class="tooltip-arrow" data-popper-arrow></div>
             </div>

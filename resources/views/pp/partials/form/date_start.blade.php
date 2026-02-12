@@ -7,7 +7,7 @@
             </svg>
         </button>
     </label>
-    @if($type == 'preapproval' or $type == 'edit' or $type == 'resume')
+    @if(in_array($type, ['preapproval', 'saved', 'edit', 'complete', 'resume']))
         <div class="flex flex-col sm:flex-row items-center w-full">
             <div class="relative w-full">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -15,18 +15,31 @@
                         <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                     </svg>
                 </div>
+
+                <input id="start_date"
+                       name="start_date"
+                       datepicker
+                       datepicker-autohide
+                       {{--}}datepicker-format="dd/mm/yyyy"{{--}}
+                       datepicker-format="yyyy-mm-dd"
+                       @if(in_array($type, ['preapproval', 'saved', 'edit', 'complete', 'resume']))
+                       value="{{ $proposal['pp']['start_date'] ?? ''}}"
+                       @endif
+                       {{--}}id="endInput"{{--}}
+                       type="text"
+                       class="@if($type == 'complete') bg-blue-300 bg-opacity-60 @else bg-gray-50 @endif border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
+                                                  @if($type == 'complete') dark:bg-blue-900 @else dark:bg-gray-700 @endif
+                                                   dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       placeholder="{{__("Select date")}}"
+                       required>
+                <p id="start_date_warning" class="mt-2 text-sm text-red-600 hidden">
+                    {{ __("Start date cannot be before the submission deadline.") }}
+                </p>
                 @error('start_date')
                 <p class="mt-3 text-sm leading-6 text-red-600">{{__("This is a required input")}}</p>
                 @enderror
-                <input id="datepicker-autohide" datepicker datepicker-autohide datepicker-format="dd/mm/yyyy"
-                       name="start_date"
-                       @if($type == 'preapproval' or $type == 'edit' or $type == 'resume')
-                       value="{{ $proposal['pp']['start_date'] ?? ''}}"
-                       @endif id="endInput" type="text"
-                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5
-                                                  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:placeholder:text-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       placeholder="{{__("Select date")}}" required>
             </div>
+
         </div>
     @else
         @include('pp.partials.review.start_date')

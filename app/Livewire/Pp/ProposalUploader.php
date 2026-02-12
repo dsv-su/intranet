@@ -3,7 +3,6 @@
 namespace App\Livewire\Pp;
 
 use App\Models\Dashboard;
-use App\Models\ProjectProposal;
 use App\Services\Review\WorkflowHandler;
 use App\Services\Settings\ProposalsDirectory;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +18,7 @@ class ProposalUploader extends Component
 
     const PREAPPROVED = 'vice_approved';
     const SUBMITTED = 'submitted';
+    const COMPLETE = 'complete';
     const APPROVED = 'final_approved';
 
     public $proposal;
@@ -29,40 +29,70 @@ class ProposalUploader extends Component
     public $directory;
     public $allow;
     public $type;
+    public $resumed = ['pending', 'vice_returned', 'head_returned', 'fo_returned', 'final_returned'];
 
     protected $listeners = [
         'upload_refresh' => '$refresh'
     ];
 
-    public function mount($proposal, $type)
+    protected function rules(): array
     {
-        $this->proposal = $proposal;
-        $this->type = $type;
-        $this->directory = ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT;
-        //$this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first();
-        //$this->allowUpload();
-        if($this->dashboard = Dashboard::where('request_id', $this->proposal->id)->first()) {
+        return [
+            'files'   => 'array',
+            'files.*' => 'file|max:20480|mimes:txt,pdf,doc,docx,ppt,pptx,odt,pages,zip,rar,rtf',
+        ];
+    }
+    public function mount($proposal, string $type): void
+    {
+        $this->proposal  = $proposal;
+        $this->type      = $type;
+        $this->directory = sprintf(
+            '%s%d%s',
+            ProposalsDirectory::MAIN,
+            $proposal->id,
+            ProposalsDirectory::DRAFT
+        );
+
+        $this->dashboard = Dashboard::firstWhere('request_id', $proposal->id);
+
+        if ($this->dashboard) {
             $this->allowUpload();
-        } else {
-            $this->allow = true;
+            return;
         }
+
+        $this->allow = true;
     }
 
     public function checkFileStatus()
     {
-        $files = is_array($this->proposal->files ?? null) ? $this->proposal->files : [];
-        //$workflowhandler = new WorkflowHandler($this->dashboard->workflow_id);
-
-        if (count($files) >= 2) {
-            //Signal workflow
-            //$workflowhandler->UploadedFiles();
-            return $this->reportStageStatus('uploaded');
-        } else {
-            //Signal workflow
-            //$workflowhandler->RemovedFile();
+        // No dashboard
+        if (!$this->dashboard) {
+            return 0;
         }
 
-        return $this->reportStageStatus('waiting');
+        // Pending dashboard
+        if ($this->dashboard->state === 'pending') {
+            return 0;
+        }
+
+        // Files: ensure array
+        $files = $this->proposal->files;
+        $files = is_array($files) ? $files : [];
+
+        $isUploaded = count($files) >= 2;
+
+        // Side-effect: notify workflow if workflow_id exists
+        if (!empty($this->dashboard->workflow_id)) {
+            $workflowHandler = new WorkflowHandler($this->dashboard->workflow_id);
+
+            if ($isUploaded) {
+                $workflowHandler->UploadedFiles();
+            } else {
+                $workflowHandler->RemovedFile();
+            }
+        }
+
+        return $this->reportStageStatus($isUploaded ? 'uploaded' : 'waiting');
     }
 
 
@@ -72,21 +102,34 @@ class ProposalUploader extends Component
         $this->proposal->save();
     }
 
-    public function allowUpload()
+    public function allowUpload(): void
     {
-        $user = Auth::user();
+        $userId = Auth::id(); // avoids loading the full user model
 
-        $allowed_roles = [$this->dashboard->user_id, $this->dashboard->head_id, $this->dashboard->vice_id, $this->dashboard->fo_id];
+        $allowedUserIds = array_values(array_filter([
+            $this->dashboard->user_id,
+            $this->dashboard->head_id,
+            $this->dashboard->vice_id,
+            $this->dashboard->fo_id,
+        ])); // removes null/empty values
 
-        if (in_array($user->id, $allowed_roles) && ($this->dashboard->state == self::PREAPPROVED or $this->dashboard->state == self::SUBMITTED or $this->dashboard->state == self::APPROVED) ) {
-            $this->allow = true;
-        } else {
+        if (! in_array($userId, $allowedUserIds, true)) {
             $this->allow = false;
+            return;
         }
+
+        $allowedStates = array_merge([
+            self::PREAPPROVED,
+            self::COMPLETE,
+            self::SUBMITTED,
+            self::APPROVED,
+        ], $this->resumed ?? []);
+
+        $this->allow = in_array($userId, $allowedUserIds)
+            && in_array($this->dashboard->state, $allowedStates);
     }
 
     public function finishUpload($name, $tmpPath, $isMultiple)
-
     {
         $this->toggleStored();
         $this->cleanupOldUploads();
@@ -101,13 +144,15 @@ class ProposalUploader extends Component
 
     public function storefiles()
     {
+        $this->validate();
         foreach($this->files as $file) {
             $this->savedfiles[$file->getClientOriginalName()] = [
                 'path' => $file->store(path: $this->directory),
                 'tmp' => basename($file->getRealPath()),
                 'size' => round($file->getSize()/1000),
-                'date' => now()->format('d/m/Y'),
+                'date' => now()->format('Y-m-d'),
                 'type' => 'draft',
+                'review' => 'pending',
                 'uploader' => Auth::user()->name
                 ];
         }
@@ -123,10 +168,10 @@ class ProposalUploader extends Component
 
     public function updateProposal()
     {
-        $this->proposal->files = array_merge($this->proposal->files, $this->savedfiles);
+        $existing = is_array($this->proposal->files) ? $this->proposal->files : [];
+        $this->proposal->files = array_merge($existing, $this->savedfiles);
         $this->proposal->save();
         $this->savedfiles = [];
-        //$this->dispatch('upload_refresh');
     }
 
     public function checkToggle()
@@ -141,8 +186,17 @@ class ProposalUploader extends Component
         $this->stored = !$this->stored;
     }
 
+    public function clearUploadErrors(): void
+    {
+        $this->resetValidation(['files', 'files.*']);
+        $this->resetErrorBag(['files', 'files.*']); // optional but safe
+    }
     public function removefile($id)
     {
+        // Clear validation errors related to uploads
+        $this->resetValidation(['files', 'files.*']);     // Livewire v2+
+        $this->resetErrorBag(['files', 'files.*']);       // extra-safe
+
         // Get the current files array
         $files = $this->proposal->files;
         $remove = $files[$id]['path'];
@@ -170,6 +224,9 @@ class ProposalUploader extends Component
 
     public function removefolder()
     {
+        $this->resetValidation(['files', 'files.*']);
+        $this->resetErrorBag(['files', 'files.*']);
+
         $this->proposal->files = [];
         Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::DRAFT);
         Storage::deleteDirectory(ProposalsDirectory::MAIN . $this->proposal->id . ProposalsDirectory::BUDGET);
@@ -185,7 +242,9 @@ class ProposalUploader extends Component
         $files = $this->proposal->files;
         $downloadfile = $files[$id]['path'];
 
-        return Storage::download($downloadfile, $id);
+        //return Storage::download($downloadfile, $id);
+        return Storage::download($downloadfile, $files[$id]['original'] ?? $id);
+
     }
 
     public function downloadfolder()

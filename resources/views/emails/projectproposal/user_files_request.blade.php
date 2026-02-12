@@ -2,12 +2,14 @@
 <br>
 <b>ProjectProposal is currently in test mode, and all created proposals are fictitious and intended for testing purposes only.</b>
 <br><br>
----
+------------------------------------------------------------
 <br>
-To User(Project proposer)
+TO: {{$user->name}}
 <br>
----
+SUBJECT: Missing necessary files
 <br>
+------------------------------------------------------------
+<br><br>
 Your Project Proposal Submitted for Review is missing necessary files.<br><br>
 Dear {{$user->name}},
 <br><br>
@@ -33,14 +35,12 @@ Here's a quick overview of the request:
 <br><br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}}
 <br><br>
-<b>Preapproved by vice head:</b> {{Carbon\Carbon::parse($dashboard->updated_at)->format('Y-m-d')}}
-<br><br>
 <b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>
 You can review the details and upload the requested files by accessing the proposal through the following link:
 <br><br>
 <a href="{{ url('') }}/pp/stage2_upload_pp/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}}</a>
 <br><br>
----
+------------------------------------------------------------
 <br>
 This is an automated email, please do not reply to this email.

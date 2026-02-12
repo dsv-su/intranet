@@ -6,7 +6,7 @@ use App\Models\FundingOrganization;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class FundingOrganizationImport implements ToModel, WithHeadingRow
+class FundingOrganizationImport implements ToModel
 {
     /**
      * @param array $row
@@ -16,7 +16,7 @@ class FundingOrganizationImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         return new FundingOrganization([
-            'name'  => $row['organization'],
+            'name' => $row[0], // second column in the row
         ]);
     }
 }

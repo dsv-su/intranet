@@ -14,6 +14,10 @@ class FundingOrganizationSeeder extends Seeder
      */
     public function run(): void
     {
-        Excel::import(new FundingOrganizationImport, 'funding_org.xlsx');
+        Excel::import(
+            new FundingOrganizationImport,
+            'exports/funding_org.xlsx',
+            'public' // reads from storage/app/public/exports/funding_org.xlsx
+        );
     }
 }

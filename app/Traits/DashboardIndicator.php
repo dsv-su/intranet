@@ -14,15 +14,15 @@ trait DashboardIndicator
         $fo = collect(Dashboard::where('state', 'head_approved')->where('type', 'travelrequest')->where('fo_id', $user)->get());
         //pp
         //$head_pp = collect(Dashboard::where('state', 'submitted')->where('head_id', $user)->where('type', 'projectproposal')->get());
-        $vice_pp = collect(Dashboard::where('state', 'submitted')->where('vice_id', $user)->where('type', 'projectproposal')->get());
         $head_pp = collect(Dashboard::where('state', 'complete')
-                                    ->where('type', 'projectproposal')
-                                    ->whereJsonContains('unit_head_approved', [$user => 0])
-                                    ->whereHas('proposal', function ($projectQuery) {
-                                        $projectQuery->whereJsonLength('files', '>=', 2);
-                                    }) // Ensure 'files' contains at least 2 files
-                                    ->get());
+                        ->where('type', 'projectproposal')
+                        ->whereJsonContains('unit_head_approved', [$user => 0])
+                        ->whereHas('proposal', function ($projectQuery) {
+                            $projectQuery->whereJsonLength('files', '>=', 2);
+                        }) // Ensure 'files' contains at least 2 files
+                        ->get());
         $fo_pp = collect(Dashboard::where('state', 'head_approved')->where('fo_id', $user)->where('type', 'projectproposal')->get());
+        $vice_pp = collect(Dashboard::where('state', 'fo_approved')->where('vice_id', $user)->where('type', 'projectproposal')->get());
 
         //User
         $manager_return = collect(Dashboard::where('state', 'manager_returned')->where('user_id', $user)->where('status', 'unread')->get());
@@ -33,7 +33,7 @@ trait DashboardIndicator
         $head_deny = collect(Dashboard::where('state', 'head_denied')->where('user_id', $user)->where('status', 'unread')->get());
         $vice_return = collect(Dashboard::where('state', 'vice_returned')->where('user_id', $user)->where('status', 'unread')->get());
         $vice_deny = collect(Dashboard::where('state', 'vice_denied')->where('user_id', $user)->where('status', 'unread')->get());
-        $approved = collect(Dashboard::where('state', 'fo_approved')->where('user_id', $user)->where('status', 'unread')->get());
+        $approved = collect(Dashboard::where('state', 'final_approved')->where('user_id', $user)->where('status', 'unread')->get());
 
         return $manager->merge($fo)->merge($head)
             ->merge($head_pp)->merge($vice_pp)->merge($fo_pp)

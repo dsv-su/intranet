@@ -6,12 +6,11 @@
 </button>
 
 <!-- Review Box -->
-
 <div id="reviewBox"
      class="sm:fixed sm:bottom-24 inset-x-0 px-4 z-40 sm:left-1/2 sm:transform sm:-translate-x-1/2 sm:max-w-2xl w-full bg-white
             dark:bg-gray-900 dark:border-gray-600 p-4 sm:rounded-lg shadow-lg overflow-x-hidden">
 
-    <form method="POST" action="{{ route('pp-decision') }}">
+    <form method="POST" action="{{ route('pp.decision') }}">
         @csrf
 
         <div class="my-4">
@@ -19,7 +18,7 @@
                 {{ __("Please Review and Comment") }}
             </label>
             <!-- Lock overview for UnitHeads -->
-            @if(in_array($dashboard->state, ['complete', 'head_approved', 'fo_approved']))
+            @if(in_array($dashboard->state, ['head_approved', 'fo_approved']))
                 @include('pp.partials.review.review_overview')
             @endif
 

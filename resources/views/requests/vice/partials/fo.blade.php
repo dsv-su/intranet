@@ -1,4 +1,3 @@
-<p class="mt-1 text-gray-600 dark:text-gray-400">Select the officer that should receive the notifications</p>
 <div class=" mt-5 border rounded-xl shadow-sm p-6 dark:bg-slate-800 dark:border-gray-700">
     <div class="w-1/2 border border-blue-500 text-sm text-blue-600 rounded-lg p-5 dark:bg-blue-600/[.15]">
         {{\App\Models\SettingsFo::find(1)->name ?? 'Not set'}}
@@ -19,8 +18,8 @@
             <div class="mt-3">
                 <button type="submit"
                         class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white
-                                                            uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:border-indigo-800 focus:ring ring-indigo-300
-                                                            disabled:opacity-25 transition ease-in-out duration-150">
+                               uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:border-indigo-800 focus:ring ring-indigo-300
+                               disabled:opacity-25 transition ease-in-out duration-150">
                     Update
                 </button>
             </div>

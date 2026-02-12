@@ -1,6 +1,6 @@
 <p class="mt-1 text-gray-600 dark:text-gray-400">Set the threshholds for DSV Overhead</p>
 <div class=" mt-5 border rounded-xl shadow-sm p-6 dark:bg-slate-800 dark:border-gray-700">
-    <form action="{{ route('oh_settings') }}" method="POST">
+    <form action="{{ route('vice_settings.oh') }}" method="POST">
         @csrf
         <label for="oh_max" class="font-sans block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ __("OH Max %") }}<span class="text-red-600"> *</span>
         </label>

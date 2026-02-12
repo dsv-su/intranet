@@ -9,29 +9,24 @@ use Workflow\Activity;
 
 class StateUpdateTransition extends Activity
 {
-    protected $dashboard, $state, $req;
-
-    public function execute($request)
+    public function execute(int $dashboardId): void
     {
-        //Retrive request dashboard
-        $id = $request;
-        $this->dashboard = Dashboard::find($id);
+        $dashboard = Dashboard::findOrFail($dashboardId);
 
-        //Update Transition state to request origin
-        switch($this->dashboard->type) {
-            //Travel request
-            case('travelrequest'):
-                $this->req = TravelRequest::find($this->dashboard->request_id);
-                //$this->req->state = $this->state;
-                $this->req->state = $this->dashboard->state;
-                $this->req->save();
-                break;
-            case('projectproposal'):
-                $this->req = ProjectProposal::find($this->dashboard->request_id);
-                //$this->req->state = $this->state;
-                $this->req->status_stage1 = $this->dashboard->state;
-                $this->req->save();
-                break;
+        $map = [
+            'travelrequest'   => [TravelRequest::class, 'state'],
+            'projectproposal' => [ProjectProposal::class, 'status_stage1'],
+        ];
+
+        if (!isset($map[$dashboard->type])) {
+            throw new \InvalidArgumentException("Unsupported dashboard type: {$dashboard->type}");
         }
+
+        [$modelClass, $field] = $map[$dashboard->type];
+
+        $modelClass::query()
+            ->whereKey($dashboard->request_id)
+            ->update([$field => $dashboard->state]);
     }
 }
+

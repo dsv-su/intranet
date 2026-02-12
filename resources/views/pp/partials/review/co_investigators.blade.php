@@ -14,6 +14,25 @@
             <div class="font-mono bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600
                                             block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-primary-500 dark:focus:border-primary-500">
                 {{$coname}}
+
+                @if(data_get($proposal, "pp.co_investigator_role.$loop->index") === 'DSV')
+                    <span class="inline-flex w-auto items-center gap-x-1.5 py-1 px-1.5 rounded text-xs font-medium
+                                 bg-suprimary text-white dark:bg-blue-800/30 dark:text-blue-500">
+                            {{$proposal['pp']['co_investigator_role'][$loop->index]}}</span>
+                @elseif(data_get($proposal, "pp.co_investigator_role.$loop->index") === 'SU')
+                    <span class="inline-flex w-auto items-center gap-x-1.5 py-1 px-1.5 rounded text-xs font-medium
+                                 bg-purple-600 text-white dark:bg-blue-800/30 dark:text-blue-500">
+                                SU</span>
+                @elseif(data_get($proposal, "pp.co_investigator_role.$loop->index") === 'Student')
+                    <span class="inline-flex w-auto items-center gap-x-1.5 py-1 px-1.5 rounded text-xs font-medium
+                                 bg-green-600 text-white dark:bg-blue-800/30 dark:text-blue-500">
+                                {{$proposal['pp']['co_investigator_role'][$loop->index]}} </span>
+                @else
+                    <span class="inline-flex w-auto items-center gap-x-1.5 py-1 px-1.5 rounded text-xs font-medium
+                                 bg-gray-600 text-white dark:bg-blue-800/30 dark:text-blue-500">
+                                External</span>
+                @endif
+
             </div>
         </div>
         <div class="w-full">

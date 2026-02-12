@@ -1,5 +1,5 @@
 <div>
-    @if($allow && in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
+    @if($allow && in_array($type, ['preapproval', 'saved', 'complete', 'edit', 'resume']))
     <div class="mb-4 mt-4 bg-purple-50 border border-purple-500 text-sm text-gray-500 rounded-lg p-5 dark:bg-purple-600/[.15]">
         <h3 class="mb-4 text-blue-600 font-semibold dark:font-medium dark:text-white">Budget file!</h3>
             <div x-data="budgetUpload()">
@@ -37,7 +37,7 @@
                     </span>
                         </div>
                         <p class="mt-1 text-xs text-gray-400 dark:text-neutral-400">
-                            Allowed file types: txt pdf doc docx ppt pptx odt pages png jpg xls xlsx zip rar tex ps djvu rtf.
+                            Allowed file types: odt pages xls xlsx zip rar tex rtf.
                         </p>
                         <input type="file" id="file-upload" multiple @change="handleFileSelect" class="hidden" />
                     </label>
@@ -78,6 +78,11 @@
                             },
                             removeUpload(filename) {
                             @this.removeUpload('budgetfiles', filename);
+                                // Clear stuck validation messages for files.*
+                                @this.clearUploadErrors();
+                                // Optional: reset progress UI
+                                this.progress = 0;
+                                this.isUploading = false;
                             },
                         }
                     }

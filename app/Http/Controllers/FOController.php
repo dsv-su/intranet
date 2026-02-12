@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dashboard;
+use App\Models\ProjectProposal;
 use App\Models\SettingsFo;
+use App\Models\SettingsFoEu;
 use App\Models\TravelRequest;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -39,7 +41,8 @@ class FOController extends Controller
                     ->with(['tr' => $tr, 'formtype' => $formtype]);
                 break;
             case 'projectproposal':
-                return redirect()->action([ReviewController::class, 'pp_view'], ['id' => $id]);
+                $proposal = ProjectProposal::find($id);
+                return redirect()->action([ReviewController::class, 'pp_view'], ['proposal' => $proposal]);
                 break;
         }
 
@@ -104,7 +107,23 @@ class FOController extends Controller
         $fo = SettingsFo::firstOrCreate(
             ['user_id' => $request->selected_fo],
             [
-                'name' => $user->name . ' Acting FO',
+                'name' => $user->name,
+                'active' => true
+            ]
+        );
+        return back();
+    }
+
+    public function settings_fo_eu(Request $request)
+    {
+        $user = User::find($request->selected_fo_eu);
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('settings_fo_eus')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        $fo = SettingsFoEu::firstOrCreate(
+            ['user_id' => $request->selected_fo_eu],
+            [
+                'name' => $user->name,
                 'active' => true
             ]
         );

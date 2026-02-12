@@ -67,13 +67,16 @@
     <div class="bg-gray-50 border-t border-gray-200 rounded-b-xl py-2 px-4 md:px-5 dark:bg-white/10 dark:border-neutral-700">
         <div class="flex flex-wrap justify-between items-center gap-x-3">
             <div>
-        <span class="text-sm font-semibold text-gray-800 dark:text-white">
-            @if($stored)
-                {{count($files)}} saved
-            @else
-                {{count($files)}} to be saved
-            @endif
-        </span>
+                <span class="text-sm font-semibold text-gray-800 dark:text-white">
+                    @if($stored)
+                        {{count($files)}} saved
+                    @else
+                        {{count($files)}} to be saved
+                    @endif
+                </span>
+                @error('files.*')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
             </div>
             <!-- End Col -->
             @if(!$stored)

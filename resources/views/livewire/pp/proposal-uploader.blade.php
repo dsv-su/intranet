@@ -4,7 +4,7 @@
         @include('livewire.pp.partials.proposal_files')
     </div>
 
-    @if($allow && in_array($type, ['preapproval', 'complete', 'edit', 'resume']))
+    @if($allow && in_array($type, ['preapproval', 'saved', 'edit', 'complete', 'edit', 'resume']))
     <div class="mb-4 mt-4 bg-yellow-50 border border-yellow-500 text-sm text-gray-500 rounded-lg p-5 dark:bg-yellow-600/[.15]">
         <h3 class="mb-4 text-blue-600 font-semibold dark:font-medium dark:text-white">Proposal draft!</h3>
         <div x-data="fileUpload()">
@@ -42,7 +42,7 @@
                         </span>
                     </div>
                     <p class="mt-1 text-xs text-gray-400 dark:text-neutral-400">
-                        Allowed file types: txt pdf doc docx ppt pptx odt pages png jpg xls xlsx zip rar tex ps djvu rtf.
+                        Allowed file types: txt pdf doc docx ppt pptx odt pages zip rar rtf.
                     </p>
                     <input type="file" id="file-upload" multiple @change="handleFileSelect" class="hidden" />
                 </label>
@@ -67,15 +67,21 @@
                         },
                         uploadFiles(files) {
                             const $this = this;
+                            // Clear previous validation errors before starting a new upload
+                            @this.clearUploadErrors();
                             this.isUploading = true
                         @this.uploadMultiple('files', files,
                             function (success) {
                                 $this.isUploading = false
                                 $this.progress = 0
+                                // (Optional) clear errors again after success
+                                @this.clearUploadErrors();
                                 $this.files = []
                             },
                             function(error) {
-                                console.log('error', error)
+                                $this.isUploading = false;
+                                $this.progress = 0;
+                                console.log('error', error);
                             },
                             function (event) {
                                 $this.progress = event.detail.progress
@@ -84,7 +90,13 @@
                         @this.checkToggle();
                         },
                         removeUpload(filename) {
-                        @this.removeUpload('files', filename);
+                            // Remove the temp upload
+                            @this.removeUpload('files', filename);
+                            // Clear stuck validation messages for files.*
+                            @this.clearUploadErrors();
+                            // Optional: reset progress UI
+                            this.progress = 0;
+                            this.isUploading = false;
                         },
                     }
                 }
@@ -93,8 +105,3 @@
     </div>
     @endif
 </div>
-
-
-
-
-

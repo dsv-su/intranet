@@ -77,6 +77,10 @@ class WorkflowHandler
         $this->workflow->vice_deny();
     }
 
+    public function Submitted()
+    {
+        $this->workflow->submit();
+    }
     public function Completed()
     {
         $this->workflow->complete();
@@ -92,6 +96,26 @@ class WorkflowHandler
     public function RemovedFile()
     {
         $this->workflow->setfilesUploaded(false);
+    }
+
+    public function DraftFileChanged()
+    {
+        $this->workflow->setDraftFilesChanged(true);
+    }
+
+    public function DraftFileUnchanged()
+    {
+        $this->workflow->setDraftFilesChanged(false);
+    }
+
+    public function BudgetFileChanged()
+    {
+        $this->workflow->setBudgetFilesChanged(true);
+    }
+
+    public function BudgetFileUnchanged()
+    {
+        $this->workflow->setBudgetFilesChanged(false);
     }
 
     //Final

@@ -4,6 +4,7 @@ namespace App\Workflows;
 
 use App\Models\Dashboard;
 use App\Traits\ProjectProSignals;
+use App\Workflows\Checks\CheckUploadedFiles;
 use App\Workflows\Notifications\NewFinalApprovalNotification;
 use App\Workflows\Notifications\NewProjectProposalNotification;
 use App\Workflows\Notifications\ResumeProjectProposalNotification;
@@ -46,7 +47,7 @@ class ResumeFromUHProjectWorkflow extends Workflow
     }
 
     //Completed
-    public function Completed()
+    public function isComplete()
     {
         return $this->stateMachine->state->status() === 'complete';
     }
@@ -71,6 +72,17 @@ class ResumeFromUHProjectWorkflow extends Workflow
     public function UploadedFiles()
     {
         return $this->files_uploaded;
+    }
+
+    //Changed files
+    public function DraftFilesChanged()
+    {
+        return $this->files_draft_changed;
+    }
+
+    public function BudgetFilesChanged()
+    {
+        return $this->files_budget_changed;
     }
 
     //Finacial officer
@@ -120,6 +132,12 @@ class ResumeFromUHProjectWorkflow extends Workflow
         //Update proposal state
         yield ActivityStub::make(StateUpdateTransition::class, $userRequest);
 
+        //Check for uploaded files
+        yield ActivityStub::make(CheckUploadedFiles::class, $userRequest);
+
+        //Wait for user to upload files
+        yield WorkflowStub::await(fn () => ($this->isComplete()));
+
         //Email to Head
         yield ActivityStub::make(ResumeProjectProposalNotification::class, RequestStates::UNIT_HEAD, $userRequest);
 
@@ -166,7 +184,7 @@ class ResumeFromUHProjectWorkflow extends Workflow
                 //Request has been approved by fo
 
                 //Update stage2
-                yield ActivityStub::make(StageUpdateTransition::class, $userRequest);
+                yield ActivityStub::make(Stage2UpdateTransition::class, $userRequest);
 
                 //Final approval request Email to Vice
                 yield ActivityStub::make(NewFinalApprovalNotification::class, RequestStates::VICE, $userRequest);

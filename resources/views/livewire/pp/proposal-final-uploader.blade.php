@@ -37,7 +37,7 @@
                     </span>
                         </div>
                         <p class="mt-1 text-xs text-gray-400 dark:text-neutral-400">
-                            Allowed file types: txt pdf doc docx ppt pptx odt pages png jpg xls xlsx zip rar tex ps djvu rtf.
+                            Allowed file types: txt pdf doc docx ppt pptx odt pages zip rar rtf.
                         </p>
                         <input type="file" id="file-upload" multiple @change="handleFileSelect" class="hidden" />
                     </label>
@@ -77,7 +77,12 @@
                             @this.checkToggle();
                             },
                             removeUpload(filename) {
-                            @this.removeUpload('finalfiles', filename);
+                                @this.removeUpload('finalfiles', filename);
+                                // Clear stuck validation messages for files.*
+                                @this.clearUploadErrors();
+                                // Optional: reset progress UI
+                                this.progress = 0;
+                                this.isUploading = false;
                             },
                         }
                     }

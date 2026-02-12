@@ -3,10 +3,7 @@
     // Dashboard state mapped to a step number
     $stateToStep = [
         'submitted' => 1,
-        'vice_approved' => 2,
-        'vice_returned' => 1,
-        'vice_denied' => 0,
-        //'complete' => 3,
+        'complete' => 2,
         'head_approved'  => 3,
         'head_returned'  => 2,
         'head_denied'  => 0,
@@ -48,7 +45,7 @@
                     @if($i == 1)
                         New Proposal
                     @elseif($i == 2)
-                        Vice Head Approval
+                        Files uploaded
                     @elseif($i == 3)
                         Unit Head(s) Approval
                     @elseif($i == 4)
