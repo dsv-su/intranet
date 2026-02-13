@@ -4,7 +4,7 @@
         <a @if($request->type == 'travelrequest')
             href="{{route('travel-request-review', $request->id)}}"
            @else
-            href="{{route('pp','awaiting')}}"
+            href="{{route('pp.show','awaiting')}}"
            @endif
            class="flex py-3 px-4 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">
             <div class="flex-shrink-0 mt-4">

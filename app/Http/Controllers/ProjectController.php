@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\Skatteverket;
-use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {

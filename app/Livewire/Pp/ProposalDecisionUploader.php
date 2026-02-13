@@ -39,12 +39,10 @@ class ProposalDecisionUploader extends Component
     {
         $this->proposal  = $proposal;
         $this->type      = $type;
-        $this->directory = sprintf(
-            '%s%d%s',
-            ProposalsDirectory::MAIN,
-            $proposal->id,
-            ProposalsDirectory::DECISION
-        );
+        $this->directory =
+            ProposalsDirectory::MAIN.
+            $proposal->id.
+            ProposalsDirectory::DECISION;
 
         $this->dashboard = Dashboard::firstWhere('request_id', $proposal->id);
 

@@ -6,21 +6,18 @@ use App\Jobs\SendFinalToRegistrator;
 use App\Jobs\SendGrantToRegistrator;
 use App\Mail\GrantNotificationVice;
 use App\Mail\SentNotificationVice;
-use App\Models\BudgetTemplate;
 use App\Models\Dashboard;
 use App\Models\DsvBudget;
 use App\Models\ProjectProposal;
-use App\Models\ResearchArea;
 use App\Models\SettingsFo;
 use App\Models\SettingsFoEu;
-use App\Models\SettingsOh;
 use App\Models\User;
+use App\Services\Proposal\ProjectProposalCreateView;
 use App\Workflows\States\HeadReturned;
 use App\Workflows\States\FoReturned;
 use App\Workflows\States\FinalReturned;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -29,124 +26,58 @@ use App\Services\Budget\ReCalcBudget;
 use App\Services\Review\DashboardRole;
 use App\Services\Review\ProposalFileReviewService;
 use App\Services\Review\WorkflowHandler;
-use App\Services\Role\RoleHandler;
+use App\Services\Proposal\ProjectProposalPrepare;
+use App\Services\Proposal\ProjectProposalFormService;
 use App\Services\Send\FilesForRegistrator;
 use App\Workflows\DSVProjectPWorkflow;
 use App\Workflows\Partials\RequestStates;
-use Illuminate\Support\Facades\Storage;
-use Statamic\View\View;
 use Workflow\WorkflowStub;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+
 
 class ProposalController extends Controller
 {
-    public function __construct()
-    {
+    public function __construct(
+        private ProjectProposalPrepare $proposalPrepare,
+        private ProjectProposalFormService $formService,
+        private ProjectProposalCreateView $proposalCreateView,
+    ) {
         $this->middleware(['web', 'auth', 'dsv']);
     }
-    public function pp(string $slug = 'my')
-    {
-        // lighter query + safe if no record exists
-        $enabled = SettingsOh::query()->value('form_enable') ?? false;
 
-        // $enabled = Cache::remember('settings.form_enable', 60, fn () => SettingsOh::query()->value('form_enable') ?? false);
-
-        if (!$enabled) {
-            return (new \Statamic\View\View)
-                ->template('pp.disabled')
-                ->with(['breadcrumb' => 'Disabled']);
-        }
-
-        $roles = (new RoleHandler(auth()->user()))->show();
-
-        $breadcrumbs = [
-            'my'       => 'My proposals',
-            'awaiting' => 'Awaiting review',
-            'all'      => 'Proposals',
-        ];
-
-        return (new \Statamic\View\View)
-            ->template('pp.index')
-            ->with([
-                'page'       => $slug,
-                'breadcrumb' => $breadcrumbs[$slug] ?? 'Unknown',
-                'roles'      => $roles,
-            ]);
-    }
     public function pp_edit(string $id)
     {
-        return $this->renderProposalForm($id, 'edit');
+        return $this->formService->build($id, 'edit');
     }
 
     public function pp_resume(string $id)
     {
-        return $this->renderProposalForm($id, 'resume', function (&$viewData) {
+        return $this->formService->build($id, 'resume', function (&$viewData) {
             $viewData['budget'] = DsvBudget::find(1); // ->first() or config id
         });
     }
 
     public function pp_continue(string $id)
     {
-        return $this->renderProposalForm($id, 'saved');
+        return $this->formService->build($id, 'saved');
     }
     public function pp_complete(string $id)
     {
-        return $this->renderProposalForm($id, 'complete');
+        return $this->formService->build($id, 'complete');
     }
 
     public function upload(string $id)
     {
-        return $this->renderProposalForm($id, 'complete', function (&$viewData) {
+        return $this->formService->build($id, 'complete', function (&$viewData) {
             $viewData['upload'] = true;
         });
     }
 
     public function create()
     {
-        $viewData = $this->prepareProjectProposalData();
+        $viewData = $this->proposalPrepare->prepareProjectProposalData();
         $viewData['type'] = 'preapproval';
 
-        return $this->createView('pp.create', 'mylayout', $viewData);
-    }
-
-    public function usermanual(): StreamedResponse
-    {
-        return Storage::download('PPManual.pdf');
-    }
-
-    public function budget(string $type): StreamedResponse
-    {
-        $template = BudgetTemplate::query()->first();
-        $files = $template?->files ?? [];
-
-        // Find the file matching the requested type
-        $file = collect($files)->firstWhere('type', $type);
-
-        abort_unless($file && !empty($file['path']), 404, 'Budget template file not found.');
-
-        // Optional: pick a filename (fallback to basename)
-        $filename = $file['name'] ?? basename($file['path']);
-
-        return Storage::download($file['path'], $filename);
-    }
-
-    /**
-     * Shared renderer for proposal form screens.
-     */
-    private function renderProposalForm(string $id, string $type, ?callable $mutate = null)
-    {
-        $viewData = $this->prepareProjectProposalData($id);
-
-        // Prefer findOrFail to avoid passing null to the view
-        $viewData['proposal']  = ProjectProposal::query()->findOrFail($id);
-        $viewData['dashboard'] = Dashboard::query()->where('request_id', $id)->first();
-        $viewData['type']      = $type;
-
-        if ($mutate) {
-            $mutate($viewData);
-        }
-
-        return $this->createView('pp.create', 'mylayout', $viewData);
+        return $this->proposalCreateView->build('pp.create', 'mylayout', $viewData);
     }
 
     /***
@@ -739,11 +670,7 @@ class ProposalController extends Controller
             (new ReCalcBudget())->scan();
         }
     }
-
-    public function pp_sent(string $id)     { return $this->renderProposalForm($id, 'sent'); }
-    public function pp_granted(string $id)  { return $this->renderProposalForm($id, 'granted'); }
-    public function pp_rejected(string $id) { return $this->renderProposalForm($id, 'rejected'); }
-
+    
 
     protected function validateRequest(Request $request)
     {
@@ -905,50 +832,4 @@ class ProposalController extends Controller
         return User::find($viceUserID);
     }
 
-    private function prepareProjectProposalData(?string $id = null)
-    {
-        $roleIdsUnitHead = $this->getUserIdsByGroup('enhetschef');
-        $unitheads = User::whereIn('id', $roleIdsUnitHead)->get();
-        $research_areas = ResearchArea::all();
-
-        if ($id) {
-            // Edit existing, or create if not found
-            $proposal = \App\Models\ProjectProposal::firstOrNew(['id' => $id]);
-        } else {
-            // Create new
-            $proposal = new \App\Models\ProjectProposal();
-        }
-
-        //User
-        $userId = Auth::user()->id;
-
-        if (! $proposal->exists) {
-            $proposal->fill([
-                'user_id' => $userId,
-                'name' => '',
-                'created' => now()->startOfDay()->timestamp,
-                'status_stage1' => 'pending',
-                'status_stage2' => 'pending',
-                'status_stage3' => 'pending',
-                'files' => [],
-            ]);
-            $proposal->save();
-        }
-
-        return [
-            'unitheads' => $unitheads,
-            'research_areas' => $research_areas,
-            'proposal' => $proposal
-        ];
-    }
-
-    private function getUserIdsByGroup($group)
-    {
-        return DB::table('group_user')->where('group_id', $group)->pluck('user_id');
-    }
-
-    private function createView($template, $layout, $data)
-    {
-        return (new View)->template($template)->layout($layout)->with($data);
-    }
 }
