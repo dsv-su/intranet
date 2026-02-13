@@ -12,9 +12,8 @@ use App\Models\User;
 use App\Services\Review\DashboardRole;
 use App\Services\Review\RequestReviewHandler;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Statamic\View\View;
+use Statamic\View\View as StatamicView;
 
 class ReviewController extends Controller
 {
@@ -24,154 +23,135 @@ class ReviewController extends Controller
         $this->middleware('review')->except(['pp_view']);
     }
 
-    public function pp_view($id)
+    public function pp_view(ProjectProposal $proposal)
     {
-        $viewData = $this->prepareProjectProposalData();
-        $viewData['proposal'] = ProjectProposal::find($id);
-        $viewData['dashboard'] = Dashboard::where('request_id', $id)->first();
-        $viewData['type'] = 'view';
+        return $this->renderProjectProposal($proposal, 'view');
+    }
+
+    public function pp_review(ProjectProposal $proposal)
+    {
+        return $this->renderProjectProposal($proposal, 'review');
+    }
+
+    private function renderProjectProposal($proposal, string $mode)
+    {
+        $dashboard = $proposal->dashboard;
+        $viewData = $this->prepareProjectProposalData() + [
+                'proposal'   => $proposal,
+                'dashboard'  => $dashboard,
+                'type'       => $mode,
+            ];
+
+        if ($mode === 'review') {
+            $viewData += [
+                'budget'   => DsvBudget::find(1),
+                'reviewer' => auth()->user(),
+                'role'     => $this->parseRole($dashboard),
+            ];
+        }
 
         return $this->createView('pp.create', 'mylayout', $viewData);
     }
 
-    public function pp_review($id)
+    private function prepareProjectProposalData(): array
     {
-        $viewData = $this->prepareProjectProposalData();
-        $viewData['proposal'] = ProjectProposal::find($id);
-        $viewData['dashboard'] = $dashboard = Dashboard::where('request_id', $id)->first();
-        $viewData['budget'] = DsvBudget::find(1);
-        $viewData['reviewer'] =  auth()->user();
-        $viewData['role'] = $this->parseRole($dashboard);
-        $viewData['type'] = 'review';
-
-        return $this->createView('pp.create', 'mylayout', $viewData);
-    }
-
-    /***
-     * @return array
-     *
-     * New Review flow
-     */
-
-    private function prepareProjectProposalData()
-    {
-        $roleIdsUnitHead = $this->getUserIdsByGroup('enhetschef');
-        $unitheads = User::whereIn('id', $roleIdsUnitHead)->get();
-        $research_areas = ResearchArea::all();
+        $unitHeadIds = $this->getUserIdsByGroup('enhetschef');
 
         return [
-            'unitheads' => $unitheads,
-            'research_areas' => $research_areas
+            'unitheads'      => User::whereIn('id', $unitHeadIds)->get(),
+            'research_areas' => ResearchArea::all(),
         ];
     }
 
-    private function getUserIdsByGroup($group)
+    private function getUserIdsByGroup($groupIdOrSlug): array
     {
-        return DB::table('group_user')->where('group_id', $group)->pluck('user_id');
+        return DB::table('group_user')
+            ->where('group_id', $groupIdOrSlug)
+            ->pluck('user_id')
+            ->all();
     }
 
-    private function createView($template, $layout, $data)
+    private function createView($template, $layout, array $data)
     {
-        return (new View)->template($template)->layout($layout)->with($data);
+        return (new \Statamic\View\View)
+            ->template($template)
+            ->layout($layout)
+            ->with($data);
     }
 
     public function show($id)
     {
-        $dashboard = Dashboard::find($id);
-        $tr = TravelRequest::find($dashboard->request_id);
-        // Retrieve the currently authenticated user's ID
-        $user = Auth::user();
-        // Check if user is FO
+        $dashboard = Dashboard::findOrFail($id);
+        $tr = TravelRequest::findOrFail($dashboard->request_id);
+
+        $user = auth()->user();
         $fo = SettingsFo::find(1);
 
-        if($user->id == $fo->user_id) {
-            $formtype = 'fo_review';
-        } else {
-            $formtype = 'review';
-        }
+        $formtype = ($fo && $user->id === $fo->user_id) ? 'fo_review' : 'review';
 
-        return (new \Statamic\View\View)
+        return (new StatamicView)
             ->template('requests.travel.show')
             ->layout('mylayout')
-            ->with(['tr' => $tr, 'formtype' => $formtype, 'dashboard' => $dashboard]);
+            ->with([
+                'tr' => $tr,
+                'formtype' => $formtype,
+                'dashboard' => $dashboard,
+            ]);
     }
 
     public function review(Request $request, $req)
     {
-        //Check request type
-        $dashboard = Dashboard::find($req);
-
-        // Retrieve the currently authenticated user's ID
-        $user = Auth::user();
-
-        //Mobile or desktop review
-        if($request->comment_mobile == null) {
-            $comment = $request->comment;
-        } else {
-            $comment = $request->comment_mobile;
-        }
-
-        //Approve
-        $handler = new RequestReviewHandler($dashboard, $user, $comment, $request->decicion);
-        $handler->review();
-
-        return redirect('/')->with('status', 'Request updated');
+        return $this->handleReview($request, $req, false);
     }
 
     public function fo_review(Request $request, $req)
     {
-        //Check request type
-        $dashboard = Dashboard::find($req);
+        return $this->handleReview($request, $req, true);
+    }
 
-        switch($dashboard->type) {
-            case('travelrequest'):
-                //Update project id
-                $tr = TravelRequest::find($dashboard->request_id);
-                $tr->project = $request->project;
-                $tr->save();
-                break;
+    private function handleReview(Request $request, $dashboardId, bool $isFo)
+    {
+        $dashboard = Dashboard::findOrFail($dashboardId);
+
+        if ($isFo) {
+            $this->applyFoUpdates($request, $dashboard);
         }
 
-        // Retrieve the currently authenticated user's ID
-        $user = Auth::user();
+        $user = auth()->user();
 
-        //Mobile or desktop review
-        if($request->comment_mobile == null) {
-            $comment = $request->comment;
-        } else {
-            $comment = $request->comment_mobile;
-        }
+        $comment = trim(
+            (string) ($request->input('comment_mobile') ?: $request->input('comment'))
+        );
 
-        //Approve
-        $handler = new RequestReviewHandler($dashboard, $user, $comment, $request->decicion);
+        $decision = $request->input('decision');
+
+        $handler = new RequestReviewHandler($dashboard, $user, $comment, $decision);
         $handler->review();
 
         return redirect('/')->with('status', 'Request updated');
     }
 
-    public function parseRole($dashboard)
+    private function applyFoUpdates(Request $request, Dashboard $dashboard): void
     {
-        $dashboardrole = new DashboardRole($dashboard, $user = auth()->user());
-        $role = $dashboardrole->check();
-        switch($role) {
-            case 'vice_final':
-                return 'Final Approval';
-                break;
-            case 'vice':
-                return 'Vice Approval';
-                break;
-            case 'head':
-                return 'Head Approval';
-                break;
-            case 'fo':
-                return 'FO Approval';
-                break;
-            default:
-                return 'N/A';
-                break;
+        if ($dashboard->type === 'travelrequest') {
+            $tr = TravelRequest::findOrFail($dashboard->request_id);
+            $tr->project = $request->input('project');
+            $tr->save();
         }
     }
 
+    public function parseRole($dashboard)
+    {
+        $dashboardrole = new DashboardRole($dashboard, auth()->user());
+        $role = $dashboardrole->check();
 
+        $map = [
+            'vice_final' => 'Final Approval',
+            'vice'       => 'Vice Approval',
+            'head'       => 'Head Approval',
+            'fo'         => 'FO Approval',
+        ];
 
+        return $map[$role] ?? 'N/A';
+    }
 }

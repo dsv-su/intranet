@@ -33,7 +33,6 @@ Route::statamic('search', 'search')->name('search');
 | Travel Request
 |--------------------------------------------------------------------------
 */
-
 // Put the non-localized explicit route first
 Route::get('/travel', [\App\Http\Controllers\TravelRequestController::class, 'create'])
     ->name('travel-request-create');
@@ -65,7 +64,6 @@ Route::post('/review/{travelRequest}', [\App\Http\Controllers\ReviewController::
 
 Route::post('/fo_review/{travelRequest}', [\App\Http\Controllers\ReviewController::class, 'fo_review'])
     ->name('fo_review');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -106,7 +104,6 @@ Route::post('/fo_eu', [\App\Http\Controllers\FOController::class, 'settings_fo_e
 Route::get('/assign_fo', [\App\Http\Controllers\AssignFOController::class, 'index'])
     ->name('assign.fo');
 
-
 /*
 |--------------------------------------------------------------------------
 | News list entries
@@ -118,16 +115,13 @@ Route::get('/en/newslist/{collection}', [\App\Http\Controllers\NewsListControlle
 Route::get('/sv/newslist/{collection}', [\App\Http\Controllers\NewsListController::class, 'swelist'])
     ->name('newslist.sv');
 
-
-
-//Project Proposals Home
-//Route::get('/', [\App\Http\Controllers\ProposalController::class, 'pp'])->name('pp.home');
-
 /*
 |--------------------------------------------------------------------------
 | PP (Project Proposals)
 |--------------------------------------------------------------------------
 */
+//Project Proposals Home
+//Route::get('/', [\App\Http\Controllers\ProposalController::class, 'pp'])->name('pp.home');
 
 Route::prefix('pp')->name('pp.')->group(function () {
     // Create + submit
@@ -135,7 +129,7 @@ Route::prefix('pp')->name('pp.')->group(function () {
     Route::post('submit', [\App\Http\Controllers\ProposalController::class, 'submit'])->name('submit');
 
     // Public / direct access by slug
-    Route::get('{slug}', [\App\Http\Controllers\ProposalController::class, 'pp'])
+    Route::get('{slug}', [\App\Http\Controllers\ProposalHomeController::class, 'pp'])
         ->where('slug', '[A-Za-z0-9\-]+')
         ->name('show');
 
@@ -152,9 +146,9 @@ Route::prefix('pp')->name('pp.')->group(function () {
     Route::post('decision', [\App\Http\Controllers\ProposalController::class, 'decision'])->name('decision');
 
     // Status pages
-    Route::get('sent/{proposal}', [\App\Http\Controllers\ProposalController::class, 'pp_sent'])->name('sent');
-    Route::get('granted/{proposal}', [\App\Http\Controllers\ProposalController::class, 'pp_granted'])->name('granted');
-    Route::get('rejected/{proposal}', [\App\Http\Controllers\ProposalController::class, 'pp_rejected'])->name('rejected');
+    Route::get('sent/{proposal}', [\App\Http\Controllers\ProposalReportController::class, 'pp_sent'])->name('sent');
+    Route::get('granted/{proposal}', [\App\Http\Controllers\ProposalReportController::class, 'pp_granted'])->name('granted');
+    Route::get('rejected/{proposal}', [\App\Http\Controllers\ProposalReportController::class, 'pp_rejected'])->name('rejected');
 
     // Reviews
     Route::prefix('review')->name('review.')->group(function () {
@@ -175,11 +169,11 @@ Route::prefix('pp')->name('pp.')->group(function () {
 | Downloads / docs
 |--------------------------------------------------------------------------
 */
-Route::get('budget/{type}', [\App\Http\Controllers\ProposalController::class, 'budget'])
+Route::get('budget/{type}', [\App\Http\Controllers\ProposalDownloadController::class, 'budget'])
     ->whereIn('type', ['eng','swe','eu']) // allowed types
     ->name('budget.template');
 
-Route::get('manual', [\App\Http\Controllers\ProposalController::class, 'usermanual'])->name('usermanual');
+Route::get('manual', [\App\Http\Controllers\ProposalDownloadController::class, 'usermanual'])->name('usermanual');
 
 /*
 |--------------------------------------------------------------------------
