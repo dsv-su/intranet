@@ -4,43 +4,33 @@
 <br><br>
 ------------------------------------------------------------
 <br>
-To: User {{$user->name}}
+To: {{$user->name}}
 <br>
-SUBJECT: Your project proposal, <i><strong>{{$dashboard->name}}</strong></i>, is now pending completion.
+SUBJECT: Reminder: Please Report Granted/Rejected
+<br>
 ------------------------------------------------------------
 <br><br>
 Dear {{$user->name}},
 <br><br>
-
-To proceed with approval from the Unit Head(s) and Financial Officer,
-please update your proposal to include the required dates and budget details.
+This is a friendly reminder to please update your proposal and mark it as <strong>“Granted or Rejected”</strong> once you have recived a decision regarding your application.
 <br><br>
-Additionally, kindly upload the following for review:
-<br><br>
-<strong> - A budget file </strong>
+If you have already reported your proposal status, please disregard this message.
 <br>
-<strong> - A brief description of the proposal </strong>
-<br>
-<strong> - Any other relevant supporting documents </strong>
-<br><br>
-
-<strong>Important: </strong>Preapproval from the Vice Head does not guarantee final approval.
-    The proposal must still go through all required approval steps before receiving final confirmation.
-
+Thank you in advance for your prompt attention to this matter.
 <br><br>
 OVERVIEW:
 <br><br>
 <b>Proposal:</b> {{$dashboard->name}}
-<br><br>
+<br>
 <b>Requester:</b> {{$user->name}}
-<br><br>
+<br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}}
-<br><br>
+<br>
 <b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>
 You can review the details and take necessary action by accessing the proposal through the following link:
 <br><br>
-<a href="{{ url('') }}/pp/complete/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}} for updating.</a>
+<a href="{{ url('') }}/pp/my">Your proposals</a>
 <br><br>
 ------------------------------------------------------------
 <br>

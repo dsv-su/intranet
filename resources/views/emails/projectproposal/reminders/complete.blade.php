@@ -4,42 +4,43 @@
 <br><br>
 ------------------------------------------------------------
 <br>
-TO: {{$user->name}}
+To: {{$user->name}}
 <br>
-SUBJECT: Missing necessary files
+SUBJECT: Reminder: Please Complete and Submit Required Documents
 <br>
 ------------------------------------------------------------
 <br><br>
-Your Project Proposal Submitted for Review is missing necessary files.<br><br>
 Dear {{$user->name}},
 <br><br>
-Your project proposal, submitted on {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}},
-is <strong>missing necessary files</strong>. Please upload: <br><br>
+
+This is a friendly reminder to please complete your proposal and submit the necessary attachments at your earliest convenience.
+We have not yet received the required documents, and completing this will help us proceed.
+
+For your reference, the required attachments include:
+<br><br>
 <strong> - A budget file </strong>
 <br>
 <strong> - A brief description of the proposal </strong>
 <br>
 <strong> - Any other relevant supporting documents </strong>
 <br><br>
+If you have already uploaded the documents, please disregard this message.
+<br>
+Thank you in advance for your prompt attention to this matter.
+<br><br>
 OVERVIEW:
 <br><br>
 <b>Proposal:</b> {{$dashboard->name}}
-<br><br>
+<br>
 <b>Requester:</b> {{$user->name}}
-<br><br>
-<b>Unit Head(s):</b>
-@foreach($dashboard->unit_heads as $head)
-{{ \App\Models\User::find($head)->name }}
-,
-@endforeach
-<br><br>
+<br>
 <b>Created:</b> {{Carbon\Carbon::createFromTimestamp($dashboard->created)->format('Y-m-d')}}
-<br><br>
+<br>
 <b>ProposalID:</b> {{$dashboard->request_id}}
 <br><br>
-You can review the details and upload the requested files by accessing the proposal through the following link:
+You can review the details and take necessary action by accessing the proposal through the following link:
 <br><br>
-<a href="{{ url('') }}/pp/stage2_upload_pp/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}}</a>
+<a href="{{ url('') }}/pp/complete/{{$dashboard->request_id}}">Direct link to {{$dashboard->name}}</a>
 <br><br>
 ------------------------------------------------------------
 <br>
