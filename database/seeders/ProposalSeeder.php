@@ -29,7 +29,7 @@ class ProposalSeeder extends Seeder
 
 
 
-        for ($i = 1; $i < 3; $i++) {
+        for ($i = 1; $i < 10; $i++) {
             $timestamp = now()->startOfDay()->timestamp;
 
             // Create a new proposal directly

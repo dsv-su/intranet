@@ -21,7 +21,6 @@ class MyProjectProposalSearch extends Component
     {
         $user = Auth::user();
         $search = $this->searchProposal;
-
         $proposals = ProjectProposal::with('dashboard')
             //Filter to the authenticated user
             ->where('user_id', $user->id)
@@ -43,6 +42,8 @@ class MyProjectProposalSearch extends Component
             })
             ->orderBy('created_at', 'desc')
             ->paginate(5);
+
+
 
         return view('livewire.pp.my-project-proposal-search',
         ['proposals' => $proposals]);
