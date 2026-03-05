@@ -102,6 +102,4 @@
         </div>
     </div>
 </section>
-
-@include('layouts.darktoggler')
 @endsection

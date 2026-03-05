@@ -222,5 +222,4 @@
             document.getElementById('other-button').click();
         });*/
     </script>
-    @include('layouts.darktoggler')
 @endsection

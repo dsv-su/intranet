@@ -57,8 +57,7 @@
 
 .open {
     transform: rotate(90deg);
-    transform: translateY(-1px);
-}
+    transform: translateY(-1px); }
 
 .open .hamburger_sub_top {
     transform:
